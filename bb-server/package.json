@@ -1,0 +1,14 @@
+{
+  "name": "breaking-bread",
+  "version": "1.0.0",
+  "description": "Break bread with like-minded people",
+  "main": "index.ts",
+  "repository": "git@github.com:tristan957/breaking-bread.git",
+  "author": "Tristan Partin <tristan.partin@gmail.com>",
+  "license": "MPL-2.0",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^10.10.1",
+    "typescript": "^3.0.3"
+  }
+}
