@@ -6,6 +6,6 @@ export default class Ingredient {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column({type: "varchar", length: 256})
+    @Column({ type: "varchar", length: 256 })
     public name: string;
 }

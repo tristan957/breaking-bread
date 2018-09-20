@@ -6,10 +6,10 @@ export default class Review {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column({type: "int4"})
+    @Column({ type: "int4" })
     public rating: number;
 
-    @Column({type: "text"})
+    @Column({ type: "text" })
     public description: string;
 
     @CreateDateColumn()

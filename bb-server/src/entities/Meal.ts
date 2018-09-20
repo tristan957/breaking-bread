@@ -6,16 +6,16 @@ export default class Meal {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column({type: "text"})
+    @Column({ type: "text" })
     public location: string;
 
-    @Column({type: "datetime"})
+    @Column({ type: "datetime" })
     public date: Date;
 
-    @Column({type: "varchar", length: "256"})
+    @Column({ type: "varchar", length: "256" })
     public name: string;
 
-    @Column({type: "text"})
+    @Column({ type: "text" })
     public description: string;
 
     @CreateDateColumn()
