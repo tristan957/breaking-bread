@@ -9,10 +9,10 @@ export default class Meal {
     @Column({ type: "text" })
     public location: string;
 
-    @Column({ type: "datetime" })
+    @Column({ type: "timestamp" })
     public date: Date;
 
-    @Column({ type: "varchar", length: "256" })
+    @Column()
     public name: string;
 
     @Column({ type: "text" })

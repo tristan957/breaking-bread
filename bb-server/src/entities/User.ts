@@ -8,16 +8,19 @@ export default class User {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column({ type: "text" })
-    public name: string;
+    @Column()
+    public firstName: string;
+
+    @Column()
+    public lastName: string;
 
     @Column({ type: "text" })
     public about: string;
 
-    @Column({ type: "varchar", length: 128 })
+    @Column()
     public email: string;
 
-    @Column({ type: "varchar", length: 16 })
+    @Column({ length: 16 })
     public phoneNumber: string;
 
     @CreateDateColumn()

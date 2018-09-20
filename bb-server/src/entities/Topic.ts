@@ -6,6 +6,6 @@ export default class Topic {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column({ type: "varchar", length: 128 })
+    @Column({ length: 128 })
     public name: string;
 }

@@ -103,7 +103,7 @@
     "number-literal-format": true,
     "object-literal-key-quotes": false,
     "object-literal-shorthand": true,
-    "object-literal-sort-keys": true,
+    "object-literal-sort-keys": false,
     "one-line": [
       true,
       "check-catch",
