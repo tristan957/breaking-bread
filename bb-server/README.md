@@ -17,6 +17,6 @@ To bring those down:
 docker-compose down -d
 ```
 
-Adminer instance will be running on localhost:10261, and the PostgreSQL
+Adminer instance will be running on `localhost:10261`, and the PostgreSQL
 instance will be using a connection URI of
 `postgresql://jesus:christ@localhost:10260`.
