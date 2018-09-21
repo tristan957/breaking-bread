@@ -1,7 +1,9 @@
 import * as dotenv from "dotenv";
+import path from "path";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
 import Ingredient from "./entities/Ingredient";
 import Meal from "./entities/Meal";
+import Recipe from "./entities/Recipe";
 import Review from "./entities/Review";
 import Topic from "./entities/Topic";
 import User from "./entities/User";
@@ -10,7 +12,7 @@ export default class App {
     public connection: Connection;
 
     constructor() {
-        dotenv.config();
+        dotenv.config({ path: path.resolve(process.cwd(), "dev.env") });
         this.setupTypeORM();
         this.setupExpress();
     }
@@ -33,7 +35,7 @@ export default class App {
             password: process.env.TYPEORM_PASSWORD,
             database: process.env.TYPEORM_DATABASE,
             logger,
-            entities: [Ingredient, Meal, Review, Topic, User],
+            entities: [Ingredient, Meal, Recipe, Review, Topic, User],
             synchronize: isDEV,
         })
             .then(value => this.connection = value)
