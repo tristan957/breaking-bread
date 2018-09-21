@@ -1,4 +1,8 @@
+import { ApolloServer, gql, IResolvers } from "apollo-server-express";
 import * as dotenv from "dotenv";
+// tslint:disable:match-default-export-name
+import express from "express";
+import { DocumentNode } from "graphql";
 import path from "path";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
 import Ingredient from "./entities/Ingredient";
@@ -10,6 +14,8 @@ import User from "./entities/User";
 
 export default class App {
     public connection: Connection;
+    public app: express.Application;
+    public server: ApolloServer;
 
     constructor() {
         dotenv.config({ path: path.resolve(process.cwd(), "dev.env") });
@@ -18,7 +24,21 @@ export default class App {
     }
 
     private setupExpress(): void {
-        return;
+        const typeDefs: DocumentNode = gql`
+            type Query {
+                hello: String
+            }
+        `;
+
+        const resolvers: IResolvers = {
+            Query: {
+                hello: (): String => "Hello world!",
+            },
+        };
+
+        this.app = express();
+        this.server = new ApolloServer({ typeDefs, resolvers });
+        this.server.applyMiddleware({ app: this.app });
     }
 
     private setupTypeORM(): void {
@@ -30,7 +50,7 @@ export default class App {
         createConnection({
             type: "postgres",
             host: process.env.TYPEORM_HOST,
-            port: parseInt(process.env.TYPEORM_PORT, 10),
+            port: parseInt(process.env.TYPEORM_PORT || "10260", 10),
             username: process.env.TYPEORM_USERNAME,
             password: process.env.TYPEORM_PASSWORD,
             database: process.env.TYPEORM_DATABASE,
@@ -43,5 +63,13 @@ export default class App {
                 console.log(`Unable to create database connection: ${reason}`);
                 process.exit(1);
             });
+    }
+
+    public run(): void {
+        let port: number | string = process.env.APP_PORT || "10262";
+        port = parseInt(port, 10);
+        this.app.listen(port, () =>
+            console.log(`Server ready at http://localhost:${port}${this.server.graphqlPath}`)
+        );
     }
 }

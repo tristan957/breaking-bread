@@ -2,3 +2,4 @@ node_modules
 docker
 *.env
 !dev.env
+yarn-error.log
