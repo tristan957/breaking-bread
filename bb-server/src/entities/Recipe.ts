@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Review from "./Review";
+import Tag from "./Tag";
 import User from "./User";
 
 @Entity()
@@ -24,4 +25,7 @@ export default class Recipe {
 
     @OneToMany(type => Review, review => review.id)
     public reviews: Review[];
+
+    @OneToMany(type => Tag, tag => tag.id)
+    public tags: Tag[];
 }

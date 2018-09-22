@@ -10,6 +10,7 @@ import Ingredient from "./entities/Ingredient";
 import Meal from "./entities/Meal";
 import Recipe from "./entities/Recipe";
 import Review from "./entities/Review";
+import Tag from "./entities/Tag";
 import Topic from "./entities/Topic";
 import User from "./entities/User";
 
@@ -56,7 +57,7 @@ export default class App {
             password: process.env.TYPEORM_PASSWORD || "christ",
             database: process.env.TYPEORM_DATABASE || "BreakingBread",
             logger,
-            entities: [Ingredient, Meal, Recipe, Review, Topic, User],
+            entities: [Ingredient, Meal, Recipe, Review, Tag, Topic, User],
             synchronize: isDEV,
         })
             .then(value => this.connection = value)
