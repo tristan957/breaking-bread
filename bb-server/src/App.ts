@@ -1,6 +1,7 @@
+/* tslint:disable: strict-boolean-expressions */
 import { ApolloServer, gql, IResolvers } from "apollo-server-express";
 import * as dotenv from "dotenv";
-// tslint:disable: match-default-export-name
+// tslint:disable-next-line: match-default-export-name
 import express from "express";
 import { DocumentNode } from "graphql";
 import path from "path";
@@ -49,12 +50,11 @@ export default class App {
 
         createConnection({
             type: "postgres",
-            host: process.env.TYPEORM_HOST,
-            // tslint:disable: strict-boolean-expressions
+            host: process.env.TYPEORM_HOST || "localhost",
             port: parseInt(process.env.TYPEORM_PORT || "10260", 10),
-            username: process.env.TYPEORM_USERNAME,
-            password: process.env.TYPEORM_PASSWORD,
-            database: process.env.TYPEORM_DATABASE,
+            username: process.env.TYPEORM_USERNAME || "jesus",
+            password: process.env.TYPEORM_PASSWORD || "christ",
+            database: process.env.TYPEORM_DATABASE || "BreakingBread",
             logger,
             entities: [Ingredient, Meal, Recipe, Review, Topic, User],
             synchronize: isDEV,
@@ -67,7 +67,6 @@ export default class App {
     }
 
     public run(): void {
-        // tslint:disable: strict-boolean-expressions
         let port: number | string = process.env.APP_PORT || "10262";
         port = parseInt(port, 10);
         this.app.listen(port, () =>
