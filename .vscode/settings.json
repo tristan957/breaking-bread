@@ -11,4 +11,7 @@
     },
     "editor.formatOnSave": true,
   },
+  "tslint.autoFixOnSave": true,
+  "tslint.exclude": "node_modules/**",
+  "tslint.packageManager": "yarn",
 }
