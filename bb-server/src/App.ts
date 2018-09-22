@@ -44,7 +44,7 @@ export default class App {
     private setupTypeORM(): void {
         const isDEV: boolean = process.env.NODE_ENV === "DEVELOPMENT";
         const logger: Logger = isDEV ?
-            new AdvancedConsoleLogger("all") :
+            new AdvancedConsoleLogger(["warn", "error"]) :
             new AdvancedConsoleLogger(["warn", "error"]);
 
         createConnection({
