@@ -20,21 +20,21 @@ export default class App {
     public server: ApolloServer;
 
     constructor() {
-        dotenv.config({ path: path.resolve(process.cwd(), "dev.env") });
-        this.setupTypeORM();
-        this.setupExpress();
+        dotenv.config({
+            path: path.resolve(process.cwd(), "dev.env")
+        });
     }
 
-    private setupExpress(): void {
+    private async setupExpress(): Promise<void> {
         const typeDefs: DocumentNode = gql`
             type Query {
-                hello: String
+                hello(id: Int): String
             }
         `;
 
         const resolvers: IResolvers = {
             Query: {
-                hello: (): String => "Hello world!",
+                hello: (id: number): String => `Hello ${id}!`,
             },
         };
 
@@ -43,13 +43,13 @@ export default class App {
         this.server.applyMiddleware({ app: this.app });
     }
 
-    private setupTypeORM(): void {
+    private async setupTypeORM(): Promise<void> {
         const isDEV: boolean = process.env.NODE_ENV === "DEVELOPMENT";
         const logger: Logger = isDEV ?
             new AdvancedConsoleLogger(["warn", "error"]) :
             new AdvancedConsoleLogger(["warn", "error"]);
 
-        createConnection({
+        await createConnection({
             type: "postgres",
             host: process.env.TYPEORM_HOST || "localhost",
             port: parseInt(process.env.TYPEORM_PORT || "10260", 10),
@@ -60,11 +60,18 @@ export default class App {
             entities: [Ingredient, Meal, Recipe, Review, Tag, Topic, User],
             synchronize: isDEV,
         })
-            .then(value => this.connection = value)
-            .catch(reason => {
-                console.log(`Unable to create database connection: ${reason}`);
-                process.exit(1);
-            });
+        .then(value => this.connection = value )
+        .catch(reason => {
+            console.log(`Unable to create database connection: ${reason}`);
+            process.exit(1);
+        });
+    }
+
+    public async setUp(): Promise<App> {
+        await this.setupTypeORM();
+        await this.setupExpress();
+
+        return this;
     }
 
     public run(): void {
