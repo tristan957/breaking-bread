@@ -3,6 +3,7 @@ import { ApolloServer, gql, IResolvers } from "apollo-server-express";
 import * as dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express from "express";
+import fs from "fs";
 import { DocumentNode } from "graphql";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
 import Ingredient from "./entities/Ingredient";
@@ -36,16 +37,8 @@ export default class App {
      * Sets up Express server
      */
     private setupExpress(): void {
-        const typeDefs: DocumentNode = gql`
-            type Query {
-                me(id: Int!): User
-            }
-
-            type User {
-                username: String!
-            }
-        `;
-
+        const schema: string = fs.readFileSync("./src/schema.gql").toString();
+        const typeDefs: DocumentNode = gql`${schema}`;
         const resolvers: IResolvers = {
             Query: {
                 me: (parent, args, context, info) => {

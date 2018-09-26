@@ -1,5 +1,5 @@
-node_modules
-docker
 *.env
-yarn-error.log
+*.log
+node_modules
 dist
+docker

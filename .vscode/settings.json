@@ -1,4 +1,5 @@
 {
+  "graphqlForVSCode.nodePath": "${workspaceRoot}/bb-server/node_modules",
   "[typescript]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": true,
