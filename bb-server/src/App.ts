@@ -1,5 +1,6 @@
 /* tslint:disable: strict-boolean-expressions */
 import { ApolloServer, gql, IResolvers } from "apollo-server-express";
+// tslint:disable-next-line: match-default-export-name
 import cors from "cors";
 import * as dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
