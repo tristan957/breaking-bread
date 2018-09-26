@@ -1,5 +1,6 @@
 /* tslint:disable: strict-boolean-expressions */
 import { ApolloServer, gql, IResolvers } from "apollo-server-express";
+import cors from "cors";
 import * as dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express from "express";
@@ -50,6 +51,7 @@ export default class App {
         };
 
         this.app = express();
+        this.app.use(cors);
         this.server = new ApolloServer({ typeDefs, resolvers });
         this.server.applyMiddleware({ app: this.app });
     }
