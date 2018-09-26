@@ -18,9 +18,6 @@ import User from "./entities/User";
 
 export default class App {
 
-    /**
-     * Sets up TypeORM
-     */
     public connection: Connection;
     public app: express.Application;
     public server: ApolloServer;
