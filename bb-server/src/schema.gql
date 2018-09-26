@@ -1,7 +1,12 @@
 type Query {
-    me(id: Int!): User
+    chef(id: Int!): User,
+    meal(): Meal,
 }
 
 type User {
     username: String!
+}
+
+type Meal {
+    name: String!
 }

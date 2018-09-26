@@ -1,12 +1,10 @@
 /* tslint:disable: strict-boolean-expressions */
-import { ApolloServer, gql, IResolvers } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 // tslint:disable-next-line: match-default-export-name
 import cors from "cors";
 import * as dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express from "express";
-import fs from "fs";
-import { DocumentNode } from "graphql";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
 import Ingredient from "./entities/Ingredient";
 import Meal from "./entities/Meal";
@@ -15,6 +13,7 @@ import Review from "./entities/Review";
 import Tag from "./entities/Tag";
 import Topic from "./entities/Topic";
 import User from "./entities/User";
+import { resolvers, typeDefs } from "./schema/schema";
 
 export default class App {
 
@@ -36,18 +35,6 @@ export default class App {
      * Sets up Express server
      */
     private setupExpress(): void {
-        const schema: string = fs.readFileSync("./src/schema.gql").toString();
-        const typeDefs: DocumentNode = gql`${schema}`;
-        const resolvers: IResolvers = {
-            Query: {
-                me: (parent, args, context, info) => {
-                    return {
-                        username: `Robin Wieruch ${args.id}`,
-                    };
-                },
-            },
-        };
-
         this.app = express();
         this.app.use(cors);
         this.server = new ApolloServer({ typeDefs, resolvers });
