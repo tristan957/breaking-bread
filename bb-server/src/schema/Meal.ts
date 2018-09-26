@@ -11,9 +11,13 @@ export const typeDef: DocumentNode = gql`
     }
 `;
 
+interface IMealQuery {
+    id: number;
+}
+
 export const resolvers: IResolvers = {
     Query: {
-        meal: (parent, args, context, info) => {
+        meal: (parent, args: IMealQuery, context, info) => {
             return {
                 name: `Chicken caprese ${args.id}`,
             };
