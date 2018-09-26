@@ -9,7 +9,10 @@
     "moduleResolution": "node",
     "newLine": "LF",
     "outDir": "dist",
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "lib": [
+      "esnext"
+    ]
   },
   "include": [
     "src/**/*"
