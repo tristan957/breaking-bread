@@ -67,7 +67,7 @@ export default class App {
         let port: number | string = process.env.APP_PORT || "10262";
         port = parseInt(port, 10);
         this.app.listen(port, () =>
-                console.log(`Server ready at http://localhost:${port}${this.server.graphqlPath}`)
+            console.log(`Server ready at http://localhost:${port}${this.server.graphqlPath}`)
         );
     }
 }
