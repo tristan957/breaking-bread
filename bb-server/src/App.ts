@@ -1,11 +1,11 @@
 /* tslint:disable: strict-boolean-expressions */
 import { ApolloServer } from "apollo-server-express";
 // tslint:disable-next-line: match-default-export-name
-import cors from "cors";
 import * as dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express from "express";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
+import Allergens from "./entities/Allergen";
 import Ingredient from "./entities/Ingredient";
 import Meal from "./entities/Meal";
 import Recipe from "./entities/Recipe";
@@ -36,7 +36,6 @@ export default class App {
      */
     private setupExpress(): void {
         this.app = express();
-        this.app.use(cors);
         this.server = new ApolloServer({ typeDefs, resolvers });
         this.server.applyMiddleware({ app: this.app });
     }
@@ -58,7 +57,7 @@ export default class App {
             password: process.env.TYPEORM_PASSWORD || "christ",
             database: process.env.TYPEORM_DATABASE || "BreakingBread",
             logger,
-            entities: [Ingredient, Meal, Recipe, Review, Tag, Topic, User],
+            entities: [Ingredient, Meal, Recipe, Allergen, Review, Tag, Topic, User],
             synchronize: isDEV,
         })
             .then(value => this.connection = value)
