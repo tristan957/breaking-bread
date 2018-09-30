@@ -22,7 +22,7 @@ export default class Recipe {
     public updatedAt: Date;
 
     // User can write more than one review
-    @ManyToOne(type => User, user => user.recipesAuthoredList)
+    @ManyToOne(type => User, user => user.recipesAuthored)
     public author: User;
 
     @OneToMany(type => RecipeReview, review => review.subject)

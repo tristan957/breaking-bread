@@ -47,11 +47,11 @@ export default class User {
     public reviewSubjectList: UserReview[];
 
     @OneToMany(type => UserReview, review => review.author)
-    public userReviewList: UserReview[];
+    public userReviewsAuthored: UserReview[];
 
     @OneToMany(type => RecipeReview, review => review.author)
-    public recipeReviewList: RecipeReview[];
+    public recipeReviewsAuthored: RecipeReview[];
 
     @OneToMany(type => Recipe, recipe => recipe.author)
-    public recipesAuthoredList: Recipe[];
+    public recipesAuthored: Recipe[];
 }

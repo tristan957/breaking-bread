@@ -3,23 +3,23 @@ import { DocumentNode } from "graphql";
 
 export const typeDef: DocumentNode = gql`
     extend type Query {
-        recipe(id: Int!): Recipe,
+        allergen(id: Int!): Allergen,
     }
 
-    type Recipe {
-        name: String!,
+    type Allergen {
+        name: String!
     }
 `;
 
-interface IRecipeQuery {
+interface IAllergenQuery {
     id: number;
 }
 
 export const resolvers: IResolvers = {
     Query: {
-        recipe: (parent, args: IRecipeQuery, context, info) => {
+        allergen: (parent, args: IAllergenQuery, context, info) => {
             return {
-                name: `test`,
+                name: `Chicken caprese ${args.id}`,
             };
         },
     },

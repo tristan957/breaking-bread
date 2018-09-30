@@ -1,5 +1,7 @@
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode } from "graphql";
+import { getConnection } from "typeorm";
+import User from "../entities/User";
 
 export const typeDef: DocumentNode = gql`
     extend type Query {
@@ -12,9 +14,13 @@ export const typeDef: DocumentNode = gql`
         about: String!,
         email: String!,
         phoneNumber: Float!,
-        whitelist: [Topic]!,
-        blacklist: [Topic]!,
-        reviews: [Review]!,
+        hostedMeals: [Meal],
+        whitelist: [Topic],
+        blacklist: [Topic],
+        reviewSubjectList: [UserReview],
+        userReviewsAuthored: [UserReview],
+        recipeReviewsAuthored: [RecipeReview],
+        recipesAuthored: [Recipe],
     }
 `;
 
@@ -25,13 +31,16 @@ interface IUserQuery {
 export const resolvers: IResolvers = {
     Query: {
         user: (parent, args: IUserQuery, context, info) => {
-            return {
-                firstName: `Greg`,
-                lastName: `Noonan`,
-                reviews: {
-                    name: `hi`,
-                },
-            };
+            return getConnection()
+                .getRepository(User)
+                .createQueryBuilder("user")
+                .where(`"user"."id" = ${args.id}`)
+                .getOne()
+                .then(user => {
+                    if (user === undefined) { return undefined; }
+
+                    return user;
+                });
         },
     },
 };

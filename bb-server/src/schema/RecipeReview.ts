@@ -3,21 +3,21 @@ import { DocumentNode } from "graphql";
 
 export const typeDef: DocumentNode = gql`
     extend type Query {
-        review(id: Int!): Review,
+        recipeReview(id: Int!): RecipeReview,
     }
 
-    type Review {
+    type RecipeReview {
         name: String!,
     }
 `;
 
-interface IReviewQuery {
+interface IRecipeReviewQuery {
     id: number;
 }
 
 export const resolvers: IResolvers = {
     Query: {
-        review: (parent, args: IReviewQuery, context, info) => {
+        recipeReview: (parent, args: IRecipeReviewQuery, context, info) => {
             return {
                 name: `test`,
             };

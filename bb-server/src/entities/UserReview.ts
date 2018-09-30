@@ -19,6 +19,6 @@ export default class UserReview {
     @ManyToOne(type => User, user => user.reviewSubjectList)
     public subject: User;
 
-    @ManyToOne(type => User, user => user.userReviewList)
+    @ManyToOne(type => User, user => user.userReviewsAuthored)
     public author: User;
 }
