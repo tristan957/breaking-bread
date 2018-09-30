@@ -1,6 +1,9 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
-import Review from "./Review";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import Meal from "./Meal";
+import Recipe from "./Recipe";
+import RecipeReview from "./RecipeReview";
 import Topic from "./Topic";
+import UserReview from "./UserReview";
 
 @Entity()
 @Unique(["email", "phoneNumber"])
@@ -26,12 +29,29 @@ export default class User {
     @CreateDateColumn()
     public createdAt: Date;
 
-    @OneToMany(type => Topic, topic => topic.id)
+    // Each meal has one host but a user can host multiple meals
+    @OneToMany(type => Meal, meal => meal.host)
+    public hostedMeals: Meal[];
+
+    // User has topics but topics are not unique to user
+    @ManyToMany(type => Topic)
+    @JoinTable()
     public whitelist: Topic[];
 
-    @OneToMany(type => Topic, topic => topic.id)
+    // User has topics but topics are not unique to user
+    @ManyToMany(type => Topic)
+    @JoinTable()
     public blacklist: Topic[];
 
-    @OneToMany(type => Review, review => review.id)
-    public reviews: Review[];
+    @OneToMany(type => UserReview, review => review.subject)
+    public reviewSubjectList: UserReview[];
+
+    @OneToMany(type => UserReview, review => review.author)
+    public userReviewList: UserReview[];
+
+    @OneToMany(type => RecipeReview, review => review.author)
+    public recipeReviewList: RecipeReview[];
+
+    @OneToMany(type => Recipe, recipe => recipe.author)
+    public recipesAuthoredList: Recipe[];
 }

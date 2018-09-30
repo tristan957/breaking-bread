@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Ingredient from "./Ingredient";
-import Review from "./Review";
+import RecipeReview from "./RecipeReview";
 import Tag from "./Tag";
 import User from "./User";
 
@@ -21,15 +21,18 @@ export default class Recipe {
     @UpdateDateColumn()
     public updatedAt: Date;
 
-    @OneToOne(type => User, user => user.id)
+    // User can write more than one review
+    @ManyToOne(type => User, user => user.recipesAuthoredList)
     public author: User;
 
-    @OneToMany(type => Review, review => review.id)
-    public reviews: Review[];
+    @OneToMany(type => RecipeReview, review => review.subject)
+    public reviewsList: RecipeReview[];
 
-    @OneToMany(type => Tag, tag => tag.id)
+    @ManyToMany(type => Tag)
+    @JoinTable()
     public tags: Tag[];
 
-    @OneToMany(type => Ingredient, ingredient => ingredient.id)
+    @ManyToMany(type => Ingredient)
+    @JoinTable()
     public ingredients: Ingredient[];
 }

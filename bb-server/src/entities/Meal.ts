@@ -1,7 +1,6 @@
-import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Recipe from "./Recipe";
 import User from "./User";
-
 @Entity()
 export default class Meal {
     @PrimaryGeneratedColumn()
@@ -22,12 +21,17 @@ export default class Meal {
     @UpdateDateColumn()
     public updatedAt: Date;
 
-    @OneToOne(type => User, user => user.id)
+    // Each meal has one host but a user can host multiple meals
+    @ManyToOne(type => User, user => user.id)
     public host: User;
 
-    @OneToMany(type => User, user => user.id)
+    // Meals have guests but quests are not unique to a meal
+    @ManyToMany(type => User)
+    @JoinTable()
     public guests: User[];
 
-    @OneToMany(type => Recipe, recipe => recipe.id)
+    // People should be able to share/re-use recipes. So recipes should not belong to one meal
+    @ManyToMany(type => Recipe)
+    @JoinTable()
     public recipes: Recipe[];
 }

@@ -7,15 +7,30 @@ export const typeDef: DocumentNode = gql`
     }
 
     type User {
-        username: String!
+        firstName: String!,
+        lastName: String!,
+        about: String!,
+        email: String!,
+        phoneNumber: Float!,
+        whitelist: [Topic]!,
+        blacklist: [Topic]!,
+        reviews: [Review]!,
     }
 `;
 
+interface IUserQuery {
+    id: number;
+}
+
 export const resolvers: IResolvers = {
     Query: {
-        user: (parent, args, context, info) => {
+        user: (parent, args: IUserQuery, context, info) => {
             return {
-                username: `Greg Noonan ${args.id}`,
+                firstName: `Greg`,
+                lastName: `Noonan`,
+                reviews: {
+                    name: `hi`,
+                },
             };
         },
     },
