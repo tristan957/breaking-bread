@@ -17,7 +17,7 @@ interface IAllergyQuery {
 
 export const resolvers: IResolvers = {
     Query: {
-        allergen: (parent, args: IAllergyQuery, context, info) => {
+        allergy: (parent, args: IAllergyQuery, context, info) => {
             return {
                 name: `Chicken caprese ${args.id}`,
             };

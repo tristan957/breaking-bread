@@ -1,7 +1,6 @@
 /* tslint:disable: strict-boolean-expressions */
 import { ApolloServer } from "apollo-server-express";
-// tslint:disable-next-line: match-default-export-name
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express from "express";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
