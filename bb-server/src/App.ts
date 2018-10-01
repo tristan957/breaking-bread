@@ -5,8 +5,8 @@ import * as dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express from "express";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
-import { entities } from "./entities/entities";
-import { resolvers, typeDefs } from "./schema/schema";
+import { entities } from "./entities";
+import { resolvers, typeDefs } from "./schema";
 
 export default class App {
 
@@ -53,8 +53,8 @@ export default class App {
             entities,
             synchronize: true,
         })
-            .then(value => this.connection = value)
-            .catch(reason => {
+            .then((value: Connection) => this.connection = value)
+            .catch((reason: void) => {
                 console.log(`Unable to create database connection: ${reason}`);
                 process.exit(1);
             });

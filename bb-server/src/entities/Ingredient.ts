@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
-import Allergen from "./Allergen";
+import Allergy from "./Allergy";
 
 @Entity()
 @Unique(["name"])
@@ -10,8 +10,7 @@ export default class Ingredient {
     @Column()
     public name: string;
 
-    // Has multiple allergens, while allergens are not unique to an ingredient
-    @ManyToMany(type => Allergen)
+    @ManyToMany(type => Allergy)
     @JoinTable()
-    public allergens: Allergen[];
+    public allergies: Allergy[];
 }

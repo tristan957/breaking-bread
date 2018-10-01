@@ -1,4 +1,4 @@
-import Allergen from "./Allergen";
+import Allergy from "./Allergy";
 import Ingredient from "./Ingredient";
 import Meal from "./Meal";
 import Recipe from "./Recipe";
@@ -8,6 +8,7 @@ import Topic from "./Topic";
 import User from "./User";
 import UserReview from "./UserReview";
 
-export const entities: Function[] = [
-    Ingredient, Meal, Recipe, Allergen, UserReview, RecipeReview, Tag, Topic, User,
+// tslint:disable-next-line: no-any
+export const entities: any[] = [
+    Ingredient, Meal, Recipe, Allergy, UserReview, RecipeReview, Tag, Topic, User,
 ];

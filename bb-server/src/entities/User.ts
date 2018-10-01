@@ -29,22 +29,19 @@ export default class User {
     @CreateDateColumn()
     public createdAt: Date;
 
-    // Each meal has one host but a user can host multiple meals
     @OneToMany(type => Meal, meal => meal.host)
     public hostedMeals: Meal[];
 
-    // User has topics but topics are not unique to user
     @ManyToMany(type => Topic)
     @JoinTable()
     public whitelist: Topic[];
 
-    // User has topics but topics are not unique to user
     @ManyToMany(type => Topic)
     @JoinTable()
     public blacklist: Topic[];
 
-    @OneToMany(type => UserReview, review => review.subject)
-    public reviewSubjectList: UserReview[];
+    @OneToMany(type => RecipeReview, review => review.subject)
+    public reviews: UserReview[];
 
     @OneToMany(type => UserReview, review => review.author)
     public userReviewsAuthored: UserReview[];

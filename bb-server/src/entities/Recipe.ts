@@ -21,12 +21,11 @@ export default class Recipe {
     @UpdateDateColumn()
     public updatedAt: Date;
 
-    // User can write more than one review
     @ManyToOne(type => User, user => user.recipesAuthored)
     public author: User;
 
     @OneToMany(type => RecipeReview, review => review.subject)
-    public reviewsList: RecipeReview[];
+    public reviews: RecipeReview[];
 
     @ManyToMany(type => Tag)
     @JoinTable()

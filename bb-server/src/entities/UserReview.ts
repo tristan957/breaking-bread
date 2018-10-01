@@ -15,8 +15,7 @@ export default class UserReview {
     @CreateDateColumn()
     public createdAt: Date;
 
-    // Needed for foreign key creation
-    @ManyToOne(type => User, user => user.reviewSubjectList)
+    @ManyToOne(type => User, user => user.reviews)
     public subject: User;
 
     @ManyToOne(type => User, user => user.userReviewsAuthored)
