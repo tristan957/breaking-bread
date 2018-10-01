@@ -1,5 +1,4 @@
 {
-  "graphqlForVSCode.nodePath": "${workspaceRoot}/bb-server/node_modules",
   "[typescript]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": true,
@@ -15,4 +14,5 @@
   "tslint.autoFixOnSave": true,
   "tslint.exclude": "node_modules/**",
   "tslint.packageManager": "yarn",
+  "typescript.tsdk": "bb-server/node_modules/typescript/lib"
 }
