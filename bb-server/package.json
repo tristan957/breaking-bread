@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "ts-run": "ts-node src/index.ts",
+    "ts-node": "ts-node src/index.ts",
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "devDependencies": {
