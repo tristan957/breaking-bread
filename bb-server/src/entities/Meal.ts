@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Recipe from "./Recipe";
 import User from "./User";
 
@@ -22,12 +22,14 @@ export default class Meal {
     @UpdateDateColumn()
     public updatedAt: Date;
 
-    @OneToOne(type => User, user => user.id)
+    @ManyToOne(type => User)
     public host: User;
 
-    @OneToMany(type => User, user => user.id)
+    @ManyToMany(type => User)
+    @JoinTable()
     public guests: User[];
 
-    @OneToMany(type => Recipe, recipe => recipe.id)
+    @ManyToMany(type => Recipe)
+    @JoinTable()
     public recipes: Recipe[];
 }

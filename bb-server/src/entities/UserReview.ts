@@ -1,8 +1,8 @@
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import User from "./User";
 
 @Entity()
-export default class Review {
+export default class UserReview {
     @PrimaryGeneratedColumn()
     public id: number;
 
@@ -15,9 +15,9 @@ export default class Review {
     @CreateDateColumn()
     public createdAt: Date;
 
-    @UpdateDateColumn()
-    public updatedAt: Date;
+    @ManyToOne(type => User, user => user.reviews)
+    public subject: User;
 
-    @OneToOne(type => User, user => user.id)
+    @ManyToOne(type => User, user => user.userReviewsAuthored)
     public author: User;
 }

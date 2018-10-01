@@ -1,17 +1,12 @@
 /* tslint:disable: strict-boolean-expressions */
 import { ApolloServer } from "apollo-server-express";
+// tslint:disable-next-line: match-default-export-name
 import * as dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express from "express";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
-import Ingredient from "./entities/Ingredient";
-import Meal from "./entities/Meal";
-import Recipe from "./entities/Recipe";
-import Review from "./entities/Review";
-import Tag from "./entities/Tag";
-import Topic from "./entities/Topic";
-import User from "./entities/User";
-import { resolvers, typeDefs } from "./schema/schema";
+import { entities } from "./entities";
+import { resolvers, typeDefs } from "./schema";
 
 export default class App {
 
@@ -55,11 +50,11 @@ export default class App {
             password: process.env.TYPEORM_PASSWORD || "christ",
             database: process.env.TYPEORM_DATABASE || "BreakingBread",
             logger,
-            entities: [Ingredient, Meal, Recipe, Review, Tag, Topic, User],
-            synchronize: isDEV,
+            entities,
+            synchronize: true,
         })
-            .then(value => this.connection = value)
-            .catch(reason => {
+            .then((value: Connection) => this.connection = value)
+            .catch((reason: void) => {
                 console.log(`Unable to create database connection: ${reason}`);
                 process.exit(1);
             });

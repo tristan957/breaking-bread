@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import Allergy from "./Allergy";
 
 @Entity()
 @Unique(["name"])
@@ -8,4 +9,8 @@ export default class Ingredient {
 
     @Column()
     public name: string;
+
+    @ManyToMany(type => Allergy)
+    @JoinTable()
+    public allergies: Allergy[];
 }
