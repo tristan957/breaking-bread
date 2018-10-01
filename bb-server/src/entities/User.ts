@@ -40,7 +40,7 @@ export default class User {
     @JoinTable()
     public blacklist: Topic[];
 
-    @OneToMany(type => RecipeReview, review => review.subject)
+    @OneToMany(type => UserReview, review => review.subject)
     public reviews: UserReview[];
 
     @OneToMany(type => UserReview, review => review.author)
