@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    environment:
+      BB_CLIENT_DIR: bb-client
+      BB_SERVER_DIR: bb-server
+
+    docker:
+      - image: circleci/node:8
+
+    working_directory: ~/breaking-bread
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v2-server-dependencies-{{ arch }}-{{ .Branch }}-{{ checksum "bb-server/yarn.lock" }}
+          - v2-server-dependencies-{{ arch }}-{{ .Branch }}-
+          - v2-server-dependencies-{{ arch }}-
+          - v2-server-dependencies-
+
+      - run: yarn --cwd $BB_SERVER_DIR install
+
+      - save_cache:
+          paths:
+            - bb-server/node_modules
+          key: v2-server-dependencies-{{ arch }}-{{ .Branch }}-{{ checksum "bb-server/yarn.lock" }}
+
+      - run: yarn --cwd $BB_SERVER_DIR run tslint
+      - run: yarn --cwd $BB_SERVER_DIR build
