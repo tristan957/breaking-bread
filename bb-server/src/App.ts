@@ -50,7 +50,7 @@ export default class App {
             database: process.env.TYPEORM_DATABASE || "BreakingBread",
             logger,
             entities,
-            synchronize: true,
+            synchronize: isDEV,
         })
             .then((value: Connection) => this.connection = value)
             .catch((reason: void) => {
