@@ -7,7 +7,11 @@ export const typeDef: DocumentNode = gql`
     }
 
     type UserReview {
-        name: String!,
+        id: Int!,
+        rating: Int!,
+        description: String!,
+        subject: User!,
+        author: User!,
     }
 `;
 

@@ -9,15 +9,17 @@ export const typeDef: DocumentNode = gql`
     }
 
     type User {
+        id: Int!,
         firstName: String!,
         lastName: String!,
         about: String!,
         email: String!,
         phoneNumber: Float!,
+        createdAt: Date!,
         hostedMeals: [Meal],
         whitelist: [Topic],
         blacklist: [Topic],
-        reviewSubjectList: [UserReview],
+        reviews: [UserReview],
         userReviewsAuthored: [UserReview],
         recipeReviewsAuthored: [RecipeReview],
         recipesAuthored: [Recipe],
@@ -33,12 +35,20 @@ export const resolvers: IResolvers = {
         user: (parent, args: IUserQuery, context, info) => {
             return getConnection()
                 .getRepository(User)
-                .createQueryBuilder("user")
-                .where(`"user"."id" = ${args.id}`)
-                .getOne()
+                .findOne({
+                    where: {
+                        id: args.id,
+                    },
+                    relations: [
+                        "hostedMeals", "whitelist", "blacklist",
+                        "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
+                        "recipesAuthored",
+                    ],
+                })
                 .then(user => {
                     if (user === undefined) { return undefined; }
 
+                    console.log(user);
                     return user;
                 });
         },
