@@ -3,11 +3,11 @@ import { DocumentNode } from "graphql";
 
 export const typeDef: DocumentNode = gql`
     extend type Query {
-        tag(id: Int!): Tag,
+        tag(id: Int!): Tag
     }
 
     type Tag {
-        id: Int!,
+        id: Int!
         name: String!
     }
 `;

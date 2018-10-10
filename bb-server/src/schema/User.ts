@@ -9,16 +9,16 @@ export const typeDef: DocumentNode = gql`
     }
 
     type User {
-        id: Int!,
-        firstName: String!,
-        lastName: String!,
-        about: String!,
-        email: String!,
-        phoneNumber: String!,
-        createdAt: String!,
-        whitelist: [Topic]!,
-        blacklist: [Topic]!,
-        reviews: [UserReview]!,
+        id: Int!
+        firstName: String!
+        lastName: String!
+        about: String!
+        email: String!
+        phoneNumber: DateTime!
+        createdAt: DateTime!
+        whitelist: [Topic]!
+        blacklist: [Topic]!
+        reviews: [UserReview]!
     }
 `;
 

@@ -2,6 +2,7 @@ import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode } from "graphql";
 import merge from "lodash.merge";
 import { resolvers as allergyResolvers, typeDef as Allergy } from "./Allergy";
+import { resolvers as dateResolvers, typeDef as DateTime } from "./DateTime";
 import { resolvers as ingredientResolvers, typeDef as Ingredient } from "./Ingredient";
 import { resolvers as mealResolvers, typeDef as Meal } from "./Meal";
 import { resolvers as recipeResolvers, typeDef as Recipe } from "./Recipe";
@@ -19,14 +20,14 @@ const Query: DocumentNode = gql`
 `;
 
 export const typeDefs: DocumentNode[] = [
-    Allergy, Meal, Query,
+    Allergy, DateTime, Meal, Query,
     User, Topic, Tag, Recipe,
     UserReview, RecipeReview, Ingredient,
 ];
 
 // tslint:disable-next-line: no-unsafe-any
 export const resolvers: IResolvers = merge(
-    allergyResolvers, mealResolvers, userResolvers,
+    allergyResolvers, dateResolvers, mealResolvers, userResolvers,
     topicResolvers, tagResolvers, recipeResolvers,
     userReviewResolvers, recipeReviewResolvers, ingredientResolvers
 );

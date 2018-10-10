@@ -3,19 +3,19 @@ import { DocumentNode } from "graphql";
 
 export const typeDef: DocumentNode = gql`
     extend type Query {
-        recipe(id: Int!): Recipe,
+        recipe(id: Int!): Recipe
     }
 
     type Recipe {
-        id: Int!,
-        name: String!,
-        description: String!,
-        createdAt: String!,
-        updatedAt: String!,
-        author: User!,
-        reviews: [RecipeReview]!,
-        tags: [Tag]!,
-        ingredients: [Ingredient]!,
+        id: Int!
+        name: String!
+        description: String!
+        createdAt: DateTime!
+        updatedAt: DateTime!
+        author: User!
+        reviews: [RecipeReview]!
+        tags: [Tag]!
+        ingredients: [Ingredient]!
     }
 `;
 

@@ -3,17 +3,17 @@ import { DocumentNode } from "graphql";
 
 export const typeDef: DocumentNode = gql`
     extend type Query {
-        userReview(id: Int!): UserReview,
+        userReview(id: Int!): UserReview
     }
 
     type UserReview {
-        id: Int!,
-        rating: Int!,
-        description: String,
-        createdAt: String!,
-        updatedAt: String!,
-        subject: User!,
-        author: User!,
+        id: Int!
+        rating: Int!
+        description: String
+        createdAt: DateTime!
+        updatedAt: DateTime!
+        subject: User!
+        author: User!
     }
 `;
 

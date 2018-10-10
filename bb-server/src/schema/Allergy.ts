@@ -3,12 +3,12 @@ import { DocumentNode } from "graphql";
 
 export const typeDef: DocumentNode = gql`
     extend type Query {
-        allergy(id: Int!): Allergy,
+        allergy(id: Int!): Allergy
     }
 
     type Allergy {
-        id: Int!,
-        name: String!,
+        id: Int!
+        name: String!
     }
 `;
 

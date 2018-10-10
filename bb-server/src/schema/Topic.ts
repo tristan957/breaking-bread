@@ -5,12 +5,12 @@ import Topic from "../entities/Topic";
 
 export const typeDef: DocumentNode = gql`
     extend type Query {
-        topic(id: Int!): Topic,
+        topic(id: Int!): Topic
     }
 
     type Topic {
-        id: Int!,
-        name: String!,
+        id: Int!
+        name: String!
     }
 `;
 
