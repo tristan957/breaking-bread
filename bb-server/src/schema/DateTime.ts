@@ -10,7 +10,7 @@ export const resolvers: IResolvers = {
     DateTime: new GraphQLScalarType({
         name: "DateTime",
         description: "DateTime represents Postgres date type",
-        parseValue(value: any): Date { // tslint:disable-line: no-any
+        parseValue(value: number): Date {
             return new Date(value);
         },
         serialize(value: Date): number {
