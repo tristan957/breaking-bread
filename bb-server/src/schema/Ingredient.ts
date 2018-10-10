@@ -7,7 +7,9 @@ export const typeDef: DocumentNode = gql`
     }
 
     type Ingredient {
-        name: String!
+        id: Int!,
+        name: String!,
+        allergies: Allergy!,
     }
 `;
 

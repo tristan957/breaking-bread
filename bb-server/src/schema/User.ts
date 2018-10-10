@@ -14,15 +14,11 @@ export const typeDef: DocumentNode = gql`
         lastName: String!,
         about: String!,
         email: String!,
-        phoneNumber: Float!,
-        createdAt: Date!,
-        hostedMeals: [Meal],
-        whitelist: [Topic],
-        blacklist: [Topic],
-        reviews: [UserReview],
-        userReviewsAuthored: [UserReview],
-        recipeReviewsAuthored: [RecipeReview],
-        recipesAuthored: [Recipe],
+        phoneNumber: String!,
+        createdAt: String!,
+        whitelist: [Topic]!,
+        blacklist: [Topic]!,
+        reviews: [UserReview]!,
     }
 `;
 
@@ -48,7 +44,6 @@ export const resolvers: IResolvers = {
                 .then(user => {
                     if (user === undefined) { return undefined; }
 
-                    console.log(user);
                     return user;
                 });
         },

@@ -22,7 +22,7 @@ export default class Meal {
     @UpdateDateColumn()
     public updatedAt: Date;
 
-    @ManyToOne(type => User)
+    @ManyToOne(type => User, { eager: true })
     public host: User;
 
     @ManyToMany(type => User)

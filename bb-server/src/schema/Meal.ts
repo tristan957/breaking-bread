@@ -7,7 +7,15 @@ export const typeDef: DocumentNode = gql`
     }
 
     type Meal {
-        name: String!
+        id: Int!,
+        location: String!,
+        date: String!,
+        name: String!,
+        createdAt: String!,
+        updatedAt: String!,
+        host: User!,
+        guests: [User]!,
+        recipes: [Recipe]!,
     }
 `;
 

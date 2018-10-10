@@ -9,7 +9,7 @@ export const typeDef: DocumentNode = gql`
     }
 
     type Topic {
-        id: Int,
+        id: Int!,
         name: String!,
     }
 `;

@@ -7,7 +7,8 @@ export const typeDef: DocumentNode = gql`
     }
 
     type Allergy {
-        name: String!
+        id: Int!,
+        name: String!,
     }
 `;
 

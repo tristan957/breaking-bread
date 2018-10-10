@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Recipe from "./Recipe";
 import User from "./User";
 
@@ -10,15 +10,18 @@ export default class RecipeReview {
     @Column({ type: "int4" })
     public rating: number;
 
-    @Column({ type: "text" })
+    @Column({ type: "text", nullable: true })
     public description: string;
 
     @CreateDateColumn()
     public createdAt: Date;
 
-    @ManyToOne(type => Recipe, recipe => recipe.reviews)
+    @UpdateDateColumn()
+    public updatedAt: Date;
+
+    @ManyToOne(type => Recipe, recipe => recipe.reviews, { eager: true })
     public subject: Recipe;
 
-    @ManyToOne(type => User, user => user.recipeReviewsAuthored)
+    @ManyToOne(type => User, user => user.recipeReviewsAuthored, { eager: true })
     public author: User;
 }

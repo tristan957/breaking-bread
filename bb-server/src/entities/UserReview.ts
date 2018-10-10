@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import User from "./User";
 
 @Entity()
@@ -15,9 +15,12 @@ export default class UserReview {
     @CreateDateColumn()
     public createdAt: Date;
 
-    @ManyToOne(type => User, user => user.reviews)
+    @UpdateDateColumn()
+    public updatedAt: Date;
+
+    @ManyToOne(type => User, user => user.reviews, { eager: true })
     public subject: User;
 
-    @ManyToOne(type => User, user => user.userReviewsAuthored)
+    @ManyToOne(type => User, user => user.userReviewsAuthored, { eager: true })
     public author: User;
 }

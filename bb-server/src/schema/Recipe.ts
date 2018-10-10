@@ -7,7 +7,15 @@ export const typeDef: DocumentNode = gql`
     }
 
     type Recipe {
+        id: Int!,
         name: String!,
+        description: String!,
+        createdAt: String!,
+        updatedAt: String!,
+        author: User!,
+        reviews: [RecipeReview]!,
+        tags: [Tag]!,
+        ingredients: [Ingredient]!,
     }
 `;
 

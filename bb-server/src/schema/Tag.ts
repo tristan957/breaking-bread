@@ -7,6 +7,7 @@ export const typeDef: DocumentNode = gql`
     }
 
     type Tag {
+        id: Int!,
         name: String!
     }
 `;

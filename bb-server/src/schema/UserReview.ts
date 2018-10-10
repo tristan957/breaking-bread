@@ -9,7 +9,9 @@ export const typeDef: DocumentNode = gql`
     type UserReview {
         id: Int!,
         rating: Int!,
-        description: String!,
+        description: String,
+        createdAt: String!,
+        updatedAt: String!,
         subject: User!,
         author: User!,
     }
