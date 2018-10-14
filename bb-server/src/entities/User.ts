@@ -17,7 +17,7 @@ export default class User {
     @Column()
     public lastName: string;
 
-    @Column({ type: "text" })
+    @Column({ type: "text", nullable: true })
     public about: string;
 
     @Column()
@@ -32,11 +32,11 @@ export default class User {
     @OneToMany(type => Meal, meal => meal.host)
     public hostedMeals: Meal[];
 
-    @ManyToMany(type => Topic)
+    @ManyToMany(type => Topic, { cascade: true })
     @JoinTable()
     public whitelist: Topic[];
 
-    @ManyToMany(type => Topic)
+    @ManyToMany(type => Topic, { cascade: true })
     @JoinTable()
     public blacklist: Topic[];
 
