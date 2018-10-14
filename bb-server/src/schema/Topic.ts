@@ -12,6 +12,10 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         name: String!
     }
+
+    input TopicInput {
+        name: String!
+    }
 `;
 
 interface ITopicQuery {

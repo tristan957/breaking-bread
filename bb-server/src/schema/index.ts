@@ -13,6 +13,13 @@ import { resolvers as userResolvers, typeDef as User } from "./User";
 import { resolvers as userReviewResolvers, typeDef as UserReview } from "./UserReview";
 
 // tslint:disable-next-line: variable-name
+const Mutation: DocumentNode = gql`
+    type Mutation {
+        _: String
+    }
+`;
+
+// tslint:disable-next-line: variable-name
 const Query: DocumentNode = gql`
     type Query {
         _: String
@@ -20,7 +27,7 @@ const Query: DocumentNode = gql`
 `;
 
 export const typeDefs: DocumentNode[] = [
-    Allergy, DateTime, Meal, Query,
+    Allergy, DateTime, Meal, Mutation, Query,
     User, Topic, Tag, Recipe,
     UserReview, RecipeReview, Ingredient,
 ];
