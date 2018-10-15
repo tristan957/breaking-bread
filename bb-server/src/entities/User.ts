@@ -32,11 +32,11 @@ export default class User {
     @OneToMany(type => Meal, meal => meal.host)
     public hostedMeals: Meal[];
 
-    @ManyToMany(type => Topic, { cascade: true })
+    @ManyToMany(type => Topic)
     @JoinTable()
     public whitelist: Topic[];
 
-    @ManyToMany(type => Topic, { cascade: true })
+    @ManyToMany(type => Topic)
     @JoinTable()
     public blacklist: Topic[];
 

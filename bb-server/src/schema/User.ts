@@ -31,8 +31,6 @@ export const typeDef: DocumentNode = gql`
         about: String
         email: String!
         phoneNumber: String!
-        whitelist: [TopicInput]
-        blacklist: [TopicInput]
     }
 `;
 
