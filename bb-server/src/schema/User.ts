@@ -3,7 +3,7 @@ import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial, getConnection, Repository } from "typeorm";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
-import { _createTopic, _getTopic } from "./Topic";
+import { createTopic, getTopic } from "./Topic";
 
 export const typeDef: DocumentNode = gql`
     extend type Mutation {
@@ -51,11 +51,11 @@ interface ICreateUserInput {
 }
 
 // tslint:disable-next-line: no-any
-function createUser(parent: any, args: ICreateUserInput, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
-    return _createUser(args.input);
+function _createUser(parent: any, args: ICreateUserInput, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
+    return createUser(args.input);
 }
 
-export async function _createUser(newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
+export async function createUser(newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
     const userRepo: Repository<User> = getConnection().getRepository(User);
 
     try {
@@ -72,11 +72,11 @@ interface IGetUser {
 }
 
 // tslint:disable-next-line: no-any
-function getUser(parent: any, args: IGetUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return  _getUser(args.id);
+function _getUser(parent: any, args: IGetUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
+    return  getUser(args.id);
 }
 
-export async function _getUser(id: number): Promise<User | undefined> {
+export async function getUser(id: number): Promise<User | undefined> {
     return getConnection()
         .getRepository(User)
         .findOne({
@@ -96,17 +96,17 @@ interface IUpdateUser {
 }
 
 // tslint:disable-next-line: no-any
-function updateUser(parent: any, args: IUpdateUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return _updateUser(args.input);
+function _updateUser(parent: any, args: IUpdateUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
+    return updateUser(args.input);
 }
 
-export async function _updateUser(input: DeepPartial<User>): Promise<User | undefined> {
+export async function updateUser(input: DeepPartial<User>): Promise<User | undefined> {
     if (input.id === undefined) {
         return undefined;
     }
     try {
         const user: User | undefined = await getConnection().getRepository(User).save({
-            ..._getUser(input.id),
+            ...getUser(input.id),
             ...input,
         });
         return user;
@@ -122,21 +122,21 @@ interface IUpdateWhitelist {
 }
 
 // tslint:disable-next-line: no-any
-function updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return _updateWhitelist(args.id, args.topics);
+function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+    return updateWhitelist(args.id, args.topics);
 }
 
-export async function _updateWhitelist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
     try {
-        const user: User | undefined = await _getUser(id);
+        const user: User | undefined = await getUser(id);
         if (user === undefined) {
             return Promise.reject(undefined);
         }
         for (const topic of topics) {
-            await _createTopic({ name: topic.name });
+            await createTopic({ name: topic.name });
         }
 
-        user.whitelist = await _newTopicList(
+        user.whitelist = await newTopicList(
             await topics.map(topic => topic.name),
             await user.whitelist.map(topic => topic.name)
         );
@@ -150,21 +150,21 @@ export async function _updateWhitelist(id: number, topics: DeepPartial<Topic>[])
 }
 
 // tslint:disable-next-line: no-any
-function updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return _updateBlacklist(args.id, args.topics);
+function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+    return updateBlacklist(args.id, args.topics);
 }
 
-export async function _updateBlacklist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
     try {
-        const user: User | undefined = await _getUser(id);
+        const user: User | undefined = await getUser(id);
         if (user === undefined) {
             return Promise.reject(undefined);
         }
         for (const topic of topics) {
-            await _createTopic({ name: topic.name });
+            await createTopic({ name: topic.name });
         }
 
-        user.blacklist = await _newTopicList(
+        user.blacklist = await newTopicList(
             await topics.map(topic => topic.name),
             await user.blacklist.map(topic => topic.name)
         );
@@ -177,7 +177,7 @@ export async function _updateBlacklist(id: number, topics: DeepPartial<Topic>[])
     }
 }
 
-async function _newTopicList(toggleTopics: (string | undefined)[], userTopics: (string | undefined)[]): Promise<Topic[]> {
+async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (string | undefined)[]): Promise<Topic[]> {
     const namesRemoved: (string | undefined)[] = [];
     for (const name of userTopics) {
         const index: number = toggleTopics.indexOf(name);
@@ -193,25 +193,25 @@ async function _newTopicList(toggleTopics: (string | undefined)[], userTopics: (
     }
 
     const newTopicNames: (string | undefined)[] = [...toggleTopics, ...userTopics];
-    const newTopicList: Topic[] = [];
+    const newList: Topic[] = [];
     for (const name of newTopicNames) {
-        const topic: Topic | undefined = await _getTopic(undefined, name);
+        const topic: Topic | undefined = await getTopic(undefined, name);
         if (topic !== undefined) {
-            newTopicList.push(topic);
+            newList.push(topic);
         }
     }
 
-    return newTopicList;
+    return newList;
 }
 
 export const resolvers: IResolvers = {
     Mutation: {
-        createUser,
-        updateUser,
-        updateWhitelist,
-        updateBlacklist,
+        createUser: _createUser,
+        updateUser: _updateUser,
+        updateWhitelist: _updateWhitelist,
+        updateBlacklist: _updateBlacklist,
     },
     Query: {
-        getUser,
+        getUser: _getUser,
     },
 };

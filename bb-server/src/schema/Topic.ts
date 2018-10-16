@@ -27,11 +27,11 @@ interface ICreateTopicsInput {
 }
 
 // tslint:disable-next-line: no-any
-function createTopic(parent: any, args: ICreateTopicsInput, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
-    return _createTopic(args.topic);
+function _createTopic(parent: any, args: ICreateTopicsInput, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
+    return createTopic(args.topic);
 }
 
-export async function _createTopic(topic: DeepPartial<Topic>): Promise<DeepPartial<Topic>> {
+export async function createTopic(topic: DeepPartial<Topic>): Promise<DeepPartial<Topic>> {
     const topicsRepo: Repository<Topic> = await getConnection().getRepository(Topic);
 
     const foundTopic: Topic | undefined = await topicsRepo.createQueryBuilder("topic")
@@ -49,11 +49,11 @@ interface IGetTopic {
 }
 
 // tslint:disable-next-line: no-any
-function getTopic(parent: any, args: IGetTopic, ctx: any, info: GraphQLResolveInfo): Promise<Topic | undefined> {
-    return _getTopic(args.input.id, args.input.name);
+function _getTopic(parent: any, args: IGetTopic, ctx: any, info: GraphQLResolveInfo): Promise<Topic | undefined> {
+    return getTopic(args.input.id, args.input.name);
 }
 
-export async function _getTopic(id: number | undefined = undefined, name: string | undefined = undefined): Promise<Topic | undefined> {
+export async function getTopic(id: number | undefined = undefined, name: string | undefined = undefined): Promise<Topic | undefined> {
     if (typeof id === "number") {
         return getRepository(Topic).createQueryBuilder("topic")
             .where("topic.id = :id", { id })
@@ -71,9 +71,9 @@ export async function _getTopic(id: number | undefined = undefined, name: string
 
 export const resolvers: IResolvers = {
     Mutation: {
-        createTopic,
+        createTopic: _createTopic,
     },
     Query: {
-        getTopic,
+        getTopic: _getTopic,
     },
 };
