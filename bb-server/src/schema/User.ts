@@ -10,10 +10,11 @@ export const typeDef: DocumentNode = gql`
         createUser(input: CreateUserInput!): User
         updateUser(input: UpdateUserInput!): User
         updateWhitelist(id: Int!, topics: [TopicInput]!): [Topic]
+        updateBlacklist(id: Int!, topics: [TopicInput]!): [Topic]
     }
 
     extend type Query {
-        user(id: Int!): User
+        getUser(id: Int!): User
     }
 
     type User {
@@ -38,6 +39,13 @@ export const typeDef: DocumentNode = gql`
         whitelist: [TopicInput]
         blacklist: [TopicInput]
     }
+
+    input UpdateUserInput {
+        id: Int!
+        about: String
+        email: String
+        phoneNumber: String
+    }
 `;
 
 interface ICreateUserInput {
@@ -50,8 +58,10 @@ function createUser(parent: any, args: ICreateUserInput, ctx: any, info: GraphQL
 }
 
 export async function _createUser(newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
+    const userRepo: Repository<User> = getConnection().getRepository(User);
+
     try {
-        const user: DeepPartial<User> = await userRepo.save(args.input);
+        const user: DeepPartial<User> = await userRepo.save(newUser);
         return user;
     } catch (reason) {
         console.log(reason);
@@ -65,11 +75,7 @@ interface IGetUser {
 
 // tslint:disable-next-line: no-any
 function getUser(parent: any, args: IGetUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
-    if (args.id === undefined) {
-        return Promise.reject(undefined);
-    }
-
-    return args.id !== undefined ? _getUser(args.id) : Promise.reject(undefined);
+    return  _getUser(args.id);
 }
 
 export async function _getUser(id: number): Promise<User | undefined> {
@@ -93,7 +99,7 @@ interface IUpdateUser {
 
 // tslint:disable-next-line: no-any
 function updateUser(parent: any, args: IUpdateUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return args.input.id !== undefined ? _updateUser(args.input) : Promise.reject(undefined);
+    return _updateUser(args.input);
 }
 
 export async function _updateUser(input: DeepPartial<User>): Promise<User | undefined> {
@@ -112,21 +118,92 @@ export async function _updateUser(input: DeepPartial<User>): Promise<User | unde
     }
 }
 
+interface IUpdateWhitelist {
+    id: number;
+    topics: DeepPartial<Topic>[];
+}
+
+// tslint:disable-next-line: no-any
+function updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+    return _updateWhitelist(args.id, args.topics);
+}
+
 export async function _updateWhitelist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
-    const topicsRepo: Repository<Topic> = getConnection().getRepository(Topic);
     try {
-        const user: User = await _getUser(id);
+        const user: User | undefined = await _getUser(id);
+        if (user === undefined) {
+            return Promise.reject(undefined);
+        }
         for (const topic of topics) {
-            if (await _getTopic(undefined, topic.name) === undefined) {
-                await _createTopic({ name: topic.name });
-            }
+            await _createTopic({ name: topic.name });
         }
 
-        const names: (string | undefined)[] = topics.map(topic => topic.name);
+        user.whitelist = await _newTopicList(
+            await topics.map(topic => topic.name),
+            await user.whitelist.map(topic => topic.name)
+        );
+        getConnection().getRepository(User).save(user);
+
+        return user.whitelist;
     } catch (reason) {
         console.log(reason);
         return undefined;
     }
+}
+
+// tslint:disable-next-line: no-any
+function updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+    return _updateBlacklist(args.id, args.topics);
+}
+
+export async function _updateBlacklist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+    try {
+        const user: User | undefined = await _getUser(id);
+        if (user === undefined) {
+            return Promise.reject(undefined);
+        }
+        for (const topic of topics) {
+            await _createTopic({ name: topic.name });
+        }
+
+        user.blacklist = await _newTopicList(
+            await topics.map(topic => topic.name),
+            await user.blacklist.map(topic => topic.name)
+        );
+        getConnection().getRepository(User).save(user);
+
+        return user.blacklist;
+    } catch (reason) {
+        console.log(reason);
+        return undefined;
+    }
+}
+
+async function _newTopicList(toggleTopics: (string | undefined)[], userTopics: (string | undefined)[]): Promise<Topic[]> {
+    const namesRemoved: (string | undefined)[] = [];
+    for (const name of userTopics) {
+        const index: number = toggleTopics.indexOf(name);
+        if (index >= 0) {
+            await toggleTopics.splice(index, 1);
+            namesRemoved.push(name);
+        }
+    }
+    for (const name of namesRemoved) {
+        await userTopics.splice(
+            userTopics.indexOf(name), 1
+        );
+    }
+
+    const newTopicNames: (string | undefined)[] = [...toggleTopics, ...userTopics];
+    const newTopicList: Topic[] = [];
+    for (const name of newTopicNames) {
+        const topic: Topic | undefined = await _getTopic(undefined, name);
+        if (topic) {
+            newTopicList.push(topic);
+        }
+    }
+
+    return newTopicList;
 }
 
 export const resolvers: IResolvers = {
@@ -134,26 +211,9 @@ export const resolvers: IResolvers = {
         createUser,
         updateUser,
         updateWhitelist,
-        // updateBlacklist,
+        updateBlacklist,
     },
     Query: {
-        user: async (parent, args: IUserQuery, context, info) => {
-            const user: User | undefined = await getConnection()
-                .getRepository(User)
-                .findOne({
-                    where: {
-                        id: args.id,
-                    },
-                    relations: [
-                        "hostedMeals", "whitelist", "blacklist",
-                        "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
-                        "recipesAuthored",
-                    ],
-                });
-            if (user === undefined) {
-                return undefined;
-            }
-            return user;
-        },
+        getUser,
     },
 };

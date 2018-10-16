@@ -1,6 +1,6 @@
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { DeepPartial, getConnection, Repository } from "typeorm";
+import { DeepPartial, getConnection, Repository, getRepository } from "typeorm";
 import Topic from "../entities/Topic";
 
 export const typeDef: DocumentNode = gql`
@@ -32,9 +32,9 @@ function createTopic(parent: any, args: ICreateTopicsInput, ctx: any, info: Grap
 }
 
 export async function _createTopic(topic: DeepPartial<Topic>): Promise<DeepPartial<Topic>> {
-    const topicsRepo: Repository<Topic> = getConnection().getRepository(Topic);
+    const topicsRepo: Repository<Topic> = await getConnection().getRepository(Topic);
 
-    const foundTopic: Topic | undefined = await topicsRepo.createQueryBuilder()
+    const foundTopic: Topic | undefined = await topicsRepo.createQueryBuilder("topic")
         .where("topic.name = :name", { name: topic.name })
         .getOne();
     if (foundTopic === undefined) {
@@ -55,13 +55,13 @@ function getTopic(parent: any, args: IGetTopic, ctx: any, info: GraphQLResolveIn
 
 export async function _getTopic(id: number | undefined = undefined, name: string | undefined = undefined): Promise<Topic | undefined> {
     if (typeof id === "number") {
-        return getConnection().createQueryBuilder()
+        return getRepository(Topic).createQueryBuilder("topic")
             .where("topic.id = :id", { id })
             .getOne();
     }
 
     if (typeof name === "string") {
-        return getConnection().createQueryBuilder()
+        return getRepository(Topic).createQueryBuilder("topic")
             .where("topic.name = :name", { name })
             .getOne();
     }
