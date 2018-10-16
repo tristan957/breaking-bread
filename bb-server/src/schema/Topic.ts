@@ -1,6 +1,6 @@
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { DeepPartial, getConnection, Repository, getRepository } from "typeorm";
+import { DeepPartial, getConnection, getRepository, Repository } from "typeorm";
 import Topic from "../entities/Topic";
 
 export const typeDef: DocumentNode = gql`
