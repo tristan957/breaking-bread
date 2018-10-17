@@ -1,6 +1,6 @@
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { DeepPartial, getConnection, Repository } from "typeorm";
+import { DeepPartial, getConnection, getRepository } from "typeorm";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
 import { createTopic, getTopic } from "./Topic";
@@ -9,8 +9,8 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createUser(input: CreateUserInput!): User
         updateUser(input: UpdateUserInput!): User
-        updateWhitelist(id: Int!, topics: [TopicInput]!): [Topic]
-        updateBlacklist(id: Int!, topics: [TopicInput]!): [Topic]
+        updateWhitelist(id: Int!, topics: [CreateTopicInput]!): [Topic]
+        updateBlacklist(id: Int!, topics: [CreateTopicInput]!): [Topic]
     }
 
     extend type Query {
@@ -50,20 +50,18 @@ export const typeDef: DocumentNode = gql`
  * Mutator Resolvers
  */
 
-interface ICreateUserInput {
+interface ICreateUser {
     input: DeepPartial<User>;
 }
 
 // tslint:disable-next-line: no-any
-function _createUser(parent: any, args: ICreateUserInput, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
+function _createUser(parent: any, args: ICreateUser, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
     return createUser(args.input);
 }
 
 export async function createUser(newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
-    const userRepo: Repository<User> = getConnection().getRepository(User);
-
     try {
-        const user: DeepPartial<User> = await userRepo.save(newUser);
+        const user: DeepPartial<User> = await getRepository(User).save(newUser);
         return user;
     } catch (reason) {
         console.log(reason);
@@ -198,7 +196,10 @@ function _getUser(parent: any, args: IGetUser, ctx: any, info: GraphQLResolveInf
 }
 
 export async function getUser(userReviewId: number): Promise<User | undefined> {
-    const neededRelations: string[] = ["author", "subject"];
+    const neededRelations: string[] = [
+        "hostedMeals", "whitelist", "blacklist",
+        "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
+        "favoriteRecipes", "favoriteUsers", "recipesAuthored"];
     return getConnection()
         .getRepository(User)
         .findOne({

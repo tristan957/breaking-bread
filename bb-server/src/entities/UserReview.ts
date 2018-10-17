@@ -9,7 +9,7 @@ export default class UserReview {
     @Column({ type: "int4" })
     public rating: number;
 
-    @Column({ type: "text" })
+    @Column({ type: "text", nullable: true })
     public description: string;
 
     @CreateDateColumn()
