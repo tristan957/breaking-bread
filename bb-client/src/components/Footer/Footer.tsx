@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Grid, Nav, NavItem } from 'react-bootstrap';
-import './Footer.css'
 import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
+import './Footer.css';
 
 function Footer() {
   return (
@@ -18,7 +19,9 @@ function Footer() {
             Terms & Conditions
           </NavItem>
           <NavItem bsStyle={"link"} eventKey={3} href={"#"}>
-            About Us
+            <Link to={"/test-page"}>
+              About Us
+            </Link>
           </NavItem>
         </Nav>
 
