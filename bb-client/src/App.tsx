@@ -1,13 +1,13 @@
+import Button from '@material-ui/core/Button';
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route} from 'react-router-dom';
-import HomePage from './components/HomePage';
-import NavBar from './components/HeaderComponent/Header';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Footer from './components/FooterComponent/Footer';
 import FormExample from './components/FormExample';
-import Button from '@material-ui/core/Button';
+import NavBar from './components/HeaderComponent/Header';
+import HomePage from './components/HomePage';
 
 class App extends Component {
-  render() {
+  render(): JSX.Element {
     return (
       <Router>
         <div id="continer">
@@ -18,11 +18,11 @@ class App extends Component {
             <Route name="home" exact path="/" component={HomePage} />
             <FormExample />
             <Button variant="contained" color="primary">
-      Hello World
+              Hello World
     </Button>
           </div>
           <div id="footer">
-            <Footer/>
+            <Footer />
           </div>
         </div>
       </Router>
