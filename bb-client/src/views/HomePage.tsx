@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Background from "../components/Background";
 import Footer from "../components/Footer";
 import FormExample from "../components/FormExample";

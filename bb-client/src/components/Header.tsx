@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./resources/css/Header.css";
+import * as logo from "./resources/images/logo_icon.png";
 
 export default class Header extends React.Component {
 	public render(): JSX.Element {
@@ -8,7 +9,7 @@ export default class Header extends React.Component {
 			<Navbar inverse={true} collapseOnSelect={true}>
 				<Navbar.Header>
 					<Navbar.Brand href="#">
-						<span><img src="./resources/images/logo_icon.png" height="30" className="d-inline-block align-top" /></span>
+						<span><img src={logo} height="30" className="d-inline-block align-top" /></span>
 						<span className={"brandname"}>Breaking Bread</span>
 					</Navbar.Brand>
 					<Navbar.Toggle />

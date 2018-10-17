@@ -10,6 +10,7 @@
 
 .navbar {
     border-radius: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 .navbar-inverse .navbar-nav > li > a {

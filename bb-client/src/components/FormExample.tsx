@@ -1,6 +1,6 @@
-import React from "react";
+import * as React from "react";
 import { ControlLabel, FormControl, FormGroup } from "react-bootstrap";
-import "./FormExample.css";
+import "./resources/css/FormExample.css";
 
 export default class FormExample extends React.Component {
 	public render(): JSX.Element {

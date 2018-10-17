@@ -38,7 +38,8 @@
     ],
     "include": [
         "**/*.ts",
-        "**/*.tsx"
+        "**/*.tsx",
+        "./src/declarations.d.ts"
     ],
     "compileOnSave": false
 }

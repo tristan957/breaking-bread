@@ -1,8 +1,8 @@
-import React from "react";
+import * as React from "react";
 import { Grid, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
-import "./Footer.css";
+import "./resources/css/Footer.css";
 
 export default class Footer extends React.Component {
 	public render(): JSX.Element {
