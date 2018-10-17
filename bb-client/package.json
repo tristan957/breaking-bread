@@ -4,8 +4,8 @@
   "description": "Breaking Bread",
   "main": "index.tsx",
   "scripts": {
-    "start": "webpack-dev-server -w --config webpack.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack-dev-server -w --config webpack.config.dev.js",
+    "bb-server": "webpack --config webpack.config.js && yarn --cwd ../bb-server/ run ts-node"
   },
   "author": "",
   "license": "ISC",
@@ -22,7 +22,8 @@
     "react-router-dom": "^4.3.1",
     "style-loader": "^0.23.0",
     "tslint": "^5.11.0",
-    "url-loader": "^1.1.1"
+    "url-loader": "^1.1.1",
+    "webpack-dev-server": "^3.1.9"
   },
   "devDependencies": {
     "@types/bootstrap": "^4.1.2",

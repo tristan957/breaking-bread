@@ -10,8 +10,13 @@ module.exports = {
     path: path.join(__dirname, 'dist/'),
     filename: '[name].bundle.js',
   },
+  watch: true,
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.css']
+  },
+  devServer: {
+    contentBase: path.join(__dirname, '../dist/'),
+    port: 3000
   },
   devtool: 'inline-source-map',
   module: {
