@@ -22,6 +22,10 @@ export const typeDef: DocumentNode = gql`
     }
 `;
 
+/**
+ * Mutator Resolvers
+ */
+
 interface ICreateTopicsInput {
     topic: DeepPartial<Topic>;
 }
@@ -47,6 +51,10 @@ export async function createTopic(topic: DeepPartial<Topic>): Promise<DeepPartia
 interface IGetTopic {
     input: DeepPartial<Topic>;
 }
+
+/**
+ * Query Resolvers
+ */
 
 // tslint:disable-next-line: no-any
 function _getTopic(parent: any, args: IGetTopic, ctx: any, info: GraphQLResolveInfo): Promise<Topic | undefined> {

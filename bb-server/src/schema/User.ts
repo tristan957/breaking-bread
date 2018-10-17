@@ -46,6 +46,10 @@ export const typeDef: DocumentNode = gql`
     }
 `;
 
+/**
+ * Mutator Resolvers
+ */
+
 interface ICreateUserInput {
     input: DeepPartial<User>;
 }
@@ -65,30 +69,6 @@ export async function createUser(newUser: DeepPartial<User>): Promise<DeepPartia
         console.log(reason);
         return undefined;
     }
-}
-
-interface IGetUser {
-    id: number;
-}
-
-// tslint:disable-next-line: no-any
-function _getUser(parent: any, args: IGetUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return  getUser(args.id);
-}
-
-export async function getUser(id: number): Promise<User | undefined> {
-    return getConnection()
-        .getRepository(User)
-        .findOne({
-            where: {
-                id,
-            },
-            relations: [
-                "hostedMeals", "whitelist", "blacklist",
-                "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
-                "recipesAuthored",
-            ],
-        });
 }
 
 interface IUpdateUser {
@@ -202,6 +182,31 @@ async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (s
     }
 
     return newList;
+}
+
+/**
+ * Query Resolvers
+ */
+
+interface IGetUser {
+    id: number;
+}
+
+// tslint:disable-next-line: no-any
+function _getUser(parent: any, args: IGetUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
+    return  getUser(args.id);
+}
+
+export async function getUser(userReviewId: number): Promise<User | undefined> {
+    const neededRelations: string[] = ["author", "subject"];
+    return getConnection()
+        .getRepository(User)
+        .findOne({
+            where: {
+                id: userReviewId,
+            },
+            relations: neededRelations,
+        });
 }
 
 export const resolvers: IResolvers = {
