@@ -5,7 +5,8 @@
   "main": "index.tsx",
   "scripts": {
     "start": "webpack-dev-server -w --config webpack.config.dev.js",
-    "bb-server": "webpack --config webpack.config.js && yarn --cwd ../bb-server/ run ts-node"
+    "build": "webpack --config webpack.config.js",
+    "bb-server": "yarn --cwd ../bb-server/ run ts-node"
   },
   "author": "",
   "license": "ISC",
