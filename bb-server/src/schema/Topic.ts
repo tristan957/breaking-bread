@@ -1,7 +1,7 @@
 import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { DeepPartial, getConnection, getRepository, Repository } from "typeorm";
+import { DeepPartial, Repository } from "typeorm";
 import { IAppContext } from "../App";
 import Topic from "../entities/Topic";
 
@@ -34,11 +34,11 @@ interface ICreateTopics {
 
 // tslint:disable-next-line: no-any
 function _createTopic(parent: any, args: ICreateTopics, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
-    return createTopic(args.topic);
+    return createTopic(args.topic, ctx);
 }
 
-export async function createTopic(topic: DeepPartial<Topic>): Promise<DeepPartial<Topic>> {
-    const topicsRepo: Repository<Topic> = await getConnection().getRepository(Topic);
+export async function createTopic(topic: DeepPartial<Topic>, ctx: Context<IAppContext>): Promise<DeepPartial<Topic>> {
+    const topicsRepo: Repository<Topic> = await ctx.connection.getRepository(Topic);
 
     const foundTopic: Topic | undefined = await topicsRepo.createQueryBuilder("topic")
         .where("topic.name = :name", { name: topic.name })
@@ -60,18 +60,18 @@ interface IGetTopic {
 
 // tslint:disable-next-line: no-any
 function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic | undefined> {
-    return getTopic(args.input.id, args.input.name);
+    return getTopic(args.input.id, args.input.name, ctx);
 }
 
-export async function getTopic(id: number | undefined = undefined, name: string | undefined = undefined): Promise<Topic | undefined> {
+export async function getTopic(id: number | undefined = undefined, name: string | undefined = undefined, ctx: Context<IAppContext>): Promise<Topic | undefined> {
     if (typeof id === "number") {
-        return getRepository(Topic).createQueryBuilder("topic")
+        return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
             .where("topic.id = :id", { id })
             .getOne();
     }
 
     if (typeof name === "string") {
-        return getRepository(Topic).createQueryBuilder("topic")
+        return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
             .where("topic.name = :name", { name })
             .getOne();
     }

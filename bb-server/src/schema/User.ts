@@ -1,7 +1,7 @@
 import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { DeepPartial, getConnection, getRepository } from "typeorm";
+import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
@@ -58,12 +58,12 @@ interface ICreateUser {
 
 // tslint:disable-next-line: no-any
 function _createUser(parent: any, args: ICreateUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
-    return createUser(args.input);
+    return createUser(args.input, ctx);
 }
 
-export async function createUser(newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
+export async function createUser(newUser: DeepPartial<User>, ctx: Context<IAppContext>): Promise<DeepPartial<User> | undefined> {
     try {
-        const user: DeepPartial<User> = await getRepository(User).save(newUser);
+        const user: DeepPartial<User> = await ctx.connection.getRepository(User).save(newUser);
         return user;
     } catch (reason) {
         console.log(reason);
@@ -77,16 +77,16 @@ interface IUpdateUser {
 
 // tslint:disable-next-line: no-any
 function _updateUser(parent: any, args: IUpdateUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return updateUser(args.input);
+    return updateUser(args.input, ctx);
 }
 
-export async function updateUser(input: DeepPartial<User>): Promise<User | undefined> {
+export async function updateUser(input: DeepPartial<User>, ctx: Context<IAppContext>): Promise<User | undefined> {
     if (input.id === undefined) {
         return undefined;
     }
     try {
-        const user: User | undefined = await getConnection().getRepository(User).save({
-            ...getUser(input.id),
+        const user: User | undefined = await ctx.connection.getRepository(User).save({
+            ...getUser(input.id, ctx),
             ...input,
         });
         return user;
@@ -103,24 +103,25 @@ interface IUpdateWhitelist {
 
 // tslint:disable-next-line: no-any
 function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return updateWhitelist(args.id, args.topics);
+    return updateWhitelist(args.id, args.topics, ctx);
 }
 
-export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
     try {
-        const user: User | undefined = await getUser(id);
+        const user: User | undefined = await getUser(id, ctx);
         if (user === undefined) {
             return Promise.reject(undefined);
         }
         for (const topic of topics) {
-            await createTopic({ name: topic.name });
+            await createTopic({ name: topic.name }, ctx);
         }
 
         user.whitelist = await newTopicList(
             await topics.map(topic => topic.name),
-            await user.whitelist.map(topic => topic.name)
+            await user.whitelist.map(topic => topic.name),
+            ctx
         );
-        getConnection().getRepository(User).save(user);
+        ctx.connection.getRepository(User).save(user);
 
         return user.whitelist;
     } catch (reason) {
@@ -131,24 +132,25 @@ export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[]):
 
 // tslint:disable-next-line: no-any
 function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return updateBlacklist(args.id, args.topics);
+    return updateBlacklist(args.id, args.topics, ctx);
 }
 
-export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
     try {
-        const user: User | undefined = await getUser(id);
+        const user: User | undefined = await getUser(id, ctx);
         if (user === undefined) {
             return Promise.reject(undefined);
         }
         for (const topic of topics) {
-            await createTopic({ name: topic.name });
+            await createTopic({ name: topic.name }, ctx);
         }
 
         user.blacklist = await newTopicList(
             await topics.map(topic => topic.name),
-            await user.blacklist.map(topic => topic.name)
+            await user.blacklist.map(topic => topic.name),
+            ctx
         );
-        getConnection().getRepository(User).save(user);
+        ctx.connection.getRepository(User).save(user);
 
         return user.blacklist;
     } catch (reason) {
@@ -157,7 +159,7 @@ export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[]):
     }
 }
 
-async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (string | undefined)[]): Promise<Topic[]> {
+async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (string | undefined)[], ctx: Context<IAppContext>): Promise<Topic[]> {
     const namesRemoved: (string | undefined)[] = [];
     for (const name of userTopics) {
         const index: number = toggleTopics.indexOf(name);
@@ -175,7 +177,7 @@ async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (s
     const newTopicNames: (string | undefined)[] = [...toggleTopics, ...userTopics];
     const newList: Topic[] = [];
     for (const name of newTopicNames) {
-        const topic: Topic | undefined = await getTopic(undefined, name);
+        const topic: Topic | undefined = await getTopic(undefined, name, ctx);
         if (topic !== undefined) {
             newList.push(topic);
         }
@@ -194,16 +196,15 @@ interface IGetUser {
 
 // tslint:disable-next-line: no-any
 function _getUser(parent: any, args: IGetUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-    ctx.;
-    return getUser(args.id);
+    return getUser(args.id, ctx);
 }
 
-export async function getUser(userReviewId: number): Promise<User | undefined> {
+export async function getUser(userReviewId: number, ctx: Context<IAppContext>): Promise<User | undefined> {
     const neededRelations: string[] = [
         "hostedMeals", "whitelist", "blacklist",
         "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
         "favoriteRecipes", "favoriteUsers", "recipesAuthored"];
-    return getConnection()
+    return ctx.connection
         .getRepository(User)
         .findOne({
             where: {

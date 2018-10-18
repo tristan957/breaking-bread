@@ -1,7 +1,7 @@
 import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { DeepPartial, getRepository } from "typeorm";
+import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
 import User from "../entities/User";
 import UserReview from "../entities/UserReview";
@@ -50,20 +50,20 @@ interface ICreateUserReview {
 
 // tslint:disable-next-line: no-any
 function _createUserReview(parent: any, args: ICreateUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<UserReview> | undefined> {
-    return createUserReview(args.input);
+    return createUserReview(args.input, ctx);
 }
 
-export async function createUserReview(newReview: DeepPartial<UserReview>): Promise<DeepPartial<UserReview> | undefined> {
+export async function createUserReview(newReview: DeepPartial<UserReview>, ctx: Context<IAppContext>): Promise<DeepPartial<UserReview> | undefined> {
     if (newReview.author === undefined || newReview.subject === undefined) {
         return undefined;
     }
     try {
-        const author: User | undefined = await getRepository(User).findOne({
+        const author: User | undefined = await ctx.connection.getRepository(User).findOne({
             where: {
                 id: newReview.author.id,
             },
         });
-        const subject: User | undefined = await getRepository(User).findOne({
+        const subject: User | undefined = await ctx.connection.getRepository(User).findOne({
             where: {
                 id: newReview.subject.id,
             },
@@ -74,7 +74,7 @@ export async function createUserReview(newReview: DeepPartial<UserReview>): Prom
 
         newReview.author = author;
         newReview.subject = subject;
-        const userReview: DeepPartial<UserReview> = await getRepository(UserReview).save(newReview);
+        const userReview: DeepPartial<UserReview> = await ctx.connection.getRepository(UserReview).save(newReview);
         return userReview;
     } catch (reason) {
         console.log(reason);
@@ -88,16 +88,16 @@ interface IUpdateUserReview {
 
 // tslint:disable-next-line: no-any
 function _updateUserReview(parent: any, args: IUpdateUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
-    return updateUserReview(args.input);
+    return updateUserReview(args.input, ctx);
 }
 
-export async function updateUserReview(input: DeepPartial<UserReview>): Promise<UserReview | undefined> {
+export async function updateUserReview(input: DeepPartial<UserReview>, ctx: Context<IAppContext>): Promise<UserReview | undefined> {
     if (input.id === undefined) {
         return undefined;
     }
     try {
-        const userReview: UserReview | undefined = await getRepository(UserReview).save({
-            ...getUserReview(input.id),
+        const userReview: UserReview | undefined = await ctx.connection.getRepository(UserReview).save({
+            ...getUserReview(input.id, ctx),
             ...input,
         });
         return userReview;
@@ -117,11 +117,11 @@ interface IGetUserReview {
 
 // tslint:disable-next-line: no-any
 function _getUserReview(parent: any, args: IGetUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
-    return getUserReview(args.id);
+    return getUserReview(args.id, ctx);
 }
 
-async function getUserReview(reviewId: number): Promise<UserReview | undefined> {
-    return getRepository(UserReview)
+async function getUserReview(reviewId: number, ctx: Context<IAppContext>): Promise<UserReview | undefined> {
+    return ctx.connection.getRepository(UserReview)
         .findOne({
             where: {
                 id: reviewId,
