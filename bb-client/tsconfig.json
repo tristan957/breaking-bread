@@ -1,45 +1,12 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es2015",
-        "jsx": "react",
-        "rootDir": "src",
-        "outDir": "build",
-        "allowSyntheticDefaultImports": true,
-        "noImplicitAny": true,
+        "outDir": "./dist/",
         "sourceMap": true,
-        "experimentalDecorators": true,
-        "preserveConstEnums": true,
-        "allowJs": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "moduleResolution": "node",
-        "baseUrl": "src"
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react"
     },
-    "filesGlob": [
-        "typings/index.d.ts",
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "node_modules/typescript/lib/lib.es6.d.ts"
-    ],
-    "exclude": [
-        "build",
-        "dist",
-        "node_modules",
-        "__tests__"
-    ],
-    "types": [
-        "node",
-        "webpack",
-        "react",
-        "react-dom",
-        "reactstrap"
-    ],
     "include": [
-        "**/*.ts",
-        "**/*.tsx",
-        "./src/declarations.d.ts"
-    ],
-    "compileOnSave": false
+        "./src/**/*"
+    ]
 }

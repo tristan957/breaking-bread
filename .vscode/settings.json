@@ -1,35 +1,35 @@
 {
-  "editor.detectIndentation": false,
-  "editor.insertSpaces": false,
-  "editor.tabSize": 4,
-  "[html]": {
-    "editor.detectIndentation": true,
-    "editor.tabSize": 2,
+	"editor.insertSpaces": false,
+	"eslint.enable": false,
+	"[html]": {
+		"editor.detectIndentation": true,
+		"editor.tabSize": 2,
 	},
 	"[json]": {
-    "editor.detectIndentation": true,
-    "editor.tabSize": 2,
-    "editor.wordWrap": "on",
+		"editor.detectIndentation": true,
+		"editor.tabSize": 2,
+		"editor.wordWrap": "on",
 	},
 	"[jsonc]": {
-    "editor.detectIndentation": true,
-    "editor.tabSize": 2,
-    "editor.wordWrap": "on",
+		"editor.detectIndentation": true,
+		"editor.tabSize": 2,
+		"editor.wordWrap": "on",
 	},
-  "[typescript]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true,
-    },
-    "editor.formatOnSave": true,
-  },
-  "[typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true,
-    },
-    "editor.formatOnSave": true,
-  },
-  "tslint.autoFixOnSave": true,
-  "tslint.exclude": "node_modules/**",
-  "tslint.packageManager": "yarn",
-  "typescript.tsdk": "bb-server/node_modules/typescript/lib"
+	"[typescript]": {
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": true,
+		},
+		"editor.formatOnSave": true,
+	},
+	"[typescriptreact]": {
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": true,
+		},
+		"editor.formatOnSave": true,
+	},
+	"tslint.autoFixOnSave": true,
+	"tslint.exclude": "node_modules/**",
+	"tslint.jsEnable": false,
+	"tslint.packageManager": "yarn",
+	"typescript.tsdk": "bb-server/node_modules/typescript/lib",
 }
