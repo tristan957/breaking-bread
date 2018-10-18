@@ -1,3 +1,4 @@
+// tslint:disable
 import * as React from "react";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./resources/css/Header.css";
