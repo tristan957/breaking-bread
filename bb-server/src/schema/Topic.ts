@@ -60,19 +60,19 @@ interface IGetTopic {
 
 // tslint:disable-next-line: no-any
 function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic | undefined> {
-    return getTopic(args.input.id, args.input.name, ctx);
+    return getTopic(args.input, ctx);
 }
 
-export async function getTopic(id: number | undefined = undefined, name: string | undefined = undefined, ctx: Context<IAppContext>): Promise<Topic | undefined> {
-    if (typeof id === "number") {
+export async function getTopic(topic: DeepPartial<Topic>, ctx: Context<IAppContext>): Promise<Topic | undefined> {
+    if (topic.id === undefined) {
         return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
-            .where("topic.id = :id", { id })
+            .where("topic.id = :id", { id: topic.id })
             .getOne();
     }
 
-    if (typeof name === "string") {
+    if (topic.name === undefined) {
         return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
-            .where("topic.name = :name", { name })
+            .where("topic.name = :name", { name: topic.name })
             .getOne();
     }
 

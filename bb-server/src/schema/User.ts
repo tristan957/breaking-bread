@@ -176,8 +176,8 @@ async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (s
 
     const newTopicNames: (string | undefined)[] = [...toggleTopics, ...userTopics];
     const newList: Topic[] = [];
-    for (const name of newTopicNames) {
-        const topic: Topic | undefined = await getTopic(undefined, name, ctx);
+    for (const newName of newTopicNames) {
+        const topic: Topic | undefined = await getTopic({ name: newName }, ctx);
         if (topic !== undefined) {
             newList.push(topic);
         }
