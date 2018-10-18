@@ -1,8 +1,9 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Check, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Recipe from "./Recipe";
 import User from "./User";
 
 @Entity()
+@Check(`"rating" >= 1 AND "rating" <= 5`)
 export default class RecipeReview {
     @PrimaryGeneratedColumn()
     public id: number;

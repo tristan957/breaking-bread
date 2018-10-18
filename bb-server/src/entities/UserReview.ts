@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Check, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import User from "./User";
 
 @Entity()
+@Check(`"rating" >= 1 AND "rating" <= 5`)
 export default class UserReview {
     @PrimaryGeneratedColumn()
     public id: number;
@@ -9,7 +10,7 @@ export default class UserReview {
     @Column({ type: "int4" })
     public rating: number;
 
-    @Column({ type: "text" })
+    @Column({ type: "text", nullable: true })
     public description: string;
 
     @CreateDateColumn()

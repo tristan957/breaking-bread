@@ -1,4 +1,10 @@
 {
+  "linterOptions": {
+    "exclude": [
+      "/tmp",
+      "node_modules/**"
+    ]
+  },
   "rules": {
     "adjacent-overload-signatures": true,
     "align": [
@@ -26,7 +32,7 @@
     "import-spacing": true,
     "indent": [
       true,
-      "spaces",
+      "tabs",
       4
     ],
     "interface-name": [
@@ -72,7 +78,7 @@
     "no-duplicate-imports": true,
     "no-duplicate-super": true,
     "no-for-in-array": true,
-    "no-import-side-effect": true,
+    "no-import-side-effect": false,
     "no-inferrable-types": true,
     "no-internal-module": true,
     "no-invalid-template-strings": true,
@@ -161,7 +167,7 @@
     "typedef": [
       true,
       "call-signature",
-      "arrow-call-signature",
+      // "arrow-call-signature",
       "parameter",
       // "arrow-parameter",
       "property-declaration",

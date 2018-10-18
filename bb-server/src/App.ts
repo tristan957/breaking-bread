@@ -1,13 +1,13 @@
 /* tslint:disable: strict-boolean-expressions */
 import { ApolloServer } from "apollo-server-express";
-// tslint:disable-next-line: match-default-export-name
-import cors from "cors";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
-import express from "express";
+import express, { Request, Response } from "express";
+import path from "path";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
+// tslint:disable-next-line: match-default-export-name
 
 export default class App {
 
@@ -30,7 +30,14 @@ export default class App {
      */
     private setupExpress(): void {
         this.app = express();
-        this.app.use(cors());
+
+        // React client
+        const clientPath: string = path.join(__dirname, "/./../../bb-client/dist/");
+        this.app.use(express.static(clientPath));
+        this.app.get("/", (_: Request, res: Response) => {
+            res.sendFile(path.join(clientPath, "index.html"));
+        });
+
         this.server = new ApolloServer({ typeDefs, resolvers });
         this.server.applyMiddleware({ app: this.app });
     }
@@ -68,8 +75,9 @@ export default class App {
     public run(): void {
         let port: number | string = process.env.APP_PORT || "10262";
         port = parseInt(port, 10);
-        this.app.listen(port, () =>
-            console.log(`Server ready at http://localhost:${port}${this.server.graphqlPath}`)
-        );
+        this.app.listen(port, () => {
+            console.log(`Server ready at http://localhost:${port}`);
+            console.log(`GraphQL test at http://localhost:${port}${this.server.graphqlPath}`);
+        });
     }
 }
