@@ -1,13 +1,22 @@
 /* tslint:disable: strict-boolean-expressions */
+import { Context } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-express";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express, { Request, Response } from "express";
 import path from "path";
-import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
+import { AdvancedConsoleLogger, Connection, createConnection, getConnection, Logger } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
-// tslint:disable-next-line: match-default-export-name
+
+export interface IAppContext {
+    connection: Connection;
+}
+
+function context(req: Request): Context<IAppContext> {
+    const connection = getConnection();
+    return { connection };
+}
 
 export default class App {
 
@@ -38,7 +47,11 @@ export default class App {
             res.sendFile(path.join(clientPath, "index.html"));
         });
 
-        this.server = new ApolloServer({ typeDefs, resolvers });
+        this.server = new ApolloServer({
+            typeDefs,
+            resolvers,
+            context,
+        });
         this.server.applyMiddleware({ app: this.app });
     }
 

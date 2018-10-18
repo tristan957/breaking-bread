@@ -1,6 +1,8 @@
+import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial, getConnection, getRepository } from "typeorm";
+import { IAppContext } from "../App";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
 import { createTopic, getTopic } from "./Topic";
@@ -55,7 +57,7 @@ interface ICreateUser {
 }
 
 // tslint:disable-next-line: no-any
-function _createUser(parent: any, args: ICreateUser, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
+function _createUser(parent: any, args: ICreateUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
     return createUser(args.input);
 }
 
@@ -74,7 +76,7 @@ interface IUpdateUser {
 }
 
 // tslint:disable-next-line: no-any
-function _updateUser(parent: any, args: IUpdateUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
+function _updateUser(parent: any, args: IUpdateUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
     return updateUser(args.input);
 }
 
@@ -100,7 +102,7 @@ interface IUpdateWhitelist {
 }
 
 // tslint:disable-next-line: no-any
-function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
     return updateWhitelist(args.id, args.topics);
 }
 
@@ -128,7 +130,7 @@ export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[]):
 }
 
 // tslint:disable-next-line: no-any
-function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
     return updateBlacklist(args.id, args.topics);
 }
 
@@ -191,8 +193,9 @@ interface IGetUser {
 }
 
 // tslint:disable-next-line: no-any
-function _getUser(parent: any, args: IGetUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return  getUser(args.id);
+function _getUser(parent: any, args: IGetUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
+    ctx.;
+    return getUser(args.id);
 }
 
 export async function getUser(userReviewId: number): Promise<User | undefined> {

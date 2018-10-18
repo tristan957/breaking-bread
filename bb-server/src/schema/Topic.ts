@@ -1,6 +1,8 @@
+import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial, getConnection, getRepository, Repository } from "typeorm";
+import { IAppContext } from "../App";
 import Topic from "../entities/Topic";
 
 export const typeDef: DocumentNode = gql`
@@ -31,7 +33,7 @@ interface ICreateTopics {
 }
 
 // tslint:disable-next-line: no-any
-function _createTopic(parent: any, args: ICreateTopics, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
+function _createTopic(parent: any, args: ICreateTopics, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
     return createTopic(args.topic);
 }
 
@@ -57,7 +59,7 @@ interface IGetTopic {
  */
 
 // tslint:disable-next-line: no-any
-function _getTopic(parent: any, args: IGetTopic, ctx: any, info: GraphQLResolveInfo): Promise<Topic | undefined> {
+function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic | undefined> {
     return getTopic(args.input.id, args.input.name);
 }
 

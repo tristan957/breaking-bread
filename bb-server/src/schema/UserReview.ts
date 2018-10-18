@@ -1,6 +1,8 @@
+import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial, getRepository } from "typeorm";
+import { IAppContext } from "../App";
 import User from "../entities/User";
 import UserReview from "../entities/UserReview";
 
@@ -47,7 +49,7 @@ interface ICreateUserReview {
 }
 
 // tslint:disable-next-line: no-any
-function _createUserReview(parent: any, args: ICreateUserReview, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<UserReview> | undefined> {
+function _createUserReview(parent: any, args: ICreateUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<UserReview> | undefined> {
     return createUserReview(args.input);
 }
 
@@ -85,7 +87,7 @@ interface IUpdateUserReview {
 }
 
 // tslint:disable-next-line: no-any
-function _updateUserReview(parent: any, args: IUpdateUserReview, ctx: any, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
+function _updateUserReview(parent: any, args: IUpdateUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
     return updateUserReview(args.input);
 }
 
@@ -114,8 +116,8 @@ interface IGetUserReview {
 }
 
 // tslint:disable-next-line: no-any
-function _getUserReview(parent: any, args: IGetUserReview, ctx: any, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
-    return  getUserReview(args.id);
+function _getUserReview(parent: any, args: IGetUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
+    return getUserReview(args.id);
 }
 
 async function getUserReview(reviewId: number): Promise<UserReview | undefined> {
