@@ -15,6 +15,9 @@ export default class Recipe {
     @Column({ type: "text" })
     public description: string;
 
+    @Column({ type: "text" })
+    public recipeImageS3Key: string;
+
     @CreateDateColumn()
     public createdAt: Date;
 
