@@ -15,7 +15,9 @@ export interface IAppContext {
 
 function context(req: Request): Context<IAppContext> {
     const connection = getConnection();
-    return { connection };
+    return {
+        connection,
+    };
 }
 
 export default class App {

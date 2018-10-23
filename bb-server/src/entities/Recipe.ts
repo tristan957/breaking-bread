@@ -27,6 +27,9 @@ export default class Recipe {
     @ManyToOne(type => User, user => user.recipesAuthored, { eager: true })
     public author: User;
 
+    @Column()
+    public timesFavorited: number;
+
     @OneToMany(type => RecipeReview, review => review.subject)
     public reviews: RecipeReview[];
 

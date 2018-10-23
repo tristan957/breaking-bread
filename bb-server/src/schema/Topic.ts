@@ -7,7 +7,7 @@ import Topic from "../entities/Topic";
 
 export const typeDef: DocumentNode = gql`
     extend type Mutation {
-        createTopic(name: CreateTopicInput!): [Topic]
+        createTopic(name: CreateTopicInput!): Topic
     }
 
     extend type Query {
@@ -29,12 +29,12 @@ export const typeDef: DocumentNode = gql`
  */
 
 interface ICreateTopics {
-    topic: DeepPartial<Topic>;
+    input: DeepPartial<Topic>;
 }
 
 // tslint:disable-next-line: no-any
 function _createTopic(parent: any, args: ICreateTopics, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
-    return createTopic(args.topic, ctx);
+    return createTopic(args.input, ctx);
 }
 
 export async function createTopic(topic: DeepPartial<Topic>, ctx: Context<IAppContext>): Promise<DeepPartial<Topic>> {
@@ -50,13 +50,13 @@ export async function createTopic(topic: DeepPartial<Topic>, ctx: Context<IAppCo
     }
 }
 
-interface IGetTopic {
-    input: DeepPartial<Topic>;
-}
-
 /**
  * Query Resolvers
  */
+
+interface IGetTopic {
+    input: DeepPartial<Topic>;
+}
 
 // tslint:disable-next-line: no-any
 function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic | undefined> {

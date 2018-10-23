@@ -11,8 +11,8 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createUser(input: CreateUserInput!): User
         updateUser(input: UpdateUserInput!): User
-        updateWhitelist(id: Int!, topics: [CreateTopicInput]!): [Topic]
-        updateBlacklist(id: Int!, topics: [CreateTopicInput]!): [Topic]
+        updateWhitelist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
+        updateBlacklist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
     }
 
     extend type Query {
@@ -85,6 +85,7 @@ export async function updateUser(input: DeepPartial<User>, ctx: Context<IAppCont
         return undefined;
     }
     try {
+        // TODO: Need to verify id with JWT from context
         const user: User | undefined = await ctx.connection.getRepository(User).save({
             ...getUser(input.id, ctx),
             ...input,
@@ -112,6 +113,7 @@ export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[], 
         if (user === undefined) {
             return Promise.reject(undefined);
         }
+        // TODO: Need to verify id with JWT from context
         for (const topic of topics) {
             await createTopic({ name: topic.name }, ctx);
         }
@@ -126,7 +128,7 @@ export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[], 
         return user.whitelist;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
@@ -141,6 +143,7 @@ export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], 
         if (user === undefined) {
             return Promise.reject(undefined);
         }
+        // TODO: Need to verify id with JWT from context
         for (const topic of topics) {
             await createTopic({ name: topic.name }, ctx);
         }
@@ -155,7 +158,7 @@ export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], 
         return user.blacklist;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
@@ -199,7 +202,7 @@ function _getUser(parent: any, args: IGetUser, ctx: Context<IAppContext>, info: 
     return getUser(args.id, ctx);
 }
 
-export async function getUser(userReviewId: number, ctx: Context<IAppContext>): Promise<User | undefined> {
+export async function getUser(userId: number, ctx: Context<IAppContext>): Promise<User | undefined> {
     const neededRelations: string[] = [
         "hostedMeals", "whitelist", "blacklist",
         "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
@@ -208,7 +211,7 @@ export async function getUser(userReviewId: number, ctx: Context<IAppContext>): 
         .getRepository(User)
         .findOne({
             where: {
-                id: userReviewId,
+                id: userId,
             },
             relations: neededRelations,
         });

@@ -55,7 +55,7 @@ function _createUserReview(parent: any, args: ICreateUserReview, ctx: Context<IA
 
 export async function createUserReview(newReview: DeepPartial<UserReview>, ctx: Context<IAppContext>): Promise<DeepPartial<UserReview> | undefined> {
     if (newReview.author === undefined || newReview.subject === undefined) {
-        return undefined;
+        return Promise.reject(undefined);
     }
     try {
         const author: User | undefined = await ctx.connection.getRepository(User).findOne({
@@ -69,8 +69,9 @@ export async function createUserReview(newReview: DeepPartial<UserReview>, ctx: 
             },
         });
         if (author === undefined || subject === undefined) {
-            return undefined;
+            return Promise.reject(undefined);
         }
+        // TODO: Check author is user from JWT in context
 
         newReview.author = author;
         newReview.subject = subject;
@@ -78,7 +79,7 @@ export async function createUserReview(newReview: DeepPartial<UserReview>, ctx: 
         return userReview;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
@@ -93,8 +94,9 @@ function _updateUserReview(parent: any, args: IUpdateUserReview, ctx: Context<IA
 
 export async function updateUserReview(input: DeepPartial<UserReview>, ctx: Context<IAppContext>): Promise<UserReview | undefined> {
     if (input.id === undefined) {
-        return undefined;
+        return Promise.reject(undefined);
     }
+    // TODO: Check author is user from JWT in context
     try {
         const userReview: UserReview | undefined = await ctx.connection.getRepository(UserReview).save({
             ...getUserReview(input.id, ctx),
@@ -103,7 +105,7 @@ export async function updateUserReview(input: DeepPartial<UserReview>, ctx: Cont
         return userReview;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
