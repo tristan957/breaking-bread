@@ -55,12 +55,12 @@ export async function createTag(tag: DeepPartial<Tag>, ctx: Context<IAppContext>
  */
 
 interface IGetTag {
-    input: DeepPartial<Tag>;
+    id: number;
 }
 
 // tslint:disable-next-line: no-any
 function _getTag(parent: any, args: IGetTag, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag | undefined> {
-    return getTag(args.input, ctx);
+    return getTag({ id: args.id }, ctx);
 }
 
 export async function getTag(tag: DeepPartial<Tag>, ctx: Context<IAppContext>): Promise<Tag | undefined> {

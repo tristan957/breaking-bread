@@ -55,12 +55,12 @@ export async function createTopic(topic: DeepPartial<Topic>, ctx: Context<IAppCo
  */
 
 interface IGetTopic {
-    input: DeepPartial<Topic>;
+    id: number;
 }
 
 // tslint:disable-next-line: no-any
 function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic | undefined> {
-    return getTopic(args.input, ctx);
+    return getTopic({ id: args.id }, ctx);
 }
 
 export async function getTopic(topic: DeepPartial<Topic>, ctx: Context<IAppContext>): Promise<Topic | undefined> {
