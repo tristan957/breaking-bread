@@ -13,6 +13,7 @@ export const typeDef: DocumentNode = gql`
         updateUser(input: UpdateUserInput!): User
         updateWhitelist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
         updateBlacklist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
+        favoriteAUser(subjectId: Int!, actorId: Int!): User
     }
 
     extend type Query {
@@ -68,6 +69,9 @@ export async function createUser(newUser: DeepPartial<User>, ctx: Context<IAppCo
     try {
         // TODO: Get oAuthSub from context
         newUser.oAuthSub = await Date.now.toString();
+        if (newUser.timesFavorited === undefined) {
+            newUser.timesFavorited = 0;
+        }
 
         const user: DeepPartial<User> = await ctx.connection.getRepository(User).save(newUser);
         return user;
@@ -195,6 +199,38 @@ async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (s
     return newList;
 }
 
+interface IMakeFavoriteUser {
+    recipeId: number;
+    userId: number;
+}
+
+// tslint:disable-next-line: no-any
+function _favoriteAUser(parent: any, args: IMakeFavoriteUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
+    return favoriteAUser(args.recipeId, args.userId, ctx);
+}
+
+export async function favoriteAUser(subjectId: number, actorId: number, ctx: Context<IAppContext>): Promise<User | undefined> {
+    let user: User | undefined = await getUser(actorId, ctx);
+    const subject: User | undefined = await getUser(subjectId, ctx);
+    if (user === undefined) {
+        return Promise.resolve(undefined);
+    }
+    if (subject === undefined) {
+        return Promise.resolve(undefined);
+    }
+    user.favoriteUsers.push(subject);
+    user = await updateUser(user, ctx);    // User verification from ctx done here
+    if (user === undefined) {
+        Promise.resolve(undefined);
+    }
+
+    subject.timesFavorited += 1;
+    return ctx.connection.getRepository(User).save({
+        ...getUser(subjectId, ctx),
+        ...subject,
+    });
+}
+
 /**
  * Query Resolvers
  */
@@ -229,6 +265,7 @@ export const resolvers: IResolvers = {
         updateUser: _updateUser,
         updateWhitelist: _updateWhitelist,
         updateBlacklist: _updateBlacklist,
+        favoriteAUser: _favoriteAUser,
     },
     Query: {
         getUser: _getUser,

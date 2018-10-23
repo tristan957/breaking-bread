@@ -5,6 +5,7 @@ import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
 import User from "../entities/User";
 import UserReview from "../entities/UserReview";
+import { getUser } from "./User";
 
 export const typeDef: DocumentNode = gql`
     extend type Mutation {
@@ -55,21 +56,16 @@ function _createUserReview(parent: any, args: ICreateUserReview, ctx: Context<IA
 
 export async function createUserReview(newReview: DeepPartial<UserReview>, ctx: Context<IAppContext>): Promise<DeepPartial<UserReview> | undefined> {
     if (newReview.author === undefined || newReview.subject === undefined) {
-        return Promise.reject(undefined);
+        return Promise.resolve(undefined);
+    }
+    if (newReview.author.id === undefined || newReview.subject.id === undefined) {
+        return Promise.resolve(undefined);
     }
     try {
-        const author: User | undefined = await ctx.connection.getRepository(User).findOne({
-            where: {
-                id: newReview.author.id,
-            },
-        });
-        const subject: User | undefined = await ctx.connection.getRepository(User).findOne({
-            where: {
-                id: newReview.subject.id,
-            },
-        });
+        const author: User | undefined = await getUser(newReview.author.id, ctx);
+        const subject: User | undefined = await getUser(newReview.subject.id, ctx);
         if (author === undefined || subject === undefined) {
-            return Promise.reject(undefined);
+            return Promise.resolve(undefined);
         }
         // TODO: Check author is user from JWT in context
 
@@ -94,7 +90,7 @@ function _updateUserReview(parent: any, args: IUpdateUserReview, ctx: Context<IA
 
 export async function updateUserReview(input: DeepPartial<UserReview>, ctx: Context<IAppContext>): Promise<UserReview | undefined> {
     if (input.id === undefined) {
-        return Promise.reject(undefined);
+        return Promise.resolve(undefined);
     }
     // TODO: Check author is user from JWT in context
     try {

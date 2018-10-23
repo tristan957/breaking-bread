@@ -38,6 +38,9 @@ export default class User {
     @UpdateDateColumn()
     public updatedAt: Date;
 
+    @Column()
+    public timesFavorited: number;
+
     @OneToMany(type => Meal, meal => meal.host)
     public hostedMeals: Meal[];
 

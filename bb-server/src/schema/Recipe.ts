@@ -3,9 +3,11 @@ import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
+import Ingredient from "../entities/Ingredient";
 import Recipe from "../entities/Recipe";
 import Tag from "../entities/Tag";
 import User from "../entities/User";
+import { getIngredient } from "./Ingredient";
 import { createTag, getTag } from "./Tag";
 import { getUser, updateUser } from "./User";
 
@@ -14,6 +16,7 @@ export const typeDef: DocumentNode = gql`
         createRecipe(input: CreateRecipeInput!): Recipe
         updateRecipe(input: UpdateRecipeInput!): Recipe
         updateTagList(recipeId: Int!, tags: [CreateTagInput]!): [Tag]
+        updateIngredients(recipeId: Int!, ingredients: [CreateIngredientInput]!): [Tag]
         favoriteARecipe(recipeId: Int!, userId: Int!): Recipe
     }
 
@@ -45,12 +48,6 @@ export const typeDef: DocumentNode = gql`
         name: String
         description: String
     }
-
-    input FavoriteARecipeInput {
-        favoriter: UpdateUserInput!
-        name: String
-        description: String
-    }
 `;
 
 /**
@@ -78,7 +75,7 @@ export async function createRecipe(newRecipe: DeepPartial<Recipe>, ctx: Context<
         });
         // TODO: Need to verify author.id with JWT from context
         if (author === undefined) {
-            return Promise.reject(undefined);
+            return Promise.resolve(undefined);
         }
 
         if (newRecipe.timesFavorited === undefined) {
@@ -104,12 +101,12 @@ function _updateRecipe(parent: any, args: IUpdateRecipe, ctx: Context<IAppContex
 
 export async function updateRecipe(input: DeepPartial<Recipe>, ctx: Context<IAppContext>): Promise<Recipe | undefined> {
     if (input.id === undefined) {
-        return Promise.reject(undefined);
+        return Promise.resolve(undefined);
     }
     try {
         // TODO:
         // if ctx user is original author
-        // if not, favorite, make copy (update input deeppartial<recipe>), then proceed
+        // if not, favorite (check if favorite), make copy (update input deeppartial<recipe>), then proceed
 
         const recipe: Recipe | undefined = await ctx.connection.getRepository(Recipe).save({
             ...getRecipe(input.id, ctx),
@@ -125,7 +122,7 @@ export async function updateRecipe(input: DeepPartial<Recipe>, ctx: Context<IApp
 async function makeRecipeCopy(recipeId: number, ctx: Context<IAppContext>): Promise<Recipe | undefined> {
     const original: DeepPartial<Recipe> | undefined = await getRecipe(recipeId, ctx);
     if (original === undefined) {
-        return Promise.reject(undefined);
+        return Promise.resolve(undefined);
     }
 
     original.id = undefined;
@@ -147,7 +144,7 @@ export async function updateTagList(recipeId: number, tags: DeepPartial<Tag>[], 
     try {
         const recipe: Recipe | undefined = await getRecipe(recipeId, ctx);
         if (recipe === undefined) {
-            return Promise.reject(undefined);
+            return Promise.resolve(undefined);
         }
         // TODO: Need to verify id with JWT from context
         for (const tag of tags) {
@@ -195,13 +192,73 @@ async function newTagList(toggleTags: (string | undefined)[], recipeTags: (strin
     return newList;
 }
 
-interface IFavoriteARecipe {
+interface IUpdateIngredients {
+    id: number;
+    ingredients: DeepPartial<Ingredient>[];
+}
+
+// tslint:disable-next-line: no-any
+function _updateIngredients(parent: any, args: IUpdateIngredients, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Ingredient[] | undefined> {
+    return updateIngredients(args.id, args.ingredients, ctx);
+}
+
+export async function updateIngredients(recipeId: number, ingredients: DeepPartial<Ingredient>[], ctx: Context<IAppContext>): Promise<Ingredient[] | undefined> {
+    try {
+        const recipe: Recipe | undefined = await getRecipe(recipeId, ctx);
+        if (recipe === undefined) {
+            return Promise.resolve(undefined);
+        }
+        // TODO: Need to verify id with JWT from context (owner of recipe)
+
+        // TODO: Ingredients should be created seperately or searched for before attaching to meals
+        recipe.ingredients = await newIngredients(
+            await ingredients.map(ingredient => ingredient.name),
+            await recipe.ingredients.map(ingredient => ingredient.name),
+            ctx
+        );
+        ctx.connection.getRepository(Recipe).save(recipe);
+
+        return recipe.ingredients;
+    } catch (reason) {
+        console.log(reason);
+        return Promise.reject(undefined);
+    }
+}
+
+async function newIngredients(toggleIngredients: (string | undefined)[], recipeIngredients: (string | undefined)[], ctx: Context<IAppContext>): Promise<Ingredient[]> {
+    const namesRemoved: (string | undefined)[] = [];
+    for (const name of recipeIngredients) {
+        const index: number = toggleIngredients.indexOf(name);
+        if (index >= 0) {
+            await toggleIngredients.splice(index, 1);
+            namesRemoved.push(name);
+        }
+    }
+    for (const name of namesRemoved) {
+        await recipeIngredients.splice(
+            recipeIngredients.indexOf(name), 1
+        );
+    }
+
+    const newIngredientNames: (string | undefined)[] = [...toggleIngredients, ...recipeIngredients];
+    const newList: Ingredient[] = [];
+    for (const newName of newIngredientNames) {
+        const ingredient: Ingredient | undefined = await getIngredient({ name: newName }, ctx);
+        if (ingredient !== undefined) {
+            newList.push(ingredient);
+        }
+    }
+
+    return newList;
+}
+
+interface IMakeFavoriteRecipe {
     recipeId: number;
     userId: number;
 }
 
 // tslint:disable-next-line: no-any
-function _favoriteARecipe(parent: any, args: IFavoriteARecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
+function _favoriteARecipe(parent: any, args: IMakeFavoriteRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
     return favoriteARecipe(args.recipeId, args.userId, ctx);
 }
 
@@ -209,15 +266,15 @@ export async function favoriteARecipe(recipeId: number, userId: number, ctx: Con
     let user: User | undefined = await getUser(userId, ctx);
     const recipe: Recipe | undefined = await getRecipe(recipeId, ctx);
     if (user === undefined) {
-        return Promise.reject(undefined);
+        return Promise.resolve(undefined);
     }
     if (recipe === undefined) {
-        return Promise.reject(undefined);
+        return Promise.resolve(undefined);
     }
     user.favoriteRecipes.push(recipe);
     user = await updateUser(user, ctx);    // User verification from ctx done here
     if (user === undefined) {
-        Promise.reject(undefined);
+        Promise.resolve(undefined);
     }
 
     recipe.timesFavorited += 1;
@@ -258,7 +315,8 @@ export const resolvers: IResolvers = {
     Mutation: {
         createRecipe: _createRecipe,
         updateRecipe: _updateRecipe,
-        updateTagList: _updateTagList,
+        updateTags: _updateTagList,
+        updateIngredients: _updateIngredients,
         favoriteARecipe: _favoriteARecipe,
     },
     Query: {

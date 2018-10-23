@@ -28,12 +28,12 @@ export const typeDef: DocumentNode = gql`
  * Mutator Resolvers
  */
 
-interface ICreateTopics {
+interface ICreateTopic {
     input: DeepPartial<Topic>;
 }
 
 // tslint:disable-next-line: no-any
-function _createTopic(parent: any, args: ICreateTopics, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
+function _createTopic(parent: any, args: ICreateTopic, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
     return createTopic(args.input, ctx);
 }
 
