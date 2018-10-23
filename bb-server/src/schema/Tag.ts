@@ -64,19 +64,19 @@ function _getTag(parent: any, args: IGetTag, ctx: Context<IAppContext>, info: Gr
 }
 
 export async function getTag(tag: DeepPartial<Tag>, ctx: Context<IAppContext>): Promise<Tag | undefined> {
-    if (tag.id === undefined) {
+    if (tag.id !== undefined) {
         return ctx.connection.getRepository(Tag).createQueryBuilder("tag")
             .where("tag.id = :id", { id: tag.id })
             .getOne();
     }
 
-    if (tag.name === undefined) {
+    if (tag.name !== undefined) {
         return ctx.connection.getRepository(Tag).createQueryBuilder("tag")
             .where("tag.name = :name", { name: tag.name })
             .getOne();
     }
 
-    return Promise.reject(undefined);
+    return Promise.resolve(undefined);
 }
 
 export const resolvers: IResolvers = {

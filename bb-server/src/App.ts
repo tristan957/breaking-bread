@@ -3,8 +3,7 @@ import { Context } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-express";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
-import express, { Request, Response } from "express";
-import path from "path";
+import express, { Request } from "express";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection, Logger } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
@@ -15,9 +14,7 @@ export interface IAppContext {
 
 function context(req: Request): Context<IAppContext> {
     const connection = getConnection();
-    return {
-        connection,
-    };
+    return { connection };
 }
 
 export default class App {
@@ -42,12 +39,12 @@ export default class App {
     private setupExpress(): void {
         this.app = express();
 
-        // React client
-        const clientPath: string = path.join(__dirname, "/./../../bb-client/dist/");
-        this.app.use(express.static(clientPath));
-        this.app.get("/", (_: Request, res: Response) => {
-            res.sendFile(path.join(clientPath, "index.html"));
-        });
+        // // React client
+        // const clientPath: string = path.join(__dirname, "/./../../bb-client/dist/");
+        // this.app.use(express.static(clientPath));
+        // this.app.get("/", (_: Request, res: Response) => {
+        //     res.sendFile(path.join(clientPath, "index.html"));
+        // });
 
         this.server = new ApolloServer({
             typeDefs,

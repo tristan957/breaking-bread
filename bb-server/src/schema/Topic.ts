@@ -64,19 +64,19 @@ function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info
 }
 
 export async function getTopic(topic: DeepPartial<Topic>, ctx: Context<IAppContext>): Promise<Topic | undefined> {
-    if (topic.id === undefined) {
+    if (topic.id !== undefined) {
         return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
             .where("topic.id = :id", { id: topic.id })
             .getOne();
     }
 
-    if (topic.name === undefined) {
+    if (topic.name !== undefined) {
         return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
             .where("topic.name = :name", { name: topic.name })
             .getOne();
     }
 
-    return Promise.reject(undefined);
+    return Promise.resolve(undefined);
 }
 
 export const resolvers: IResolvers = {

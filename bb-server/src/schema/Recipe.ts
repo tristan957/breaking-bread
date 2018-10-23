@@ -13,7 +13,7 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createRecipe(input: CreateRecipeInput!): Recipe
         updateRecipe(input: UpdateRecipeInput!): Recipe
-        updateTags(recipeId: Int!, tags: [CreateTagInput]!): [Tag]
+        updateTagList(recipeId: Int!, tags: [CreateTagInput]!): [Tag]
         favoriteARecipe(recipeId: Int!, userId: Int!): Recipe
     }
 
@@ -25,6 +25,7 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         name: String!
         description: String!
+        recipeImageS3Key: String!
         createdAt: DateTime!
         updatedAt: DateTime!
         author: User!
@@ -132,17 +133,17 @@ async function makeRecipeCopy(recipeId: number, ctx: Context<IAppContext>): Prom
     createRecipe(original, ctx);
 }
 
-interface IUpdateTags {
+interface IUpdateTagList {
     id: number;
     tags: DeepPartial<Tag>[];
 }
 
 // tslint:disable-next-line: no-any
-function _updateTags(parent: any, args: IUpdateTags, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag[] | undefined> {
-    return updateTags(args.id, args.tags, ctx);
+function _updateTagList(parent: any, args: IUpdateTagList, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag[] | undefined> {
+    return updateTagList(args.id, args.tags, ctx);
 }
 
-export async function updateTags(recipeId: number, tags: DeepPartial<Tag>[], ctx: Context<IAppContext>): Promise<Tag[] | undefined> {
+export async function updateTagList(recipeId: number, tags: DeepPartial<Tag>[], ctx: Context<IAppContext>): Promise<Tag[] | undefined> {
     try {
         const recipe: Recipe | undefined = await getRecipe(recipeId, ctx);
         if (recipe === undefined) {
@@ -153,7 +154,7 @@ export async function updateTags(recipeId: number, tags: DeepPartial<Tag>[], ctx
             await createTag({ name: tag.name }, ctx);
         }
 
-        recipe.tags = await newTags(
+        recipe.tags = await newTagList(
             await tags.map(tag => tag.name),
             await recipe.tags.map(tag => tag.name),
             ctx
@@ -167,7 +168,7 @@ export async function updateTags(recipeId: number, tags: DeepPartial<Tag>[], ctx
     }
 }
 
-async function newTags(toggleTags: (string | undefined)[], recipeTags: (string | undefined)[], ctx: Context<IAppContext>): Promise<Tag[]> {
+async function newTagList(toggleTags: (string | undefined)[], recipeTags: (string | undefined)[], ctx: Context<IAppContext>): Promise<Tag[]> {
     const namesRemoved: (string | undefined)[] = [];
     for (const name of recipeTags) {
         const index: number = toggleTags.indexOf(name);
@@ -255,9 +256,9 @@ export async function getRecipe(recipeId: number, ctx: Context<IAppContext>): Pr
 
 export const resolvers: IResolvers = {
     Mutation: {
-        createUser: _createRecipe,
+        createRecipe: _createRecipe,
         updateRecipe: _updateRecipe,
-        updateTags: _updateTags,
+        updateTagList: _updateTagList,
         favoriteARecipe: _favoriteARecipe,
     },
     Query: {

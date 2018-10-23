@@ -6,7 +6,7 @@ import Topic from "./Topic";
 import UserReview from "./UserReview";
 
 @Entity()
-@Unique(["oAuthSub", "email", "phoneNumber"])
+@Unique(["oAuthSub", "profilePictureS3Key", "email", "phoneNumber"])
 export default class User {
     @PrimaryGeneratedColumn()
     public id: number;

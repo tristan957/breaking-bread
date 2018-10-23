@@ -23,6 +23,7 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         firstName: String!
         lastName: String!
+        profilePictureS3Key: String!
         about: String!
         email: String!
         phoneNumber: DateTime!
@@ -35,6 +36,7 @@ export const typeDef: DocumentNode = gql`
     input CreateUserInput {
         firstName: String!
         lastName: String!
+        profilePictureS3Key: String!
         about: String
         email: String!
         phoneNumber: String!
@@ -42,6 +44,7 @@ export const typeDef: DocumentNode = gql`
 
     input UpdateUserInput {
         id: Int!
+        profilePictureS3Key: String
         about: String
         email: String
         phoneNumber: String
@@ -63,11 +66,14 @@ function _createUser(parent: any, args: ICreateUser, ctx: Context<IAppContext>, 
 
 export async function createUser(newUser: DeepPartial<User>, ctx: Context<IAppContext>): Promise<DeepPartial<User> | undefined> {
     try {
+        // TODO: Get oAuthSub from context
+        newUser.oAuthSub = await Date.now.toString();
+
         const user: DeepPartial<User> = await ctx.connection.getRepository(User).save(newUser);
         return user;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
@@ -82,7 +88,7 @@ function _updateUser(parent: any, args: IUpdateUser, ctx: Context<IAppContext>, 
 
 export async function updateUser(input: DeepPartial<User>, ctx: Context<IAppContext>): Promise<User | undefined> {
     if (input.id === undefined) {
-        return undefined;
+        return Promise.resolve(undefined);
     }
     try {
         // TODO: Need to verify id with JWT from context
@@ -93,25 +99,25 @@ export async function updateUser(input: DeepPartial<User>, ctx: Context<IAppCont
         return user;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
 interface IUpdateWhitelist {
-    id: number;
+    userId: number;
     topics: DeepPartial<Topic>[];
 }
 
 // tslint:disable-next-line: no-any
 function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return updateWhitelist(args.id, args.topics, ctx);
+    return updateWhitelist(args.userId, args.topics, ctx);
 }
 
 export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
     try {
         const user: User | undefined = await getUser(id, ctx);
         if (user === undefined) {
-            return Promise.reject(undefined);
+            return Promise.resolve(undefined);
         }
         // TODO: Need to verify id with JWT from context
         for (const topic of topics) {
@@ -134,14 +140,14 @@ export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[], 
 
 // tslint:disable-next-line: no-any
 function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return updateBlacklist(args.id, args.topics, ctx);
+    return updateBlacklist(args.userId, args.topics, ctx);
 }
 
 export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
     try {
         const user: User | undefined = await getUser(id, ctx);
         if (user === undefined) {
-            return Promise.reject(undefined);
+            return Promise.resolve(undefined);
         }
         // TODO: Need to verify id with JWT from context
         for (const topic of topics) {
