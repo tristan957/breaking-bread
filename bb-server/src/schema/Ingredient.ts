@@ -11,17 +11,21 @@ export const typeDef: DocumentNode = gql`
     }
 
     extend type Query {
-        getIngredient(id: Int!): Ingredient
+        getIngredient(input: GetIngredientInput!): Ingredient
     }
 
     type Ingredient {
         id: Int!
         name: String!
-        allergies: [Allergy]!
     }
 
     input CreateIngredientInput {
         name: String!
+    }
+
+    input GetIngredientInput {
+        id: Int
+        name: String
     }
 `;
 
@@ -35,13 +39,12 @@ interface ICreateIngredient {
 
 // tslint:disable-next-line: no-any
 function _createIngredient(parent: any, args: ICreateIngredient, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Ingredient> | undefined> {
-    return createIngredient(args.input, ctx);
+    return createIngredient(ctx, args.input);
 }
 
-export async function createIngredient(ingredient: DeepPartial<Ingredient>, ctx: Context<IAppContext>): Promise<DeepPartial<Ingredient>> {
+export async function createIngredient(ctx: Context<IAppContext>, ingredient: DeepPartial<Ingredient>): Promise<DeepPartial<Ingredient>> {
     const ingredientsRepo: Repository<Ingredient> = await ctx.connection.getRepository(Ingredient);
 
-    // TODO: Check for allergies by name
     const foundIngredient: Ingredient | undefined = await ingredientsRepo.createQueryBuilder("ingredient")
         .where("ingredient.name = :name", { name: ingredient.name })
         .getOne();
@@ -57,16 +60,15 @@ export async function createIngredient(ingredient: DeepPartial<Ingredient>, ctx:
  */
 
 interface IGetIngredient {
-    id: number;
+    input: DeepPartial<Ingredient>;
 }
 
 // tslint:disable-next-line: no-any
 function _getIngredient(parent: any, args: IGetIngredient, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Ingredient | undefined> {
-    return getIngredient({ id: args.id }, ctx);
+    return getIngredient(ctx, args.input);
 }
 
-export async function getIngredient(ingredient: DeepPartial<Ingredient>, ctx: Context<IAppContext>): Promise<Ingredient | undefined> {
-    const neededRelations: string[] = ["allergies"];
+export async function getIngredient(ctx: Context<IAppContext>, ingredient: DeepPartial<Ingredient>): Promise<Ingredient | undefined> {
     if (ingredient.id !== undefined) {
         return ctx.connection
             .getRepository(Ingredient)
@@ -74,7 +76,6 @@ export async function getIngredient(ingredient: DeepPartial<Ingredient>, ctx: Co
                 where: {
                     id: ingredient.id,
                 },
-                relations: neededRelations,
             });
     }
 
@@ -85,7 +86,6 @@ export async function getIngredient(ingredient: DeepPartial<Ingredient>, ctx: Co
                 where: {
                     name: ingredient.name,
                 },
-                relations: neededRelations,
             });
     }
 

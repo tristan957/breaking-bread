@@ -62,10 +62,10 @@ interface ICreateUser {
 
 // tslint:disable-next-line: no-any
 function _createUser(parent: any, args: ICreateUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
-    return createUser(args.input, ctx);
+    return createUser(ctx, args.input);
 }
 
-export async function createUser(newUser: DeepPartial<User>, ctx: Context<IAppContext>): Promise<DeepPartial<User> | undefined> {
+export async function createUser(ctx: Context<IAppContext>, newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
     try {
         // TODO: Get oAuthSub from context
         newUser.oAuthSub = await Date.now.toString();
@@ -87,17 +87,18 @@ interface IUpdateUser {
 
 // tslint:disable-next-line: no-any
 function _updateUser(parent: any, args: IUpdateUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return updateUser(args.input, ctx);
+    return updateUser(ctx, args.input);
 }
 
-export async function updateUser(input: DeepPartial<User>, ctx: Context<IAppContext>): Promise<User | undefined> {
+export async function updateUser(ctx: Context<IAppContext>, input: DeepPartial<User>): Promise<User | undefined> {
     if (input.id === undefined) {
         return Promise.resolve(undefined);
     }
+
     try {
         // TODO: Need to verify id with JWT from context
         const user: User | undefined = await ctx.connection.getRepository(User).save({
-            ...getUser(input.id, ctx),
+            ...getUser(ctx, input.id),
             ...input,
         });
         return user;
@@ -114,24 +115,24 @@ interface IUpdateWhitelist {
 
 // tslint:disable-next-line: no-any
 function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return updateWhitelist(args.userId, args.topics, ctx);
+    return updateWhitelist(ctx, args.userId, args.topics);
 }
 
-export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
+export async function updateWhitelist(ctx: Context<IAppContext>, id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
     try {
-        const user: User | undefined = await getUser(id, ctx);
+        const user: User | undefined = await getUser(ctx, id);
         if (user === undefined) {
             return Promise.resolve(undefined);
         }
         // TODO: Need to verify id with JWT from context
         for (const topic of topics) {
-            await createTopic({ name: topic.name }, ctx);
+            await createTopic(ctx, { name: topic.name });
         }
 
         user.whitelist = await newTopicList(
+            ctx,
             await topics.map(topic => topic.name),
-            await user.whitelist.map(topic => topic.name),
-            ctx
+            await user.whitelist.map(topic => topic.name)
         );
         ctx.connection.getRepository(User).save(user);
 
@@ -149,19 +150,19 @@ function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: Context<IApp
 
 export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
     try {
-        const user: User | undefined = await getUser(id, ctx);
+        const user: User | undefined = await getUser(ctx, id);
         if (user === undefined) {
             return Promise.resolve(undefined);
         }
         // TODO: Need to verify id with JWT from context
         for (const topic of topics) {
-            await createTopic({ name: topic.name }, ctx);
+            await createTopic(ctx, { name: topic.name });
         }
 
         user.blacklist = await newTopicList(
+            ctx,
             await topics.map(topic => topic.name),
-            await user.blacklist.map(topic => topic.name),
-            ctx
+            await user.blacklist.map(topic => topic.name)
         );
         ctx.connection.getRepository(User).save(user);
 
@@ -172,7 +173,7 @@ export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], 
     }
 }
 
-async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (string | undefined)[], ctx: Context<IAppContext>): Promise<Topic[]> {
+async function newTopicList(ctx: Context<IAppContext>, toggleTopics: (string | undefined)[], userTopics: (string | undefined)[]): Promise<Topic[]> {
     const namesRemoved: (string | undefined)[] = [];
     for (const name of userTopics) {
         const index: number = toggleTopics.indexOf(name);
@@ -190,7 +191,7 @@ async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (s
     const newTopicNames: (string | undefined)[] = [...toggleTopics, ...userTopics];
     const newList: Topic[] = [];
     for (const newName of newTopicNames) {
-        const topic: Topic | undefined = await getTopic({ name: newName }, ctx);
+        const topic: Topic | undefined = await getTopic(ctx, { name: newName });
         if (topic !== undefined) {
             newList.push(topic);
         }
@@ -200,18 +201,18 @@ async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (s
 }
 
 interface IMakeFavoriteUser {
-    recipeId: number;
-    userId: number;
+    subjectId: number;
+    actorId: number;
 }
 
 // tslint:disable-next-line: no-any
 function _favoriteAUser(parent: any, args: IMakeFavoriteUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return favoriteAUser(args.recipeId, args.userId, ctx);
+    return favoriteAUser(ctx, args.subjectId, args.actorId);
 }
 
-export async function favoriteAUser(subjectId: number, actorId: number, ctx: Context<IAppContext>): Promise<User | undefined> {
-    let user: User | undefined = await getUser(actorId, ctx);
-    const subject: User | undefined = await getUser(subjectId, ctx);
+export async function favoriteAUser(ctx: Context<IAppContext>, subjectId: number, actorId: number): Promise<User | undefined> {
+    let user: User | undefined = await getUser(ctx, actorId);
+    const subject: User | undefined = await getUser(ctx, subjectId);
     if (user === undefined) {
         return Promise.resolve(undefined);
     }
@@ -219,14 +220,14 @@ export async function favoriteAUser(subjectId: number, actorId: number, ctx: Con
         return Promise.resolve(undefined);
     }
     user.favoriteUsers.push(subject);
-    user = await updateUser(user, ctx);    // User verification from ctx done here
+    user = await updateUser(ctx, user);    // User verification from ctx done here
     if (user === undefined) {
         Promise.resolve(undefined);
     }
 
     subject.timesFavorited += 1;
     return ctx.connection.getRepository(User).save({
-        ...getUser(subjectId, ctx),
+        ...getUser(ctx, subjectId),
         ...subject,
     });
 }
@@ -241,10 +242,10 @@ interface IGetUser {
 
 // tslint:disable-next-line: no-any
 function _getUser(parent: any, args: IGetUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return getUser(args.id, ctx);
+    return getUser(ctx, args.id);
 }
 
-export async function getUser(userId: number, ctx: Context<IAppContext>): Promise<User | undefined> {
+export async function getUser(ctx: Context<IAppContext>, userId: number): Promise<User | undefined> {
     const neededRelations: string[] = [
         "hostedMeals", "whitelist", "blacklist",
         "reviews", "userReviewsAuthored", "recipeReviewsAuthored",

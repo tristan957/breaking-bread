@@ -3,10 +3,12 @@ import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
+import Allergy from "../entities/Allergy";
 import Ingredient from "../entities/Ingredient";
 import Recipe from "../entities/Recipe";
 import Tag from "../entities/Tag";
 import User from "../entities/User";
+import { getAllergy } from "./Allergy";
 import { getIngredient } from "./Ingredient";
 import { createTag, getTag } from "./Tag";
 import { getUser, updateUser } from "./User";
@@ -15,13 +17,14 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createRecipe(input: CreateRecipeInput!): Recipe
         updateRecipe(input: UpdateRecipeInput!): Recipe
-        updateTagList(recipeId: Int!, tags: [CreateTagInput]!): [Tag]
-        updateIngredients(recipeId: Int!, ingredients: [CreateIngredientInput]!): [Tag]
+        updateTagList(recipeId: Int!, tags: [GetTagInput!]!): [Tag!]
+        updateIngredients(recipeId: Int!, ingredients: [GetIngredientInput!]!): [Ingredient!]
+        updateAllergies(recipeId: Int!, allergies: [GetAllergyInput!]!): [Allergy!]
         favoriteARecipe(recipeId: Int!, userId: Int!): Recipe
     }
 
     extend type Query {
-        getRecipe(id: Int!): Recipe
+        getRecipe(input: GetRecipeInput!): Recipe
     }
 
     type Recipe {
@@ -35,6 +38,7 @@ export const typeDef: DocumentNode = gql`
         reviews: [RecipeReview]!
         tags: [Tag]!
         ingredients: [Ingredient]!
+        allergies: [Allergy]!
     }
 
     input CreateRecipeInput {
@@ -48,6 +52,11 @@ export const typeDef: DocumentNode = gql`
         name: String
         description: String
     }
+
+    input GetRecipeInput {
+        id: Int
+        name: String
+    }
 `;
 
 /**
@@ -60,10 +69,10 @@ interface ICreateRecipe {
 
 // tslint:disable-next-line: no-any
 function _createRecipe(parent: any, args: ICreateRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Recipe> | undefined> {
-    return createRecipe(args.input, ctx);
+    return createRecipe(ctx, args.input);
 }
 
-export async function createRecipe(newRecipe: DeepPartial<Recipe>, ctx: Context<IAppContext>): Promise<DeepPartial<Recipe> | undefined> {
+export async function createRecipe(ctx: Context<IAppContext>, newRecipe: DeepPartial<Recipe>): Promise<DeepPartial<Recipe> | undefined> {
     if (newRecipe.author === undefined) {
         return undefined;
     }
@@ -96,10 +105,10 @@ interface IUpdateRecipe {
 
 // tslint:disable-next-line: no-any
 function _updateRecipe(parent: any, args: IUpdateRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
-    return updateRecipe(args.input, ctx);
+    return updateRecipe(ctx, args.input);
 }
 
-export async function updateRecipe(input: DeepPartial<Recipe>, ctx: Context<IAppContext>): Promise<Recipe | undefined> {
+export async function updateRecipe(ctx: Context<IAppContext>, input: DeepPartial<Recipe>): Promise<Recipe | undefined> {
     if (input.id === undefined) {
         return Promise.resolve(undefined);
     }
@@ -109,7 +118,7 @@ export async function updateRecipe(input: DeepPartial<Recipe>, ctx: Context<IApp
         // if not, favorite (check if favorite), make copy (update input deeppartial<recipe>), then proceed
 
         const recipe: Recipe | undefined = await ctx.connection.getRepository(Recipe).save({
-            ...getRecipe(input.id, ctx),
+            ...getRecipe(ctx, { id: input.id }),
             ...input,
         });
         return recipe;
@@ -119,15 +128,15 @@ export async function updateRecipe(input: DeepPartial<Recipe>, ctx: Context<IApp
     }
 }
 
-async function makeRecipeCopy(recipeId: number, ctx: Context<IAppContext>): Promise<Recipe | undefined> {
-    const original: DeepPartial<Recipe> | undefined = await getRecipe(recipeId, ctx);
+async function makeRecipeCopy(ctx: Context<IAppContext>, recipeId: number): Promise<Recipe | undefined> {
+    const original: DeepPartial<Recipe> | undefined = await getRecipe(ctx, { id: recipeId });
     if (original === undefined) {
         return Promise.resolve(undefined);
     }
 
     original.id = undefined;
     // TODO: Set author to user from JWT in context
-    createRecipe(original, ctx);
+    createRecipe(ctx, original);
 }
 
 interface IUpdateTagList {
@@ -137,24 +146,24 @@ interface IUpdateTagList {
 
 // tslint:disable-next-line: no-any
 function _updateTagList(parent: any, args: IUpdateTagList, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag[] | undefined> {
-    return updateTagList(args.id, args.tags, ctx);
+    return updateTagList(ctx, args.id, args.tags);
 }
 
-export async function updateTagList(recipeId: number, tags: DeepPartial<Tag>[], ctx: Context<IAppContext>): Promise<Tag[] | undefined> {
+export async function updateTagList(ctx: Context<IAppContext>, recipeId: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
     try {
-        const recipe: Recipe | undefined = await getRecipe(recipeId, ctx);
+        const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
         if (recipe === undefined) {
             return Promise.resolve(undefined);
         }
         // TODO: Need to verify id with JWT from context
         for (const tag of tags) {
-            await createTag({ name: tag.name }, ctx);
+            await createTag(ctx, { name: tag.name });
         }
 
         recipe.tags = await newTagList(
+            ctx,
             await tags.map(tag => tag.name),
-            await recipe.tags.map(tag => tag.name),
-            ctx
+            await recipe.tags.map(tag => tag.name)
         );
         ctx.connection.getRepository(Tag).save(recipe);
 
@@ -165,7 +174,7 @@ export async function updateTagList(recipeId: number, tags: DeepPartial<Tag>[], 
     }
 }
 
-async function newTagList(toggleTags: (string | undefined)[], recipeTags: (string | undefined)[], ctx: Context<IAppContext>): Promise<Tag[]> {
+async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undefined)[], recipeTags: (string | undefined)[]): Promise<Tag[]> {
     const namesRemoved: (string | undefined)[] = [];
     for (const name of recipeTags) {
         const index: number = toggleTags.indexOf(name);
@@ -183,7 +192,7 @@ async function newTagList(toggleTags: (string | undefined)[], recipeTags: (strin
     const newTagNames: (string | undefined)[] = [...toggleTags, ...recipeTags];
     const newList: Tag[] = [];
     for (const newName of newTagNames) {
-        const tag: Tag | undefined = await getTag({ name: newName }, ctx);
+        const tag: Tag | undefined = await getTag(ctx, { name: newName });
         if (tag !== undefined) {
             newList.push(tag);
         }
@@ -199,22 +208,21 @@ interface IUpdateIngredients {
 
 // tslint:disable-next-line: no-any
 function _updateIngredients(parent: any, args: IUpdateIngredients, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Ingredient[] | undefined> {
-    return updateIngredients(args.id, args.ingredients, ctx);
+    return updateIngredients(ctx, args.id, args.ingredients);
 }
 
-export async function updateIngredients(recipeId: number, ingredients: DeepPartial<Ingredient>[], ctx: Context<IAppContext>): Promise<Ingredient[] | undefined> {
+export async function updateIngredients(ctx: Context<IAppContext>, recipeId: number, ingredients: DeepPartial<Ingredient>[]): Promise<Ingredient[] | undefined> {
     try {
-        const recipe: Recipe | undefined = await getRecipe(recipeId, ctx);
+        const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
         if (recipe === undefined) {
             return Promise.resolve(undefined);
         }
         // TODO: Need to verify id with JWT from context (owner of recipe)
 
-        // TODO: Ingredients should be created seperately or searched for before attaching to meals
         recipe.ingredients = await newIngredients(
+            ctx,
             await ingredients.map(ingredient => ingredient.name),
-            await recipe.ingredients.map(ingredient => ingredient.name),
-            ctx
+            await recipe.ingredients.map(ingredient => ingredient.name)
         );
         ctx.connection.getRepository(Recipe).save(recipe);
 
@@ -225,7 +233,7 @@ export async function updateIngredients(recipeId: number, ingredients: DeepParti
     }
 }
 
-async function newIngredients(toggleIngredients: (string | undefined)[], recipeIngredients: (string | undefined)[], ctx: Context<IAppContext>): Promise<Ingredient[]> {
+async function newIngredients(ctx: Context<IAppContext>, toggleIngredients: (string | undefined)[], recipeIngredients: (string | undefined)[]): Promise<Ingredient[]> {
     const namesRemoved: (string | undefined)[] = [];
     for (const name of recipeIngredients) {
         const index: number = toggleIngredients.indexOf(name);
@@ -243,9 +251,68 @@ async function newIngredients(toggleIngredients: (string | undefined)[], recipeI
     const newIngredientNames: (string | undefined)[] = [...toggleIngredients, ...recipeIngredients];
     const newList: Ingredient[] = [];
     for (const newName of newIngredientNames) {
-        const ingredient: Ingredient | undefined = await getIngredient({ name: newName }, ctx);
+        const ingredient: Ingredient | undefined = await getIngredient(ctx, { name: newName });
         if (ingredient !== undefined) {
             newList.push(ingredient);
+        }
+    }
+
+    return newList;
+}
+
+interface IUpdateAllergies {
+    id: number;
+    allergies: DeepPartial<Allergy>[];
+}
+
+// tslint:disable-next-line: no-any
+function _updateAllergies(parent: any, args: IUpdateAllergies, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Allergy[] | undefined> {
+    return updateAllergies(ctx, args.id, args.allergies);
+}
+
+export async function updateAllergies(ctx: Context<IAppContext>, recipeId: number, allergies: DeepPartial<Allergy>[]): Promise<Allergy[] | undefined> {
+    try {
+        const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
+        if (recipe === undefined) {
+            return Promise.resolve(undefined);
+        }
+        // TODO: Need to verify id with JWT from context (owner of recipe)
+
+        recipe.allergies = await newAllergies(
+            ctx,
+            await allergies.map(allergy => allergy.name),
+            await recipe.allergies.map(allergy => allergy.name)
+        );
+        ctx.connection.getRepository(Recipe).save(recipe);
+
+        return recipe.allergies;
+    } catch (reason) {
+        console.log(reason);
+        return Promise.reject(undefined);
+    }
+}
+
+async function newAllergies(ctx: Context<IAppContext>, toggleAllergies: (string | undefined)[], recipeAllergies: (string | undefined)[]): Promise<Allergy[]> {
+    const namesRemoved: (string | undefined)[] = [];
+    for (const name of recipeAllergies) {
+        const index: number = toggleAllergies.indexOf(name);
+        if (index >= 0) {
+            await toggleAllergies.splice(index, 1);
+            namesRemoved.push(name);
+        }
+    }
+    for (const name of namesRemoved) {
+        await recipeAllergies.splice(
+            recipeAllergies.indexOf(name), 1
+        );
+    }
+
+    const newAllergyNames: (string | undefined)[] = [...toggleAllergies, ...recipeAllergies];
+    const newList: Allergy[] = [];
+    for (const newName of newAllergyNames) {
+        const allery: Ingredient | undefined = await getAllergy(ctx, { name: newName });
+        if (allery !== undefined) {
+            newList.push(allery);
         }
     }
 
@@ -259,12 +326,12 @@ interface IMakeFavoriteRecipe {
 
 // tslint:disable-next-line: no-any
 function _favoriteARecipe(parent: any, args: IMakeFavoriteRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
-    return favoriteARecipe(args.recipeId, args.userId, ctx);
+    return favoriteARecipe(ctx, args.recipeId, args.userId);
 }
 
-export async function favoriteARecipe(recipeId: number, userId: number, ctx: Context<IAppContext>): Promise<Recipe | undefined> {
-    let user: User | undefined = await getUser(userId, ctx);
-    const recipe: Recipe | undefined = await getRecipe(recipeId, ctx);
+export async function favoriteARecipe(ctx: Context<IAppContext>, recipeId: number, userId: number): Promise<Recipe | undefined> {
+    let user: User | undefined = await getUser(ctx, userId);
+    const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
     if (user === undefined) {
         return Promise.resolve(undefined);
     }
@@ -272,14 +339,14 @@ export async function favoriteARecipe(recipeId: number, userId: number, ctx: Con
         return Promise.resolve(undefined);
     }
     user.favoriteRecipes.push(recipe);
-    user = await updateUser(user, ctx);    // User verification from ctx done here
+    user = await updateUser(ctx, user);    // User verification from ctx done here
     if (user === undefined) {
         Promise.resolve(undefined);
     }
 
     recipe.timesFavorited += 1;
     return ctx.connection.getRepository(Recipe).save({
-        ...getRecipe(recipeId, ctx),
+        ...getRecipe(ctx, { id: recipeId }),
         ...recipe,
     });
 }
@@ -289,26 +356,42 @@ export async function favoriteARecipe(recipeId: number, userId: number, ctx: Con
  */
 
 interface IGetRecipe {
-    id: number;
+    input: DeepPartial<Recipe>;
 }
 
 // tslint:disable-next-line: no-any
 function _getRecipe(parent: any, args: IGetRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
-    return getRecipe(args.id, ctx);
+    return getRecipe(ctx, args.input);
 }
 
-export async function getRecipe(recipeId: number, ctx: Context<IAppContext>): Promise<Recipe | undefined> {
+export async function getRecipe(ctx: Context<IAppContext>, recipe: DeepPartial<Recipe>): Promise<Recipe | undefined> {
     const neededRelations: string[] = [
-        "author", "tags", "ingredients", "reviews",
+        "author", "tags", "ingredients", "reviews", "allergies",
     ];
-    return ctx.connection
-        .getRepository(Recipe)
-        .findOne({
-            where: {
-                id: recipeId,
-            },
-            relations: neededRelations,
-        });
+
+    if (recipe.id !== undefined) {
+        return ctx.connection
+            .getRepository(Recipe)
+            .findOne({
+                where: {
+                    id: recipe.id,
+                },
+                relations: neededRelations,
+            });
+    }
+
+    if (recipe.name !== undefined) {
+        return ctx.connection
+            .getRepository(Recipe)
+            .findOne({
+                where: {
+                    name: recipe.name,
+                },
+                relations: neededRelations,
+            });
+    }
+
+    return Promise.resolve(undefined);
 }
 
 export const resolvers: IResolvers = {
@@ -317,6 +400,7 @@ export const resolvers: IResolvers = {
         updateRecipe: _updateRecipe,
         updateTags: _updateTagList,
         updateIngredients: _updateIngredients,
+        updateAllergies: _updateAllergies,
         favoriteARecipe: _favoriteARecipe,
     },
     Query: {

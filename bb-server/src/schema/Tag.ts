@@ -11,12 +11,17 @@ export const typeDef: DocumentNode = gql`
     }
 
     extend type Query {
-        getTag(id: Int!): Tag
+        getTag(input: GetTagInput!): Tag
     }
 
     type Tag {
         id: Int!
         name: String!
+    }
+
+    input GetTagInput {
+        id: Int
+        name: String
     }
 
     input CreateTagInput {
@@ -28,23 +33,23 @@ export const typeDef: DocumentNode = gql`
  * Mutator Resolvers
  */
 
-interface ICreateTopics {
+interface ICreateTag {
     input: DeepPartial<Tag>;
 }
 
 // tslint:disable-next-line: no-any
-function _createTag(parent: any, args: ICreateTopics, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Tag>> {
-    return createTag(args.input, ctx);
+function _createTag(parent: any, args: ICreateTag, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Tag>> {
+    return createTag(ctx, args.input);
 }
 
-export async function createTag(tag: DeepPartial<Tag>, ctx: Context<IAppContext>): Promise<DeepPartial<Tag>> {
-    const tagsRepo: Repository<Tag> = await ctx.connection.getRepository(Tag);
+export async function createTag(ctx: Context<IAppContext>, tag: DeepPartial<Tag>): Promise<DeepPartial<Tag>> {
+    const tagRepo: Repository<Tag> = await ctx.connection.getRepository(Tag);
 
-    const foundTag: Tag | undefined = await tagsRepo.createQueryBuilder("tag")
+    const foundTag: Tag | undefined = await tagRepo.createQueryBuilder("tag")
         .where("tag.name = :name", { name: tag.name })
         .getOne();
     if (foundTag === undefined) {
-        return tagsRepo.save(tag);
+        return tagRepo.save(tag);
     } else {
         return foundTag;
     }
@@ -55,15 +60,15 @@ export async function createTag(tag: DeepPartial<Tag>, ctx: Context<IAppContext>
  */
 
 interface IGetTag {
-    id: number;
+    input: DeepPartial<Tag>;
 }
 
 // tslint:disable-next-line: no-any
 function _getTag(parent: any, args: IGetTag, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag | undefined> {
-    return getTag({ id: args.id }, ctx);
+    return getTag(ctx, args.input);
 }
 
-export async function getTag(tag: DeepPartial<Tag>, ctx: Context<IAppContext>): Promise<Tag | undefined> {
+export async function getTag(ctx: Context<IAppContext>, tag: DeepPartial<Tag>): Promise<Tag | undefined> {
     if (tag.id !== undefined) {
         return ctx.connection.getRepository(Tag).createQueryBuilder("tag")
             .where("tag.id = :id", { id: tag.id })

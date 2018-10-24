@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import Allergy from "./Allergy";
 import Ingredient from "./Ingredient";
 import RecipeReview from "./RecipeReview";
 import Tag from "./Tag";
@@ -40,4 +41,8 @@ export default class Recipe {
     @ManyToMany(type => Ingredient)
     @JoinTable()
     public ingredients: Ingredient[];
+
+    @ManyToMany(type => Allergy)
+    @JoinTable()
+    public allergies: Allergy[];
 }

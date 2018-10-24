@@ -11,11 +11,15 @@ export const typeDef: DocumentNode = gql`
     }
 
     extend type Query {
-        getTopic(id: Int!): Topic
+        getTopic(input: GetTopicInput!): Topic
     }
 
     type Topic {
         id: Int!
+        name: String!
+    }
+
+    input GetTopicInput {
         name: String!
     }
 
@@ -34,17 +38,17 @@ interface ICreateTopic {
 
 // tslint:disable-next-line: no-any
 function _createTopic(parent: any, args: ICreateTopic, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<Topic>> {
-    return createTopic(args.input, ctx);
+    return createTopic(ctx, args.input);
 }
 
-export async function createTopic(topic: DeepPartial<Topic>, ctx: Context<IAppContext>): Promise<DeepPartial<Topic>> {
-    const topicsRepo: Repository<Topic> = await ctx.connection.getRepository(Topic);
+export async function createTopic(ctx: Context<IAppContext>, topic: DeepPartial<Topic>): Promise<DeepPartial<Topic>> {
+    const topicRepo: Repository<Topic> = await ctx.connection.getRepository(Topic);
 
-    const foundTopic: Topic | undefined = await topicsRepo.createQueryBuilder("topic")
+    const foundTopic: Topic | undefined = await topicRepo.createQueryBuilder("topic")
         .where("topic.name = :name", { name: topic.name })
         .getOne();
     if (foundTopic === undefined) {
-        return topicsRepo.save(topic);
+        return topicRepo.save(topic);
     } else {
         return foundTopic;
     }
@@ -55,15 +59,15 @@ export async function createTopic(topic: DeepPartial<Topic>, ctx: Context<IAppCo
  */
 
 interface IGetTopic {
-    id: number;
+    input: DeepPartial<Topic>;
 }
 
 // tslint:disable-next-line: no-any
 function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic | undefined> {
-    return getTopic({ id: args.id }, ctx);
+    return getTopic(ctx, args.input);
 }
 
-export async function getTopic(topic: DeepPartial<Topic>, ctx: Context<IAppContext>): Promise<Topic | undefined> {
+export async function getTopic(ctx: Context<IAppContext>, topic: DeepPartial<Topic>): Promise<Topic | undefined> {
     if (topic.id !== undefined) {
         return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
             .where("topic.id = :id", { id: topic.id })

@@ -51,10 +51,10 @@ interface ICreateUserReview {
 
 // tslint:disable-next-line: no-any
 function _createUserReview(parent: any, args: ICreateUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<UserReview> | undefined> {
-    return createUserReview(args.input, ctx);
+    return createUserReview(ctx, args.input);
 }
 
-export async function createUserReview(newReview: DeepPartial<UserReview>, ctx: Context<IAppContext>): Promise<DeepPartial<UserReview> | undefined> {
+export async function createUserReview(ctx: Context<IAppContext>, newReview: DeepPartial<UserReview>): Promise<DeepPartial<UserReview> | undefined> {
     if (newReview.author === undefined || newReview.subject === undefined) {
         return Promise.resolve(undefined);
     }
@@ -62,8 +62,8 @@ export async function createUserReview(newReview: DeepPartial<UserReview>, ctx: 
         return Promise.resolve(undefined);
     }
     try {
-        const author: User | undefined = await getUser(newReview.author.id, ctx);
-        const subject: User | undefined = await getUser(newReview.subject.id, ctx);
+        const author: User | undefined = await getUser(ctx, newReview.author.id);
+        const subject: User | undefined = await getUser(ctx, newReview.subject.id);
         if (author === undefined || subject === undefined) {
             return Promise.resolve(undefined);
         }
@@ -85,17 +85,17 @@ interface IUpdateUserReview {
 
 // tslint:disable-next-line: no-any
 function _updateUserReview(parent: any, args: IUpdateUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
-    return updateUserReview(args.input, ctx);
+    return updateUserReview(ctx, args.input);
 }
 
-export async function updateUserReview(input: DeepPartial<UserReview>, ctx: Context<IAppContext>): Promise<UserReview | undefined> {
+export async function updateUserReview(ctx: Context<IAppContext>, input: DeepPartial<UserReview>): Promise<UserReview | undefined> {
     if (input.id === undefined) {
         return Promise.resolve(undefined);
     }
     // TODO: Check author is user from JWT in context
     try {
         const userReview: UserReview | undefined = await ctx.connection.getRepository(UserReview).save({
-            ...getUserReview(input.id, ctx),
+            ...getUserReview(ctx, input.id),
             ...input,
         });
         return userReview;
@@ -115,10 +115,10 @@ interface IGetUserReview {
 
 // tslint:disable-next-line: no-any
 function _getUserReview(parent: any, args: IGetUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
-    return getUserReview(args.id, ctx);
+    return getUserReview(ctx, args.id);
 }
 
-async function getUserReview(reviewId: number, ctx: Context<IAppContext>): Promise<UserReview | undefined> {
+async function getUserReview(ctx: Context<IAppContext>, reviewId: number): Promise<UserReview | undefined> {
     return ctx.connection.getRepository(UserReview)
         .findOne({
             where: {
