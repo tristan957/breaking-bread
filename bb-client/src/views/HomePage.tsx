@@ -2,7 +2,7 @@ import * as React from "react";
 import Background from "../components/Background";
 import Footer from "../components/Footer";
 import FormExample from "../components/FormExample";
-import NavBar from "../components/Header";
+import Header from "../components/Header";
 import "./resources/css/HomePage.css";
 
 export default class HomePage extends React.Component {
@@ -10,7 +10,7 @@ export default class HomePage extends React.Component {
 		return (
 			<div id="container">
 				<div id="header">
-					<NavBar />
+					<Header />
 				</div>
 
 				<div id="content">

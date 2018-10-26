@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export default class HomePage extends React.Component {
+export default class TestPage extends React.Component {
 	public render(): JSX.Element {
 		return (
 			<div id="container">
