@@ -16,7 +16,7 @@ export const typeDef: DocumentNode = gql`
     }
 
     extend type Query {
-        recipeReview(id: Int!): RecipeReview
+        getRecipeReview(id: Int!): RecipeReview
     }
 
     type RecipeReview {

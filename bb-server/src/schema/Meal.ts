@@ -5,6 +5,9 @@ import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
 import Meal from "../entities/Meal";
 import Recipe from "../entities/Recipe";
+import User from "../entities/User";
+import { getRecipe } from "./Recipe";
+import { getUser } from "./User";
 
 export const typeDef: DocumentNode = gql`
     extend type Mutation {
@@ -12,7 +15,7 @@ export const typeDef: DocumentNode = gql`
         deleteMeal(mealId: Int!): Meal
         updateGuests(mealId: Int!, guests: [Int!]): Meal
         updateMeal(input: UpdateMealInput!): Meal
-        updateRecipes(mealId: Int!, recipes: [GetRecipeInput!]!): Meal
+        updateRecipes(mealId: Int!, recipes: [UpdateRecipeInput!]!): Meal
     }
 
     extend type Query {
@@ -70,16 +73,22 @@ export async function createMeal(ctx: Context<IAppContext>, newMeal: DeepPartial
 }
 
 interface IDeleteMeal {
-    id: number;
+    mealId: number;
 }
 
-interface IGetMeal {
-    id: number;
+// tslint:disable-next-line: no-any
+function _deleteMeal(parent: any, args: IDeleteMeal, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Meal | undefined> {
+    return deleteMeal(ctx, args.mealId);
 }
 
-interface IUpdateGuests {
-    id: number;
-    guests: number[];
+export async function deleteMeal(ctx: Context<IAppContext>, mealId: number): Promise<Meal | undefined> {
+    const meal: Meal | undefined = await getMeal(ctx, mealId);
+    if (meal === undefined) {
+        return Promise.resolve(undefined);
+    }
+
+    ctx.connection.getRepository(Meal).delete(meal);
+    return meal;
 }
 
 interface IUpdateMeal {
@@ -126,10 +135,18 @@ export async function updateRecipes(ctx: Context<IAppContext>, id: number, recip
             return Promise.resolve(undefined);
         }
 
-        // TODO: remove/add recipes dependng on their existance in meal's recipe array
-        // for (const recipe of recipes) {
-        //     if (meal.recipes.) { }
-        // }
+        // TODO: Need to verify id with JWT from context
+        for (const recipe of recipes) {
+            if (await getRecipe(ctx, recipe) === undefined) {
+                return Promise.resolve(undefined);
+            }
+        }
+
+        meal.recipes = await newRecipeList(
+            ctx,
+            await recipes.map(recipe => recipe.id),
+            await meal.recipes.map(recipe => recipe.id)
+        );
 
         ctx.connection.getRepository(Meal).save(meal);
         return meal;
@@ -137,6 +154,100 @@ export async function updateRecipes(ctx: Context<IAppContext>, id: number, recip
         console.log(reason);
         return Promise.reject(undefined);
     }
+}
+
+async function newRecipeList(ctx: Context<IAppContext>, toggleRecipes: (number | undefined)[], mealRecipes: (number | undefined)[]): Promise<Recipe[]> {
+    const idsRemoved: (number | undefined)[] = [];
+    for (const id of mealRecipes) {
+        const index: number = toggleRecipes.indexOf(id);
+        if (index >= 0) {
+            await toggleRecipes.splice(index, 1);
+            idsRemoved.push(id);
+        }
+    }
+    for (const id of idsRemoved) {
+        await mealRecipes.splice(
+            mealRecipes.indexOf(id), 1
+        );
+    }
+
+    const newRecipeIds: (number | undefined)[] = [...toggleRecipes, ...mealRecipes];
+    const newList: Recipe[] = [];
+    for (const newId of newRecipeIds) {
+        const recipe: Recipe | undefined = await getRecipe(ctx, { id: newId });
+        if (recipe !== undefined) {
+            newList.push(recipe);
+        }
+    }
+
+    return newList;
+}
+
+interface IUpdateGuests {
+    mealId: number;
+    guests: number[];
+}
+
+// tslint:disable-next-line: no-any
+function _updateGuests(parent: any, args: IUpdateGuests, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Meal | undefined> {
+    return updateGuests(ctx, args.mealId, args.guests);
+}
+
+export async function updateGuests(ctx: Context<IAppContext>, mealId: number, guests: number[]): Promise<Meal | undefined> {
+    try {
+        const meal: Meal | undefined = await getMeal(ctx, mealId);
+        if (meal === undefined) {
+            return Promise.resolve(undefined);
+        }
+
+        // TODO: Need to verify id with JWT from context
+        for (const guestId of guests) {
+            if (await getUser(ctx, guestId) === undefined) {
+                return Promise.resolve(undefined);
+            }
+        }
+
+        meal.guests = await newGuestList(
+            ctx,
+            guests,
+            await meal.guests.map(guest => guest.id)
+        );
+
+        ctx.connection.getRepository(Meal).save(meal);
+        return meal;
+    } catch (reason) {
+        console.log(reason);
+        return Promise.reject(undefined);
+    }
+}
+
+async function newGuestList(ctx: Context<IAppContext>, toggleGuests: (number | undefined)[], mealGuests: (number | undefined)[]): Promise<User[]> {
+    const idsRemoved: (number | undefined)[] = [];
+    for (const id of mealGuests) {
+        const index: number = toggleGuests.indexOf(id);
+        if (index >= 0) {
+            await toggleGuests.splice(index, 1);
+            idsRemoved.push(id);
+        }
+    }
+    for (const id of idsRemoved) {
+        await mealGuests.splice(
+            mealGuests.indexOf(id), 1
+        );
+    }
+
+    const newGuestIds: (number | undefined)[] = [...toggleGuests, ...mealGuests];
+    const newList: User[] = [];
+    for (const newId of newGuestIds) {
+        if (newId !== undefined) {
+            const guest: User | undefined = await getUser(ctx, newId);
+            if (guest !== undefined) {
+                newList.push(guest);
+            }
+        }
+    }
+
+    return newList;
 }
 
 /**

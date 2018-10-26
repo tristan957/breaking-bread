@@ -17,7 +17,7 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createRecipe(input: CreateRecipeInput!): Recipe
         updateRecipe(input: UpdateRecipeInput!): Recipe
-        updateTagList(recipeId: Int!, tags: [GetTagInput!]!): [Tag!]
+        updateTags(recipeId: Int!, tags: [GetTagInput!]!): [Tag!]
         updateIngredients(recipeId: Int!, ingredients: [GetIngredientInput!]!): [Ingredient!]
         updateAllergies(recipeId: Int!, allergies: [GetAllergyInput!]!): [Allergy!]
         favoriteARecipe(recipeId: Int!, userId: Int!): Recipe
