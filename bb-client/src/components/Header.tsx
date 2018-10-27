@@ -1,30 +1,58 @@
 // tslint:disable
+import autobind from 'autobind-decorator';
 import * as React from "react";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
+import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Auth0Authentication } from '../auth/Auth0Authentication';
+import "./resources/css/Font.css";
 import "./resources/css/Header.css";
 import * as logo from "./resources/images/logo_icon.png";
 
-export default class Header extends React.Component {
+type AppProps = {
+	auth: Auth0Authentication,
+}
+type AppState = {
+	isOpen: boolean,
+}
+
+export default class Header extends React.Component<AppProps, AppState> {
+	constructor(props) {
+		super(props);
+		this.toggle = this.toggle.bind(this);
+		this.state = {
+			isOpen: false
+		};
+	}
+
+	toggle() {
+		this.setState({ isOpen: !this.state.isOpen });
+	}
+
+	@autobind
+	login() {
+		this.props.auth.login();
+	}
+
+	@autobind
+	logout() {
+		this.props.auth.logout();
+	}
+
 	public render(): JSX.Element {
+		// const { authenticated } = this.props.auth;
 		return (
-			<Navbar inverse={true} collapseOnSelect={true}>
-				<Navbar.Header>
-					<Navbar.Brand href="#">
-						<span><img src={logo} height="30" className="d-inline-block align-top" /></span>
-						<span className={"brandname"}>Breaking Bread</span>
-					</Navbar.Brand>
-					<Navbar.Toggle />
-				</Navbar.Header>
-				<Navbar.Collapse>
-					<Nav pullRight={true}>
-						<NavItem eventKey={1} href="#">
-							Log In
-						</NavItem>
-						<NavItem eventKey={2} href="#">
-							Sign Up
+			<Navbar light expand="md">
+				<NavbarBrand href="/">
+					Breaking Bread
+					<span><img src={logo} height="25" /></span>
+				</NavbarBrand>
+				<NavbarToggler onClick={this.toggle} />
+				<Collapse isOpen={this.state.isOpen} navbar>
+					<Nav className="ml-auto" navbar>
+						<NavItem>
+							<NavLink onClick={this.login}>Log in / Sign up</NavLink>
 						</NavItem>
 					</Nav>
-				</Navbar.Collapse>
+				</Collapse>
 			</Navbar>
 		);
 	}

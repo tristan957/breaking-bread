@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ControlLabel, FormControl, FormGroup } from "react-bootstrap";
+import "./resources/css/Font.css";
 import "./resources/css/FormExample.css";
 
 export default class FormExample extends React.Component {
