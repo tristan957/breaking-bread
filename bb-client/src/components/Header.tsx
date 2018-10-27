@@ -37,8 +37,14 @@ export default class Header extends React.Component<AppProps, AppState> {
 		this.props.auth.logout();
 	}
 
+	@autobind
+	showToken() {
+	  console.log(localStorage.getItem("access_token"));
+	}
+
 	public render(): JSX.Element {
-		// const { authenticated } = this.props.auth;
+		const { authenticated } = this.props.auth;
+
 		return (
 			<Navbar light expand="md">
 				<NavbarBrand href="/">
@@ -48,9 +54,35 @@ export default class Header extends React.Component<AppProps, AppState> {
 				<NavbarToggler onClick={this.toggle} />
 				<Collapse isOpen={this.state.isOpen} navbar>
 					<Nav className="ml-auto" navbar>
+					{!authenticated && (
+						<li className="nav-item">
+						<button
+							className="btn btn-outline-primary my-2 my-sm-0"
+							type="submit"
+							onClick={this.login}
+						>
+							Log In
+						</button>
+						</li>
+					)}
+					{authenticated && (
+						<li className="nav-item">
 						<NavItem>
-							<NavLink onClick={this.login}>Log in / Sign up</NavLink>
+							<NavLink>Hi, {localStorage.getItem("user_id")}</NavLink>
 						</NavItem>
+						</li>
+					)}
+					{authenticated && (
+						<li className="nav-item">
+						<button
+							className="btn btn-outline-primary my-2 my-sm-0"
+							type="submit"
+							onClick={this.logout}
+						>
+							Log Out
+						</button>
+						</li>
+					)}
 					</Nav>
 				</Collapse>
 			</Navbar>
