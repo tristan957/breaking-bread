@@ -7,7 +7,6 @@ import path from "path";
 import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
-// tslint:disable-next-line: match-default-export-name
 
 export default class App {
 
