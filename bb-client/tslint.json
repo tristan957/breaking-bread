@@ -38,13 +38,13 @@
     ],
     "interface-name": [
       true,
-      "always-prefix"
+      "never-prefix"
     ],
     "jsdoc-format": true,
     "label-position": true,
     "linebreak-style": [
       true,
-      "LF"
+      "CRLF"
     ],
     "match-default-export-name": true,
     "member-access": true,
@@ -72,7 +72,7 @@
     ],
     "new-parens": true,
     "no-angle-bracket-type-assertion": true,
-    "no-any": true,
+    "no-any": false,
     "no-arg": true,
     "no-boolean-literal-compare": true,
     "no-consecutive-blank-lines": true,
@@ -123,7 +123,7 @@
       true,
       "allow-named-functions"
     ],
-    "ordered-imports": true,
+    "ordered-imports": false,
     "prefer-conditional-expression": true,
     "prefer-const": true,
     "prefer-for-of": true,
@@ -199,7 +199,8 @@
     "variable-name": [
       true,
       "check-format",
-      "ban-keywords"
+      "ban-keywords",
+      "allow-pascal-case"
     ],
     "whitespace": [
       true,
