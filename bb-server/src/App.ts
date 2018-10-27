@@ -2,9 +2,8 @@
 import { ApolloServer } from "apollo-server-express";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
-import express, { Request, Response } from "express";
-import path from "path";
-import { AdvancedConsoleLogger, Connection, createConnection, Logger } from "typeorm";
+import express from "express";
+import { AdvancedConsoleLogger, Connection, createConnection } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
 
@@ -30,13 +29,6 @@ export default class App {
     private setupExpress(): void {
         this.app = express();
 
-        // React client
-        const clientPath: string = path.join(__dirname, "/./../../bb-client/dist/");
-        this.app.use(express.static(clientPath));
-        this.app.get("/", (_: Request, res: Response) => {
-            res.sendFile(path.join(clientPath, "index.html"));
-        });
-
         this.server = new ApolloServer({ typeDefs, resolvers });
         this.server.applyMiddleware({ app: this.app });
     }
@@ -45,8 +37,8 @@ export default class App {
      * Sets up TypeORM
      */
     private setupTypeORM(): void {
-        const isDEV: boolean = process.env.NODE_ENV === "DEVELOPMENT";
-        const logger: Logger = isDEV ?
+        const isDEV = process.env.NODE_ENV === "DEVELOPMENT";
+        const logger = isDEV ?
             new AdvancedConsoleLogger(["warn", "error"]) :
             new AdvancedConsoleLogger(["warn", "error"]);
 
