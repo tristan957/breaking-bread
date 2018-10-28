@@ -68,10 +68,7 @@ function _createUser(parent: any, args: ICreateUser, ctx: Context<IAppContext>, 
 export async function createUser(ctx: Context<IAppContext>, newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
     try {
         // TODO: Get oAuthSub from context
-        if (ctx.user === undefined) {
-            Promise.reject(undefined);
-        }
-        newUser.oAuthSub = ctx.user.sub;
+        newUser.oAuthSub = await Date.now.toString();
         if (newUser.timesFavorited === undefined) {
             newUser.timesFavorited = 0;
         }
