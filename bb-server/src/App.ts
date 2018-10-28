@@ -1,9 +1,14 @@
 /* tslint:disable: strict-boolean-expressions */
 import { Context } from "apollo-server-core";
-import { ApolloServer } from "apollo-server-express";
+import { makeExecutableSchema } from "apollo-server-express";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express, { Request, Response } from "express";
+import graphqlHTTP from "express-graphql";
+import jwt, { RequestHandler } from "express-jwt";
+import { GraphQLSchema } from "graphql";
+import JwksRsa from "jwks-rsa";
 import path from "path";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection, Logger } from "typeorm";
 import { entities } from "./entities";
@@ -11,18 +16,36 @@ import { resolvers, typeDefs } from "./schema";
 
 export interface IAppContext {
     connection: Connection;
+    // tslint:disable-next-line:no-any
+    user: any;
 }
 
+const jwtCheck: RequestHandler = jwt({
+    secret: JwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: "https://bbread.auth0.com/.well-known/jwks.json",
+    }),
+    audience: "https://bbread.com/graphql-test",
+    issuer: "https://bbread.auth0.com/",
+    algorithms: ["RS256"],
+});
+
 function context(req: Request): Context<IAppContext> {
-    const connection = getConnection();
-    return { connection };
+    const connection: Connection = getConnection();
+
+    return {
+        connection,
+        user: req.user,
+    };
 }
 
 export default class App {
 
     public connection: Connection;
     public app: express.Application;
-    public server: ApolloServer;
+    // public server: ApolloServer;
 
     /**
      * Sets up the application to connect to database and create server
@@ -47,12 +70,20 @@ export default class App {
             res.sendFile(path.join(clientPath, "index.html"));
         });
 
-        this.server = new ApolloServer({
+        const schema: GraphQLSchema = makeExecutableSchema({
             typeDefs,
             resolvers,
-            context,
         });
-        this.server.applyMiddleware({ app: this.app });
+
+        this.app.use(
+            "/graphql",
+            bodyParser.json(),
+            jwtCheck,
+            graphqlHTTP((req) => ({
+                schema,
+                context,
+            }))
+        );
     }
 
     /**
@@ -90,7 +121,7 @@ export default class App {
         port = parseInt(port, 10);
         this.app.listen(port, () => {
             console.log(`Server ready at http://localhost:${port}`);
-            console.log(`GraphQL test at http://localhost:${port}${this.server.graphqlPath}`);
+            console.log(`GraphQL test at http://localhost:${port}`);
         });
     }
 }
