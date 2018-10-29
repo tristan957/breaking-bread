@@ -1,11 +1,14 @@
 /* tslint:disable: strict-boolean-expressions */
 import { Context } from "apollo-server-core";
-import { ApolloServer } from "apollo-server-express";
+import { makeExecutableSchema } from "apollo-server-express";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import express, { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import jwksClient from "jwks-rsa";
+import graphqlHTTP from "express-graphql";
+import jwt, { RequestHandler } from "express-jwt";
+import { GraphQLSchema } from "graphql";
+import JwksRsa from "jwks-rsa";
 import path from "path";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection, Logger } from "typeorm";
 import { entities } from "./entities";
@@ -13,52 +16,28 @@ import { resolvers, typeDefs } from "./schema";
 
 export interface IAppContext {
     connection: Connection;
-    user: Promise<{}> | undefined;
+    // tslint:disable-next-line:no-any
+    user: any;
 }
 
-const client = jwksClient({
-    jwksUri: `https://bbread.auth0.com//.well-known/jwks.json`,
+const jwtCheck: RequestHandler = jwt({
+    secret: JwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: "https://bbread.auth0.com/.well-known/jwks.json",
+    }),
+    audience: "https://bbread.com/graphql-test",
+    issuer: "https://bbread.auth0.com/",
+    algorithms: ["RS256"],
 });
 
-// tslint:disable-next-line:no-any
-function getKey(header: any, cb: Function): void {
-    client.getSigningKey(header.kid, (err, key) => {
-        const signingKey = key.publicKey || key.rsaPublicKey;
-        // tslint:disable-next-line:no-null-keyword
-        cb(null, signingKey);
-    });
-}
-
-const options = {
-    audience: "https://bbread.com/graphql-test",
-    issuer: `https://bbread.auth0.com/`,
-    algorithms: ["RS256"],
-};
-
 function context(req: Request): Context<IAppContext> {
-    const connection = getConnection();
-    const token: string | undefined = req.headers.authorization;
-    let user: Promise<{}> | undefined = undefined;
-    if (token !== undefined) {
-        user = new Promise((resolve, reject) => {
-            /**
-             * Seems TSlint cannot see function overrides
-             * Works here: https://auth0.com/blog/develop-modern-apps-with-react-graphql-apollo-and-add-authentication/
-             * If this isn't possible the key can be loaded directly from a file
-             * Key found here: https://auth0.com/docs/api-auth/tutorials/verify-access-token#how-can-i-verify-the-signature-
-             */
-            jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
-                if (err || decoded === null) {
-                    return reject(err);
-                }
-                resolve(decoded);
-            });
-        });
-    }
+    const connection: Connection = getConnection();
 
     return {
         connection,
-        user,
+        user: req.user,
     };
 }
 
@@ -66,7 +45,7 @@ export default class App {
 
     public connection: Connection;
     public app: express.Application;
-    public server: ApolloServer;
+    // public server: ApolloServer;
 
     /**
      * Sets up the application to connect to database and create server
@@ -91,12 +70,20 @@ export default class App {
             res.sendFile(path.join(clientPath, "index.html"));
         });
 
-        this.server = new ApolloServer({
+        const schema: GraphQLSchema = makeExecutableSchema({
             typeDefs,
             resolvers,
-            context,
         });
-        this.server.applyMiddleware({ app: this.app });
+
+        this.app.use(
+            "/graphql",
+            bodyParser.json(),
+            jwtCheck,
+            graphqlHTTP((req) => ({
+                schema,
+                context,
+            }))
+        );
     }
 
     /**
@@ -134,7 +121,7 @@ export default class App {
         port = parseInt(port, 10);
         this.app.listen(port, () => {
             console.log(`Server ready at http://localhost:${port}`);
-            console.log(`GraphQL test at http://localhost:${port}${this.server.graphqlPath}`);
+            console.log(`GraphQL test at http://localhost:${port}`);
         });
     }
 }
