@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
-import Background from "../components/Background";
+import Content from "../components/Content";
 import Footer from "../components/Footer";
 import FormExample from "../components/FormExample";
 import Header from "../components/Header";
@@ -19,7 +19,7 @@ export default class HomePage extends React.Component<AppProps> {
 				</div>
 
 				<div id="content">
-					<Background />
+					<Content />
 					<FormExample />
 				</div>
 
