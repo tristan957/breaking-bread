@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 export default class TestPage extends React.Component {
 	public render(): JSX.Element {
