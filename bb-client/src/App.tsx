@@ -6,6 +6,7 @@ import { Route, RouteComponentProps } from "react-router";
 import { WebAuthentication } from "./auth/WebAuthentication";
 import * as React from "react";
 import Content from "./components/Content";
+import MealProfile from "./views/MealProfilePage";
 
 const auth = new WebAuthentication();
 
@@ -27,6 +28,10 @@ export default class App extends React.Component {
 					<Route
 						path="/home"
 						render={props => <Content {...props} />}
+					/>
+					<Route
+						path="/mealProfile"
+						render={props => <MealProfile {...props} />}
 					/>
 					<Route
 						path="/callback"
