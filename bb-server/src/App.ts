@@ -1,7 +1,6 @@
 /* tslint:disable: strict-boolean-expressions */
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer } from "apollo-server";
 import dotenv from "dotenv";
-import { default as express } from "express";
 import { AdvancedConsoleLogger, Connection, createConnection } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
@@ -9,7 +8,6 @@ import { resolvers, typeDefs } from "./schema";
 export default class App {
 
     public connection: Connection;
-    public app: express.Application;
     public server: ApolloServer;
 
     /**
@@ -19,17 +17,7 @@ export default class App {
         dotenv.config();
 
         this.setupTypeORM();
-        this.setupExpress();
-    }
-
-    /**
-     * Sets up Express server
-     */
-    private setupExpress(): void {
-        this.app = express();
-
         this.server = new ApolloServer({ typeDefs, resolvers });
-        this.server.applyMiddleware({ app: this.app });
     }
 
     /**
@@ -65,7 +53,7 @@ export default class App {
     public run(): void {
         let port: number | string = process.env.APP_PORT || "10262";
         port = parseInt(port, 10);
-        this.app.listen(port, () => {
+        this.server.listen(port, () => {
             console.log(`Server ready at http://localhost:${port}`);
             console.log(`GraphQL test at http://localhost:${port}${this.server.graphqlPath}`);
         });
