@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
 import Content from "../components/Content";
 import Footer from "../components/Footer";

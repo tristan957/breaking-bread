@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Nav, NavItem, NavLink } from "reactstrap";
 import "./resources/css/Footer.css";
 

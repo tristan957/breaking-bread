@@ -2,8 +2,7 @@
   "linterOptions": {
     "exclude": [
       "/tmp",
-      "node_modules/**",
-      "./src/registerServiceWorker.ts"
+      "node_modules/**"
     ]
   },
   "rules": {
@@ -38,10 +37,14 @@
     ],
     "interface-name": [
       true,
-      "never-prefix"
+      "always-prefix"
     ],
     "jsdoc-format": true,
     "label-position": true,
+    "linebreak-style": [
+      true,
+      "LF"
+    ],
     "match-default-export-name": true,
     "member-access": true,
     "member-ordering": [
@@ -68,7 +71,7 @@
     ],
     "new-parens": true,
     "no-angle-bracket-type-assertion": true,
-    "no-any": false,
+    "no-any": true,
     "no-arg": true,
     "no-boolean-literal-compare": true,
     "no-consecutive-blank-lines": true,
@@ -98,7 +101,7 @@
     "no-unnecessary-callback-wrapper": true,
     "no-unnecessary-qualifier": true,
     "no-unnecessary-type-assertion": true,
-    "no-unsafe-any": false,
+    "no-unsafe-any": true,
     "no-unsafe-finally": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
@@ -119,7 +122,7 @@
       true,
       "allow-named-functions"
     ],
-    "ordered-imports": false,
+    "ordered-imports": true,
     "prefer-conditional-expression": true,
     "prefer-const": true,
     "prefer-for-of": true,
@@ -138,7 +141,7 @@
     "semicolon": true,
     "space-before-function-paren": false,
     "space-within-parens": false,
-    "strict-boolean-expressions": false,
+    "strict-boolean-expressions": true,
     "strict-type-predicates": true,
     "switch-default": true,
     "switch-final-break": true,
@@ -168,8 +171,9 @@
       "parameter",
       // "arrow-parameter",
       "property-declaration",
+      // "variable-declaration",
       "member-variable-declaration",
-      "object-destructuring",
+      // "object-destructuring",
       "array-destructuring"
     ],
     "typedef-whitespace": [
@@ -195,8 +199,7 @@
     "variable-name": [
       true,
       "check-format",
-      "ban-keywords",
-      "allow-pascal-case"
+      "ban-keywords"
     ],
     "whitespace": [
       true,

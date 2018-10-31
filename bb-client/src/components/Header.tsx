@@ -1,20 +1,21 @@
 import autobind from "autobind-decorator";
-import * as React from "react";
+import React from "react";
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from "reactstrap";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
 import "./resources/css/Font.css";
 import "./resources/css/Header.css";
 import logo from "./resources/images/logo_icon.png";
 
-type AppProps = {
-	auth: Auth0Authentication,
-};
-type AppState = {
-	isOpen: boolean,
-};
+interface IAppProps {
+	auth: Auth0Authentication;
+}
 
-export default class Header extends React.Component<AppProps, AppState> {
-	constructor(props) {
+interface IAppState {
+	isOpen: boolean;
+}
+
+export default class Header extends React.Component<IAppProps, IAppState> {
+	constructor(props: IAppProps) {
 		super(props);
 		this.toggle = this.toggle.bind(this);
 		this.state = {
@@ -22,22 +23,22 @@ export default class Header extends React.Component<AppProps, AppState> {
 		};
 	}
 
-	public toggle() {
+	public toggle(): void {
 		this.setState({ isOpen: !this.state.isOpen });
 	}
 
 	@autobind
-	public login() {
+	public login(): void {
 		this.props.auth.login();
 	}
 
 	@autobind
-	public logout() {
+	public logout(): void {
 		this.props.auth.logout();
 	}
 
 	@autobind
-	public showToken() {
+	public showToken(): void {
 		console.log(localStorage.getItem("access_token"));
 	}
 

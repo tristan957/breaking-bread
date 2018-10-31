@@ -1,9 +1,9 @@
-import * as React from "react";
+import React from "react";
 import loading from "./loading.svg";
 
-export interface CallbackProps {}
+export interface ICallbackProps { }
 
-const Callback: React.SFC<CallbackProps> = props => {
+const Callback: React.SFC<ICallbackProps> = props => {
 	const style: React.CSSProperties = {
 		position: "absolute",
 		display: "flex",

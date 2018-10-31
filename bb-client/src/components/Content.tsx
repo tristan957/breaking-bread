@@ -1,25 +1,25 @@
-import * as React from "react";
+import React from "react";
+import { Col, Row } from "reactstrap";
 import MealCard from "./MealCard";
-import { Row, Col } from "reactstrap";
-import * as logo from "./resources/images/logo_icon.png";
 import "./resources/css/Background.css";
+import * as logo from "./resources/images/logo_icon.png";
 
-interface FoodInfo {
+interface IFoodInfo {
 	image: string;
 }
 
 export default class Content extends React.Component {
 	public render(): JSX.Element {
-		const food: FoodInfo = { image: logo};
+		const food: IFoodInfo = { image: logo };
 		return (
 			<div id="background">
 				<div id="logo">Breaking Bread</div>
 				<Row>
 					<Col sm="3">
-						<MealCard cardInfo = {food}/>
+						<MealCard cardInfo={food} />
 					</Col>
 					<Col sm="3">
-						<MealCard cardInfo = {food}/>
+						<MealCard cardInfo={food} />
 					</Col>
 				</Row>
 			</div>

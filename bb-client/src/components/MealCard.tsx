@@ -1,11 +1,11 @@
-import * as React from "react";
-import { Card, CardImg, CardTitle, CardText, CardSubtitle, CardBody } from "reactstrap";
+import React from "react";
+import { Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle } from "reactstrap";
 
 const MealCard = (props) => {
 	return (
 		<div>
 			<Card>
-				<CardImg top width="100%" src={ props.cardInfo.image } alt="meal image cap" />
+				<CardImg top width="100%" src={props.cardInfo.image} alt="meal image cap" />
 				<CardBody>
 					<CardTitle>meal title</CardTitle>
 					<CardSubtitle>meal subtitle</CardSubtitle>
