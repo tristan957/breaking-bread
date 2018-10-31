@@ -42,10 +42,6 @@
     ],
     "jsdoc-format": true,
     "label-position": true,
-    "linebreak-style": [
-      true,
-      "CRLF"
-    ],
     "match-default-export-name": true,
     "member-access": true,
     "member-ordering": [
