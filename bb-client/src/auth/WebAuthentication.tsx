@@ -2,12 +2,12 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloClient } from "apollo-client";
 import { setContext } from "apollo-link-context";
 import { HttpLink } from "apollo-link-http";
-import { Auth0DecodedHash, WebAuth } from "auth0-js";
+import { Auth0DecodedHash, Auth0Error, WebAuth } from "auth0-js";
+import autobind from "autobind-decorator";
 import gql from "graphql-tag";
 import history from "../history";
 import { Auth0Authentication } from "./Auth0Authentication";
 import { AUTH_CONFIG } from "./configuration";
-
 /**
  * Web based Auth0 authentication
  *
@@ -60,21 +60,27 @@ export class WebAuthentication implements Auth0Authentication {
 		return new Date().getTime() < expiresAt;
 	}
 
-	public login(): void {
+	public login = () => {
 		this.auth0.authorize();
 	}
 
-	public handleAuthentication(): void {
-		this.auth0.parseHash((result: Auth0DecodedHash | null) => {
+	public handleAuthentication = () => {
+		this.auth0.parseHash((e: Auth0Error, result: Auth0DecodedHash) => {
 			if (result && result.accessToken && result.idToken) {
 				this.setSession(result);
 				this.setUser();
 				history.replace("/home");
+			} else if (e) {
+				history.replace("/home");
+				// tslint:disable-next-line:no-console
+				console.error(e);
+				alert(`Error: ${e.error}. Check the console for further details.`);
 			}
 		});
 	}
 
-	public setSession(authResult: Auth0DecodedHash): void {
+	public setSession = (authResult: Auth0DecodedHash) => {
+		// tslint:disable-next-line:typedef
 		const { accessToken, expiresIn, idToken } = authResult;
 		// Set the time that the access token will expire at
 		// tslint:disable-next-line:no-non-null-assertion
@@ -88,7 +94,7 @@ export class WebAuthentication implements Auth0Authentication {
 		// history.replace("/home");
 	}
 
-	public logout(): void {
+	public logout = () => {
 		// Clear access token and ID token from local storage
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("id_token");
@@ -98,7 +104,7 @@ export class WebAuthentication implements Auth0Authentication {
 		history.replace("/home");
 	}
 
-	public setUser(): void {
+	public setUser = () => {
 		apolloClient
 			.query({
 				query: gql`{message}`,

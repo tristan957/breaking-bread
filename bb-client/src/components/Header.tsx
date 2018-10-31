@@ -22,19 +22,19 @@ export default class Header extends React.Component<IAppProps, IAppState> {
 		};
 	}
 
-	public toggle(): void {
+	toggle = () => {
 		this.setState({ isOpen: !this.state.isOpen });
 	}
 
-	public login(): void {
+	login = () => {
 		this.props.auth.login();
 	}
 
-	public logout(): void {
+	logout = () => {
 		this.props.auth.logout();
 	}
 
-	public showToken(): void {
+	showToken = () => {
 		console.log(localStorage.getItem("access_token"));
 	}
 
