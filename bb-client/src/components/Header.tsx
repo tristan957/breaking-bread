@@ -1,4 +1,3 @@
-import autobind from "autobind-decorator";
 import React from "react";
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from "reactstrap";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
@@ -27,17 +26,14 @@ export default class Header extends React.Component<IAppProps, IAppState> {
 		this.setState({ isOpen: !this.state.isOpen });
 	}
 
-	@autobind
 	public login(): void {
 		this.props.auth.login();
 	}
 
-	@autobind
 	public logout(): void {
 		this.props.auth.logout();
 	}
 
-	@autobind
 	public showToken(): void {
 		console.log(localStorage.getItem("access_token"));
 	}

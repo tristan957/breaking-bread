@@ -2,12 +2,12 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloClient } from "apollo-client";
 import { setContext } from "apollo-link-context";
 import { HttpLink } from "apollo-link-http";
-import { Auth0DecodedHash, Auth0Error, WebAuth } from "auth0-js";
-import autobind from "autobind-decorator";
+import { Auth0DecodedHash, WebAuth } from "auth0-js";
 import gql from "graphql-tag";
 import history from "../history";
 import { Auth0Authentication } from "./Auth0Authentication";
 import { AUTH_CONFIG } from "./configuration";
+
 /**
  * Web based Auth0 authentication
  *
@@ -60,30 +60,21 @@ export class WebAuthentication implements Auth0Authentication {
 		return new Date().getTime() < expiresAt;
 	}
 
-	@autobind
 	public login(): void {
 		this.auth0.authorize();
 	}
 
-	@autobind
 	public handleAuthentication(): void {
-		this.auth0.parseHash((e: Auth0Error, result: Auth0DecodedHash) => {
+		this.auth0.parseHash((result: Auth0DecodedHash | null) => {
 			if (result && result.accessToken && result.idToken) {
 				this.setSession(result);
 				this.setUser();
 				history.replace("/home");
-			} else if (e) {
-				history.replace("/home");
-				// tslint:disable-next-line:no-console
-				console.error(e);
-				alert(`Error: ${e.error}. Check the console for further details.`);
 			}
 		});
 	}
 
-	@autobind
 	public setSession(authResult: Auth0DecodedHash): void {
-		// tslint:disable-next-line:typedef
 		const { accessToken, expiresIn, idToken } = authResult;
 		// Set the time that the access token will expire at
 		// tslint:disable-next-line:no-non-null-assertion
@@ -97,7 +88,6 @@ export class WebAuthentication implements Auth0Authentication {
 		// history.replace("/home");
 	}
 
-	@autobind
 	public logout(): void {
 		// Clear access token and ID token from local storage
 		localStorage.removeItem("access_token");
@@ -108,7 +98,6 @@ export class WebAuthentication implements Auth0Authentication {
 		history.replace("/home");
 	}
 
-	@autobind
 	public setUser(): void {
 		apolloClient
 			.query({
