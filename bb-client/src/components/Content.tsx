@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row } from "reactstrap";
 import MealCard from "./MealCard";
 import "./resources/css/Background.css";
-import * as logo from "./resources/images/logo_icon.png";
+import logo from "./resources/images/logo_icon.png";
 
 interface IFoodInfo {
 	image: string;
