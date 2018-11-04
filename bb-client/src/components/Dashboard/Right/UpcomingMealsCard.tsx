@@ -25,7 +25,7 @@ export default class UpcomingMealsCard extends React.Component<IUpcomingMealsPro
 						);
 					})}
 				</ul>
-			</div>
+			</div >
 		);
 	}
 }
