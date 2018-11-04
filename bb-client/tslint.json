@@ -173,7 +173,7 @@
       "property-declaration",
       // "variable-declaration",
       "member-variable-declaration",
-      // "object-destructuring",
+      "object-destructuring",
       "array-destructuring"
     ],
     "typedef-whitespace": [

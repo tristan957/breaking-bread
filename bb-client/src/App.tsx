@@ -1,47 +1,65 @@
 import React from "react";
-import { Route, RouteComponentProps } from "react-router";
-import { Router } from "react-router-dom";
-import { WebAuthentication } from "./auth/WebAuthentication";
-import Content from "./components/Content";
-import history from "./history";
-import Callback from "./views/Callback";
-import HomePage from "./views/HomePage";
-import MealProfile from "./views/MealProfilePage";
+import "./App.css";
+import Dashboard from "./components/Dashboard";
 
-const auth = new WebAuthentication();
+export type User = {
+	id: number;
+	name: string;
+	tags: string[];
+	topics: string[];
+	upcomingMeals: Meal[];
+};
 
-const handleAuthentication = (props: RouteComponentProps) => {
-	if (/access_token|id_token|error/.test(location.hash)) {
-		auth.handleAuthentication();
-	}
+export type Meal = {
+	id: number;
+	location: string;
+	imagePath?: string;
+	title: string;
+	date: Date;
 };
 
 export default class App extends React.Component {
+	private user?: User;
+	private meal?: Meal;
+
+	constructor(props: undefined) {
+		super({});
+
+		// check local storage for user already logged in, if not undefined
+		this.user = {
+			id: 5,
+			name: "Tristan Partin",
+			topics: [
+				"Your Mom",
+				"Your Dad",
+			],
+			tags: [
+				"Vegan",
+				"Vegetarian",
+			],
+			upcomingMeals: [
+				{
+					id: 1,
+					location: "Your Mom's house",
+					imagePath: undefined,
+					title: "Mom's home cooking",
+					date: new Date(),
+				},
+			],
+		};
+
+		this.meal = {
+			id: 1,
+			location: "EDC",
+			imagePath: "blah",
+			title: "String Beef",
+			date: new Date(),
+		};
+	}
+
 	public render(): JSX.Element {
 		return (
-			<Router history={history}>
-				<main>
-					<Route
-						path="/"
-						render={props => <HomePage auth={auth} {...props} />}
-					/>
-					<Route
-						path="/home"
-						render={props => <Content {...props} />}
-					/>
-					<Route
-						path="/mealProfile"
-						render={props => <MealProfile {...props} />}
-					/>
-					<Route
-						path="/callback"
-						render={props => {
-							handleAuthentication(props);
-							return <Callback {...props} />;
-						}}
-					/>
-				</main>
-			</Router>
+			<Dashboard user={this.user} />
 		);
 	}
 }

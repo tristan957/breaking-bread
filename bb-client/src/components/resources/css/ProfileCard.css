@@ -1,0 +1,11 @@
+#profile-card {
+	display: flex;
+	align-items: center;
+	padding: 5px;
+	justify-content: space-between;
+}
+
+.profile#picture {
+	width: 50px;
+	border-radius: 25px;
+}

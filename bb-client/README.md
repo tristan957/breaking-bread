@@ -1,3 +1,23 @@
+# Breaking Bread Client
+
+## Components
+
+### Logged in components
+
+* Profile Card
+* Upcoming Meals Card
+* Followed Tags and Topics Card
+
+### Non-logged in components
+
+### Shared components
+
+* Discover tags/topics Card
+* Feed
+* Meal Card
+* Nav Bar
+* General Tags
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
