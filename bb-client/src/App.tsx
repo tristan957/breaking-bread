@@ -20,7 +20,7 @@ export type Meal = {
 
 export default class App extends React.Component {
 	private user?: User;
-	private meal?: Meal;
+	private meal: Meal;
 
 	constructor(props: undefined) {
 		super({});
@@ -59,7 +59,7 @@ export default class App extends React.Component {
 
 	public render(): JSX.Element {
 		return (
-			<Dashboard user={this.user} />
+			<Dashboard user={this.user} upcomingMeals={[this.meal]} />
 		);
 	}
 }

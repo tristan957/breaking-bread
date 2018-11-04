@@ -1,12 +1,14 @@
 import React from "react";
+import { Meal, User } from "../../App";
 import "../resources/css/Dashboard.css";
 import Feed from "./Center/Feed";
 import FollowedTagsTopics from "./Left/FollowedTagsTopics";
 import ProfileCard from "./Left/ProfileCard";
-import UpcomingMeals from "./Right/UpcomingMealsCard";
+import UpcomingMealsCard from "./Right/UpcomingMealsCard";
 
 interface IDashboardProps {
 	user?: User;
+	upcomingMeals: Meal[];
 }
 
 export default class Dashboard extends React.Component<IDashboardProps> {
@@ -27,7 +29,7 @@ export default class Dashboard extends React.Component<IDashboardProps> {
 					<Feed />
 				</div>
 				<div id="Right">
-					<UpcomingMeals />
+					<UpcomingMealsCard upcomingMeals={this.props.upcomingMeals}/>
 				</div>
 			</div>
 		);

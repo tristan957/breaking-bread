@@ -11,7 +11,7 @@ export default class UpcomingMeals extends React.Component<IUpcomingMealsProps> 
 			<div>
 				<ul>
 					{this.props.upcomingMeals.map(meal => {
-						return <li><UpcomingMeal title={meal.title} location={meal.location} imagePath={meal.imagePath} date={meal.date} /></li>;
+						return <li><UpcomingMeal id={meal.id} title={meal.title} location={meal.location} imagePath={meal.imagePath} date={meal.date} /></li>;
 					})}
 				</ul>
 			</div>

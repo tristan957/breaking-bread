@@ -1,0 +1,18 @@
+{
+  "name": "bb-graphql",
+  "version": "1.0.0",
+  "description": "GraphQL schema and types package for Breaking Bread",
+  "main": "index.ts",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "graphql": "^14.0.2",
+    "lodash.merge": "^4.6.1"
+  },
+  "devDependencies": {
+    "@types/graphql": "^14.0.3",
+    "@types/lodash.merge": "^4.6.4",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.6"
+  }
+}

@@ -1,0 +1,5 @@
+{
+	"private": true,
+	"workspaces": ["bb-client", "bb-graphql", "bb-server"]
+}
+
