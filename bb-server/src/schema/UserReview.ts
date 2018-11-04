@@ -1,8 +1,11 @@
+import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { DeepPartial, getRepository } from "typeorm";
+import { DeepPartial } from "typeorm";
+import { IAppContext } from "../App";
 import User from "../entities/User";
 import UserReview from "../entities/UserReview";
+import { getUser } from "./User";
 
 export const typeDef: DocumentNode = gql`
     extend type Mutation {
@@ -47,36 +50,32 @@ interface ICreateUserReview {
 }
 
 // tslint:disable-next-line: no-any
-function _createUserReview(parent: any, args: ICreateUserReview, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<UserReview> | undefined> {
-    return createUserReview(args.input);
+function _createUserReview(parent: any, args: ICreateUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<UserReview> | undefined> {
+    return createUserReview(ctx, args.input);
 }
 
-export async function createUserReview(newReview: DeepPartial<UserReview>): Promise<DeepPartial<UserReview> | undefined> {
+export async function createUserReview(ctx: Context<IAppContext>, newReview: DeepPartial<UserReview>): Promise<DeepPartial<UserReview> | undefined> {
     if (newReview.author === undefined || newReview.subject === undefined) {
-        return undefined;
+        return Promise.resolve(undefined);
+    }
+    if (newReview.author.id === undefined || newReview.subject.id === undefined) {
+        return Promise.resolve(undefined);
     }
     try {
-        const author: User | undefined = await getRepository(User).findOne({
-            where: {
-                id: newReview.author.id,
-            },
-        });
-        const subject: User | undefined = await getRepository(User).findOne({
-            where: {
-                id: newReview.subject.id,
-            },
-        });
+        const author: User | undefined = await getUser(ctx, newReview.author.id);
+        const subject: User | undefined = await getUser(ctx, newReview.subject.id);
         if (author === undefined || subject === undefined) {
-            return undefined;
+            return Promise.resolve(undefined);
         }
+        // TODO: Check author is user from JWT in context
 
         newReview.author = author;
         newReview.subject = subject;
-        const userReview: DeepPartial<UserReview> = await getRepository(UserReview).save(newReview);
+        const userReview: DeepPartial<UserReview> = await ctx.connection.getRepository(UserReview).save(newReview);
         return userReview;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
@@ -85,23 +84,24 @@ interface IUpdateUserReview {
 }
 
 // tslint:disable-next-line: no-any
-function _updateUserReview(parent: any, args: IUpdateUserReview, ctx: any, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
-    return updateUserReview(args.input);
+function _updateUserReview(parent: any, args: IUpdateUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
+    return updateUserReview(ctx, args.input);
 }
 
-export async function updateUserReview(input: DeepPartial<UserReview>): Promise<UserReview | undefined> {
+export async function updateUserReview(ctx: Context<IAppContext>, input: DeepPartial<UserReview>): Promise<UserReview | undefined> {
     if (input.id === undefined) {
-        return undefined;
+        return Promise.resolve(undefined);
     }
+    // TODO: Check author is user from JWT in context
     try {
-        const userReview: UserReview | undefined = await getRepository(UserReview).save({
-            ...getUserReview(input.id),
+        const userReview: UserReview | undefined = await ctx.connection.getRepository(UserReview).save({
+            ...getUserReview(ctx, input.id),
             ...input,
         });
         return userReview;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
@@ -114,12 +114,12 @@ interface IGetUserReview {
 }
 
 // tslint:disable-next-line: no-any
-function _getUserReview(parent: any, args: IGetUserReview, ctx: any, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
-    return  getUserReview(args.id);
+function _getUserReview(parent: any, args: IGetUserReview, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<UserReview | undefined> {
+    return getUserReview(ctx, args.id);
 }
 
-async function getUserReview(reviewId: number): Promise<UserReview | undefined> {
-    return getRepository(UserReview)
+async function getUserReview(ctx: Context<IAppContext>, reviewId: number): Promise<UserReview | undefined> {
+    return ctx.connection.getRepository(UserReview)
         .findOne({
             where: {
                 id: reviewId,

@@ -1,6 +1,8 @@
+import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { DeepPartial, getConnection, getRepository } from "typeorm";
+import { DeepPartial } from "typeorm";
+import { IAppContext } from "../App";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
 import { createTopic, getTopic } from "./Topic";
@@ -9,8 +11,9 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createUser(input: CreateUserInput!): User
         updateUser(input: UpdateUserInput!): User
-        updateWhitelist(id: Int!, topics: [CreateTopicInput]!): [Topic]
-        updateBlacklist(id: Int!, topics: [CreateTopicInput]!): [Topic]
+        updateWhitelist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
+        updateBlacklist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
+        favoriteAUser(subjectId: Int!, actorId: Int!): User
     }
 
     extend type Query {
@@ -21,6 +24,7 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         firstName: String!
         lastName: String!
+        profilePictureS3Key: String!
         about: String!
         email: String!
         phoneNumber: DateTime!
@@ -33,6 +37,7 @@ export const typeDef: DocumentNode = gql`
     input CreateUserInput {
         firstName: String!
         lastName: String!
+        profilePictureS3Key: String!
         about: String
         email: String!
         phoneNumber: String!
@@ -40,6 +45,7 @@ export const typeDef: DocumentNode = gql`
 
     input UpdateUserInput {
         id: Int!
+        profilePictureS3Key: String
         about: String
         email: String
         phoneNumber: String
@@ -55,17 +61,26 @@ interface ICreateUser {
 }
 
 // tslint:disable-next-line: no-any
-function _createUser(parent: any, args: ICreateUser, ctx: any, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
-    return createUser(args.input);
+function _createUser(parent: any, args: ICreateUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<DeepPartial<User> | undefined> {
+    return createUser(ctx, args.input);
 }
 
-export async function createUser(newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
+export async function createUser(ctx: Context<IAppContext>, newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
     try {
-        const user: DeepPartial<User> = await getRepository(User).save(newUser);
+        // TODO: Get oAuthSub from context
+        if (ctx.user === undefined) {
+            Promise.reject(undefined);
+        }
+        newUser.oAuthSub = ctx.user.sub;
+        if (newUser.timesFavorited === undefined) {
+            newUser.timesFavorited = 0;
+        }
+
+        const user: DeepPartial<User> = await ctx.connection.getRepository(User).save(newUser);
         return user;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
@@ -74,88 +89,94 @@ interface IUpdateUser {
 }
 
 // tslint:disable-next-line: no-any
-function _updateUser(parent: any, args: IUpdateUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return updateUser(args.input);
+function _updateUser(parent: any, args: IUpdateUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
+    return updateUser(ctx, args.input);
 }
 
-export async function updateUser(input: DeepPartial<User>): Promise<User | undefined> {
+export async function updateUser(ctx: Context<IAppContext>, input: DeepPartial<User>): Promise<User | undefined> {
     if (input.id === undefined) {
-        return undefined;
+        return Promise.resolve(undefined);
     }
+
     try {
-        const user: User | undefined = await getConnection().getRepository(User).save({
-            ...getUser(input.id),
+        // TODO: Need to verify id with JWT from context
+        const user: User | undefined = await ctx.connection.getRepository(User).save({
+            ...getUser(ctx, input.id),
             ...input,
         });
         return user;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
 interface IUpdateWhitelist {
-    id: number;
+    userId: number;
     topics: DeepPartial<Topic>[];
 }
 
 // tslint:disable-next-line: no-any
-function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return updateWhitelist(args.id, args.topics);
+function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+    return updateWhitelist(ctx, args.userId, args.topics);
 }
 
-export async function updateWhitelist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+export async function updateWhitelist(ctx: Context<IAppContext>, id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
     try {
-        const user: User | undefined = await getUser(id);
+        const user: User | undefined = await getUser(ctx, id);
         if (user === undefined) {
-            return Promise.reject(undefined);
+            return Promise.resolve(undefined);
         }
+        // TODO: Need to verify id with JWT from context
         for (const topic of topics) {
-            await createTopic({ name: topic.name });
+            await createTopic(ctx, { name: topic.name });
         }
 
         user.whitelist = await newTopicList(
+            ctx,
             await topics.map(topic => topic.name),
             await user.whitelist.map(topic => topic.name)
         );
-        getConnection().getRepository(User).save(user);
+        ctx.connection.getRepository(User).save(user);
 
         return user.whitelist;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
 // tslint:disable-next-line: no-any
-function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: any, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-    return updateBlacklist(args.id, args.topics);
+function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+    return updateBlacklist(args.userId, args.topics, ctx);
 }
 
-export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
     try {
-        const user: User | undefined = await getUser(id);
+        const user: User | undefined = await getUser(ctx, id);
         if (user === undefined) {
-            return Promise.reject(undefined);
+            return Promise.resolve(undefined);
         }
+        // TODO: Need to verify id with JWT from context
         for (const topic of topics) {
-            await createTopic({ name: topic.name });
+            await createTopic(ctx, { name: topic.name });
         }
 
         user.blacklist = await newTopicList(
+            ctx,
             await topics.map(topic => topic.name),
             await user.blacklist.map(topic => topic.name)
         );
-        getConnection().getRepository(User).save(user);
+        ctx.connection.getRepository(User).save(user);
 
         return user.blacklist;
     } catch (reason) {
         console.log(reason);
-        return undefined;
+        return Promise.reject(undefined);
     }
 }
 
-async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (string | undefined)[]): Promise<Topic[]> {
+async function newTopicList(ctx: Context<IAppContext>, toggleTopics: (string | undefined)[], userTopics: (string | undefined)[]): Promise<Topic[]> {
     const namesRemoved: (string | undefined)[] = [];
     for (const name of userTopics) {
         const index: number = toggleTopics.indexOf(name);
@@ -172,14 +193,46 @@ async function newTopicList(toggleTopics: (string | undefined)[], userTopics: (s
 
     const newTopicNames: (string | undefined)[] = [...toggleTopics, ...userTopics];
     const newList: Topic[] = [];
-    for (const name of newTopicNames) {
-        const topic: Topic | undefined = await getTopic(undefined, name);
+    for (const newName of newTopicNames) {
+        const topic: Topic | undefined = await getTopic(ctx, { name: newName });
         if (topic !== undefined) {
             newList.push(topic);
         }
     }
 
     return newList;
+}
+
+interface IMakeFavoriteUser {
+    subjectId: number;
+    actorId: number;
+}
+
+// tslint:disable-next-line: no-any
+function _favoriteAUser(parent: any, args: IMakeFavoriteUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
+    return favoriteAUser(ctx, args.subjectId, args.actorId);
+}
+
+export async function favoriteAUser(ctx: Context<IAppContext>, subjectId: number, actorId: number): Promise<User | undefined> {
+    let user: User | undefined = await getUser(ctx, actorId);
+    const subject: User | undefined = await getUser(ctx, subjectId);
+    if (user === undefined) {
+        return Promise.resolve(undefined);
+    }
+    if (subject === undefined) {
+        return Promise.resolve(undefined);
+    }
+    user.favoriteUsers.push(subject);
+    user = await updateUser(ctx, user);    // User verification from ctx done here
+    if (user === undefined) {
+        Promise.resolve(undefined);
+    }
+
+    subject.timesFavorited += 1;
+    return ctx.connection.getRepository(User).save({
+        ...getUser(ctx, subjectId),
+        ...subject,
+    });
 }
 
 /**
@@ -191,20 +244,20 @@ interface IGetUser {
 }
 
 // tslint:disable-next-line: no-any
-function _getUser(parent: any, args: IGetUser, ctx: any, info: GraphQLResolveInfo): Promise<User | undefined> {
-    return  getUser(args.id);
+function _getUser(parent: any, args: IGetUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
+    return getUser(ctx, args.id);
 }
 
-export async function getUser(userReviewId: number): Promise<User | undefined> {
+export async function getUser(ctx: Context<IAppContext>, userId: number): Promise<User | undefined> {
     const neededRelations: string[] = [
         "hostedMeals", "whitelist", "blacklist",
         "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
         "favoriteRecipes", "favoriteUsers", "recipesAuthored"];
-    return getConnection()
+    return ctx.connection
         .getRepository(User)
         .findOne({
             where: {
-                id: userReviewId,
+                id: userId,
             },
             relations: neededRelations,
         });
@@ -216,6 +269,7 @@ export const resolvers: IResolvers = {
         updateUser: _updateUser,
         updateWhitelist: _updateWhitelist,
         updateBlacklist: _updateBlacklist,
+        favoriteAUser: _favoriteAUser,
     },
     Query: {
         getUser: _getUser,

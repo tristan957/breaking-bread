@@ -10,7 +10,7 @@ export default class Meal {
     @Column({ type: "text" })
     public location: string;
 
-    @Column({ type: "timestamp" })
+    @Column()
     public date: Date;
 
     @Column()

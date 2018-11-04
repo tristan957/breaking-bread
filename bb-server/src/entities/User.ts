@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import Meal from "./Meal";
 import Recipe from "./Recipe";
 import RecipeReview from "./RecipeReview";
@@ -6,7 +6,7 @@ import Topic from "./Topic";
 import UserReview from "./UserReview";
 
 @Entity()
-@Unique(["email", "phoneNumber"])
+@Unique(["oAuthSub", "profilePictureS3Key", "email", "phoneNumber"])
 export default class User {
     @PrimaryGeneratedColumn()
     public id: number;
@@ -16,6 +16,12 @@ export default class User {
 
     @Column()
     public lastName: string;
+
+    @Column({ type: "text" })
+    public profilePictureS3Key: string;
+
+    @Column({ length: 255 })
+    public oAuthSub: string;
 
     @Column({ type: "text", nullable: true })
     public about: string;
@@ -28,6 +34,12 @@ export default class User {
 
     @CreateDateColumn()
     public createdAt: Date;
+
+    @UpdateDateColumn()
+    public updatedAt: Date;
+
+    @Column()
+    public timesFavorited: number;
 
     @OneToMany(type => Meal, meal => meal.host)
     public hostedMeals: Meal[];
