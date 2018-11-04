@@ -3,6 +3,7 @@ import "../../resources/css/ProfileCard.css";
 import { default as defaultUserPic } from "../../resources/images/default_user_pic.png";
 
 interface IProfileCardProps {
+	userID: number;
 	name: string;
 	picturePath?: string;
 }
