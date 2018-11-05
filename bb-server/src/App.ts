@@ -1,11 +1,11 @@
 /* tslint:disable: strict-boolean-expressions */
+import { ApolloServer } from "apollo-server";
 import { Context } from "apollo-server-core";
-import { ApolloServer } from "apollo-server-express";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import { Request } from "express";
+import fs from "fs";
 import jwt from "jsonwebtoken";
-import jwksClient from "jwks-rsa";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
@@ -15,17 +15,8 @@ export interface IAppContext {
     user: Promise<{}> | undefined;
 }
 
-const client = jwksClient({
-    jwksUri: `https://bbread.auth0.com//.well-known/jwks.json`,
-});
-
-// tslint:disable-next-line:no-any
-function getKey(header: any, cb: Function): void {
-    client.getSigningKey(header.kid, (err, key) => {
-        const signingKey = key.publicKey || key.rsaPublicKey;
-        // tslint:disable-next-line:no-null-keyword
-        cb(null, signingKey);
-    });
+function getKey(): string {
+    return fs.readFileSync("../signing.cert").toString();
 }
 
 const options = {
@@ -46,7 +37,7 @@ function context(req: Request): Context<IAppContext> {
              * If this isn't possible the key can be loaded directly from a file
              * Key found here: https://auth0.com/docs/api-auth/tutorials/verify-access-token#how-can-i-verify-the-signature-
              */
-            jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
+            jwt.verify(token, getKey(), options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
                 if (err || decoded === null) {
                     return reject(err);
                 }
@@ -62,7 +53,6 @@ function context(req: Request): Context<IAppContext> {
 }
 
 export default class App {
-
     public connection: Connection;
     public server: ApolloServer;
 
