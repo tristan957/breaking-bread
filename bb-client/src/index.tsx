@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import dotenv from "dotenv";
 import React from "react";
 import { ApolloProvider } from "react-apollo";
+import "react-dates/lib/css/_datepicker.css";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
