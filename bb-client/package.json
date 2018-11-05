@@ -39,6 +39,7 @@
     "@types/moment": "^2.13.0",
     "@types/node": "10.12.2",
     "@types/react": "16.4.18",
+    "@types/react-datepicker": "^1.1.7",
     "@types/react-dom": "16.0.9",
     "@types/react-input-calendar": "^0.0.35",
     "@types/react-router": "^4.4.0",

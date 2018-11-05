@@ -1,6 +1,6 @@
 import moment from "moment";
 import React from "react";
-import Calendar from "react-input-calendar";
+import DatePicker from "react-datepicker";
 import { Button, Col, Container, Form, FormGroup, Input, NavbarBrand, Row } from "reactstrap";
 import "../resources/css/NavigationBar.css";
 import logo from "../resources/images/logo_icon.png";
@@ -9,6 +9,7 @@ type AppProps = {};
 
 type AppState = {
 	isOpen: boolean;
+	// tslint:disable-next-line:no-any
 	startDate: any;
 };
 
@@ -16,7 +17,7 @@ export default class NavigationBar extends React.Component<AppProps, AppState> {
 	constructor(props: Readonly<AppProps>) {
 		super(props);
 		this.toggle = this.toggle.bind(this);
-		this.toggleCalendar = this.toggleCalendar.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 		this.state = {
 			isOpen: false,
 			startDate: moment(),
@@ -27,8 +28,11 @@ export default class NavigationBar extends React.Component<AppProps, AppState> {
 		this.setState({ isOpen: !this.state.isOpen });
 	}
 
-	public toggleCalendar(): void {
-		this.setState({ showCalendar: !this.state.showCalendar });
+	// tslint:disable-next-line:no-any
+	public handleChange(date: any): void {
+		this.setState({
+			startDate: date,
+		});
 	}
 
 	public render(): JSX.Element {
@@ -60,12 +64,22 @@ export default class NavigationBar extends React.Component<AppProps, AppState> {
 							</Form>
 						</Col>
 
+						{/*
 						<Col xs="2">
 							<Calendar format="DD/MM/YYYY" date="4-12-2014" />
 						</Col>
+						*/}
 
-						<Col>
-							react-datepicker
+						<Col xs="2">
+							<DatePicker
+								selected={this.state.startDate}
+								onChange={this.handleChange}
+								showTimeSelect
+								timeFormat="HH:mm"
+								timeIntervals={15}
+								dateFormat="LLL"
+								timeCaption="time"
+							/>
 						</Col>
 
 						{/* <Button color="danger" onClick={() => this.toggleCalendar > Danger!</Button> */}
