@@ -1,5 +1,4 @@
 /* tslint:disable: strict-boolean-expressions */
-<<<<<<< HEAD
 import { ApolloServer } from "apollo-server";
 import { Context } from "apollo-server-core";
 import dotenv from "dotenv";
@@ -10,19 +9,6 @@ import { Jwk, JwksClient } from "jwks-rsa";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
-=======
-import { Context } from "apollo-server-core";
-import { makeExecutableSchema } from "apollo-server-express";
-import bodyParser from "body-parser";
-import dotenv from "dotenv";
-// tslint:disable-next-line: match-default-export-name
-import express, { Request, Response } from "express";
-import graphqlHTTP from "express-graphql";
-import jwt, { RequestHandler } from "express-jwt";
-import { GraphQLSchema } from "graphql";
-import JwksRsa from "jwks-rsa";
-import path from "path";
->>>>>>> front-end-refactor
 
 export interface IAppContext {
 	connection: Connection;
@@ -77,8 +63,8 @@ export default class App {
 	public server: ApolloServer;
 
 	/**
-     * Sets up the application to connect to database and create server
-     */
+	 * Sets up the application to connect to database and create server
+	 */
 	public constructor() {
 		dotenv.config();
 
@@ -87,8 +73,8 @@ export default class App {
 	}
 
 	/**
-     * Sets up TypeORM
-     */
+	 * Sets up TypeORM
+	 */
 	private setupTypeORM(): void {
 		const isDEV = process.env.NODE_ENV === "DEVELOPMENT";
 		const logger = isDEV ?
@@ -114,8 +100,8 @@ export default class App {
 	}
 
 	/**
-     * Runs the application
-     */
+	 * Runs the application
+	 */
 	public run(): void {
 		let port: number | string = process.env.APP_PORT || "10262";
 		port = parseInt(port, 10);
