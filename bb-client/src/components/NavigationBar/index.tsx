@@ -9,15 +9,9 @@ import logo from "../resources/images/logo_icon.png";
 
 interface IAppState {
 	isOpen: boolean;
-<<<<<<< HEAD
 	createdAt: moment.Moment | null;
 	calendarFocused: boolean;
-};
-=======
-	// tslint:disable-next-line:no-any
-	startDate: any;
 }
->>>>>>> 7d71a5b75e360a82a536e676cc7834d4f9fa2226
 
 export default class NavigationBar extends React.Component<{}, IAppState> {
 	constructor(props: Readonly<{}>) {
