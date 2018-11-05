@@ -1,7 +1,7 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
 import { User } from "../../App";
-import Navbar from "../NavigationBar/index";
+import NavigationBar from "../NavigationBar";
 import "../resources/css/Dashboard.css";
 import Feed from "./Center/Feed";
 import FollowedTagsTopics from "./Left/FollowedTagsTopics";
@@ -16,7 +16,7 @@ export default class Dashboard extends React.Component<IDashboardProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<Navbar />
+				<NavigationBar />
 				<div id="Left">
 					{
 						this.props.user === undefined ? undefined : (

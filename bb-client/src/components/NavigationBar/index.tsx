@@ -1,3 +1,4 @@
+// tslint:disable: no-unsafe-any
 import moment from "moment";
 import React from "react";
 import { SingleDatePicker } from "react-dates";
@@ -6,16 +7,20 @@ import { Button, Collapse, Form, FormGroup, Input, Nav, Navbar, NavbarBrand, Nav
 import "../resources/css/NavigationBar.css";
 import logo from "../resources/images/logo_icon.png";
 
-type AppProps = {};
-
-type AppState = {
+interface IAppState {
 	isOpen: boolean;
+<<<<<<< HEAD
 	createdAt: moment.Moment | null;
 	calendarFocused: boolean;
 };
+=======
+	// tslint:disable-next-line:no-any
+	startDate: any;
+}
+>>>>>>> 7d71a5b75e360a82a536e676cc7834d4f9fa2226
 
-export default class NavigationBar extends React.Component<AppProps, AppState> {
-	constructor(props: Readonly<AppProps>) {
+export default class NavigationBar extends React.Component<{}, IAppState> {
+	constructor(props: Readonly<{}>) {
 		super(props);
 		this.toggle = this.toggle.bind(this);
 		this.onDateChange = this.onDateChange.bind(this);
