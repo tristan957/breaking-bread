@@ -5,7 +5,8 @@ import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import { Request } from "express";
 import fs from "fs";
-import jwt from "jsonwebtoken";
+import jwt, { JwtHeader } from "jsonwebtoken";
+import { Jwk, JwksClient } from "jwks-rsa";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
@@ -15,8 +16,19 @@ export interface IAppContext {
     user: Promise<{}> | undefined;
 }
 
-function getKey(): string {
-    return fs.readFileSync("../signing.cert").toString();
+const client = new JwksClient({
+    jwksUri: `https://bbread.auth0.com//.well-known/jwks.json`,
+});
+
+function getKey(header: JwtHeader, cb: Function): void {
+    if (header.kid === undefined) {
+        return;
+    }
+    client.getSigningKey(header.kid, (err: Error, key: Jwk) => {
+        const signingKey = key.publicKey || key.rsaPublicKey;
+        // tslint:disable-next-line:no-null-keyword
+        cb(null, signingKey);
+    });
 }
 
 const options = {
@@ -31,13 +43,7 @@ function context(req: Request): Context<IAppContext> {
     let user: Promise<{}> | undefined = undefined;
     if (token !== undefined) {
         user = new Promise((resolve, reject) => {
-            /**
-             * Seems TSlint cannot see function overrides
-             * Works here: https://auth0.com/blog/develop-modern-apps-with-react-graphql-apollo-and-add-authentication/
-             * If this isn't possible the key can be loaded directly from a file
-             * Key found here: https://auth0.com/docs/api-auth/tutorials/verify-access-token#how-can-i-verify-the-signature-
-             */
-            jwt.verify(token, getKey(), options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
+            jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
                 if (err || decoded === null) {
                     return reject(err);
                 }
@@ -53,6 +59,8 @@ function context(req: Request): Context<IAppContext> {
 }
 
 export default class App {
+    private cert: String;
+
     public connection: Connection;
     public server: ApolloServer;
 
@@ -61,6 +69,8 @@ export default class App {
      */
     public constructor() {
         dotenv.config();
+
+        this.cert = fs.readFileSync("../signing.cert").toString();
 
         this.setupTypeORM();
         this.server = new ApolloServer({ typeDefs, resolvers, context });
