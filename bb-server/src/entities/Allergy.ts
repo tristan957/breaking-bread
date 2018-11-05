@@ -5,9 +5,9 @@ import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 @Entity()
 @Unique(["name"])
 export default class Allergy {
-    @PrimaryGeneratedColumn()
-    public id: number;
+	@PrimaryGeneratedColumn()
+	public id: number;
 
-    @Column({ length: 128 })
-    public name: string;
+	@Column({ length: 128 })
+	public name: string;
 }

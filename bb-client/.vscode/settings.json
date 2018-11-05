@@ -1,4 +1,5 @@
 {
+	"editor.tabSize": 4,
 	"editor.insertSpaces": false,
 	"eslint.enable": false,
 	"[html]": {

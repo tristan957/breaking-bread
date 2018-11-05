@@ -2,8 +2,7 @@
   "linterOptions": {
     "exclude": [
       "/tmp",
-      "node_modules/**",
-      "./src/registerServiceWorker.ts"
+      "node_modules/**"
     ]
   },
   "rules": {
@@ -168,6 +167,7 @@
       "parameter",
       // "arrow-parameter",
       "property-declaration",
+      // "variable-declaration",
       "member-variable-declaration",
       "object-destructuring",
       "array-destructuring"

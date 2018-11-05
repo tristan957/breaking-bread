@@ -32,7 +32,7 @@
     "import-spacing": true,
     "indent": [
       true,
-      "spaces",
+      "tabs",
       4
     ],
     "interface-name": [
@@ -173,7 +173,7 @@
       "property-declaration",
       // "variable-declaration",
       "member-variable-declaration",
-      "object-destructuring",
+      // "object-destructuring",
       "array-destructuring"
     ],
     "typedef-whitespace": [
