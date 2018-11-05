@@ -1,3 +1,4 @@
+// tslint:disable: no-unsafe-any
 import React from "react";
 import "react-day-picker/lib/style.css";
 import { DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, Nav, NavbarBrand, UncontrolledDropdown } from "reactstrap";
@@ -7,7 +8,7 @@ type AppState = {
 	isOpen: boolean;
 };
 
-export default class Navbar extends React.Component<AppState> {
+export default class Navbar extends React.Component<{}, AppState> {
 	constructor(props: Readonly<AppState>) {
 		super(props);
 		this.toggle = this.toggle.bind(this);

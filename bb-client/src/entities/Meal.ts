@@ -1,16 +1,17 @@
-import Recipe from "./Recipe";
-import User from "./User";
-
+// TODO: Needs title
 type Meal = {
 	id: number;
+	title: string; // TODO: Change name to title in bb-server
+	description: string; // TODO: Add to bb-server as text size 512
+	imagePath: string;
 	location: string;
+	numberOfGuests: number;
 	date: Date;
-	name: string;
 	createdAt: Date;
 	updatedAt: Date;
-	host: User;
-	guests: User[];
-	recipes: Recipe[];
+	hostID: number;
+	guestIDs: number[];
+	recipeIDs: number[];
 };
 
 export default Meal;

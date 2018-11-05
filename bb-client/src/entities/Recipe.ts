@@ -1,9 +1,4 @@
-import Allergy from "./Allergy";
-import Ingredient from "./Ingredient";
-import RecipeReview from "./RecipeReview";
-import Tag from "./Tag";
-import User from "./User";
-
+// TODO: Needs title
 type Recipe = {
 	id: number;
 	name: string;
@@ -11,12 +6,12 @@ type Recipe = {
 	recipeImageS3Key: string;
 	createdAt: Date;
 	updatedAt: Date;
-	author: User;
+	authorID: number;
 	timesFavorited: number;
-	reviews: RecipeReview[];
-	tags: Tag[];
-	ingredients: Ingredient[];
-	allergies: Allergy[];
+	reviewIDs: number[];
+	tagIDs: number[];
+	ingredientIDs: number[];
+	allergyIDs: number[];
 };
 
 export default Recipe;

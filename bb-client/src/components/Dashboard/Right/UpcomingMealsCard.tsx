@@ -1,17 +1,28 @@
 import React from "react";
-import UpcomingMeal, { IUpcomingMealProps } from "./UpcomingMeal";
+import Meal from "../../../entities/Meal";
+import UpcomingMeal from "./UpcomingMeal";
 
 interface IUpcomingMealsProps {
-	upcomingMeals: IUpcomingMealProps[];
+	upcomingMeals: Partial<Meal>[];
 }
 
-export default class UpcomingMeals extends React.Component<IUpcomingMealsProps> {
+export default class UpcomingMealsCard extends React.Component<IUpcomingMealsProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
 				<ul>
-					{this.props.upcomingMeals.map(meal => {
-						return <li><UpcomingMeal id={meal.id} title={meal.title} location={meal.location} imagePath={meal.imagePath} date={meal.date} /></li>;
+					{this.props.upcomingMeals.map((meal, i) => {
+						return (
+							<li key={i}>
+								<UpcomingMeal
+									id={meal.id as number}
+									title={"This is a meal."} // TODO: fillin with actual
+									location={meal.location as string}
+									imagePath={undefined}
+									date={meal.date as Date}
+								/>
+							</li>
+						);
 					})}
 				</ul>
 			</div>

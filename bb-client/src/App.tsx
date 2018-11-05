@@ -1,41 +1,33 @@
 import React from "react";
 import "./App.css";
 import Dashboard from "./components/Dashboard";
+import Meal from "./entities/Meal";
+import Tag from "./entities/Tag";
+import Topic from "./entities/Topic";
 
 export type User = {
 	id: number;
 	name: string;
-	tags: string[];
-	topics: string[];
-	upcomingMeals: Meal[];
-};
-
-export type Meal = {
-	id: number;
-	location: string;
-	imagePath?: string;
-	title: string;
-	date: Date;
+	tags: Tag[];
+	topics: Topic[];
+	upcomingMeals: Partial<Meal>[];
 };
 
 export default class App extends React.Component {
 	private user?: User;
-	private meal?: Meal;
 
-	constructor(props: undefined) {
-		super({});
-
+	public componentWillMount(): void {
 		// check local storage for user already logged in, if not undefined
 		this.user = {
 			id: 5,
 			name: "Tristan Partin",
 			topics: [
-				"Your Mom",
-				"Your Dad",
+				{ id: 1, name: "Food" },
+				{ id: 2, name: "Nuts" },
 			],
 			tags: [
-				"Vegan",
-				"Vegetarian",
+				{ id: 1, name: "Vegan" },
+				{ id: 2, name: "Veget" },
 			],
 			upcomingMeals: [
 				{
@@ -46,14 +38,6 @@ export default class App extends React.Component {
 					date: new Date(),
 				},
 			],
-		};
-
-		this.meal = {
-			id: 1,
-			location: "EDC",
-			imagePath: "blah",
-			title: "String Beef",
-			date: new Date(),
 		};
 	}
 

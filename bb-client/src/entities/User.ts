@@ -1,8 +1,3 @@
-import Meal from "./Meal";
-import Recipe from "./Recipe";
-import RecipeReview from "./RecipeReview";
-import Topic from "./Topic";
-import UserReview from "./UserReview";
 
 type User = {
 	id: number;
@@ -16,15 +11,15 @@ type User = {
 	createdAt: Date;
 	updatedAt: Date;
 	timesFavorited: number;
-	hostedMeals: Meal[];
-	whitelist: Topic[];
-	blacklist: Topic[];
-	favoriteRecipes: Recipe[];
-	favoriteUsers: User[];
-	reviews: UserReview[];
-	userReviewsAuthored: UserReview[];
-	recipeReviewsAuthored: RecipeReview[];
-	recipesAuthored: Recipe[];
+	hostedMealsIDs: number[];
+	whitelistIDs: number[];
+	blacklistIDs: number[];
+	favoriteRecipesIDs: number[];
+	favoriteUsersIDs: number[];
+	reviewsIDs: number[];
+	userReviewsAuthoredIDs: number[];
+	recipeReviewsAuthoredIDs: number[];
+	recipesAuthoredIDs: number[];
 };
 
 export default User;

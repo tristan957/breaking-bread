@@ -1,3 +1,4 @@
+// tslint:disable: no-unsafe-any
 import React from "react";
 import { User } from "../../App";
 import "../resources/css/Dashboard.css";
