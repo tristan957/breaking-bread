@@ -4,7 +4,6 @@ import { Context } from "apollo-server-core";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import { Request } from "express";
-import fs from "fs";
 import jwt, { JwtHeader } from "jsonwebtoken";
 import { Jwk, JwksClient } from "jwks-rsa";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
@@ -16,7 +15,7 @@ export interface IAppContext {
     user: Promise<{}> | undefined;
 }
 
-const client = new JwksClient({
+const client: JwksClient = new JwksClient({
     jwksUri: `https://bbread.auth0.com//.well-known/jwks.json`,
 });
 
@@ -59,8 +58,6 @@ function context(req: Request): Context<IAppContext> {
 }
 
 export default class App {
-    private cert: String;
-
     public connection: Connection;
     public server: ApolloServer;
 
@@ -69,8 +66,6 @@ export default class App {
      */
     public constructor() {
         dotenv.config();
-
-        this.cert = fs.readFileSync("../signing.cert").toString();
 
         this.setupTypeORM();
         this.server = new ApolloServer({ typeDefs, resolvers, context });
@@ -109,6 +104,9 @@ export default class App {
     public run(): void {
         let port: number | string = process.env.APP_PORT || "10262";
         port = parseInt(port, 10);
-        this.server.listen();
+        this.server.listen(port, () => {
+            console.log(`Server ready at http://localhost:${port}`);
+            console.log(`GraphQL test at http://localhost:${port}${this.server.graphqlPath}`);
+        });
     }
 }
