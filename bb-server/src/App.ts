@@ -3,11 +3,10 @@ import { Context } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-express";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
-import express, { Request, Response } from "express";
+import { Request } from "express";
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
-import path from "path";
-import { AdvancedConsoleLogger, Connection, createConnection, getConnection, Logger } from "typeorm";
+import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
 
@@ -65,7 +64,6 @@ function context(req: Request): Context<IAppContext> {
 export default class App {
 
     public connection: Connection;
-    public app: express.Application;
     public server: ApolloServer;
 
     /**
@@ -75,36 +73,15 @@ export default class App {
         dotenv.config();
 
         this.setupTypeORM();
-        this.setupExpress();
-    }
-
-    /**
-     * Sets up Express server
-     */
-    private setupExpress(): void {
-        this.app = express();
-
-        // React client
-        const clientPath: string = path.join(__dirname, "/./../../bb-client/dist/");
-        this.app.use(express.static(clientPath));
-        this.app.get("/", (_: Request, res: Response) => {
-            res.sendFile(path.join(clientPath, "index.html"));
-        });
-
-        this.server = new ApolloServer({
-            typeDefs,
-            resolvers,
-            context,
-        });
-        this.server.applyMiddleware({ app: this.app });
+        this.server = new ApolloServer({ typeDefs, resolvers, context });
     }
 
     /**
      * Sets up TypeORM
      */
     private setupTypeORM(): void {
-        const isDEV: boolean = process.env.NODE_ENV === "DEVELOPMENT";
-        const logger: Logger = isDEV ?
+        const isDEV = process.env.NODE_ENV === "DEVELOPMENT";
+        const logger = isDEV ?
             new AdvancedConsoleLogger(["warn", "error"]) :
             new AdvancedConsoleLogger(["warn", "error"]);
 
@@ -132,9 +109,6 @@ export default class App {
     public run(): void {
         let port: number | string = process.env.APP_PORT || "10262";
         port = parseInt(port, 10);
-        this.app.listen(port, () => {
-            console.log(`Server ready at http://localhost:${port}`);
-            console.log(`GraphQL test at http://localhost:${port}${this.server.graphqlPath}`);
-        });
+        this.server.listen();
     }
 }

@@ -2,7 +2,8 @@
   "linterOptions": {
     "exclude": [
       "/tmp",
-      "node_modules/**"
+      "node_modules/**",
+      "./src/registerServiceWorker.ts"
     ]
   },
   "rules": {
@@ -37,14 +38,10 @@
     ],
     "interface-name": [
       true,
-      "always-prefix"
+      "never-prefix"
     ],
     "jsdoc-format": true,
     "label-position": true,
-    "linebreak-style": [
-      true,
-      "LF"
-    ],
     "match-default-export-name": true,
     "member-access": true,
     "member-ordering": [
@@ -71,7 +68,7 @@
     ],
     "new-parens": true,
     "no-angle-bracket-type-assertion": true,
-    "no-any": true,
+    "no-any": false,
     "no-arg": true,
     "no-boolean-literal-compare": true,
     "no-consecutive-blank-lines": true,
@@ -101,7 +98,7 @@
     "no-unnecessary-callback-wrapper": true,
     "no-unnecessary-qualifier": true,
     "no-unnecessary-type-assertion": true,
-    "no-unsafe-any": true,
+    "no-unsafe-any": false,
     "no-unsafe-finally": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
@@ -122,7 +119,7 @@
       true,
       "allow-named-functions"
     ],
-    "ordered-imports": true,
+    "ordered-imports": false,
     "prefer-conditional-expression": true,
     "prefer-const": true,
     "prefer-for-of": true,
@@ -141,7 +138,7 @@
     "semicolon": true,
     "space-before-function-paren": false,
     "space-within-parens": false,
-    "strict-boolean-expressions": true,
+    "strict-boolean-expressions": false,
     "strict-type-predicates": true,
     "switch-default": true,
     "switch-final-break": true,
@@ -171,7 +168,6 @@
       "parameter",
       // "arrow-parameter",
       "property-declaration",
-      "variable-declaration",
       "member-variable-declaration",
       "object-destructuring",
       "array-destructuring"
@@ -199,7 +195,8 @@
     "variable-name": [
       true,
       "check-format",
-      "ban-keywords"
+      "ban-keywords",
+      "allow-pascal-case"
     ],
     "whitespace": [
       true,
