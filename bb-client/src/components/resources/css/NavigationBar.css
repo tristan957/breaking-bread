@@ -1,11 +1,44 @@
-#search{
-	margin-top: .5rem;
+.bg-light {
+	background-color: #fdf9f3 !important;
+	border-bottom: 1px solid rgba(0,0,0,0.33);
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
 }
 
-#guest{
-	margin-top: .5rem;
+.btn-secondary {
+    background-color: #ce8650;
+    border-color: #ce8650;
 }
 
-#login{
-	margin-top: .5rem;
+#search {
+	border: 1px solid #ce8650;
+}
+
+#guest {
+	border: 1px solid #ce8650;
+}
+
+.SingleDatePickerInput {
+	margin-top: .15rem;
+	border-radius: 5px;
+	border: 1px solid #ce8650;
+	overflow: hidden;
+}
+
+.CalendarDay__selected,
+.CalendarDay__selected:active,
+.CalendarDay__selected:hover {
+	background: #ce8650;
+	border: 1px double black
+}
+
+.DayPickerKeyboardShortcuts_show__bottomRight {
+	border-right: 33px solid #ce8650;
+}
+
+.DateInput_input__focused {
+	border-bottom: 2px solid #ce8650;
+}
+
+.nav-item{
+	margin: 10px 10px 0px 10px;
 }

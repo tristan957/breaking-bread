@@ -1,7 +1,8 @@
 import moment from "moment";
 import React from "react";
-import DatePicker from "react-datepicker";
-import { Button, Col, Container, Form, FormGroup, Input, NavbarBrand, Row } from "reactstrap";
+import { SingleDatePicker } from "react-dates";
+import "react-dates/initialize";
+import { Button, Collapse, Form, FormGroup, Input, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from "reactstrap";
 import "../resources/css/NavigationBar.css";
 import logo from "../resources/images/logo_icon.png";
 
@@ -9,86 +10,89 @@ type AppProps = {};
 
 type AppState = {
 	isOpen: boolean;
-	// tslint:disable-next-line:no-any
-	startDate: any;
+	createdAt: moment.Moment | null;
+	calendarFocused: boolean;
 };
 
 export default class NavigationBar extends React.Component<AppProps, AppState> {
 	constructor(props: Readonly<AppProps>) {
 		super(props);
 		this.toggle = this.toggle.bind(this);
-		this.handleChange = this.handleChange.bind(this);
+		this.onDateChange = this.onDateChange.bind(this);
+		this.onFocusChange = this.onFocusChange.bind(this);
 		this.state = {
 			isOpen: false,
-			startDate: moment(),
+			createdAt: moment(),
+			calendarFocused: false,
 		};
 	}
 
 	public toggle(): void {
-		this.setState({ isOpen: !this.state.isOpen });
+		this.setState({
+			isOpen: !this.state.isOpen,
+		});
 	}
 
-	// tslint:disable-next-line:no-any
-	public handleChange(date: any): void {
+	public onDateChange(date: moment.Moment | null): void {
 		this.setState({
-			startDate: date,
+			createdAt: date,
+		});
+	}
+
+	public onFocusChange(): void {
+		this.setState({
+			calendarFocused: !this.state.calendarFocused,
 		});
 	}
 
 	public render(): JSX.Element {
 		return (
 			<div id="navbar">
-				<Container>
-					<Row>
-						<Col xs="1">
-							<NavbarBrand href="/">
-								<span><img src={logo} height="50" /></span>
-							</NavbarBrand>
-						</Col>
-						<Col xs="6">
-							<Form>
-								<FormGroup>
-									<Input type="search" name="search" id="search" placeholder="Search" />
-								</FormGroup>
-							</Form>
-						</Col>
+				<Navbar color="light" light expand="md">
+					<NavbarBrand href="/">
+						<span><img src={logo} height="45" /></span>
+					</NavbarBrand>
+					<NavbarToggler onClick={this.toggle} />
+					<Collapse isOpen={this.state.isOpen} navbar>
+						<Nav className="ml-auto" navbar>
+							<NavItem>
+								<Form>
+									<FormGroup>
+										<Input type="search" name="search" id="search" placeholder="Search" />
+									</FormGroup>
+								</Form>
+							</NavItem>
 
-						<Col xs="2">
-							<Form>
-								<Input type="select" name="guest" id="guest">
-									<option value="" disabled selected>Guests</option>
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
-								</Input>
-							</Form>
-						</Col>
+							<NavItem>
+								<Form>
+									<Input type="select" name="guest" id="guest">
+										<option value="" disabled selected>Guests</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+									</Input>
+								</Form>
+							</NavItem>
 
-						{/*
-						<Col xs="2">
-							<Calendar format="DD/MM/YYYY" date="4-12-2014" />
-						</Col>
-						*/}
+							<NavItem>
+								<SingleDatePicker
+									date={this.state.createdAt}
+									focused={this.state.calendarFocused}
+									onDateChange={this.onDateChange}
+									onFocusChange={this.onFocusChange}
+									id={"datepicker"}
+									small={true}
+								/>
+							</NavItem>
 
-						<Col xs="2">
-							<DatePicker
-								selected={this.state.startDate}
-								onChange={this.handleChange}
-								showTimeSelect
-								timeFormat="HH:mm"
-								timeIntervals={15}
-								dateFormat="LLL"
-								timeCaption="time"
-							/>
-						</Col>
-
-						{/* <Button color="danger" onClick={() => this.toggleCalendar > Danger!</Button> */}
-
-						<Col xs="1">
-							<Button type="submit" id="login"> Log In </Button>
-						</Col>
-					</Row>
-				</Container>
+							<NavItem>
+								<Button type="submit" id="login"> Log In </Button>
+							</NavItem>
+						</Nav>
+					</Collapse>
+				</Navbar>
 			</div >
 		);
 	}
