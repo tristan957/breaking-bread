@@ -1,3 +1,4 @@
+// tslint:disable: no-unsafe-any
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
@@ -5,16 +6,14 @@ import { Button, Col, Container, Form, FormGroup, Input, NavbarBrand, Row } from
 import "../resources/css/NavigationBar.css";
 import logo from "../resources/images/logo_icon.png";
 
-type AppProps = {};
-
-type AppState = {
+interface IAppState {
 	isOpen: boolean;
 	// tslint:disable-next-line:no-any
 	startDate: any;
-};
+}
 
-export default class NavigationBar extends React.Component<AppProps, AppState> {
-	constructor(props: Readonly<AppProps>) {
+export default class NavigationBar extends React.Component<{}, IAppState> {
+	constructor(props: Readonly<{}>) {
 		super(props);
 		this.toggle = this.toggle.bind(this);
 		this.handleChange = this.handleChange.bind(this);
