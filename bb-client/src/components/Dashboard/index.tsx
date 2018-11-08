@@ -16,7 +16,10 @@ export default class Dashboard extends React.Component<IDashboardProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<NavigationBar />
+				<div id="Top">
+					<NavigationBar />
+				</div>
+				<div id="TopPlaceHolder"></div>
 				<div id="Left">
 					{
 						this.props.user === undefined ? undefined : (

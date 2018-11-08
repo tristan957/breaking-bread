@@ -23,7 +23,7 @@ export default class MealCard extends React.Component<IMealCardProps> {
 					<div className="meal-card-title">{this.props.title}</div>
 					<div className="meal-card-location">{this.props.location}</div>
 					<div className="host">
-						<img src={defaultUserPic} alt="Host Picture" />
+						<img src={defaultUserPic} alt="Host Picture" id="HostImg" />
 						<div>TODO: Get Host Name from host ID</div>
 					</div>
 					<div className="meal-card-footer">
