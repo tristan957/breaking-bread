@@ -2,6 +2,7 @@ import moment from "moment";
 import React from "react";
 import { SingleDatePicker } from "react-dates";
 import "react-dates/initialize";
+import { Link } from "react-router-dom";
 import { Button, Col, Form, FormGroup, Input, Label, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Rodal from "rodal";
 import AutoCompletionSearchBar from "../AutoSuggestion";
@@ -54,9 +55,11 @@ export default class NavigationBar extends React.Component<{}, IAppState> {
 		return (
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
-					<NavbarBrand href="/">
-						<span><img src={logo} height="40" /></span>
-					</NavbarBrand>
+					<Link to="/">
+						<NavbarBrand>
+							<span><img src={logo} height="40" /></span>
+						</NavbarBrand>
+					</Link>
 					<Nav className="ml-auto" navbar>
 						<NavItem>
 							{/* This button triggers our modal (Rodal) */}

@@ -1,33 +1,60 @@
 import React from "react";
 import Meal from "../../../entities/Meal";
+import User from "../../../entities/User";
 import MealCard from "./MealCard";
 
-export default class Feed extends React.Component {
-	private loadedMeals?: Partial<Meal>[];
+interface IFeedState {
+	loadedMeals: Partial<Meal>[];
+}
+
+export default class Feed extends React.Component<{}, IFeedState> {
+	constructor(props: Readonly<{}>) {
+		super(props);
+
+		this.state = {
+			loadedMeals: [],
+		};
+	}
 
 	public componentWillMount(): void {
 		// TODO: fetch last 25 meals from server
 		// TODO: recommender system
-		this.loadedMeals = [
-			{
-				id: 1,
-				hostID: 1,
-				date: new Date(),
-				location: "College Station, TX",
-				title: "Cuban delight",
-				guestIDs: [1, 2],
-				numberOfGuests: 3,
-			},
-			{
-				id: 2,
-				hostID: 2,
-				date: new Date(),
-				location: "College Station, TX",
-				title: "Mexican Night Out",
-				guestIDs: [],
-				numberOfGuests: 4,
-			},
-		];
+		this.setState({
+			loadedMeals: [
+				{
+					id: 1,
+					host: {
+						id: 3,
+						firstName: "Fank",
+						lastName: "Food",
+					},
+					date: new Date(),
+					location: "College Station, TX",
+					title: "Cuban delight",
+					guests: [
+						{
+							id: 4,
+							firstName: "Micky",
+							lastName: "Li",
+						},
+					],
+					numberOfGuests: 3,
+				},
+				{
+					id: 2,
+					host: {
+						id: 5,
+						firstName: "Jonathan",
+						lastName: "Wang",
+					},
+					date: new Date(),
+					location: "College Station, TX",
+					title: "Mexican Night Out",
+					guests: [],
+					numberOfGuests: 4,
+				},
+			],
+		});
 	}
 
 	public render(): JSX.Element {
@@ -36,26 +63,26 @@ export default class Feed extends React.Component {
 				<div>Feed</div>
 				<ul>
 					{
-						this.loadedMeals === undefined ? undefined :
-							this.loadedMeals.map((meal, i) => {
-								return (
-									<li key={i}>
-										<MealCard
-											id={meal.id as number}
-											location={meal.location as string}
-											imagePath={meal.imagePath as string}
-											title={meal.title as string}
-											description={meal.description as string}
-											date={meal.date as Date}
-											guestIDs={meal.guestIDs as number[]}
-											numberOfGuests={meal.numberOfGuests as number}
-										/>
-									</li>
-								);
-							})
+						this.state.loadedMeals.map((meal, i) => {
+							return (
+								<li key={i}>
+									<MealCard
+										id={meal.id as number}  // TODO: Reconsider all casts considering this is a partial meal
+										location={meal.location || ""}
+										host={meal.host as User}
+										imagePath={meal.imagePath}
+										title={meal.title || ""}
+										description={meal.description || ""}
+										date={meal.date as Date}
+										guests={meal.guests || []}
+										numberOfGuests={meal.numberOfGuests as number}
+									/>
+								</li>
+							);
+						})
 					}
 				</ul>
-			</div>
+			</div >
 		);
 	}
 }

@@ -3,7 +3,7 @@ import Meal from "../../../entities/Meal";
 import UpcomingMeal from "./UpcomingMeal";
 
 interface IUpcomingMealsProps {
-	upcomingMeals: Partial<Meal>[];
+	mealsAttending: Partial<Meal>[];
 }
 
 export default class UpcomingMealsCard extends React.Component<IUpcomingMealsProps> {
@@ -11,7 +11,7 @@ export default class UpcomingMealsCard extends React.Component<IUpcomingMealsPro
 		return (
 			<div>
 				<ul>
-					{this.props.upcomingMeals.map((meal, i) => {
+					{this.props.mealsAttending.map((meal, i) => {
 						return (
 							<li key={i}>
 								<UpcomingMeal

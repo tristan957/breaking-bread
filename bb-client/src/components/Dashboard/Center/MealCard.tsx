@@ -1,6 +1,8 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
-import defaultMealPic from "../../resources/images/default_meal_pic.jpg";
+import { Link } from "react-router-dom";
+import User from "../../../entities/User";
+import defaultImagePic from "../../resources/images/default_meal_pic.jpg";
 import defaultUserPic from "../../resources/images/default_user_pic.png";
 
 export interface IMealCardProps {
@@ -9,30 +11,34 @@ export interface IMealCardProps {
 	imagePath?: string;
 	title: string;
 	description: string;
+	host: User;
 	date: Date;
-	guestIDs: number[];
+	guests: Partial<User>[];
 	numberOfGuests: number;
 }
 
 export default class MealCard extends React.Component<IMealCardProps> {
 	public render(): JSX.Element {
 		return (
-			<div>
-				<img src={this.props.imagePath === undefined ? defaultMealPic : this.props.imagePath} />
-				<div className="meal-card-header">
-					<div className="meal-card-title">{this.props.title}</div>
-					<div className="meal-card-location">{this.props.location}</div>
-					<div className="host">
-						<img src={defaultUserPic} alt="Host Picture" id="HostImg" />
-						<div>TODO: Get Host Name from host ID</div>
-					</div>
-					<div className="meal-card-footer">
-						<div className="meal-card-description">{this.props.description}</div>
-						<div className="meal-card-guest-count">{`${this.props.guestIDs.length}/${this.props.numberOfGuests} 👨`}</div>
+			<Link to={`/${this.props.host.id}/${this.props.id}`}>
+				<div>
+					<img src={this.props.imagePath || defaultImagePic} />
+					<div className="meal-card-header">
+						<div className="meal-card-title">{this.props.title}</div>
+						<div className="meal-card-location">{this.props.location}</div>
+						<div className="host">
+							<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="HostImg" />
+							<div>TODO: Get Host Name from host ID</div>
+						</div>
+						<div className="meal-card-footer">
+							<div className="meal-card-description">{this.props.description}</div>
+							<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.numberOfGuests} 👨`}</div>
+						</div>
 					</div>
 				</div>
-				<div></div>
-			</div>
+			</Link>
 		);
 	}
 }
+
+// export default withRouter(MealCard);

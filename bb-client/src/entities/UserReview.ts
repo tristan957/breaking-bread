@@ -1,3 +1,4 @@
+import User from "./User";
 
 type UserReview = {
 	id: number;
@@ -5,8 +6,8 @@ type UserReview = {
 	description: string;
 	createdAt: Date;
 	updatedAt: Date;
-	subjectID: number;
-	authorID: number;
+	subject: Partial<User>;
+	author: Partial<User>;
 };
 
 export default UserReview;

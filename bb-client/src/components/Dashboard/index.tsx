@@ -1,8 +1,7 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
 import MediaQuery from "react-responsive";
-import { User } from "../../App";
-import NavigationBar from "../NavigationBar";
+import User from "../../entities/User";
 import "../resources/css/Dashboard.css";
 import Feed from "./Center/Feed";
 import FollowedTagsTopics from "./Left/FollowedTagsTopics";
@@ -10,7 +9,7 @@ import ProfileCard from "./Left/ProfileCard";
 import UpcomingMealsCard from "./Right/UpcomingMealsCard";
 
 interface IDashboardProps {
-	user?: User;
+	user?: Partial<User>;
 }
 
 export default class Dashboard extends React.Component<IDashboardProps> {
@@ -29,16 +28,12 @@ export default class Dashboard extends React.Component<IDashboardProps> {
 				*/}
 
 				<MediaQuery query="(min-width: 500px)">
-					<div id="Top">
-						<NavigationBar />
-					</div>
-					<div id="TopPlaceHolder"></div>
 					<div id="Left">
 						{
 							this.props.user === undefined ? undefined : (
 								<div>
-									<ProfileCard userID={this.props.user.id} name={this.props.user.name} />
-									<FollowedTagsTopics tags={this.props.user.tags} topics={this.props.user.topics} />
+									<ProfileCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+									<FollowedTagsTopics tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
 								</div>
 							)
 						}
@@ -49,7 +44,7 @@ export default class Dashboard extends React.Component<IDashboardProps> {
 					<div id="Right">
 						{
 							this.props.user === undefined ? undefined : (
-								<UpcomingMealsCard upcomingMeals={this.props.user.upcomingMeals} />
+								<UpcomingMealsCard mealsAttending={this.props.user.mealsAttending || []} />
 							)
 						}
 					</div>

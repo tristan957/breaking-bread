@@ -3,8 +3,8 @@ import Tag from "../../../entities/Tag";
 import Topic from "../../../entities/Topic";
 
 interface IFollowedTagsTopicsProps {
-	tags: Tag[];
-	topics: Topic[];
+	tags: Partial<Tag>[];
+	topics: Partial<Topic>[];
 }
 
 export default class FollowedTagsTopics extends React.Component<IFollowedTagsTopicsProps> {
