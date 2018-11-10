@@ -1,4 +1,4 @@
-// tslint:diable: no-unsafe-any
+// tslint:disable: no-unsafe-any
 import * as React from "react";
 import Autosuggest from "react-autosuggest";
 import Tag from "../../entities/Tag";
@@ -76,12 +76,14 @@ export default class AutoCompletionSearchBar extends React.Component<{}, IAppSta
 		};
 	}
 
+	// tslint:disable-next-line: no-any
 	public onChange(event: React.FormEvent<any>, { newValue, method }: Autosuggest.ChangeEvent): void {
 		this.setState({ value: newValue });
 	}
 
 	// Autosuggest will call this function every time you need to update suggestions.
 	// You already implemented this logic above, so just use it.
+	// tslint:disable-next-line: no-any
 	public onSuggestionsFetchRequested({ value }: any): void {
 		this.setState({
 			suggestions: getSuggestions(value),

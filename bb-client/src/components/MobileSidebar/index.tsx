@@ -1,3 +1,4 @@
+// tslint:disable: no-unsafe-any
 import React from "react";
 import Sidebar from "react-sidebar";
 import { Button } from "reactstrap";
