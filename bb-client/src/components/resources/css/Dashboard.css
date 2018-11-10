@@ -4,8 +4,8 @@
 
 #Top {
 	position: fixed;
-	width: 100%;
-	z-index:9;
+    width: 100%;
+    z-index: 9;
 }
 
 #TopPlaceHolder {
