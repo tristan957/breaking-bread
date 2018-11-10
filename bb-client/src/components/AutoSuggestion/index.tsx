@@ -1,6 +1,9 @@
 import * as React from "react";
 import Autosuggest from "react-autosuggest";
 import Tag from "../../entities/Tag";
+import theme from "../resources/css/AutoSuggestionSearchBar.css";
+
+// const theme = require("../resources/css/AutoSuggestionSearchBar.css");
 
 const languages: Tag[] = [
   {
@@ -98,6 +101,7 @@ export default class AutoCompletionSearchBar extends React.Component<{}, IAppSta
 
     return (
       <Autosuggest
+        theme={theme}
         // focusInputOnSuggestionClick={!isMobile}
         suggestions={suggestions}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
