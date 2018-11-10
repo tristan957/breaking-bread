@@ -4,6 +4,11 @@
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
 }
 
+.btn {
+	padding: .375rem 1.75rem;
+	margin: 0rem 0rem .6rem 0rem;
+}
+
 .btn-secondary {
     background-color: #ce8650;
     border-color: #ce8650;
@@ -40,5 +45,65 @@
 }
 
 .nav-item{
-	margin: 0px 10px 0px 10px;
+	margin: 10px 10px 0px 10px;
+}
+
+.header {
+    font-size: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.body {
+    padding-top: 15px;
+}
+
+.rodal,
+.rodal-mask {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	position: fixed !important;
+	padding: 10px;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+.rodal-dialog {
+	display: flex;
+	margin: auto;
+	height: auto !important;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	background-color: #fff;
+	font-family: inherit;
+	font-size: 1rem;
+	padding: 1.25em;
+	border-radius: 0.3125em;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	position: relative !important;
+	width: 45em;
+	max-width: 100%;
 }
