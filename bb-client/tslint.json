@@ -141,7 +141,7 @@
     "semicolon": true,
     "space-before-function-paren": false,
     "space-within-parens": false,
-    "strict-boolean-expressions": true,
+    "strict-boolean-expressions": false,
     "strict-type-predicates": true,
     "switch-default": true,
     "switch-final-break": true,

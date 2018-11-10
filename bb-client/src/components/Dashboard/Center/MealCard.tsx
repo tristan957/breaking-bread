@@ -2,8 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import User from "../../../entities/User";
-import defaultImagePic from "../../resources/images/default_meal_pic.jpg";
-import defaultUserPic from "../../resources/images/default_user_pic.png";
+import { default as defaultImagePic } from "../../resources/images/default_meal_pic.jpg";
+import { default as defaultUserPic } from "../../resources/images/default_user_pic.png";
 
 export interface IMealCardProps {
 	id: number;

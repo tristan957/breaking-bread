@@ -7,7 +7,7 @@ import { Button, Col, Form, FormGroup, Input, Label, Nav, Navbar, NavbarBrand, N
 import Rodal from "rodal";
 import AutoCompletionSearchBar from "../AutoSuggestion";
 import "../resources/css/NavigationBar.css";
-import logo from "../resources/images/logo_icon.png";
+import { default as logo } from "../resources/images/logo_icon.png";
 
 interface IAppState {
 	createdAt: moment.Moment | null;
@@ -18,6 +18,7 @@ interface IAppState {
 export default class NavigationBar extends React.Component<{}, IAppState> {
 	constructor(props: Readonly<{}>) {
 		super(props);
+
 		this.onDateChange = this.onDateChange.bind(this);
 		this.onFocusChange = this.onFocusChange.bind(this);
 		this.state = {
