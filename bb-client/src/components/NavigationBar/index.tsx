@@ -63,7 +63,7 @@ export default class NavigationBar extends React.Component<{}, IAppState> {
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
 					<NavbarBrand href="/">
-						<span><img src={logo} height="45" /></span>
+						<span><img src={logo} height="40" /></span>
 					</NavbarBrand>
 					<NavbarToggler onClick={this.toggle} />
 					<Collapse isOpen={this.state.isOpen} navbar>
