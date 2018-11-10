@@ -1,5 +1,5 @@
 // tslint:disable: no-unsafe-any
-import * as React from "react";
+import React from "react";
 import Autosuggest from "react-autosuggest";
 import Tag from "../../entities/Tag";
 import theme from "../resources/css/AutoSuggestionSearchBar.css";
