@@ -4,6 +4,7 @@ import React from "react";
 import { SingleDatePicker } from "react-dates";
 import "react-dates/initialize";
 import { Button, Collapse, Form, FormGroup, Input, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from "reactstrap";
+import AutoCompletionSearchBar from "../AutoSuggestion";
 import "../resources/css/NavigationBar.css";
 import logo from "../resources/images/logo_icon.png";
 
@@ -56,8 +57,8 @@ export default class NavigationBar extends React.Component<{}, IAppState> {
 						<Nav className="ml-auto" navbar>
 							<NavItem>
 								<Form>
-									<FormGroup>
-										<Input type="search" name="search" id="search" placeholder="Search" />
+									<FormGroup id="search">
+										<AutoCompletionSearchBar />
 									</FormGroup>
 								</Form>
 							</NavItem>
