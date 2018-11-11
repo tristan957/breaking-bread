@@ -14,8 +14,10 @@ export default class GuestCard extends React.Component<IGuestCardProps> {
 			// TODO: Link to user page
 			// TODO: Show kickable button if host of meal
 			<div id="profile-card" className="profile card">
-				<div id="username" className="profile">{this.props.name}</div>
-				<img id="picture" className="profile" src={this.props.imagePath === undefined ? defaultUserPic : this.props.imagePath} alt="Profile Picture" />
+				<div id="username" className="profile">
+					<img id="picture" className="profile" src={this.props.imagePath === undefined ? defaultUserPic : this.props.imagePath} alt="Profile Picture" />
+					{this.props.name}
+				</div>
 			</div>
 		);
 	}

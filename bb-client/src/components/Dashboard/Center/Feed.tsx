@@ -39,6 +39,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 							lastName: "Li",
 						},
 					],
+					price: 40,
 					numberOfGuests: 3,
 				},
 				{
@@ -61,7 +62,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<div>Feed</div>
+				<h3>Feed</h3>
 				<ul>
 					{
 						this.state.loadedMeals.map((meal, i) => {
@@ -77,6 +78,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 										date={meal.date as Date}
 										guests={meal.guests || []}
 										numberOfGuests={meal.numberOfGuests as number}
+										price={meal.price}
 									/>
 								</li>
 							);

@@ -10,9 +10,19 @@ interface IGuestListCardProps {
 export default class GuestListCard extends React.Component<IGuestListCardProps> {
 	public render(): JSX.Element {
 		return (
-			<div>
+			<div className="card">
+				<h3>Guests:</h3>
 				<ul className="list">
 					<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.numberOfGuests} 👨`}</div>
+					{
+						// Also need to check conflicts with attendingMeals of current user
+						this.props.guests.length < this.props.numberOfGuests ? (
+							<div>
+								There's room! <button>Sign Up!</button>
+							</div>
+						) : undefined
+						// Otherwise render "You're signed up!" if current user is in the Guest list
+					}
 					<hr className="seperator" />
 					{this.props.guests.map((guest, i) => {
 						return (
@@ -27,7 +37,6 @@ export default class GuestListCard extends React.Component<IGuestListCardProps> 
 							</div>
 						);
 					})}
-					{/* TODO: If there is still room, and a user is signed in, and doesn't have a meal attending conflict, display signup for meal button */}
 				</ul>
 			</div>
 		);

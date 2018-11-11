@@ -19,25 +19,35 @@ export default class HostCard extends React.Component<IHostCardProps> {
 		// TODO: Link to user page
 		return (
 			<div id="profile-card" className="profile card">
+				<h3>Host:</h3>
 				<img id="picture" className="profile" src={this.props.imagePath === undefined ? defaultUserPic : this.props.imagePath} alt="Profile Picture" />
 				<div id="username" className="profile"><h6><b>{this.props.name}</b></h6></div>
 
-				<div>Favorite Topics:</div>
 				{/* TODO: Seperate out re-usable components to their own folders */}
-				<ul className="list">
-					{this.props.topics.map((topic, i) => {
-						return (
-							<li className="topic" key={i}>
-								<TopicCard id={topic.id as number} name={topic.name as string} />
-							</li>
-						);
-					})}
-				</ul>
-
-				<div id="about" className="profile">
-					<div>About:</div>
-					<p>{this.props.about}</p>
-				</div>
+				{
+					this.props.topics.length === 0 ? undefined : (
+						<div>
+							<div>Favorite Topics:</div>
+							<ul className="list">
+								{this.props.topics.map((topic, i) => {
+									return (
+										<li className="topic" key={i}>
+											<TopicCard id={topic.id as number} name={topic.name as string} />
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					)
+				}
+				{
+					this.props.about === undefined ? undefined : (
+						<div id="about" className="profile">
+							<div>About:</div>
+							<p>{this.props.about}</p>
+						</div>
+					)
+				}
 			</div>
 		);
 		// TODO: Maybe tags too. Could use tag card used in dashboard

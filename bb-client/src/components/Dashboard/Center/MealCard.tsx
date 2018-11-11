@@ -15,6 +15,7 @@ export interface IMealCardProps {
 	date: Date;
 	guests: Partial<User>[];
 	numberOfGuests: number;
+	price?: number;
 }
 
 export default class MealCard extends React.Component<IMealCardProps> {
@@ -28,11 +29,18 @@ export default class MealCard extends React.Component<IMealCardProps> {
 						<div className="meal-card-location">{this.props.location}</div>
 						<div className="host">
 							<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="HostImg" />
-							<div>TODO: Get Host Name from host ID</div>
+							<div>TODO: Pass in host name when fetching with the feed fetch</div>
 						</div>
 						<div className="meal-card-footer">
 							<div className="meal-card-description">{this.props.description}</div>
 							<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.numberOfGuests} 👨`}</div>
+							<div>
+								{
+									this.props.price === undefined ? `Free!` : (
+										`$${this.props.price} expected`
+									)
+								}
+							</div>
 						</div>
 					</div>
 				</div>

@@ -15,7 +15,7 @@ const loadedMeals: Partial<Meal>[] = [
 			id: 3,
 			firstName: "Fank",
 			lastName: "Food",
-			about: "I like to cook cubano",
+			about: "I like to cook Cuban",
 			whitelist: [
 				{
 					id: 10,
@@ -53,6 +53,7 @@ const loadedMeals: Partial<Meal>[] = [
 				timesFavorited: 10,
 			},
 		],
+		price: 40,
 		numberOfGuests: 3,
 	},
 	{
@@ -111,19 +112,45 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 	public render(): JSX.Element {
 		return (
 			<div>
+				<MediaQuery query="(max-width: 949px)">
+					<div>
+						<div id="back" onClick={() => { this.props.history.goBack(); }}>
+							<h4>GoBack</h4>
+						</div>
+						<div id="mobileCenter">
+							<MealArticle
+								meal={this.state.meal}
+							/>
+							<hr className="seperator" />
+							<HostCard
+								id={this.state.host.id as number}
+								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
+								about={this.state.host.about as string}
+								imagePath={this.state.host.imagePath}
+								topics={this.state.host.whitelist || []}
+							/>
+							<hr className="seperator" />
+							<GuestListCard
+								guests={this.state.guests}
+								numberOfGuests={this.state.meal.numberOfGuests as number}
+							/>
+						</div>
+					</div>
+				</MediaQuery>
+
 				<MediaQuery query="(min-width: 950px)">
 					<div>
-						<div id="back">
-							<div onClick={() => { this.props.history.goBack(); }}>
+						<div id="Left">
+							<div id="back" onClick={() => { this.props.history.goBack(); }}>
 								<h4>GoBack</h4>
 							</div>
 						</div>
-						<div id="center">
+						<div id="Center">
 							<MealArticle
 								meal={this.state.meal}
 							/>
 						</div>
-						<div id="right">
+						<div id="Right">
 							<HostCard
 								id={this.state.host.id as number}
 								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
