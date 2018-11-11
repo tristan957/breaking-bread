@@ -11,7 +11,6 @@ interface IAppState {
 }
 
 export default class App extends React.Component<{}, IAppState> {
-
 	constructor(props: Readonly<{}>) {
 		super(props);
 
@@ -27,11 +26,11 @@ export default class App extends React.Component<{}, IAppState> {
 				id: 5,
 				firstName: "Tristan",
 				lastName: "Partin",
-				topics: [
+				whitelist: [
 					{ id: 1, name: "Food" },
 					{ id: 2, name: "Nuts" },
 				],
-				tags: [
+				followedTags: [
 					{ id: 1, name: "Vegan" },
 					{ id: 2, name: "Veget" },
 				],
