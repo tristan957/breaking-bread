@@ -60,7 +60,7 @@ export default class NavigationBar extends React.Component<{}, IAppState> {
 				<Navbar color="light" light expand="md">
 					<Link to="/">
 						<NavbarBrand>
-							<span><img src={logo} height="40" /></span>
+							<span><img className="brand" src={logo} height="30" /></span>
 						</NavbarBrand>
 					</Link>
 					<Nav className="ml-auto" navbar>

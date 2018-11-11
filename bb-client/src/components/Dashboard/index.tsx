@@ -2,6 +2,7 @@
 import React from "react";
 import MediaQuery from "react-responsive";
 import User from "../../entities/User";
+import MobileSidebar from "../MobileSidebar";
 import "../resources/css/Dashboard.css";
 import Feed from "./Center/Feed";
 import FollowedTagsTopics from "./Left/FollowedTagsTopics";
@@ -16,18 +17,17 @@ export default class Dashboard extends React.Component<IDashboardProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				{/*
-				<MediaQuery query="(max-width: 950px)">
-					<div id="Top">
-						<NavigationBar />
-					</div>
+				<MediaQuery query="(max-width: 949px)">
 					<div id="mobileSidebar">
-						<MobileSidebar />
+						<MobileSidebar {...this.props} />
+					</div>
+					<div id="TopPlaceHolder"></div>
+					<div id="mobileCenter">
+						<Feed />
 					</div>
 				</MediaQuery>
-				*/}
 
-				<MediaQuery query="(min-width: 500px)">
+				<MediaQuery query="(min-width: 950px)">
 					<div id="Left">
 						{
 							this.props.user === undefined ? undefined : (
