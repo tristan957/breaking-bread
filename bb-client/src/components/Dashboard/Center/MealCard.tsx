@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import User from "../../../entities/User";
+import "../../resources/css/utils.css";
 import { default as defaultImagePic } from "../../resources/images/default_meal_pic.jpg";
 import { default as defaultUserPic } from "../../resources/images/default_user_pic.png";
 
@@ -21,8 +22,8 @@ export interface IMealCardProps {
 export default class MealCard extends React.Component<IMealCardProps> {
 	public render(): JSX.Element {
 		return (
-			<Link to={`/m/${this.props.id}`}>
-				<div>
+			<Link to={`/${this.props.host.id}/${this.props.id}`} className="no-link">
+				<div className="no-link">
 					<img src={this.props.imagePath || defaultImagePic} />
 					<div className="meal-card-header">
 						<div className="meal-card-title">{this.props.title}</div>
