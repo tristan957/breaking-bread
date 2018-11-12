@@ -12,7 +12,8 @@
 }
 
 ul {
-	margin-left: -45px;
+    margin-left: -40px;
+    list-style-type: none;
 }
 
 img:not(.brand) {
