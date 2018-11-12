@@ -21,23 +21,26 @@ export interface IMealCardProps {
 export default class MealCard extends React.Component<IMealCardProps> {
 	public render(): JSX.Element {
 		return (
-			<Link to={`/${this.props.host.id}/${this.props.id}`}>
+			<Link to={`/m/${this.props.id}`}>
 				<div>
 					<img src={this.props.imagePath || defaultImagePic} />
 					<div className="meal-card-header">
 						<div className="meal-card-title">{this.props.title}</div>
 						<div className="meal-card-location">{this.props.location}</div>
-						<div className="host">
-							<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="HostImg" />
-							<div>TODO: Pass in host name when fetching with the feed fetch</div>
-						</div>
+						<Link to={`/p/${this.props.host.id}`}>
+							<div className="host">
+								<div>
+									<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="HostImg" /> {`${this.props.host.firstName} ${this.props.host.lastName}`}
+								</div>
+							</div>
+						</Link>
 						<div className="meal-card-footer">
 							<div className="meal-card-description">{this.props.description}</div>
 							<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.numberOfGuests} 👨`}</div>
 							<div>
 								{
 									this.props.price === undefined ? `Free!` : (
-										`$${this.props.price} expected`
+										`$${this.props.price} per person`
 									)
 								}
 							</div>
