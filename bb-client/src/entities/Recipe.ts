@@ -9,7 +9,7 @@ type Recipe = {
 	id: number;
 	name: string;
 	description: string;
-	recipeImageS3Key: string;
+	imagePath: string;
 	createdAt: Date;
 	updatedAt: Date;
 	author: Partial<User>;

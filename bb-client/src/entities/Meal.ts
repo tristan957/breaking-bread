@@ -4,6 +4,7 @@ import User from "./User";
 type Meal = {
 	id: number;
 	title: string;
+	price: number;  // TODO: Add to db if not in there already (undefined/null if meal is free)
 	description: string;
 	imagePath: string;
 	location: string;

@@ -4,8 +4,13 @@
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.13);
 }
 
+.brand {
+	max-width: 100%;
+	max-height: 100%;
+}
+
 .btn {
-	padding: .375rem 1.75rem;
+	padding: .1rem 1.25rem;
 	margin: 0rem 0rem .6rem 0rem;
 }
 
@@ -38,6 +43,10 @@
 
 .DateInput_input__focused {
 	border-bottom: 2px solid #ce8650;
+}
+
+.navbar {
+	padding: 0 1rem;
 }
 
 .nav-item{

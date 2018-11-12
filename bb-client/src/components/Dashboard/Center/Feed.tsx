@@ -1,6 +1,7 @@
 import React from "react";
 import Meal from "../../../entities/Meal";
 import User from "../../../entities/User";
+import "../../resources/css/Feed.css";
 import MealCard from "./MealCard";
 
 interface IFeedState {
@@ -38,6 +39,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 							lastName: "Li",
 						},
 					],
+					price: 40,
 					numberOfGuests: 3,
 				},
 				{
@@ -60,12 +62,12 @@ export default class Feed extends React.Component<{}, IFeedState> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<div>Feed</div>
+				<h3>Feed</h3>
 				<ul>
 					{
 						this.state.loadedMeals.map((meal, i) => {
 							return (
-								<li key={i}>
+								<li key={i} className="feedCard">
 									<MealCard
 										id={meal.id as number}  // TODO: Reconsider all casts considering this is a partial meal
 										location={meal.location || ""}
@@ -76,6 +78,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 										date={meal.date as Date}
 										guests={meal.guests || []}
 										numberOfGuests={meal.numberOfGuests as number}
+										price={meal.price}
 									/>
 								</li>
 							);

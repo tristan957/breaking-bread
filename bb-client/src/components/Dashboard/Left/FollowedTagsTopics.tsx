@@ -1,6 +1,8 @@
 import React from "react";
 import Tag from "../../../entities/Tag";
 import Topic from "../../../entities/Topic";
+import TagCard from "./TagCard";
+import TopicCard from "./TopicCard";
 
 interface IFollowedTagsTopicsProps {
 	tags: Partial<Tag>[];
@@ -14,14 +16,22 @@ export default class FollowedTagsTopics extends React.Component<IFollowedTagsTop
 				<div className="header">Tags</div>
 				<ul className="list">
 					{this.props.tags.map((tag, i) => {
-						return <li className="tag" key={i}>{`#${tag.name}`}</li>;
+						return (
+							<li className="tag" key={i}>
+								<TagCard id={tag.id as number} name={tag.name as string}></TagCard>
+							</li>
+						);
 					})}
 				</ul>
 				<hr className="seperator" />
 				<div className="header">Topics</div>
 				<ul className="list">
 					{this.props.topics.map((topic, i) => {
-						return <li className="topic" key={i}>{`#${topic.name}`}</li>;
+						return (
+							<li className="topic" key={i}>
+								<TopicCard id={topic.id as number} name={topic.name as string}></TopicCard>
+							</li>
+						);
 					})}
 				</ul>
 			</div>

@@ -1,18 +1,6 @@
-#profile-card {
-	display: flex;
+.upcomingMealCard {
+	margin-bottom: 15px;
 	padding: 15px;
-	justify-content: space-between;
-}
-
-.profile#picture {
-	width: 50px;
-	border-radius: 25px;
-}
-
-.card {
-    margin-bottom: 15px;
-    margin-right: 25px;
-    padding: 15px;
     position: relative;
     overflow: hidden;
     background: white;
