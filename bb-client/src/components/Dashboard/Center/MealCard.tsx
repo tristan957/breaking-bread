@@ -22,7 +22,7 @@ export interface IMealCardProps {
 export default class MealCard extends React.Component<IMealCardProps> {
 	public render(): JSX.Element {
 		return (
-			<Link to={`/${this.props.host.id}/${this.props.id}`} className="no-link">
+			<Link to={`/m/${this.props.id}`} className="no-link">
 				<div className="no-link">
 					<img src={this.props.imagePath || defaultImagePic} />
 					<div className="meal-card-header">
