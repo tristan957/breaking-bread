@@ -13,7 +13,7 @@ export default class TagCard extends React.Component<ITagCardProps> {
 			// TODO: Show x to unfollow modal
 			// TODO: If shown and followed (show x to unfollow) if shown and not followed (show + to follow)
 			<div id="tag-card" className="tag card">
-				<div id="tag" className="tag">#{this.props.name}</div>
+				<div id="tag" className="tag">{this.props.name}</div>
 			</div>
 		);
 	}
