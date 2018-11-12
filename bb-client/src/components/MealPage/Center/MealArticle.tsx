@@ -16,10 +16,9 @@ export default class MealArticle extends React.Component<IMealArticleProps> {
 				<div id="meal-article-header">
 					<img src={this.props.meal.imagePath || defaultImagePic} />
 					<h3>{this.props.meal.title}</h3>
-					<h5>
-						{
+					<h5>{this.props.meal.location} - {
 							this.props.meal.price === undefined ? `Free!` : (
-								`$${this.props.meal.price} expected`
+								`$${this.props.meal.price} per person`
 							)
 						}
 					</h5>
