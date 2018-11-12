@@ -114,14 +114,10 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 			<div>
 				<MediaQuery query="(max-width: 949px)">
 					<div>
-						<div id="back" onClick={() => { this.props.history.goBack(); }}>
-							<h4>GoBack</h4>
-						</div>
 						<div id="mobileCenter">
 							<MealArticle
 								meal={this.state.meal}
 							/>
-							<hr className="seperator" />
 							<HostCard
 								id={this.state.host.id as number}
 								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
@@ -129,7 +125,6 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 								imagePath={this.state.host.imagePath}
 								topics={this.state.host.whitelist || []}
 							/>
-							<hr className="seperator" />
 							<GuestListCard
 								guests={this.state.guests}
 								numberOfGuests={this.state.meal.numberOfGuests as number}
@@ -140,11 +135,7 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 
 				<MediaQuery query="(min-width: 950px)">
 					<div>
-						<div id="Left">
-							<div id="back" onClick={() => { this.props.history.goBack(); }}>
-								<h4>GoBack</h4>
-							</div>
-						</div>
+						<div id="Left"></div>
 						<div id="Center">
 							<MealArticle
 								meal={this.state.meal}
@@ -158,7 +149,6 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 								imagePath={this.state.host.imagePath}
 								topics={this.state.host.whitelist || []}
 							/>
-							<hr className="seperator" />
 							<GuestListCard
 								guests={this.state.guests}
 								numberOfGuests={this.state.meal.numberOfGuests as number}
