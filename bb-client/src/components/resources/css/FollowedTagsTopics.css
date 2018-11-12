@@ -1,0 +1,21 @@
+@font-face {
+    font-family: "SFMonoSemiBold";
+    src: url("../fonts/SF-Mono/SFMono-Semibold.otf");
+}
+
+@font-face {
+    font-family: "SFMonoRegular";
+    src: url("../fonts/SF-Mono/SFMono-Regular.otf");
+}
+
+.tags {
+    font-family: 'SFMonoSemiBold', Arial, sans-serif;
+    text-transform: lowercase;
+    padding: 0px 20px;
+}
+
+.tagsHeader {
+    font-family: 'SFMonoRegular', Arial, sans-serif;
+    text-transform: lowercase;
+    padding: 15px 10px;
+}
