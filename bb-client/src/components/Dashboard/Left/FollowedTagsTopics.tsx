@@ -27,7 +27,6 @@ export default class FollowedTagsTopics extends React.Component<IFollowedTagsTop
 				<div className="header">Topics</div>
 				<ul className="list">
 					{this.props.topics.map((topic, i) => {
-						console.log(topic);
 						return (
 							<li className="topic" key={i}>
 								<TopicCard id={topic.id as number} name={topic.name as string}></TopicCard>

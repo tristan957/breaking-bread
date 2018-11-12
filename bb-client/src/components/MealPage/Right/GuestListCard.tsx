@@ -14,15 +14,7 @@ export default class GuestListCard extends React.Component<IGuestListCardProps> 
 				<h3>Guests:</h3>
 				<ul className="list">
 					<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.numberOfGuests} 👨`}</div>
-					{
-						// Also need to check conflicts with attendingMeals of current user
-						this.props.guests.length < this.props.numberOfGuests ? (
-							<div>
-								There's room! <button>Sign Up!</button>
-							</div>
-						) : undefined
-						// Otherwise render "You're signed up!" if current user is in the Guest list
-					}
+					{this.renderSignUp()}
 					<hr className="seperator" />
 					{this.props.guests.map((guest, i) => {
 						return (
@@ -40,5 +32,19 @@ export default class GuestListCard extends React.Component<IGuestListCardProps> 
 				</ul>
 			</div>
 		);
+	}
+
+	public renderSignUp(): JSX.Element | undefined {
+		// Also need to check conflicts with attendingMeals of current user
+		if (this.props.guests.length < this.props.numberOfGuests) {
+			return (
+				<div>
+					There's room! <button>Sign Up!</button>
+				</div>
+			);
+		}
+		// Otherwise render "You're signed up!" if current user is in the Guest list
+
+		return undefined;
 	}
 }
