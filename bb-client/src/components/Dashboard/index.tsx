@@ -5,7 +5,7 @@ import User from "../../entities/User";
 import MobileSidebar from "../MobileSidebar";
 import "../resources/css/Dashboard.css";
 import Feed from "./Center/Feed";
-import FollowedTagsTopics from "./Left/FollowedTagsTopics";
+import FollowedTagsCard from "./Left/FollowedTagsCard";
 import ProfileCard from "./Left/ProfileCard";
 import UpcomingMealsCard from "./Right/UpcomingMealsCard";
 
@@ -33,7 +33,7 @@ export default class Dashboard extends React.Component<IDashboardProps> {
 							this.props.user === undefined ? undefined : (
 								<div>
 									<ProfileCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
-									<FollowedTagsTopics tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
+									<FollowedTagsCard tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
 								</div>
 							)
 						}

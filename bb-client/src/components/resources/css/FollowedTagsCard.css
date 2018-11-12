@@ -8,14 +8,14 @@
     src: url("../fonts/SF-Mono/SFMono-Regular.otf");
 }
 
-.tags {
+.followed-tags-card-list {
     font-family: 'SFMonoSemiBold', Arial, sans-serif;
     text-transform: lowercase;
-    padding: 0px 20px;
+    padding: 0px 50px;
 }
 
 .tagsHeader {
     font-family: 'SFMonoRegular', Arial, sans-serif;
     text-transform: lowercase;
-    padding: 15px 10px;
+    padding: 15px 10px 0px;
 }

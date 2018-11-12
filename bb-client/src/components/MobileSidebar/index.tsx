@@ -2,7 +2,7 @@
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
 import User from "../../entities/User";
-import FollowedTagsTopics from "../Dashboard/Left/FollowedTagsTopics";
+import FollowedTagsCard from "../Dashboard/Left/FollowedTagsCard";
 import ProfileCard from "../Dashboard/Left/ProfileCard";
 import UpcomingMealsCard from "../Dashboard/Right/UpcomingMealsCard";
 import "../resources/css/MobileSidebar.css";
@@ -39,7 +39,7 @@ export default class MobileSidebar extends React.Component<IDashboardProps, IApp
 							{this.props.user === undefined ? undefined : (
 								<div>
 									<ProfileCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
-									<FollowedTagsTopics tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
+									<FollowedTagsCard tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
 								</div>
 							)}
 						</div>
