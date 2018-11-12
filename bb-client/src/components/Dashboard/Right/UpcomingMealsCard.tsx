@@ -17,9 +17,11 @@ export default class UpcomingMealsCard extends React.Component<IUpcomingMealsPro
 							<li key={i}>
 								<UpcomingMeal
 									id={meal.id as number}
-									title={"This is a meal."} // TODO: fillin with actual
+									title={meal.title as string} // TODO: fillin with actual
+									price={meal.price as number}
+									guests={meal.guests || []}
+									maxGuests={meal.maxGuests as number}
 									location={meal.location as string}
-									imagePath={undefined}
 									date={meal.date as Date}
 								/>
 							</li>

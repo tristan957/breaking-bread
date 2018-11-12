@@ -54,7 +54,7 @@ const loadedMeals: Partial<Meal>[] = [
 			},
 		],
 		price: 40,
-		numberOfGuests: 3,
+		maxGuests: 3,
 	},
 	{
 		id: 2,
@@ -67,7 +67,7 @@ const loadedMeals: Partial<Meal>[] = [
 		location: "College Station, TX",
 		title: "Mexican Night Out",
 		guests: [],
-		numberOfGuests: 4,
+		maxGuests: 4,
 	},
 ];
 
@@ -127,7 +127,7 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 							/>
 							<GuestListCard
 								guests={this.state.guests}
-								numberOfGuests={this.state.meal.numberOfGuests as number}
+								maxGuests={this.state.meal.maxGuests as number}
 							/>
 						</div>
 					</div>
@@ -151,7 +151,7 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 							/>
 							<GuestListCard
 								guests={this.state.guests}
-								numberOfGuests={this.state.meal.numberOfGuests as number}
+								maxGuests={this.state.meal.maxGuests as number}
 							/>
 						</div>
 					</div>

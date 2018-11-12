@@ -14,7 +14,7 @@ export interface IMealCardProps {
 	host: User;
 	date: Date;
 	guests: Partial<User>[];
-	numberOfGuests: number;
+	maxGuests: number;
 	price?: number;
 }
 
@@ -36,7 +36,7 @@ export default class MealCard extends React.Component<IMealCardProps> {
 						</Link>
 						<div className="meal-card-footer">
 							<div className="meal-card-description">{this.props.description}</div>
-							<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.numberOfGuests} 👨`}</div>
+							<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.maxGuests} 👨`}</div>
 							<div>
 								{
 									this.props.price === undefined ? `Free!` : (
@@ -44,6 +44,7 @@ export default class MealCard extends React.Component<IMealCardProps> {
 									)
 								}
 							</div>
+							{`${this.props.date.toLocaleDateString()} at ${this.props.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
 						</div>
 					</div>
 				</div>

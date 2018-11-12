@@ -37,10 +37,26 @@ export default class App extends React.Component<{}, IAppState> {
 				mealsAttending: [
 					{
 						id: 1,
-						location: "Your Mom's house",
-						imagePath: undefined,
-						title: "Mom's home cooking",
 						date: new Date(),
+						location: "College Station, TX",
+						title: "Cuban delight",
+						guests: [
+							{
+								id: 4,
+								firstName: "Micky",
+								lastName: "Li",
+							},
+							{
+								firstName: "Greg",
+								lastName: "Noonan",
+							},
+							{
+								firstName: "Jon",
+								lastName: "Wang",
+							},
+						],
+						price: 40,
+						maxGuests: 3,
 					},
 				],
 			},

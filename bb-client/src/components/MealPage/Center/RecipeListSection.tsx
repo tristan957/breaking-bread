@@ -11,6 +11,7 @@ export default class RecipeListSection extends React.Component<IRecipeSectionPro
 	public render(): JSX.Element {
 		return (
 			<div>
+				<h4>Recipes</h4>
 				<ul className="list">
 					{this.props.recipes.map((recipe, i) => {
 						return (

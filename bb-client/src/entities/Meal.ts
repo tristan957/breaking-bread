@@ -8,7 +8,7 @@ type Meal = {
 	description: string;
 	imagePath: string;
 	location: string;
-	numberOfGuests: number;
+	maxGuests: number;
 	date: Date;
 	createdAt: Date;
 	updatedAt: Date;

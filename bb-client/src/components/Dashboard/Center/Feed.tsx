@@ -40,7 +40,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 						},
 					],
 					price: 40,
-					numberOfGuests: 3,
+					maxGuests: 3,
 				},
 				{
 					id: 2,
@@ -53,7 +53,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 					location: "College Station, TX",
 					title: "Mexican Night Out",
 					guests: [],
-					numberOfGuests: 4,
+					maxGuests: 4,
 				},
 			],
 		});
@@ -77,7 +77,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 										description={meal.description || ""}
 										date={meal.date as Date}
 										guests={meal.guests || []}
-										numberOfGuests={meal.numberOfGuests as number}
+										maxGuests={meal.maxGuests as number}
 										price={meal.price}
 									/>
 								</li>
