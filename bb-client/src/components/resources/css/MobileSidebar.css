@@ -1,26 +1,27 @@
-#container {
+#mobile-button-container {
 	width: 100%;
 	text-align: center;
 }
 
 /* Position and sizing of burger button */
 .bm-burger-button {
-	position: relative;
+	position: sticky;
 	width: 36px;
 	height: 30px;
 	left: 36px;
 	top: 15px;
 	z-index: 0 !important;
+	margin-top: 20px;
 }
 
-.leftPane {
+.left-pane {
 	float: left;
-	margin-left: .5rem;
+	/* margin-left: .5rem; */
 }
 
-.rightPane {
+.right-pane {
 	float: right;
-	margin-right: 5rem;
+	margin-right: 2.25rem;
 }
 
 /* Color/shape of burger icon bars */

@@ -16,37 +16,43 @@ interface IDashboardProps {
 export default class Dashboard extends React.Component<IDashboardProps> {
 	public render(): JSX.Element {
 		return (
-			<div>
+			<div style={{ width: "100%" }}>
 				<MediaQuery query="(max-width: 949px)">
-					<div id="mobileSidebar">
-						<MobileSidebar {...this.props} />
-					</div>
-					<div id="TopPlaceHolder"></div>
-					<div id="mobileCenter">
-						<Feed />
+					<div id="mobile-dashboard">
+						<div id="mobile-sidebar">
+							<MobileSidebar {...this.props} />
+						</div>
+						<div id="mobile-feed">
+							<Feed />
+						</div>
 					</div>
 				</MediaQuery>
 
 				<MediaQuery query="(min-width: 950px)">
-					<div id="Left">
-						{
-							this.props.user === undefined ? undefined : (
-								<div>
-									<ProfileCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
-									<FollowedTagsCard tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
-								</div>
-							)
-						}
-					</div>
-					<div id="Center">
-						<Feed />
-					</div>
-					<div id="Right">
-						{
-							this.props.user === undefined ? undefined : (
-								<UpcomingMealsCard mealsAttending={this.props.user.mealsAttending || []} />
-							)
-						}
+					<div id="dashboard">
+						<div className="take-up-space"></div>
+						<div id="Left">
+							{
+								this.props.user === undefined ? undefined : (
+									<div>
+										<ProfileCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+										<FollowedTagsCard tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
+									</div>
+								)
+							}
+						</div>
+						<div id="Center">
+							<h3>Feed</h3>
+							<Feed />
+						</div>
+						<div id="Right">
+							{
+								this.props.user === undefined ? undefined : (
+									<UpcomingMealsCard mealsAttending={this.props.user.mealsAttending || []} />
+								)
+							}
+						</div>
+						<div className="take-up-space"></div>
 					</div>
 				</MediaQuery>
 			</div>

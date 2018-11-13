@@ -1,12 +1,29 @@
 .component {
-	border: 1px solid black;
+    border: 1px solid black;
+    margin: 0px;
 }
 
-#mobileCenter {
-    margin: 0 auto;
-    width: 40rem;
-    padding: 0rem 2rem 2rem 2rem;
+#mobile-dashboard {
+    display: block;
+}
+
+#mobile-sidebar {
+    overflow: hidden;
+    padding: 20px auto;
+}
+
+#mobile-feed {
+    margin: 20px;
+}
+
+#dashboard {
+    display: flex;
+    justify-content: space-around;
     width: 100%;
+}
+
+.take-up-space {
+    flex-grow: 5;
 }
 
 #TopPlaceHolder {
@@ -16,31 +33,25 @@
 
 #Left {
     width: 280px;
-    position: relative;
-    height: 100%;
-    float: left;
-    border-collapse: collapse;
+    /* height: 100%; */
     margin-top: 1rem;
-    padding-left: 1rem;
+    margin-left: 40px;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 #Center {
-    width: calc(100% - 600px);
-    height: 100%;
-    float: left;
-    border-collapse: collapse;
-    padding: 15px;
+    margin: 1rem 40px;
+    flex-grow: 2;
 }
 
 #Right {
   width: 280px;
-  height: 100%;
-  position: relative;
-  float: left;
-  border-collapse: collapse;
+  /* height: 100%; */
   margin-top: 1rem;
-  padding-right: 1rem;
-  padding-left: 15px;
+  margin-right: 40px;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 #HostImg {

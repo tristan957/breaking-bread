@@ -32,27 +32,25 @@ export default class MobileSidebar extends React.Component<IDashboardProps, IApp
 
 	public render(): JSX.Element {
 		return (
-			<div id="container">
+			<div id="mobile-button-container">
 				<div id="left">
-					<Menu burgerButtonClassName={"leftPane"}>
-						<div>
-							{this.props.user === undefined ? undefined : (
-								<div>
-									<ProfileCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
-									<FollowedTagsCard tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
-								</div>
-							)}
-						</div>
+					<Menu burgerButtonClassName={"left-pane"}>
+						{this.props.user === undefined ? undefined : (
+							<div>
+								<ProfileCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+								<FollowedTagsCard tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
+							</div>
+						)}
 					</Menu>
 				</div>
-				<div id="center"></div>
+				{/* <div id="center">
+					<h3>Feed</h3>
+				</div> */}
 				<div id="right">
-					<Menu burgerButtonClassName={"rightPane"} right>
-						<div>
-							{this.props.user === undefined ? undefined : (
-								<UpcomingMealsCard mealsAttending={this.props.user.mealsAttending || []} />
-							)}
-						</div>
+					<Menu burgerButtonClassName={"right-pane"} right>
+						{this.props.user === undefined ? undefined : (
+							<UpcomingMealsCard mealsAttending={this.props.user.mealsAttending || []} />
+						)}
 					</Menu>
 				</div>
 			</div>
