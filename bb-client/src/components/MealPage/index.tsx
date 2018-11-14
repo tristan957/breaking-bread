@@ -4,6 +4,7 @@ import React from "react";
 import MediaQuery from "react-responsive";
 import Meal from "../../entities/Meal";
 import User from "../../entities/User";
+import "../resources/css/MealPage.css";
 import MealArticle from "./Center/MealArticle";
 import GuestListCard from "./Right/GuestListCard";
 import HostCard from "./Right/HostCard";
@@ -137,13 +138,12 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 
 				<MediaQuery query="(min-width: 950px)">
 					<div>
-						<div id="Left"></div>
-						<div id="Center">
+						<div id="Article">
 							<MealArticle
 								meal={this.state.meal}
 							/>
 						</div>
-						<div id="Right">
+						<div id="ArticleRight">
 							<HostCard
 								id={this.state.host.id as number}
 								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}

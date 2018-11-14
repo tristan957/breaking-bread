@@ -15,6 +15,27 @@ interface IHostCardProps {
 }
 
 export default class HostCard extends React.Component<IHostCardProps> {
+	private renderTopics(): JSX.Element | undefined {
+		if (this.props.topics.length === 0) {
+			return undefined;
+		}
+
+		return (
+			<div>
+				<div>Favorite Topics:</div>
+				<ul className="list">
+					{this.props.topics.map((topic, i) => {
+						return (
+							<li className="topic" key={i}>
+								<TopicCard id={topic.id as number} name={topic.name as string} />
+							</li>
+						);
+					})}
+				</ul>
+			</div>
+		);
+	}
+
 	public render(): JSX.Element {
 		// TODO: Need host card specific css
 		// TODO: Link to user page
@@ -26,22 +47,7 @@ export default class HostCard extends React.Component<IHostCardProps> {
 					<div id="username" className="profile"><h6><b>{this.props.name}</b></h6></div>
 
 					{/* TODO: Seperate out re-usable components to their own folders */}
-					{
-						this.props.topics.length === 0 ? undefined : (
-							<div>
-								<div>Favorite Topics:</div>
-								<ul className="list">
-									{this.props.topics.map((topic, i) => {
-										return (
-											<li className="topic" key={i}>
-												<TopicCard id={topic.id as number} name={topic.name as string} />
-											</li>
-										);
-									})}
-								</ul>
-							</div>
-						)
-					}
+					{this.renderTopics()}
 					{
 						this.props.about === undefined ? undefined : (
 							<div id="about" className="profile">

@@ -13,26 +13,27 @@ export default class MealArticle extends React.Component<IMealArticleProps> {
 		return (
 			// TODO: Edit link to editMealPage if current user is the meal host
 			<div className="card">
-				<div id="meal-article-header">
-					<img src={this.props.meal.imagePath || defaultImagePic} />
-					<h3>{this.props.meal.title}</h3>
-					<h5>
-						{this.props.meal.location} - {this.props.meal.price === undefined ? `Free!` : `$${this.props.meal.price} per person`}
-					</h5>
-					{
-						this.props.meal.date === undefined ? undefined : (
-							<h6>
-								{this.props.meal.date.toLocaleDateString()} at {this.props.meal.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-							</h6>
-						)
-					}
-					<h6>{this.props.meal.description}</h6>
-				</div>
-				<hr className="seperator" />
-				<div id="recipe-section">
-					<RecipeListSection recipes={this.props.meal.recipes || []} />
-				</div>
-				<div id="footer">
+				<div>
+					<div id="meal-article-header">
+						<img src={this.props.meal.imagePath || defaultImagePic} className="bg" />
+						<h3>{this.props.meal.title}</h3>
+						<h5>
+							{this.props.meal.location} - {this.props.meal.price === undefined ? `Free!` : `$${this.props.meal.price} per person`}
+						</h5>
+						{
+							this.props.meal.date === undefined ? undefined : (
+								<h6>
+									{this.props.meal.date.toLocaleDateString()} at {this.props.meal.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+								</h6>
+							)
+						}
+						<h6>{this.props.meal.description}</h6>
+					</div>
+					<hr className="seperator" />
+					<div id="recipe-section">
+						<RecipeListSection recipes={this.props.meal.recipes || []} />
+					</div>
+					<div id="footer"></div>
 				</div>
 			</div>
 		);

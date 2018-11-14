@@ -62,7 +62,7 @@ export default class Feed extends React.Component<{}, IFeedState> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<h3>Feed</h3>
+				<h2>Feed</h2>
 				<ul>
 					{
 						this.state.loadedMeals.map((meal, i) => {

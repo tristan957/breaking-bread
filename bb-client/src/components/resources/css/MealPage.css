@@ -1,0 +1,25 @@
+#Article {
+	width: 74%;
+    height: 100%;
+    float: left;
+	border-collapse: collapse;
+	margin-top: 2em;
+	padding-left: 2.6em;	
+}
+
+#ArticleRight {
+	width: 26%;
+	height: 100%;
+	position: relative;
+	float: left;
+	border-collapse: collapse;
+	padding-left: 1px;
+	margin-top: 2em;
+	padding-right: 1.1em;
+}
+
+.bg
+{
+  width: 100%;
+  z-index: 0;
+}
