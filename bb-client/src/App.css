@@ -25,7 +25,7 @@
 #Top {
 	position: fixed;
   width: 100%;
-	z-index: 1111;
+	z-index: 999;
 }
 
 @keyframes App-logo-spin {
