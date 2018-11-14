@@ -22,10 +22,24 @@
   color: #61dafb;
 }
 
-#Top {
-	position: fixed;
+#page-content {
   width: 100%;
-	z-index: 1111;
+  height: 100%;
+  margin-top: 43px;
+  overflow: auto;
+}
+
+#content-container {
+  max-width: 1250px;
+  margin: auto;
+  margin-top: 2em;
+}
+
+#Top {
+  position: fixed;
+  top: 0;
+  width: 100%;
+	z-index: 1100;
 }
 
 @keyframes App-logo-spin {

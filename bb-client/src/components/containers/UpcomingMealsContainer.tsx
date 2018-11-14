@@ -1,13 +1,13 @@
 import React from "react";
-import Meal from "../../../entities/Meal";
+import Meal from "../../entities/Meal";
 import "../../resources/css/UpcomingMealsCard.css";
 import UpcomingMeal from "./UpcomingMeal";
 
-interface IUpcomingMealsProps {
+interface IUpcomingMealsContainerProps {
 	mealsAttending: Partial<Meal>[];
 }
 
-export default class UpcomingMealsCard extends React.Component<IUpcomingMealsProps> {
+export default class UpcomingMealsContainer extends React.Component<IUpcomingMealsContainerProps> {
 	private renderUpcoming(): JSX.Element {
 		if (this.props.mealsAttending.length > 0) {
 			this.props.mealsAttending.sort((a: Partial<Meal>, b: Partial<Meal>) => {
@@ -45,7 +45,7 @@ export default class UpcomingMealsCard extends React.Component<IUpcomingMealsPro
 
 	public render(): JSX.Element {
 		return (
-			<div className="upcomingMealCard">
+			<div className="card">
 				<h4 id="upcomingMealHeader">My upcoming meals</h4>
 				<hr className="seperator" />
 				{this.renderUpcoming()}

@@ -26,7 +26,8 @@
 }
 
 ul {
-    margin-left: -40px;
+    /* margin-left: -40px; */
+    padding: 0px;
     list-style-type: none;
 }
 

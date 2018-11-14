@@ -2,10 +2,18 @@
 	border: 1px solid black;
 }
 
+.whitespace {
+	flex-grow: 4;
+}
+
 #mobileCenter {
     margin: 0 auto;
     padding: 1em 1em 1em 1em;
     width: 100%;
+}
+
+#dashboard {
+	display: flex;
 }
 
 #TopPlaceHolder {
@@ -14,33 +22,27 @@
 }
 
 #Left {
-    width: 24%;
-    position: relative;
+    width: 300px;
     height: 100%;
-    float: left;
-    border-collapse: collapse;
-    margin-top: 2em;
-    padding-left: 1em;
+	padding-left: 1em;
+	flex-grow: 0;
+	flex-shrink: 0;
 }
 
 #Center {
-    width: 52%;
     height: 100%;
-    float: left;
-	border-collapse: collapse;
-	margin-top: 2em;
-	padding: 0px 8px 0px 8px;
+	margin-left: 40px;
+	margin-right: 40px;
+	flex-grow: 2;
 }
 
 #Right {
-	width: 24%;
+	width: 300px;
 	height: 100%;
-	position: relative;
-	float: left;
-	border-collapse: collapse;
 	padding-left: 25px;
-	margin-top: 2em;
 	padding-right: 1.4em;
+	flex-grow: 0;
+	flex-shrink: 0;
 }
 
 #HostImg {

@@ -1,9 +1,9 @@
 import React from "react";
 import { Route } from "react-router";
 import "./App.css";
-import Dashboard from "./components/Dashboard";
-import MealPage from "./components/MealPage";
-import NavigationBar from "./components/NavigationBar";
+import Dashboard from "./components/DashboardPage/Da";
+import MealPage from "./components/MealPage/MealPage";
+import NavigationBar from "./components/NavigationBar/NavigationBar";
 import User from "./entities/User";
 
 interface IAppState {
@@ -82,14 +82,17 @@ export default class App extends React.Component<{}, IAppState> {
 				<div id="Top">
 					<NavigationBar />
 				</div>
-				<div id="TopPlaceHolder"></div>
-				<Route exact path="/" render={() => <Dashboard user={this.state.user} />} />
-				<Route exact path="/m/:mealID" component={MealPage} />
-				{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} />
-				<Route exact path="/p/:userID" component={ProfilePage} />
-				<Route exact path="/p/:userID/e/" component={ProfileEditPage} />
-				<Route exact path="/r/:recipeID" component={RecipePage} />
-				<Route exact path="/r/:recipeID/e/" component={RecipeEditPage} /> */}
+				<div id="page-content">
+					<div id="content-container">
+						<Route exact path="/" render={() => <Dashboard user={this.state.user} />} />
+						<Route exact path="/m/:mealID" component={MealPage} />
+						{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} />
+						<Route exact path="/p/:userID" component={ProfilePage} />
+						<Route exact path="/p/:userID/e/" component={ProfileEditPage} />
+						<Route exact path="/r/:recipeID" component={RecipePage} />
+						<Route exact path="/r/:recipeID/e/" component={RecipeEditPage} /> */}
+					</div>
+				</div>
 			</div >
 		);
 	}

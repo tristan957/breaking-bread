@@ -4,20 +4,20 @@ import { SingleDatePicker } from "react-dates";
 import "react-dates/initialize";
 import { Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
 import Rodal from "rodal";
-import Meal from "../../../entities/Meal";
-import User from "../../../entities/User";
-import AutoCompletionSearchBar from "../../AutoSuggestion";
-import "../../resources/css/Feed.css";
-import MealCard from "./MealCard";
+import Meal from "../../entities/Meal";
+import User from "../../entities/User";
+import AutoCompletionSearchBar from "../AutoSuggestion";
+import MealCard from "../cards/MealSummaryCard";
+import "../resources/css/Feed.css";
 
-interface IFeedState {
+interface IFeedContainerState {
 	loadedMeals: Partial<Meal>[];
 	createdAt: moment.Moment | null;
 	calendarFocused: boolean;
 	visible: boolean;
 }
 
-export default class Feed extends React.Component<{}, IFeedState> {
+export default class FeedContainer extends React.Component<{}, IFeedContainerState> {
 	constructor(props: Readonly<{}>) {
 		super(props);
 

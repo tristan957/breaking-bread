@@ -1,9 +1,9 @@
 import React from "react";
-import Tag from "../../../entities/Tag";
-import Topic from "../../../entities/Topic";
+import Tag from "../../entities/Tag";
+import Topic from "../../entities/Topic";
 import "../../resources/css/FollowedTagsCard.css";
-import TagCard from "./TagCard";
-import TopicCard from "./TopicCard";
+import TagCard from "../cards/TagCard";
+import TopicCard from "../cards/TopicCard";
 
 interface IFollowedTagsCardProps {
 	tags: Partial<Tag>[];
