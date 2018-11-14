@@ -61,32 +61,32 @@ import theme from "../resources/css/AutoSuggestionSearchBar.css";
 
 const languages: Tag[] = [
   {
-    name: "indian",
-    id: 1,
+	name: "indian",
+	id: 1,
   },
   {
-    name: "polygamy",
-    id: 2,
+	name: "polygamy",
+	id: 2,
   },
   {
-    name: "puke",
-    id: 12,
+	name: "puke",
+	id: 12,
   },
   {
-    name: "cannibol",
-    id: 232,
+	name: "cannibol",
+	id: 232,
   },
   {
-    name: "cat",
-    id: 666,
+	name: "cat",
+	id: 666,
   },
   {
-    name: "vegan",
-    id: 129,
+	name: "vegan",
+	id: 129,
   },
   {
-    name: "veget",
-    id: 2329,
+	name: "veget",
+	id: 2329,
   },
 ];
 
@@ -95,7 +95,7 @@ const getSuggestions = (value: String) => {
   const inputLength = inputValue.length;
 
   return inputLength === 0 ? [] : languages.filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue
+	lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
 };
 
@@ -107,7 +107,7 @@ const getSuggestionValue = (suggestion: Tag) => suggestion.name;
 // Use your imagination to render suggestions.
 const renderSuggestion = (suggestion: Tag) => (
   <div>
-    #{suggestion.name}
+	#{suggestion.name}
   </div>
 );
 
@@ -118,58 +118,59 @@ interface IAppState {
 
 export default class AutoCompletionSearchBar extends React.Component<{}, IAppState> {
   constructor(props: Readonly<{}>) {
-    super(props);
+	super(props);
 
-    // Autosuggest is a controlled component.
-    // This means that you need to provide an input value
-    // and an onChange handler that updates this value (see below).
-    // Suggestions also need to be provided to the Autosuggest,
-    // and they are initially empty because the Autosuggest is closed.
-    this.state = {
-      value: "",
-      suggestions: [],
-    };
+	// Autosuggest is a controlled component.
+	// This means that you need to provide an input value
+	// and an onChange handler that updates this value (see below).
+	// Suggestions also need to be provided to the Autosuggest,
+	// and they are initially empty because the Autosuggest is closed.
+	this.state = {
+		value: "",
+		suggestions: [],
+	};
   }
 
   // tslint:disable-next-line: no-any
   public onChange(event: React.FormEvent<any>, { newValue, method }: Autosuggest.ChangeEvent): void {
-    this.setState({ value: newValue });
+	this.setState({ value: newValue });
   }
 
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
   // tslint:disable-next-line: no-any
   public onSuggestionsFetchRequested({ value }: any): void {
-    this.setState({
-      suggestions: getSuggestions(value),
-    });
+	this.setState({
+		suggestions: getSuggestions(value),
+	});
   }
 
   // Autosuggest will call this function every time you need to clear suggestions.
   public onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: [],
-    });
+	this.setState({
+		suggestions: [],
+	});
   }
 
   public render(): JSX.Element {
-    const { value, suggestions }: IAppState = this.state;
+	const { value, suggestions }: IAppState = this.state;
 
-    return (
-      <Autosuggest
-        theme={theme}
-        // focusInputOnSuggestionClick={!isMobile}
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={{
-          placeholder: `search tag`,
-          value,
-          onChange: (e, changeEvent) => this.onChange(e, changeEvent),
-        }}
-      />
-    );
+	return (
+		<Autosuggest
+		id="asdfafsd"
+		theme={theme}
+		// focusInputOnSuggestionClick={!isMobile}
+		suggestions={suggestions}
+		onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+		onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+		getSuggestionValue={getSuggestionValue}
+		renderSuggestion={renderSuggestion}
+		inputProps={{
+			placeholder: `search tag`,
+			value,
+			onChange: (e, changeEvent) => this.onChange(e, changeEvent),
+		}}
+		/>
+	);
   }
 }

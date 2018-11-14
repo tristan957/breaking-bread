@@ -1,22 +1,23 @@
 import React from "react";
 import Tag from "../../../entities/Tag";
 import Topic from "../../../entities/Topic";
-import "../../resources/css/FollowedTagsTopics.css";
+import "../../resources/css/FollowedTagsCard.css";
 import TagCard from "./TagCard";
 import TopicCard from "./TopicCard";
 
-interface IFollowedTagsTopicsProps {
+interface IFollowedTagsCardProps {
 	tags: Partial<Tag>[];
 	topics: Partial<Topic>[];
 }
 
-export default class FollowedTagsTopics extends React.Component<IFollowedTagsTopicsProps> {
+export default class FollowedTagsCard extends React.Component<IFollowedTagsCardProps> {
 	public render(): JSX.Element {
 		return (
-			<div id="followed-tags-topics-card" className="followed-tags-topics">
+			<div id="followed-tags-card" className="followed-tags-card-class">
 				<div className="card">
 					<div className="tagsHeader">Tags</div>
-					<ul className="list">
+					<hr className="seperator" />
+					<ul className="followed-tags-card-list">
 						{this.props.tags.map((tag, i) => {
 							return (
 								<li className="tags" key={i}>
@@ -29,7 +30,8 @@ export default class FollowedTagsTopics extends React.Component<IFollowedTagsTop
 
 				<div className="card">
 					<div className="tagsHeader">Topics</div>
-					<ul className="list">
+					<hr className="seperator" />
+					<ul className="followed-tags-card-list">
 						{this.props.topics.map((topic, i) => {
 							return (
 								<li className="tags" key={i}>
