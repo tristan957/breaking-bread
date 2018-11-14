@@ -16,10 +16,10 @@ export interface IUpcomingMealProps {
 export default class UpcomingMeal extends React.Component<IUpcomingMealProps> {
 	public render(): JSX.Element {
 		return (
-			<Link to={`/m/${this.props.id}`}>
-				<div>
-					<div id="UpcomingMealHeader">
-						<h5>{this.props.title}</h5><h6> - {`${this.props.guests.length}/${this.props.maxGuests} 👨`}</h6>
+			<Link to={`/m/${this.props.id}`} className="no-link">
+				<div className="upcomingMeal no-link">
+					<div id="upcomingMealCardHeader">
+						<h5>{this.props.title}</h5>
 					</div>
 					<div>
 						<h6>

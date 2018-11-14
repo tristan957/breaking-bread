@@ -20,7 +20,7 @@ export default class HostCard extends React.Component<IHostCardProps> {
 		// TODO: Link to user page
 		return (
 			<Link to={`/p/${this.props.id}`}>
-				<div id="profile-card" className="profile card">
+				<div id="profile-card" className="profile card no-link">
 					<h3>Host:</h3>
 					<img id="picture" className="profile" src={this.props.imagePath === undefined ? defaultUserPic : this.props.imagePath} alt="Profile Picture" />
 					<div id="username" className="profile"><h6><b>{this.props.name}</b></h6></div>

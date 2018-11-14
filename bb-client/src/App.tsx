@@ -37,7 +37,7 @@ export default class App extends React.Component<{}, IAppState> {
 				mealsAttending: [
 					{
 						id: 1,
-						date: new Date(),
+						date: new Date("December 21, 2018 18:30:00"),
 						location: "College Station, TX",
 						title: "Cuban delight",
 						guests: [
@@ -57,6 +57,19 @@ export default class App extends React.Component<{}, IAppState> {
 						],
 						price: 40,
 						maxGuests: 3,
+					},
+					{
+						id: 2,
+						host: {
+							id: 5,
+							firstName: "Jonathan",
+							lastName: "Wang",
+						},
+						date: new Date("December 17, 2018 19:24:00"),
+						location: "College Station, TX",
+						title: "Mexican Night Out",
+						guests: [],
+						maxGuests: 4,
 					},
 				],
 			},

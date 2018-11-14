@@ -23,7 +23,7 @@ const loadedMeals: Partial<Meal>[] = [
 				},
 			],
 		},
-		date: new Date(),
+		date: new Date("December 21, 2018 18:30:00"),
 		description: "I'll be cooking cuban food over a wood grill in my backyard. These are family recipes that never fail to satisfy.",
 		location: "College Station, TX",
 		title: "Cuban delight",
@@ -44,10 +44,12 @@ const loadedMeals: Partial<Meal>[] = [
 		],
 		recipes: [
 			{
+				id: 1,
 				name: "Arroz con pollo",
 				description: "Traditional chicken and rice",
 			},
 			{
+				id: 2,
 				name: "Ropa vieja",
 				description: "A classic and a national dish of Cuba",
 				timesFavorited: 10,
@@ -63,7 +65,7 @@ const loadedMeals: Partial<Meal>[] = [
 			firstName: "Jonathan",
 			lastName: "Wang",
 		},
-		date: new Date(),
+		date: new Date("December 17, 2018 19:24:00"),
 		location: "College Station, TX",
 		title: "Mexican Night Out",
 		guests: [],

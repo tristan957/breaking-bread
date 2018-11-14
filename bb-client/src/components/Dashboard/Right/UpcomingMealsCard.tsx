@@ -8,13 +8,20 @@ interface IUpcomingMealsProps {
 }
 
 export default class UpcomingMealsCard extends React.Component<IUpcomingMealsProps> {
-	public render(): JSX.Element {
-		return (
-			<div className="upcomingMealCard">
+	private renderUpcoming(): JSX.Element {
+		if (this.props.mealsAttending.length > 0) {
+			this.props.mealsAttending.sort((a: Partial<Meal>, b: Partial<Meal>) => {
+				if (a.date === undefined || b.date === undefined) {
+					return 0;
+				}
+				return a.date.valueOf() - b.date.valueOf();
+			});
+
+			return (
 				<ul>
 					{this.props.mealsAttending.map((meal, i) => {
 						return (
-							<li key={i}>
+							<li key={i} className="upcomingMealListItem">
 								<UpcomingMeal
 									id={meal.id as number}
 									title={meal.title as string} // TODO: fillin with actual
@@ -28,6 +35,20 @@ export default class UpcomingMealsCard extends React.Component<IUpcomingMealsPro
 						);
 					})}
 				</ul>
+			);
+		}
+
+		return (
+			<div className="noDice">🤷 Nada!</div>
+		);
+	}
+
+	public render(): JSX.Element {
+		return (
+			<div className="upcomingMealCard">
+				<h4 id="upcomingMealHeader">My upcoming meals</h4>
+				<hr className="seperator" />
+				{this.renderUpcoming()}
 			</div >
 		);
 	}

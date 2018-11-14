@@ -29,7 +29,7 @@ export default class MealCard extends React.Component<IMealCardProps> {
 						<div className="meal-card-title">{this.props.title}</div>
 						<div className="meal-card-location">{this.props.location}</div>
 						<Link to={`/p/${this.props.host.id}`}>
-							<div className="host">
+							<div className="host no-link">
 								<div>
 									<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="HostImg" /> {`${this.props.host.firstName} ${this.props.host.lastName}`}
 								</div>
@@ -40,9 +40,7 @@ export default class MealCard extends React.Component<IMealCardProps> {
 							<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.maxGuests} 👨`}</div>
 							<div>
 								{
-									this.props.price === undefined ? `Free!` : (
-										`$${this.props.price} per person`
-									)
+									this.props.price === undefined ? `Free!` : `$${this.props.price} per person`
 								}
 							</div>
 							{`${this.props.date.toLocaleDateString()} at ${this.props.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
