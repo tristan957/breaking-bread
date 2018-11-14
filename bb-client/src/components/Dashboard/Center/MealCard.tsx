@@ -24,7 +24,7 @@ export default class MealCard extends React.Component<IMealCardProps> {
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">
 				<div className="no-link">
-					<img src={this.props.imagePath || defaultImagePic} />
+					<img src={this.props.imagePath || defaultImagePic} className="bg" />
 					<div className="meal-card-header">
 						<div className="meal-card-title">{this.props.title}</div>
 						<div className="meal-card-location">{this.props.location}</div>

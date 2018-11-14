@@ -4,6 +4,7 @@
     float: left;
 	border-collapse: collapse;
 	margin-top: 2em;
+	margin-bottom: 2em;
 	padding-left: 2.6em;	
 }
 
@@ -18,8 +19,23 @@
 	padding-right: 1.1em;
 }
 
-.bg
-{
+#GuestListHeader h3,
+#GuestListHeader h5 {
+	display: inline;
+}
+
+#mobileArticle {
+    margin: 0 auto;
+    padding: 1em 0em 1em 1em;
+    width: 100%;
+}
+
+.articleMain {
+	margin-bottom: 15px;
+	padding: 15px;
+}
+
+.bg {
   width: 100%;
   z-index: 0;
 }

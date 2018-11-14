@@ -117,7 +117,7 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 			<div>
 				<MediaQuery query="(max-width: 949px)">
 					<div>
-						<div id="mobileCenter">
+						<div id="mobileArticle">
 							<MealArticle
 								meal={this.state.meal}
 							/>

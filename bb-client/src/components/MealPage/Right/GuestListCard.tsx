@@ -10,9 +10,9 @@ interface IGuestListCardProps {
 export default class GuestListCard extends React.Component<IGuestListCardProps> {
 	public render(): JSX.Element {
 		return (
-			<div className="card">
+			<div className="card cardSubstance">
 				<div id="GuestListHeader">
-					<h3>Guests</h3><h6> - {`${this.props.guests.length}/${this.props.maxGuests} 👨`}</h6>
+					<h3>Guests</h3><h5> - {`${this.props.guests.length}/${this.props.maxGuests} 👨`}</h5>
 				</div>
 				<ul className="list">
 					{this.renderSignUp()}
