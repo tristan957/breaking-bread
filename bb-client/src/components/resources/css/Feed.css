@@ -1,4 +1,5 @@
 #filter {
+    float: right;
     position: -webkit-sticky;
     position: sticky;
     top: 10px;
@@ -11,6 +12,7 @@
 }
 
 .feedCard {
+    width: 100%;
 	margin-bottom: 15px;
 	padding: 15px;
     position: relative;
