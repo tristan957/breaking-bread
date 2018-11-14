@@ -1,7 +1,7 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
 import { Link } from "react-router-dom";
-import { default as defaultUserPic } from "../../resources/images/default_user_pic.png";
+import { default as defaultUserPic } from "../resources/images/default_user_pic.png";
 
 interface IGuestCardProps {
 	id: number;

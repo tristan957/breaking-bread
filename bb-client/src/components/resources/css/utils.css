@@ -53,6 +53,19 @@
 	padding: 0px 1em 0em 1em;
 }
 
+.card {
+    padding: 1em;
+    margin-bottom: 1.2em;
+    position: relative;
+    overflow: hidden;
+    background: white;
+    display: block;
+    color: #0a0a0a;
+    border-radius: 3px;
+    border: 1px solid #d6d6d6;
+    box-shadow: 3px 3px 0px #bababa;
+}
+
 #ProfileHeaderImg {
 	max-height: 220px;
 	max-height: 220px;

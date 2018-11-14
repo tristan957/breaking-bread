@@ -2,11 +2,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import User from "../../entities/User";
-import "../../resources/css/utils.css";
-import { default as defaultImagePic } from "../../resources/images/default_meal_pic.jpg";
-import { default as defaultUserPic } from "../../resources/images/default_user_pic.png";
+import "../resources/css/utils.css";
+import { default as defaultImagePic } from "../resources/images/default_meal_pic.jpg";
+import { default as defaultUserPic } from "../resources/images/default_user_pic.png";
 
-export interface IMealCardProps {
+export interface IMealSummaryCardProps {
 	id: number;
 	location: string;
 	imagePath?: string;
@@ -19,7 +19,7 @@ export interface IMealCardProps {
 	price?: number;
 }
 
-export default class MealCard extends React.Component<IMealCardProps> {
+export default class MealSummaryCard extends React.Component<IMealSummaryCardProps> {
 	public render(): JSX.Element {
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">

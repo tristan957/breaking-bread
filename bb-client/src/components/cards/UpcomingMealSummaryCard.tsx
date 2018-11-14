@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import User from "../../entities/User";
-import "../../resources/css/UpcomingMealCard.css";
+import "../resources/css/UpcomingMealsCard.css";
 
-interface IUpcomingMealCardProps {
+interface IUpcomingMealSummaryCardPropss {
 	id: number;
 	title: string;
 	price: number;
@@ -13,7 +13,7 @@ interface IUpcomingMealCardProps {
 	location: string;
 }
 
-export default class UpcomingsMealCard extends React.Component<IUpcomingMealCardProps> {
+export default class UpcomingSummaryMealCards extends React.Component<IUpcomingMealSummaryCardPropss> {
 	public render(): JSX.Element {
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">

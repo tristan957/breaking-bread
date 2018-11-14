@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-interface IRecipeCardProps {
+interface IRecipeSummaryCardProps {
 	id: number;
 	name: string;
 	description: string;
@@ -10,7 +10,7 @@ interface IRecipeCardProps {
 	timesFavorited: number;
 }
 
-export default class GuestCard extends React.Component<IRecipeCardProps> {
+export default class RecipeSummaryCard extends React.Component<IRecipeSummaryCardProps> {
 	public render(): JSX.Element {
 		return (
 			// TODO: Click to link to recipe

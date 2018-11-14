@@ -1,7 +1,7 @@
 import React from "react";
 import Meal from "../../entities/Meal";
-import "../../resources/css/UpcomingMealsCard.css";
-import UpcomingMeal from "./UpcomingMeal";
+import UpcomingMealSummaryCard from "../cards/UpcomingMealSummaryCard";
+import "../resources/css/UpcomingMealsCard.css";
 
 interface IUpcomingMealsContainerProps {
 	mealsAttending: Partial<Meal>[];
@@ -22,7 +22,7 @@ export default class UpcomingMealsContainer extends React.Component<IUpcomingMea
 					{this.props.mealsAttending.map((meal, i) => {
 						return (
 							<li key={i} className="upcomingMealListItem">
-								<UpcomingMeal
+								<UpcomingMealSummaryCard
 									id={meal.id as number}
 									title={meal.title as string} // TODO: fillin with actual
 									price={meal.price as number}

@@ -1,23 +1,20 @@
 import React from "react";
 import Tag from "../../entities/Tag";
-import Topic from "../../entities/Topic";
-import "../../resources/css/FollowedTagsCard.css";
 import TagCard from "../cards/TagCard";
-import TopicCard from "../cards/TopicCard";
+import "../resources/css/FollowedTagsCard.css";
 
-interface IFollowedTagsCardProps {
+interface IFollowedTagsContainerProps {
 	tags: Partial<Tag>[];
-	topics: Partial<Topic>[];
 }
 
-export default class FollowedTagsCard extends React.Component<IFollowedTagsCardProps> {
+export default class FollowedTagsContainer extends React.Component<IFollowedTagsContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div id="followed-tags-card" className="followed-tags-card-class">
 				<div className="card">
-					<div className="tagsHeader">Tags</div>
+					<div className="tags-topics-list-header">Tags</div>
 					<hr className="seperator" />
-					<ul className="followed-tags-card-list">
+					<ul className="followed-tags-topics-list">
 						{this.props.tags.map((tag, i) => {
 							return (
 								<li className="tags" key={i}>
@@ -27,29 +24,7 @@ export default class FollowedTagsCard extends React.Component<IFollowedTagsCardP
 						})}
 					</ul>
 				</div>
-
-				<div className="card">
-					<div className="tagsHeader">Topics</div>
-					<hr className="seperator" />
-					<ul className="followed-tags-card-list">
-						{this.props.topics.map((topic, i) => {
-							return (
-								<li className="tags" key={i}>
-									<TopicCard id={topic.id as number} name={topic.name as string}></TopicCard>
-								</li>
-							);
-						})}
-					</ul>
-				</div>
 			</div>
 		);
 	}
-
-	// public toggleTags(toggleTags: Readonly<string[]>): void {
-	// 	this.setState({
-	// 		topics: this.state.tags.concat(toggleTags).filter((tag, index, arr) => {
-	// 			return arr.indexOf(tag) === index;
-	// 		}),
-	// 	});
-	// }
 }

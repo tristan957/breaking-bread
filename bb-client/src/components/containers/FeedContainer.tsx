@@ -7,7 +7,7 @@ import Rodal from "rodal";
 import Meal from "../../entities/Meal";
 import User from "../../entities/User";
 import AutoCompletionSearchBar from "../AutoSuggestion";
-import MealCard from "../cards/MealSummaryCard";
+import MealSummaryCard from "../cards/MealSummaryCard";
 import "../resources/css/Feed.css";
 
 interface IFeedContainerState {
@@ -150,7 +150,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 						this.state.loadedMeals.map((meal, i) => {
 							return (
 								<li key={i} className="feedCard">
-									<MealCard
+									<MealSummaryCard
 										id={meal.id as number}  // TODO: Reconsider all casts considering this is a partial meal
 										location={meal.location || ""}
 										host={meal.host as User}

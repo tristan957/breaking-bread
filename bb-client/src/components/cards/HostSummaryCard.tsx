@@ -2,8 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Topic from "../../entities/Topic";
-import "../../resources/css/ProfileCard.css";
-import { default as defaultUserPic } from "../../resources/images/default_user_pic.png";
+import "../resources/css/ProfileCard.css";
+import { default as defaultUserPic } from "../resources/images/default_user_pic.png";
 import TopicCard from "./TopicCard";
 
 interface IHostSummaryCardProps {

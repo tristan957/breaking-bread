@@ -2,12 +2,13 @@
 import React from "react";
 import MediaQuery from "react-responsive";
 import User from "../../entities/User";
-import MobileSidebar from "../MobileSidebar/MobileSidebar";
+import ProfileSummaryCard from "../cards/ProfileSummaryCard";
+import FeedContainer from "../containers/FeedContainer";
+import FollowedTagsContainer from "../containers/FollowedTagsContainer";
+import FollowedTopicsContainer from "../containers/FollowedTopicsContainer";
+import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
+import MobileSidebar from "../MobileSidebar";
 import "../resources/css/Dashboard.css";
-import Feed from "./FeedContainer";
-import FollowedTagsCard from "./FollowedTagsContainer";
-import ProfileCard from "./ProfileCard";
-import UpcomingMealsCard from "./UpcomingMealsContainer";
 
 interface IDashboardPageProps {
 	user?: Partial<User>;
@@ -23,7 +24,7 @@ export default class DashboardPage extends React.Component<IDashboardPageProps> 
 					</div>
 					<div id="TopPlaceHolder"></div>
 					<div id="mobileCenter">
-						<Feed />
+						<FeedContainer />
 					</div>
 				</MediaQuery>
 
@@ -34,19 +35,20 @@ export default class DashboardPage extends React.Component<IDashboardPageProps> 
 							{
 								this.props.user === undefined ? undefined : (
 									<div>
-										<ProfileCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
-										<FollowedTagsCard tags={this.props.user.followedTags || []} topics={this.props.user.whitelist || []} />
+										<ProfileSummaryCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+										<FollowedTagsContainer tags={this.props.user.followedTags || []} />
+										<FollowedTopicsContainer topics={this.props.user.whitelist || []} />
 									</div>
 								)
 							}
 						</div>
 						<div id="Center">
-							<Feed />
+							<FeedContainer />
 						</div>
 						<div id="Right">
 							{
 								this.props.user === undefined ? undefined : (
-									<UpcomingMealsCard mealsAttending={this.props.user.mealsAttending || []} />
+									<UpcomingMealsContainer mealsAttending={this.props.user.mealsAttending || []} />
 								)
 							}
 						</div>

@@ -1,13 +1,13 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
-import Recipe from "../../../entities/Recipe";
-import RecipeCard from "./RecipeCard";
+import Recipe from "../../entities/Recipe";
+import RecipeSummaryCard from "../cards/RecipeSummaryCard";
 
-interface IRecipeSectionProps {
+interface IRecipesContainerProps {
 	recipes: Partial<Recipe>[];
 }
 
-export default class RecipeListSection extends React.Component<IRecipeSectionProps> {
+export default class RecipesContainer extends React.Component<IRecipesContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
@@ -16,7 +16,7 @@ export default class RecipeListSection extends React.Component<IRecipeSectionPro
 					{this.props.recipes.map((recipe, i) => {
 						return (
 							<li className="recipe" key={i}>
-								<RecipeCard
+								<RecipeSummaryCard
 									id={recipe.id as number}
 									name={recipe.name as string}
 									description={recipe.description as string}

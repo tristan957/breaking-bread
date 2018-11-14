@@ -1,13 +1,13 @@
 import React from "react";
-import User from "../../../entities/User";
-import GuestCard from "./GuestCard";
+import User from "../../entities/User";
+import GuestCard from "../cards/GuestCard";
 
-interface IGuestListCardProps {
+interface IGuestsContainerProps {
 	guests: Partial<User>[];
 	maxGuests: number;
 }
 
-export default class GuestListCard extends React.Component<IGuestListCardProps> {
+export default class GuestsContainer extends React.Component<IGuestsContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div className="card cardSubstance">

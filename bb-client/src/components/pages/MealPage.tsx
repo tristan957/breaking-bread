@@ -4,10 +4,10 @@ import React from "react";
 import MediaQuery from "react-responsive";
 import Meal from "../../entities/Meal";
 import User from "../../entities/User";
+import HostSummaryCard from "../cards/HostSummaryCard";
+import MealDescriptionCard from "../cards/MealDescriptionCard";
+import GuestsContainer from "../containers/GuestsContainer";
 import "../resources/css/MealPage.css";
-import MealArticle from "./Center/MealArticle";
-import GuestListCard from "./Right/GuestListCard";
-import HostCard from "./Right/HostCard";
 
 const loadedMeals: Partial<Meal>[] = [
 	{
@@ -118,17 +118,17 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 				<MediaQuery query="(max-width: 949px)">
 					<div>
 						<div id="mobileArticle">
-							<MealArticle
+							<MealDescriptionCard
 								meal={this.state.meal}
 							/>
-							<HostCard
+							<HostSummaryCard
 								id={this.state.host.id as number}
 								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 								about={this.state.host.about as string}
 								imagePath={this.state.host.imagePath}
 								topics={this.state.host.whitelist || []}
 							/>
-							<GuestListCard
+							<GuestsContainer
 								guests={this.state.guests}
 								maxGuests={this.state.meal.maxGuests as number}
 							/>
@@ -139,19 +139,19 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 				<MediaQuery query="(min-width: 950px)">
 					<div>
 						<div id="Article">
-							<MealArticle
+							<MealDescriptionCard
 								meal={this.state.meal}
 							/>
 						</div>
 						<div id="ArticleRight">
-							<HostCard
+							<HostSummaryCard
 								id={this.state.host.id as number}
 								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 								about={this.state.host.about as string}
 								imagePath={this.state.host.imagePath}
 								topics={this.state.host.whitelist || []}
 							/>
-							<GuestListCard
+							<GuestsContainer
 								guests={this.state.guests}
 								maxGuests={this.state.meal.maxGuests as number}
 							/>
