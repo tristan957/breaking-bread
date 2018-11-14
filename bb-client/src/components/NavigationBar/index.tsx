@@ -2,7 +2,7 @@
 
 import moment from "moment";
 import React from "react";
-import { SingleDatePicker } from "react-dates";
+import { DateRangePicker } from "react-dates";
 import "react-dates/initialize";
 import { Link } from "react-router-dom";
 import { Button, Col, Form, FormGroup, Input, Label, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
@@ -12,9 +12,11 @@ import "../resources/css/NavigationBar.css";
 import { default as logo } from "../resources/images/logo_icon.png";
 
 interface IAppState {
-	createdAt: moment.Moment | null;
-	calendarFocused: boolean;
+	startDate: moment.Moment | null;
+	endDate: moment.Moment | null;
+	focusedInput: "startDate" | "endDate" | null;
 	visible: boolean;
+	color: boolean;
 }
 
 export default class NavigationBar extends React.Component<{}, IAppState> {
@@ -24,37 +26,44 @@ export default class NavigationBar extends React.Component<{}, IAppState> {
 		this.onDateChange = this.onDateChange.bind(this);
 		this.onFocusChange = this.onFocusChange.bind(this);
 		this.state = {
-			createdAt: moment(),
-			calendarFocused: false,
+			startDate: moment(),
+			endDate: moment(),
+			// tslint:disable-next-line:no-null-keyword
+			focusedInput: null,
 			visible: false,
+			color: false,
 		};
 	}
 
 	public showModal(): void {
 		this.setState({
 			visible: true,
+			color: !this.state.color,
 		});
 	}
 
 	public hideModal(): void {
 		this.setState({
 			visible: false,
+			color: !this.state.color,
 		});
 	}
 
-	public onDateChange(date: moment.Moment | null): void {
+	public onDateChange(arg: { startDate: moment.Moment | null; endDate: moment.Moment | null }): void {
 		this.setState({
-			createdAt: date,
+			startDate: arg.startDate,
+			endDate: arg.endDate,
 		});
 	}
 
-	public onFocusChange(): void {
+	public onFocusChange(focusedInput: "startDate" | "endDate" | null): void {
 		this.setState({
-			calendarFocused: !this.state.calendarFocused,
+			focusedInput,
 		});
 	}
 
 	public render(): JSX.Element {
+		const btncolor = this.state.color ? "inverse-btn" : "btn-secondary";
 		return (
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
@@ -66,7 +75,7 @@ export default class NavigationBar extends React.Component<{}, IAppState> {
 					<Nav className="ml-auto" navbar>
 						<NavItem>
 							{/* This button triggers our modal (Rodal) */}
-							<Button className="float-right" type="submit" onClick={this.showModal.bind(this)} id="login">Filters</Button>
+							<Button className={btncolor} type="submit" onClick={this.showModal.bind(this)} id="login">Filters</Button>
 						</NavItem>
 					</Nav>
 				</Navbar>
@@ -86,7 +95,6 @@ export default class NavigationBar extends React.Component<{}, IAppState> {
 								<Label for="guest" sm={2}>Guest</Label>
 								<Col sm={10}>
 									<Input type="select" name="guest" id="guest">
-										<option value="Guests" disabled>Guests</option>
 										<option>1</option>
 										<option>2</option>
 										<option>3</option>
@@ -99,19 +107,23 @@ export default class NavigationBar extends React.Component<{}, IAppState> {
 							<FormGroup row>
 								<Label for="date" sm={2}>Date</Label>
 								<Col sm={10}>
-									<SingleDatePicker
-										date={this.state.createdAt}
-										focused={this.state.calendarFocused}
-										onDateChange={this.onDateChange}
+									<DateRangePicker
+										startDateId={"sdid"}
+										endDateId={"edid"}
+										startDate={this.state.startDate}
+										endDate={this.state.endDate}
+										onDatesChange={this.onDateChange}
+										focusedInput={this.state.focusedInput}
 										onFocusChange={this.onFocusChange}
-										id={"datepicker"}
+										startDatePlaceholderText={"Start Date"}
+										endDatePlaceholderText={"End Date"}
 										small={true}
 										numberOfMonths={1}
 									/>
 								</Col>
 							</FormGroup>
 
-							<Button className="float-right"> Submit </Button>
+							<Button className="float-right submit-btn"> Submit </Button>
 						</Form>
 					</div>
 				</Rodal>

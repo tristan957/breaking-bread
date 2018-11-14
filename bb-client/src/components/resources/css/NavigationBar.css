@@ -10,20 +10,31 @@
 }
 
 .btn {
-	padding: .1rem 1.25rem;
-	margin: 0rem 0rem .6rem 0rem;
+	padding: .1em 1.25em;
+	margin: 0em 0em .6em 0em;
+}
+
+.submit-btn {
+	margin: 0;
 }
 
 .btn-secondary {
     background-color: #ce8650;
-    border-color: #ce8650;
+	border-color: #ce8650;
+}
+
+.inverse-btn {
+	background-color: white;
+	border-color: white;
+	color: #ce8650;
 }
 
 #guest {
 	border: 1px solid #ce8650;
+	width: 20%;
 }
 
-.SingleDatePickerInput {
+.DateRangePickerInput {
 	margin-top: .15rem;
 	border-radius: 5px;
 	border: 1px solid #ce8650;
@@ -43,6 +54,24 @@
 
 .DateInput_input__focused {
 	border-bottom: 2px solid #ce8650;
+}
+
+.CalendarDay__selected_span {
+	background: #ce8650;
+	border: 1px double black;
+}
+
+.CalendarDay__selected_span:hover {
+    background: white;
+	border: 1px double black;
+	color: black;
+}
+
+.CalendarDay__hovered_span,
+.CalendarDay__hovered_span:hover {
+	background: #ce8650;
+	border: 1px double black;
+	color: white;
 }
 
 .navbar {

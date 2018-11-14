@@ -2,17 +2,15 @@
     position: 'relative'
 }
 
-.input {
-    width: 240;
-    height: 30;
-    padding: '10px 20px';
-    fontFamily: 'Helvetica; sans-serif';
-    fontWeight: 300;
-    fontSize: 16;
-    border: '1px solid #ce8650';
-    borderTopLeftRadius: 4;
-    borderTopRightRadius: 4;
-    borderBottomLeftRadius: 4;
-    borderBottomRightRadius: 4;
+.react-autosuggest__input {
     border: 1px solid #ce8650;
+    border-radius: .25rem;
+    height: calc(2.25rem + 2px);
+    width: 100%;
+    text-indent: 5px;
+}
+
+::placeholder {
+    color: black;
+    opacity: .25;
 }
