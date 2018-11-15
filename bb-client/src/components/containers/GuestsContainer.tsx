@@ -1,6 +1,6 @@
 import React from "react";
 import User from "../../entities/User";
-import GuestCard from "../cards/GuestCard";
+import ProfileSummaryCard from "../cards/ProfileSummaryCard";
 
 interface IGuestsContainerProps {
 	guests: Partial<User>[];
@@ -21,7 +21,7 @@ export default class GuestsContainer extends React.Component<IGuestsContainerPro
 						return (
 							<div>
 								<li className="guest" key={i}>
-									<GuestCard
+									<ProfileSummaryCard
 										id={guest.id as number}
 										name={`${guest.firstName} ${guest.lastName}`}
 										imagePath={guest.imagePath}

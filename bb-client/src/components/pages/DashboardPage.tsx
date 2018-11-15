@@ -35,7 +35,7 @@ export default class DashboardPage extends React.Component<IDashboardPageProps> 
 							{
 								this.props.user === undefined ? undefined : (
 									<div>
-										<ProfileSummaryCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+										<ProfileSummaryCard id={this.props.user.id as number} name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
 										<FollowedTagsContainer tags={this.props.user.followedTags || []} />
 										<FollowedTopicsContainer topics={this.props.user.whitelist || []} />
 									</div>
