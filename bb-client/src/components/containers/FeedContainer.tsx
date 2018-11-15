@@ -97,7 +97,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 
 	public render(): JSX.Element {
 		return (
-			<div>
+			<div id="feed-container">
 				<span id="feedTitle">Feed</span>
 				<Button type="submit" onClick={this.showModal.bind(this)} id="filter">Filters</Button>
 
@@ -149,7 +149,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 					{
 						this.state.loadedMeals.map((meal, i) => {
 							return (
-								<li key={i} className="feedCard">
+								<li key={i}>
 									<MealSummaryCard
 										id={meal.id as number}  // TODO: Reconsider all casts considering this is a partial meal
 										location={meal.location || ""}

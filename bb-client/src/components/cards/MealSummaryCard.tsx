@@ -23,7 +23,7 @@ export default class MealSummaryCard extends React.Component<IMealSummaryCardPro
 	public render(): JSX.Element {
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">
-				<div className="no-link">
+				<div className="no-link feed-card">
 					<img src={this.props.imagePath || defaultImagePic} className="bg" />
 					<div className="meal-card-header">
 						<div className="meal-card-title">{this.props.title}</div>
