@@ -4,10 +4,10 @@ import { SingleDatePicker } from "react-dates";
 import "react-dates/initialize";
 import { Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
 import Rodal from "rodal";
-import Meal from "../../entities/Meal";
-import User from "../../entities/User";
-import AutoCompletionSearchBar from "../AutoSuggestion";
-import MealSummaryCard from "../cards/MealSummaryCard";
+import AutoCompletionSearchBar from "../components/AutoSuggestion";
+import MealSummary from "../components/MealSummary";
+import Meal from "../entities/Meal";
+import User from "../entities/User";
 import "../resources/css/Feed.css";
 
 interface IFeedContainerState {
@@ -148,22 +148,20 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 				<ul>
 					{
 						this.state.loadedMeals.map((meal, i) => {
-							return (
-								<li key={i}>
-									<MealSummaryCard
-										id={meal.id as number}  // TODO: Reconsider all casts considering this is a partial meal
-										location={meal.location || ""}
-										host={meal.host as User}
-										imagePath={meal.imagePath}
-										title={meal.title || ""}
-										description={meal.description || ""}
-										date={meal.date as Date}
-										guests={meal.guests || []}
-										maxGuests={meal.maxGuests as number}
-										price={meal.price}
-									/>
-								</li>
-							);
+							<li key={i}>
+								<MealSummary
+									id={meal.id as number}  // TODO: Reconsider all casts considering this is a partial meal
+									location={meal.location || ""}
+									host={meal.host as User}
+									imagePath={meal.imagePath}
+									title={meal.title || ""}
+									description={meal.description || ""}
+									date={meal.date as Date}
+									guests={meal.guests || []}
+									maxGuests={meal.maxGuests as number}
+									price={meal.price}
+								/>
+							</li>;
 						})
 					}
 				</ul>

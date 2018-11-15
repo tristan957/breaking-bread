@@ -1,7 +1,7 @@
 import React from "react";
 import Meal from "../../entities/Meal";
-import UpcomingMealSummaryCard from "../cards/UpcomingMealSummaryCard";
 import "../resources/css/UpcomingMealsCard.css";
+import UpcomingMealSummaryCard from "../UpcomingMealSummary";
 
 interface IUpcomingMealsContainerProps {
 	mealsAttending: Partial<Meal>[];

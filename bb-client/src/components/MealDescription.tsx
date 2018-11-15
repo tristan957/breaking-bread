@@ -1,14 +1,14 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
-import Meal from "../../entities/Meal";
-import RecipesContainer from "../containers/RecipesContainer";
+import Meal from "../entities/Meal";
 import { default as defaultImagePic } from "../resources/images/default_meal_pic.jpg";
+import RecipeSummaries from "./RecipeSummaries";
 
-interface IMealDescriptionCardProps {
+interface IMealDescriptionProps {
 	meal: Partial<Meal>;
 }
 
-export default class MealDescriptionCard extends React.Component<IMealDescriptionCardProps> {
+export default class MealDescription extends React.Component<IMealDescriptionProps> {
 	public render(): JSX.Element {
 		return (
 			// TODO: Edit link to editMealPage if current user is the meal host
@@ -31,7 +31,7 @@ export default class MealDescriptionCard extends React.Component<IMealDescriptio
 					</div>
 					<hr className="seperator" />
 					<div id="recipe-section">
-						<RecipesContainer recipes={this.props.meal.recipes || []} />
+						<RecipeSummaries recipes={this.props.meal.recipes || []} />
 					</div>
 					<div id="footer"></div>
 				</div>

@@ -1,13 +1,13 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
 import MediaQuery from "react-responsive";
-import User from "../../entities/User";
-import ProfileSummaryCard from "../cards/ProfileSummaryCard";
+import MobileSidebar from "../components/MobileSidebar";
+import ProfileSummary from "../components/ProfileSummary";
 import FeedContainer from "../containers/FeedContainer";
-import FollowedTagsContainer from "../containers/FollowedTagsContainer";
-import FollowedTopicsContainer from "../containers/FollowedTopicsContainer";
+import TagsContainer from "../containers/TagsContainer";
+import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
-import MobileSidebar from "../MobileSidebar";
+import User from "../entities/User";
 import "../resources/css/Dashboard.css";
 
 interface IDashboardPageProps {
@@ -35,9 +35,9 @@ export default class DashboardPage extends React.Component<IDashboardPageProps> 
 							{
 								this.props.user === undefined ? undefined : (
 									<div>
-										<ProfileSummaryCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
-										<FollowedTagsContainer tags={this.props.user.followedTags || []} />
-										<FollowedTopicsContainer topics={this.props.user.whitelist || []} />
+										<ProfileSummary name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+										<TagsContainer tags={this.props.user.followedTags || []} />
+										<TopicsContainer topics={this.props.user.whitelist || []} />
 									</div>
 								)
 							}

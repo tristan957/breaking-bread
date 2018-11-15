@@ -1,12 +1,12 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
 import { Link } from "react-router-dom";
-import User from "../../entities/User";
+import User from "../entities/User";
 import "../resources/css/utils.css";
 import { default as defaultImagePic } from "../resources/images/default_meal_pic.jpg";
 import { default as defaultUserPic } from "../resources/images/default_user_pic.png";
 
-export interface IMealSummaryCardProps {
+export interface IMealSummaryProps {
 	id: number;
 	location: string;
 	imagePath?: string;
@@ -19,7 +19,7 @@ export interface IMealSummaryCardProps {
 	price?: number;
 }
 
-export default class MealSummaryCard extends React.Component<IMealSummaryCardProps> {
+export default class MealSummary extends React.Component<IMealSummaryProps> {
 	public render(): JSX.Element {
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">

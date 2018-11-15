@@ -1,12 +1,12 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
 import { Link } from "react-router-dom";
-import Topic from "../../entities/Topic";
+import Topic from "../entities/Topic";
 import "../resources/css/ProfileCard.css";
 import { default as defaultUserPic } from "../resources/images/default_user_pic.png";
-import TopicCard from "./TopicCard";
+import TopicCard from "./Topic";
 
-interface IHostSummaryCardProps {
+interface IHostSummaryProps {
 	id: number;
 	name: string;
 	about?: string;
@@ -14,7 +14,7 @@ interface IHostSummaryCardProps {
 	topics: Partial<Topic>[];
 }
 
-export default class HostSummaryCard extends React.Component<IHostSummaryCardProps> {
+export default class HostSummary extends React.Component<IHostSummaryProps> {
 	private renderTopics(): JSX.Element | undefined {
 		if (this.props.topics.length === 0) {
 			return undefined;

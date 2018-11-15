@@ -1,7 +1,7 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
-import Recipe from "../../entities/Recipe";
-import RecipeSummaryCard from "../cards/RecipeSummaryCard";
+import RecipeSummaries from "../components/RecipeSummaries";
+import Recipe from "../entities/Recipe";
 
 interface IRecipesContainerProps {
 	recipes: Partial<Recipe>[];
@@ -12,11 +12,12 @@ export default class RecipesContainer extends React.Component<IRecipesContainerP
 		return (
 			<div>
 				<h4>Recipes</h4>
-				<ul className="list">
+				<RecipeSummaries {...this.props} />
+				{/* <ul className="list">
 					{this.props.recipes.map((recipe, i) => {
 						return (
 							<li className="recipe" key={i}>
-								<RecipeSummaryCard
+								<RecipeSummary
 									id={recipe.id as number}
 									name={recipe.name as string}
 									description={recipe.description as string}
@@ -26,7 +27,7 @@ export default class RecipesContainer extends React.Component<IRecipesContainerP
 							</li>
 						);
 					})}
-				</ul>
+				</ul> */}
 			</div>
 		);
 	}

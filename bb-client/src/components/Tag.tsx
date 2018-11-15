@@ -1,12 +1,12 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
 
-interface ITagCardProps {
+interface ITagProps {
 	id: number;
 	name: string;
 }
 
-export default class TagCard extends React.Component<ITagCardProps> {
+export default class Tag extends React.Component<ITagProps> {
 	public render(): JSX.Element {
 		return (
 			// TODO: Click to filter Tag?

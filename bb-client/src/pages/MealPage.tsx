@@ -2,11 +2,11 @@
 import { History, Location } from "history";
 import React from "react";
 import MediaQuery from "react-responsive";
-import Meal from "../../entities/Meal";
-import User from "../../entities/User";
-import HostSummaryCard from "../cards/HostSummaryCard";
-import MealDescriptionCard from "../cards/MealDescriptionCard";
-import GuestsContainer from "../containers/GuestsContainer";
+import HostSummary from "../components/HostSummary";
+import MealDescription from "../components/MealDescription";
+import GuestsContainer from "../containers/GuestListContainer";
+import Meal from "../entities/Meal";
+import User from "../entities/User";
 import "../resources/css/MealPage.css";
 
 const loadedMeals: Partial<Meal>[] = [
@@ -118,10 +118,10 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 				<MediaQuery query="(max-width: 949px)">
 					<div>
 						<div id="mobileArticle">
-							<MealDescriptionCard
+							<MealDescription
 								meal={this.state.meal}
 							/>
-							<HostSummaryCard
+							<HostSummary
 								id={this.state.host.id as number}
 								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 								about={this.state.host.about as string}
@@ -139,12 +139,12 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 				<MediaQuery query="(min-width: 950px)">
 					<div>
 						<div id="Article">
-							<MealDescriptionCard
+							<MealDescription
 								meal={this.state.meal}
 							/>
 						</div>
 						<div id="ArticleRight">
-							<HostSummaryCard
+							<HostSummary
 								id={this.state.host.id as number}
 								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 								about={this.state.host.about as string}

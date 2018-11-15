@@ -1,20 +1,21 @@
 import React from "react";
-import Tag from "../../entities/Tag";
+import Tags from "../components/Tags";
+import Tag from "../entities/Tag";
 import "../resources/css/FollowedTagsCard.css";
-import TagCard from "../Tag";
 
-interface IFollowedTagsContainerProps {
+interface ITagsContainerProps {
 	tags: Partial<Tag>[];
 }
 
-export default class FollowedTagsContainer extends React.Component<IFollowedTagsContainerProps> {
+export default class TagsContainer extends React.Component<ITagsContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div id="followed-tags-card" className="followed-tags-card-class">
 				<div className="card">
 					<div className="tags-topics-list-header">Tags</div>
 					<hr className="seperator" />
-					<ul className="followed-tags-topics-list">
+					<Tags {...this.props} />
+					{/* <ul className="followed-tags-topics-list">
 						{this.props.tags.map((tag, i) => {
 							return (
 								<li className="tags" key={i}>
@@ -22,7 +23,7 @@ export default class FollowedTagsContainer extends React.Component<IFollowedTags
 								</li>
 							);
 						})}
-					</ul>
+					</ul> */}
 				</div>
 			</div>
 		);

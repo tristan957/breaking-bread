@@ -3,12 +3,12 @@ import React from "react";
 import "../resources/css/ProfileCard.css";
 import { default as defaultUserPic } from "../resources/images/default_user_pic.png";
 
-interface IProfileSummaryCardProps {
+interface IProfileSummaryProps {
 	name: string;
 	imagePath?: string;
 }
 
-export default class ProfileSummaryCard extends React.Component<IProfileSummaryCardProps> {
+export default class ProfileSummary extends React.Component<IProfileSummaryProps> {
 	public render(): JSX.Element {
 		return (
 			<div id="profile-card" className="profile card">

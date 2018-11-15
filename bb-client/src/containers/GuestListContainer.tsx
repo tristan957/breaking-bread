@@ -1,20 +1,21 @@
 import React from "react";
-import User from "../../entities/User";
-import GuestCard from "../cards/GuestCard";
+import GuestList from "../components/GuestList";
+import User from "../entities/User";
 
-interface IGuestsContainerProps {
+interface IGuestListContainerProps {
 	guests: Partial<User>[];
 	maxGuests: number;
 }
 
-export default class GuestsContainer extends React.Component<IGuestsContainerProps> {
+export default class GuestsContainer extends React.Component<IGuestListContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div className="card cardSubstance">
 				<div id="GuestListHeader">
 					<h3>Guests</h3><h5> - {`${this.props.guests.length}/${this.props.maxGuests} 👨`}</h5>
 				</div>
-				<ul className="list">
+				<GuestList {...this.props} />
+				{/* <ul className="list">
 					{this.renderSignUp()}
 					<hr className="seperator" />
 					{this.props.guests.map((guest, i) => {
@@ -30,22 +31,8 @@ export default class GuestsContainer extends React.Component<IGuestsContainerPro
 							</div>
 						);
 					})}
-				</ul>
-			</div>
+				</ul> */}
+			</div >
 		);
-	}
-
-	public renderSignUp(): JSX.Element | undefined {
-		// Also need to check conflicts with attendingMeals of current user
-		if (this.props.guests.length < this.props.maxGuests) {
-			return (
-				<div>
-					There's room! <button>Sign Up!</button>
-				</div>
-			);
-		}
-		// Otherwise render "You're signed up!" if current user is in the Guest list
-
-		return undefined;
 	}
 }

@@ -1,11 +1,11 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
+import TagsContainer from "../containers/TagsContainer";
+import TopicsContainer from "../containers/TopicsContainer";
 import User from "../entities/User";
-import ProfileSummaryCard from "./cards/ProfileSummaryCard";
-import FollowedTagsContainer from "./containers/FollowedTagsContainer";
-import FollowedTopicsContainer from "./containers/FollowedTopicsContainer";
 import UpcomingMealsContainer from "./containers/UpcomingMealsContainer";
+import ProfileSummaryCard from "./ProfileSummary";
 import "./resources/css/MobileSidebar.css";
 
 interface IAppState {
@@ -40,8 +40,8 @@ export default class MobileSidebar extends React.Component<IDashboardProps, IApp
 							{this.props.user === undefined ? undefined : (
 								<div>
 									<ProfileSummaryCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
-									<FollowedTagsContainer tags={this.props.user.followedTags || []} />
-									<FollowedTopicsContainer topics={this.props.user.whitelist || []} />
+									<TagsContainer tags={this.props.user.followedTags || []} />
+									<TopicsContainer topics={this.props.user.whitelist || []} />
 								</div>
 							)}
 						</div>
