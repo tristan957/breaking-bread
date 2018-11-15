@@ -1,0 +1,40 @@
+.component {
+	border: 1px solid black;
+}
+
+.whitespace {
+	flex-grow: 4;
+}
+
+#mobile-center {
+    margin: 0 auto;
+    padding: 1em 1em 1em 1em;
+    width: 100%;
+}
+
+#dashboard {
+	display: flex;
+}
+
+#left {
+    width: 300px;
+    height: 100%;
+	padding-left: .8em;
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+#center {
+    height: 100%;
+	margin-left: 1.8em;
+	margin-right: 1.8em;
+	flex-grow: 2;
+}
+
+#right {
+	width: 300px;
+	height: 100%;
+	padding-right: .8em;
+	flex-grow: 0;
+	flex-shrink: 0;
+}

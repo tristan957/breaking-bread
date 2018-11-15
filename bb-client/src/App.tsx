@@ -1,10 +1,11 @@
 import React from "react";
 import { Route } from "react-router";
-import "./App.css";
 import NavigationBar from "./components/NavigationBar";
-import DashboardPage from "./components/pages/DashboardPage";
-import MealPage from "./components/pages/MealPage";
 import User from "./entities/User";
+import DashboardPage from "./pages/DashboardPage";
+import MealPage from "./pages/MealPage";
+import "./resources/App.css";
+import "./resources/common.css";
 
 interface IAppState {
 	user?: Partial<User>;

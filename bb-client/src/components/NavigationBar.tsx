@@ -7,13 +7,7 @@ import { Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/logo_icon.png";
 
-interface IAppState { }
-
-export default class NavigationBar extends React.Component<{}, IAppState> {
-	constructor(props: Readonly<{}>) {
-		super(props);
-	}
-
+export default class NavigationBar extends React.Component {
 	public render(): JSX.Element {
 		return (
 			<div id="navbar">

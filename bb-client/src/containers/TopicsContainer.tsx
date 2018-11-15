@@ -1,20 +1,21 @@
 import React from "react";
-import Topic from "../../entities/Topic";
-import "../resources/css/FollowedTagsCard.css";
-import TopicCard from "../Topic";
+import Topics from "../components/Topics";
+import Topic from "../entities/Topic";
+import "../resources/css/TopicsContainer.css";
 
-interface IFollowedTopicsContainerProps {
+interface ITopicsContainerProps {
 	topics: Partial<Topic>[];
 }
 
-export default class FollowedTopicsContainer extends React.Component<IFollowedTopicsContainerProps> {
+export default class TopicsContainer extends React.Component<ITopicsContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div id="followed-topics-card" className="followed-topics-card">
 				<div className="card">
 					<div className="tags-topics-list-header">Topics</div>
 					<hr className="seperator" />
-					<ul className="followed-tags-topics-list">
+					<Topics {...this.props} />
+					{/* <ul className="followed-tags-topics-list">
 						{this.props.topics.map((topic, i) => {
 							return (
 								<li className="tags" key={i}>
@@ -22,7 +23,7 @@ export default class FollowedTopicsContainer extends React.Component<IFollowedTo
 								</li>
 							);
 						})}
-					</ul>
+					</ul> */}
 				</div>
 			</div>
 		);
