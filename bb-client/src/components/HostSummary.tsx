@@ -2,9 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Topic from "../entities/Topic";
-import "../resources/css/ProfileCard.css";
-import { default as defaultUserPic } from "../resources/images/default_user_pic.png";
-import TopicCard from "./Topic";
+import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
+import { default as TopicComponent } from "./Topic";
 
 interface IHostSummaryProps {
 	id: number;
@@ -27,7 +26,7 @@ export default class HostSummary extends React.Component<IHostSummaryProps> {
 					{this.props.topics.map((topic, i) => {
 						return (
 							<li className="topic" key={i}>
-								<TopicCard id={topic.id as number} name={topic.name as string} />
+								<TopicComponent id={topic.id as number} name={topic.name as string} />
 							</li>
 						);
 					})}

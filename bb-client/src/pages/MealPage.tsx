@@ -7,7 +7,7 @@ import MealDescription from "../components/MealDescription";
 import GuestsContainer from "../containers/GuestListContainer";
 import Meal from "../entities/Meal";
 import User from "../entities/User";
-import "../resources/css/MealPage.css";
+import "./resources/css/MealPage.css";
 
 const loadedMeals: Partial<Meal>[] = [
 	{

@@ -1,0 +1,9 @@
+#upcoming-meals-list > li {
+	margin-bottom: 10px;
+	padding-left: 5px;
+	border-left: solid blue 2px;
+}
+
+#upcoming-meals-list:last-child {
+	margin-bottom: 0px;
+}

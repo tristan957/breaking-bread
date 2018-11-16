@@ -10,14 +10,16 @@ export default class Tags extends React.Component<ITagsProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<ul>
+				<ul className="no-style-list">
 					{this.props.tags.map((tag, i) => {
-						<li key={i}>
-							<TagComponent
-								id={tag.id as number}
-								name={tag.name as string}
-							/>
-						</li>;
+						return (
+							<li key={i}>
+								<TagComponent
+									id={tag.id as number}
+									name={tag.name as string}
+								/>
+							</li>
+						);
 					})}
 				</ul>
 			</div>

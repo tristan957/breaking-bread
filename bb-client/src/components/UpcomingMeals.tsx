@@ -1,5 +1,6 @@
 import React from "react";
 import Meal from "../entities/Meal";
+import "./resources/css/UpcomingMeals.css";
 import UpcomingMealSummary from "./UpcomingMealSummary";
 
 interface IUpcomingMealsProps {
@@ -10,7 +11,7 @@ export default class UpcomingMeals extends React.Component<IUpcomingMealsProps> 
 	public render(): JSX.Element {
 		return (
 			<div>
-				<ul>
+				<ul id="upcoming-meals-list" className="no-style-list">
 					{this.props.mealsAttending.map((meal, i) => {
 						return (
 							<li key={i}>

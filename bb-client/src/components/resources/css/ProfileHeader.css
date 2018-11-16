@@ -1,0 +1,22 @@
+#header-component {
+	display: flex;
+	flex-direction: row;
+}
+
+#header-card-left {
+	width: 65%;
+	margin: 0px;
+	padding: 0px 1em 0em 1em;
+}
+
+#header-card-right {
+	width: 45%;
+	margin: 0px;
+	padding: 0px 1em 0em 1em;
+}
+
+#profile-header-img {
+	max-height: 220px;
+	max-height: 220px;
+	border-radius: 200px;
+}

@@ -30,7 +30,7 @@
 }
 
 #content-container {
-  max-width: 1250px;
+  width: 98%;
   margin: auto;
   margin-top: 2em;
 }

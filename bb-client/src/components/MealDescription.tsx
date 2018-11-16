@@ -1,8 +1,8 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
 import Meal from "../entities/Meal";
-import { default as defaultImagePic } from "../resources/images/default_meal_pic.jpg";
 import RecipeSummaries from "./RecipeSummaries";
+import { default as defaultImagePic } from "./resources/images/default_meal_pic.jpg";
 
 interface IMealDescriptionProps {
 	meal: Partial<Meal>;

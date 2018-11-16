@@ -3,9 +3,9 @@ import React from "react";
 import { slide as Menu } from "react-burger-menu";
 import TagsContainer from "../containers/TagsContainer";
 import TopicsContainer from "../containers/TopicsContainer";
+import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import User from "../entities/User";
-import UpcomingMealsContainer from "./containers/UpcomingMealsContainer";
-import ProfileSummaryCard from "./ProfileSummary";
+import ProfileSummary from "./ProfileSummary";
 import "./resources/css/MobileSidebar.css";
 
 interface IAppState {
@@ -39,7 +39,7 @@ export default class MobileSidebar extends React.Component<IDashboardProps, IApp
 						<div>
 							{this.props.user === undefined ? undefined : (
 								<div>
-									<ProfileSummaryCard name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+									<ProfileSummary id={this.props.user.id as number} name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
 									<TagsContainer tags={this.props.user.followedTags || []} />
 									<TopicsContainer topics={this.props.user.whitelist || []} />
 								</div>

@@ -37,14 +37,16 @@ export default class Topics extends React.Component<ITopicsProps, ITopicsState> 
 	public render(): JSX.Element {
 		return (
 			<div>
-				<ul>
+				<ul className="no-style-list">
 					{this.state.topics.map((topic, i) => {
-						<li key={i}>
-							<TopicComponent
-								id={topic.id as number}
-								name={topic.name as string}
-							/>
-						</li>;
+						return (
+							<li key={i}>
+								<TopicComponent
+									id={topic.id as number}
+									name={topic.name as string}
+								/>
+							</li>
+						);
 					})}
 				</ul>
 			</div>

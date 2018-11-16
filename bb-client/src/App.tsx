@@ -1,11 +1,12 @@
 import React from "react";
 import { Route } from "react-router";
 import NavigationBar from "./components/NavigationBar";
-import DashboardPage from "./components/pages/DashboardPage";
-import MealPage from "./components/pages/MealPage";
 import User from "./entities/User";
-import "./resources/App.css";
-import "./resources/common.css";
+import DashboardPage from "./pages/DashboardPage";
+import MealPage from "./pages/MealPage";
+import ProfilePage from "./pages/ProfilePage";
+import "./resources/css/App.css";
+import "./resources/css/common.css";
 
 interface IAppState {
 	user?: Partial<User>;
@@ -40,7 +41,7 @@ export default class App extends React.Component<{}, IAppState> {
 						id: 1,
 						date: new Date("December 21, 2018 18:30:00"),
 						location: "College Station, TX",
-						title: "Cuban delight",
+						title: "Cuban Delight",
 						guests: [
 							{
 								id: 4,
@@ -48,10 +49,12 @@ export default class App extends React.Component<{}, IAppState> {
 								lastName: "Li",
 							},
 							{
+								id: 5,
 								firstName: "Greg",
 								lastName: "Noonan",
 							},
 							{
+								id: 6,
 								firstName: "Jon",
 								lastName: "Wang",
 							},
@@ -87,9 +90,9 @@ export default class App extends React.Component<{}, IAppState> {
 					<div id="content-container">
 						<Route exact path="/" render={() => <DashboardPage user={this.state.user} />} />
 						<Route exact path="/m/:mealID" component={MealPage} />
-						{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} />
+						{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} /> */}
 						<Route exact path="/p/:userID" component={ProfilePage} />
-						<Route exact path="/p/:userID/e/" component={ProfileEditPage} />
+						{/* <Route exact path="/p/:userID/e/" component={ProfileEditPage} />
 						<Route exact path="/r/:recipeID" component={RecipePage} />
 						<Route exact path="/r/:recipeID/e/" component={RecipeEditPage} /> */}
 					</div>

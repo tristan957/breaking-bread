@@ -8,7 +8,7 @@ import TagsContainer from "../containers/TagsContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import User from "../entities/User";
-import "../resources/css/Dashboard.css";
+import "./resources/css/DashboardPage.css";
 
 interface IDashboardPageProps {
 	user?: Partial<User>;
@@ -35,7 +35,7 @@ export default class DashboardPage extends React.Component<IDashboardPageProps> 
 							{
 								this.props.user === undefined ? undefined : (
 									<div>
-										<ProfileSummary name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+										<ProfileSummary id={this.props.user.id as number} name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
 										<TagsContainer tags={this.props.user.followedTags || []} />
 										<TopicsContainer topics={this.props.user.whitelist || []} />
 									</div>
