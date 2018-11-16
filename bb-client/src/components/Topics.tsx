@@ -4,41 +4,15 @@ import { default as TopicComponent } from "./Topic";
 
 interface ITopicsProps {
 	userID?: number;
-}
-
-interface ITopicsState {
 	topics: Partial<Topic>[];
 }
 
-export default class Topics extends React.Component<ITopicsProps, ITopicsState> {
-	constructor(props: ITopicsProps) {
-		super(props);
-
-		this.state = {
-			topics: [],
-		};
-	}
-
-	public componentWillMount(): void {
-		this.setState({
-			topics: [
-				{
-					id: 1,
-					name: "vegan",
-				},
-				{
-					id: 2,
-					name: "vegetarian",
-				},
-			],
-		});
-	}
-
+export default class Topics extends React.Component<ITopicsProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
 				<ul className="no-style-list">
-					{this.state.topics.map((topic, i) => {
+					{this.props.topics.map((topic, i) => {
 						return (
 							<li key={i}>
 								<TopicComponent

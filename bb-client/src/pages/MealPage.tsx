@@ -156,6 +156,7 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 								maxGuests={this.state.meal.maxGuests as number}
 							/>
 						</div>
+						{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
 					</div>
 				</MediaQuery>
 			</div>

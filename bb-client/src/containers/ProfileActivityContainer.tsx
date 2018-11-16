@@ -64,7 +64,6 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 						}
 					</div>
 				);
-				break;
 			}
 			case RenderSide.AuthoredRecipes: {
 				return (
@@ -78,7 +77,6 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 						}
 					</div>
 				);
-				break;
 			}
 			case RenderSide.FavoriteRecipes: {
 				return (
@@ -93,7 +91,6 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 						}
 					</div>
 				);
-				break;
 			}
 			case RenderSide.FavoriteUsers: {
 				return (
@@ -107,7 +104,6 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 						}
 					</div>
 				);
-				break;
 			}
 			default: {
 				return undefined;

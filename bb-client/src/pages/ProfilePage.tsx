@@ -44,6 +44,35 @@ const loadedUser: Partial<User> = {
 			maxGuests: 3,
 		},
 	],
+	reviews: [
+		{
+			id: 1,
+			rating: 5,
+		},
+		{
+			id: 2,
+			rating: 4,
+		},
+		{
+			id: 3,
+			rating: 2,
+		},
+	],
+	mealsAttending: [
+		{
+			id: 2,
+			host: {
+				id: 4,
+				firstName: "than",
+				lastName: "Wng",
+			},
+			date: new Date("December 17, 2017 19:24:00"),
+			location: " Station, TX",
+			title: "Mn Night Out",
+			guests: [],
+			maxGuests: 2,
+		},
+	],
 	recipesAuthored: [
 		{
 			id: 1,
@@ -80,6 +109,25 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
 		this.state = {
 			user: {},
 		};
+
+		this.getUserReviewAverage = this.getUserReviewAverage.bind(this);
+	}
+
+	private getUserReviewAverage(): number {
+		if (this.state.user.reviews === undefined || this.state.user.reviews.length === 0) {
+			return 0;
+		}
+
+		let sum = 0;
+		let effectiveLength = 0;
+		this.state.user.reviews.forEach(element => {
+			if (element.rating !== undefined) {
+				sum += element.rating;
+				effectiveLength += 1;
+			}
+		});
+
+		return sum / effectiveLength;
 	}
 
 	public componentWillMount(): void {
@@ -103,10 +151,15 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
 				<MediaQuery query="(min-width: 950px)">
 					<div>
 						<div id="profile-header">
+							{/* TODO: Need followed tags */}
 							<ProfileHeader
 								name={`${this.state.user.firstName} ${this.state.user.lastName}`}
+								about={this.state.user.about as string}
+								whiteList={this.state.user.whitelist || []}
+								blackList={this.state.user.blacklist || []}
 								imagePath={this.state.user.imagePath}
 								joinedAt={this.state.user.createdAt as Date}
+								reviewAverage={this.getUserReviewAverage()}
 							/>
 						</div>
 						<div id="profile-under">  {/* Essentially a mini feed for a specific user */}
@@ -122,6 +175,7 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
 							</div>
 							<div>
 							</div>
+							{/* TODO: If this isn't current user, and you have been in a meal with them => show ability to review, or show previous for editing */}
 						</div>
 					</div>
 				</MediaQuery>

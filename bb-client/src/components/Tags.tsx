@@ -3,6 +3,7 @@ import Tag from "../entities/Tag";
 import { default as TagComponent } from "./Tag";
 
 interface ITagsProps {
+	userID?: number;
 	tags: Partial<Tag>[];
 }
 
