@@ -80,7 +80,6 @@ interface IMealPageProps {
 	match: {
 		params: {
 			mealID: number;
-			hostID: number;
 		};
 	};
 }

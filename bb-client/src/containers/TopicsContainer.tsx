@@ -1,7 +1,7 @@
 import React from "react";
 import Topics from "../components/Topics";
 import Topic from "../entities/Topic";
-import "../resources/css/TopicsContainer.css";
+import "../resources/css/containers/FollowedTopicsContainer.css";
 
 interface ITopicsContainerProps {
 	topics: Partial<Topic>[];

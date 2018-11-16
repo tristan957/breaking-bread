@@ -1,7 +1,7 @@
 import React from "react";
 import Tags from "../components/Tags";
 import Tag from "../entities/Tag";
-import "../resources/css/FollowedTagsCard.css";
+import "../resources/css/containers/FollowedTagsContainer.css";
 
 interface ITagsContainerProps {
 	tags: Partial<Tag>[];

@@ -8,7 +8,7 @@ import AutoCompletionSearchBar from "../components/AutoSuggestion";
 import MealSummary from "../components/MealSummary";
 import Meal from "../entities/Meal";
 import User from "../entities/User";
-import "../resources/css/Feed.css";
+import "../resources/css/containers/FeedContainer.css";
 
 interface IFeedContainerState {
 	loadedMeals: Partial<Meal>[];

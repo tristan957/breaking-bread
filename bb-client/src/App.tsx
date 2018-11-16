@@ -4,8 +4,9 @@ import NavigationBar from "./components/NavigationBar";
 import User from "./entities/User";
 import DashboardPage from "./pages/DashboardPage";
 import MealPage from "./pages/MealPage";
-import "./resources/App.css";
-import "./resources/common.css";
+import ProfilePage from "./pages/ProfilePage";
+import "./resources/css/App.css";
+import "./resources/css/common.css";
 
 interface IAppState {
 	user?: Partial<User>;
@@ -87,9 +88,9 @@ export default class App extends React.Component<{}, IAppState> {
 					<div id="content-container">
 						<Route exact path="/" render={() => <DashboardPage user={this.state.user} />} />
 						<Route exact path="/m/:mealID" component={MealPage} />
-						{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} />
+						{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} /> */}
 						<Route exact path="/p/:userID" component={ProfilePage} />
-						<Route exact path="/p/:userID/e/" component={ProfileEditPage} />
+						{/* <Route exact path="/p/:userID/e/" component={ProfileEditPage} />
 						<Route exact path="/r/:recipeID" component={RecipePage} />
 						<Route exact path="/r/:recipeID/e/" component={RecipeEditPage} /> */}
 					</div>
