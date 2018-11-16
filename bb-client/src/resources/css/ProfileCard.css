@@ -1,0 +1,46 @@
+#profile-card {
+	display: flex;
+	padding: 15px;
+	justify-content: space-between;
+}
+
+.profile#picture {
+	width: 50px;
+	border-radius: 25px;
+}
+
+.profile#username {
+    display: inline
+}
+
+.card-substance {
+	margin-bottom: 15px;
+	padding: 15px;
+}
+
+.header-card {
+    margin-left: 2em;
+	margin-right: 2.1em;
+	padding: 2em;
+    position: relative;
+    overflow: hidden;
+    background: white;
+    display: block;
+    color: #0a0a0a;
+    border-radius: 3px;
+    border: 1px solid #d6d6d6;
+    box-shadow: 3px 3px 0px #bababa;
+}
+
+.header-card-container {
+	width: 65%;
+	margin: 0px;
+	padding: 0px 1em 0em 1em;
+}
+
+.card>hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
