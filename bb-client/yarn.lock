@@ -908,6 +908,13 @@
     "@types/history" "*"
     "@types/react" "*"
 
+"@types/react-sticky-el@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-sticky-el/-/react-sticky-el-1.0.1.tgz#5fa6b1b72d5edc8fed431c10e71064bce7239856"
+  integrity sha512-8nf+D1VQxQWtfxuHZn/Izh86USiBwhlRpuw9IZ87fZqJ3DwiZ8AuSOP1b/2lXSrwk8xIX6JOgOrVkqI0doPdZA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@16.4.18":
   version "16.4.18"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.18.tgz#2e28a2e7f92d3fa7d6a65f2b73275c3e3138a13d"
@@ -8105,7 +8112,7 @@ prop-types-exact@^1.2.0:
     object.assign "^4.1.0"
     reflect.ownkeys "^0.2.0"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@>=15.5.10, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   integrity sha512-3pboPvLiWD7dkI3qf3KbUe6hKFKa52w+AE0VCqECtf+QHAKgOL37tTaNCnuX1nAAQ4ZhyP+kYVKf8rLmJ/feDQ==
@@ -8524,6 +8531,13 @@ react-scripts@2.1.1:
     workbox-webpack-plugin "3.6.3"
   optionalDependencies:
     fsevents "1.2.4"
+
+react-sticky-el@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/react-sticky-el/-/react-sticky-el-1.0.20.tgz#b3c5e7128218633f440dc67aec239d1cd078342d"
+  integrity sha512-uBe+ZaPJ4lAB9M85L4Hjw9lbmHw00PbbBg9KdMIAcaGEVY3ASKhQkbEaRLF6jkzStLZ7GwF6m3Fja7FbuWY9qg==
+  dependencies:
+    prop-types ">=15.5.10"
 
 react-themeable@^1.1.0:
   version "1.1.0"

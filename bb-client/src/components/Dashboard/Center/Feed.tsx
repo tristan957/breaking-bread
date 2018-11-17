@@ -2,6 +2,7 @@ import moment from "moment";
 import React from "react";
 import { SingleDatePicker } from "react-dates";
 import "react-dates/initialize";
+import Sticky from "react-sticky-el";
 import { Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
 import Rodal from "rodal";
 import Meal from "../../../entities/Meal";
@@ -98,8 +99,11 @@ export default class Feed extends React.Component<{}, IFeedState> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<span id="feedTitle">Feed</span>
-				<Button type="submit" onClick={this.showModal.bind(this)} id="filter">Filters</Button>
+
+				<Sticky scrollElement="window" style={{ zIndex: 1000 }} stickyStyle={{ display: "flex", justifyContent: "center", zIndex: 1000 }} topOffset={0}>
+					<span id="feedTitle">Feed</span>
+					<Button type="submit" onClick={this.showModal.bind(this)} id="filter">Filters</Button>
+				</Sticky>
 
 				<Rodal visible={this.state.visible} onClose={this.hideModal.bind(this)}>
 					<div className="header">Filters</div>

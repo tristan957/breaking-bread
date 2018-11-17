@@ -50,7 +50,7 @@ export default class App extends React.Component<{}, IAppState> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<div id="Top">
+				<div id="Top" className="scrollarea">
 					<NavigationBar />
 				</div>
 				<div id="TopPlaceHolder"></div>
