@@ -1,14 +1,10 @@
-.component {
-	border: 1px solid black;
-}
-
 .whitespace {
 	flex-grow: 4;
 }
 
-#mobileCenter {
-    margin: 0 auto;
-    padding: 1em 1em 1em 1em;
+#mobile-center {
+    /* margin: 0 auto; */
+	padding: 1em 1em 1em 1em;
     width: 100%;
 }
 
@@ -16,37 +12,31 @@
 	display: flex;
 }
 
-#TopPlaceHolder {
+#top-buffer {
 	width: 100%;
-	padding-bottom: 3rem;
+	padding-top: 1em;
+	padding-bottom: 2em;
 }
 
-#Left {
+#left-container {
     width: 300px;
     height: 100%;
-	padding-left: .8em;
 	flex-grow: 0;
 	flex-shrink: 0;
 }
 
-#Center {
+#center-container {
     height: 100%;
 	margin-left: 1.8em;
 	margin-right: 1.8em;
 	flex-grow: 2;
 }
 
-#Right {
+#right-container {
 	width: 300px;
 	height: 100%;
-	padding-right: .8em;
 	flex-grow: 0;
 	flex-shrink: 0;
-}
-
-#HostImg {
-	width: 35px;
-	height: 35px;
 }
 
 .bg {

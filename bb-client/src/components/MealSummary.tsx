@@ -2,6 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import User from "../entities/User";
+import MealQuickInfoFooter from "./MealQuickInfoFooter";
+import "./resources/css/MealSummary.css";
 import { default as defaultImagePic } from "./resources/images/default_meal_pic.jpg";
 import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
 
@@ -15,51 +17,45 @@ export interface IMealSummaryProps {
 	date: Date;
 	guests: Partial<User>[];
 	maxGuests: number;
-	price?: number;
+	price: number;
 	showHost?: boolean;
 }
 
 export default class MealSummary extends React.Component<IMealSummaryProps> {
-	private renderHost(): JSX.Element | undefined {
-		if (this.props.showHost === false) {
-			return undefined;
-		}
-
-		return (
-			<Link to={`/p/${this.props.host.id}`}>
-				<div className="host no-link">
-					<div>
-						<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="HostImg" /> {`${this.props.host.firstName} ${this.props.host.lastName}`}
-					</div>
-				</div>
-			</Link>
-		);
-	}
-
 	public render(): JSX.Element {
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">
-				<div className="no-link feed-card">
+				<div className="no-link">
 					<img src={this.props.imagePath || defaultImagePic} className="bg" />
-					<div className="meal-card-header">
-						<div className="meal-card-title">{this.props.title}</div>
-						<div className="meal-card-location">{this.props.location}</div>
-						{this.renderHost()}
-						<div className="meal-card-footer">
-							<div className="meal-card-description">{this.props.description}</div>
-							<div className="meal-card-guest-count">{`${this.props.guests.length}/${this.props.maxGuests} 👨`}</div>
-							<div>
-								{
-									this.props.price === undefined ? `Free!` : `$${this.props.price} per person`
-								}
+					<div id="meal-summary-header">
+						<div>
+							<div id="meal-summary-title">{this.props.title}</div>
+							<div id="meal-tags">
+
 							</div>
-							{`${this.props.date.toLocaleDateString()} at ${this.props.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
 						</div>
+						{this.props.showHost !== true
+							? undefined
+							: (
+								<Link to={`/p/${this.props.host.id}`}>
+									<div id="host" className="no-link">
+										<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="host-img" />
+										<div id="host-name">{`${this.props.host.firstName} ${this.props.host.lastName}`}</div>
+									</div>
+								</Link>
+							)
+						}
 					</div>
+					<div id="meal-summary-description">{this.props.description}</div>
+					<MealQuickInfoFooter
+						price={this.props.price}
+						numOfGuests={this.props.guests.length}
+						maxGuests={this.props.maxGuests}
+						date={this.props.date}
+						location={this.props.location}
+					/>
 				</div>
 			</Link>
 		);
 	}
 }
-
-// export default withRouter(MealCard);

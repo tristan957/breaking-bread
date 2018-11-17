@@ -97,8 +97,10 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 	public render(): JSX.Element {
 		return (
 			<div id="feed-container">
-				<span id="feedTitle">Feed</span>
-				<Button type="submit" onClick={this.showModal.bind(this)} id="filter">Filters</Button>
+				<div id="feed-header">
+					<span id="feed-title">Feed</span>
+					<Button type="submit" onClick={this.showModal.bind(this)} id="show-filter-modal">Filter</Button>
+				</div>
 
 				<Rodal visible={this.state.visible} onClose={this.hideModal.bind(this)}>
 					<div className="header">Filters</div>
@@ -140,11 +142,14 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 								</Col>
 							</FormGroup>
 
-							<Button className="float-right"> Submit </Button>
+							<Button className="float-right">Submit</Button>
 						</Form>
 					</div>
 				</Rodal>
-				<MealSummaries meals={this.state.loadedMeals} />
+				<MealSummaries
+					meals={this.state.loadedMeals}
+					showHosts={true}
+				/>
 			</div >
 		);
 	}

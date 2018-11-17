@@ -14,7 +14,7 @@ export default class ProfileSummary extends React.Component<IProfileSummaryProps
 	public render(): JSX.Element {
 		return (
 			<Link to={`/p/${this.props.id}`}>
-				<div id="profile-summary" className="card no-link">
+				<div id="profile-summary" className="no-link">
 					<img id="profile-summary-picture" src={this.props.imagePath === undefined ? defaultUserPic : this.props.imagePath} alt="Profile Picture" />
 					<div id="profile-summary-username" className="container-header">{this.props.name}</div>
 				</div>

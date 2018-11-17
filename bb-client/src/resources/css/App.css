@@ -35,6 +35,12 @@
   margin-top: 2em;
 }
 
+@media (max-width: 949px) {
+  #content-container {
+    margin-top: 0px;
+  }
+}
+
 #Top {
   position: fixed;
   top: 0;

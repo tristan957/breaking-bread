@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, ButtonGroup } from "reactstrap";
 import MealSummaries from "../components/MealSummaries";
 import ProfileList from "../components/ProfileList";
 import RecipeSummaries from "../components/RecipeSummaries";
@@ -44,7 +45,7 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 	private renderActivity(): JSX.Element | undefined {
 		const nada: JSX.Element = (
 			<div>
-				😯 Nada!
+				😯 Nada! Get out there! Eat some food, meet some people!
 			</div>
 		);
 
@@ -115,10 +116,12 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 		return (
 			<div id="profile-activity-container" className="profile-activity-container-class">
 				<div>
-					<button onClick={() => this.changeRender(RenderSide.HostedMeals)}>Hosted Meals</button>
-					<button onClick={() => this.changeRender(RenderSide.AuthoredRecipes)}>Authored Recipes</button>
-					<button onClick={() => this.changeRender(RenderSide.FavoriteRecipes)}>Favorite Recipes</button>
-					<button onClick={() => this.changeRender(RenderSide.FavoriteUsers)}>Favorite Users</button>
+					<ButtonGroup>
+						<Button className="show-filter-modal" active={this.state.render === 0} onClick={() => this.changeRender(RenderSide.HostedMeals)}>Hosted Meals</Button>
+						<Button className="show-filter-modal" active={this.state.render === 1} onClick={() => this.changeRender(RenderSide.AuthoredRecipes)}>Authored Recipes</Button>
+						<Button className="show-filter-modal" active={this.state.render === 2} onClick={() => this.changeRender(RenderSide.FavoriteRecipes)}>Favorite Recipes</Button>
+						<Button className="show-filter-modal" active={this.state.render === 3} onClick={() => this.changeRender(RenderSide.FavoriteUsers)}>Favorite Users</Button>
+					</ButtonGroup>
 				</div>
 				<div className="card">
 					{this.renderActivity()}

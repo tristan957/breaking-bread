@@ -5,13 +5,20 @@ import { default as TagComponent } from "./Tag";
 interface ITagsProps {
 	userID?: number;
 	tags: Partial<Tag>[];
+	displayInline?: boolean;
 }
 
 export default class Tags extends React.Component<ITagsProps> {
 	public render(): JSX.Element {
+		let ulClasses = "no-style-list ";
+
+		if (this.props.displayInline === true) {
+			ulClasses += "list-inline";
+		}
+
 		return (
 			<div>
-				<ul className="no-style-list">
+				<ul className={ulClasses}>
 					{this.props.tags.map((tag, i) => {
 						return (
 							<li key={i}>

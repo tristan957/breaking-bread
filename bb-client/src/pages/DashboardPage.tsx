@@ -2,8 +2,8 @@
 import React from "react";
 import MediaQuery from "react-responsive";
 import MobileSidebar from "../components/MobileSidebar";
-import ProfileSummary from "../components/ProfileSummary";
 import FeedContainer from "../containers/FeedContainer";
+import ProfileSummaryContainer from "../containers/ProfileSummaryContainer";
 import TagsContainer from "../containers/TagsContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
@@ -22,37 +22,35 @@ export default class DashboardPage extends React.Component<IDashboardPageProps> 
 					<div id="mobileSidebar">
 						<MobileSidebar {...this.props} />
 					</div>
-					<div id="TopPlaceHolder"></div>
-					<div id="mobileCenter">
+					<div id="top-buffer"></div>
+					<div id="mobile-center">
 						<FeedContainer />
 					</div>
 				</MediaQuery>
 
 				<MediaQuery query="(min-width: 950px)">
 					<div id="dashboard">
-						<div className="whitespace"></div>
-						<div id="Left">
+						<div id="left-container">
 							{
 								this.props.user === undefined ? undefined : (
 									<div>
-										<ProfileSummary id={this.props.user.id as number} name={`${this.props.user.firstName} ${this.props.user.lastName}`} imagePath={this.props.user.imagePath} />
+										<ProfileSummaryContainer user={this.props.user} />
 										<TagsContainer tags={this.props.user.followedTags || []} />
 										<TopicsContainer topics={this.props.user.whitelist || []} />
 									</div>
 								)
 							}
 						</div>
-						<div id="Center">
+						<div id="center-container">
 							<FeedContainer />
 						</div>
-						<div id="Right">
+						<div id="right-container">
 							{
 								this.props.user === undefined ? undefined : (
 									<UpcomingMealsContainer mealsAttending={this.props.user.mealsAttending || []} />
 								)
 							}
 						</div>
-						<div className="whitespace"></div>
 					</div>
 				</MediaQuery>
 			</div>

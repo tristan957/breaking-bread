@@ -75,14 +75,15 @@ const loadedMeals: Partial<Meal>[] = [
 ];
 
 interface IMealPageProps {
-	history: History;
-	location: Location;
-	match: {
+	history?: History;
+	location?: Location;
+	match?: {
 		params: {
 			mealID: number;
 			hostID: number;
 		};
 	};
+	userLoggedIn?: Partial<User>;
 }
 
 interface IMealPageState {
@@ -104,6 +105,10 @@ export default class MealPage extends React.Component<IMealPageProps, IMealPageS
 
 	public componentWillMount(): void {
 		// TODO: Fetch meal from server based on mealID
+		console.log(this.props.match);
+		if (this.props.match === undefined) {
+			return;
+		}
 		const meal: Partial<Meal> = loadedMeals[this.props.match.params.mealID - 1];
 		this.setState({
 			meal,

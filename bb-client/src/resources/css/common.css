@@ -50,23 +50,13 @@
     margin: 0px;
 }
 
+ul.list-inline li {
+    display: inline;
+    margin-right: .4em;
+}
+
 .monospace {
     font-family: "SFMono-Regular", "courier", "monospace";
-}
-
-.info-footer {
-    display: flex;
-    background: #edeff2;
-    border-radius: 3px;
-    padding: 5px;
-}
-
-.info-footer > div {
-    margin-right: 1em;
-}
-
-.info-footer:last-child {
-    margin-right: 0px;
 }
 
 hr.separator {

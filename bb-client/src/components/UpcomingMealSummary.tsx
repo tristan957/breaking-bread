@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import User from "../entities/User";
+import MealQuickInfoFooter from "./MealQuickInfoFooter";
 import "./resources/css/UpcomingMealSummary.css";
 
 interface IUpcomingMealSummaryProps {
@@ -17,15 +18,16 @@ export default class UpcomingMealSummary extends React.Component<IUpcomingMealSu
 	public render(): JSX.Element {
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">
-				<div className="no-link">
+				<div id="upcoming-meal-summary" className="no-link">
 					<div id="upcoming-meal-summary-header">{this.props.title}</div>
 					<div id="upcoming-meal-summary-body">
-						<div>{`${this.props.location}`}</div>
-						<div>{`${this.props.date.toLocaleDateString()} at ${this.props.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}</div>
-						<div className="info-footer">
-							<div>💵 {this.props.price === undefined || this.props.price === 0 ? "Free" : `$${this.props.price}`}</div>
-							<div>#️⃣ {`${this.props.guests.length}/${this.props.maxGuests}`}</div>
-						</div>
+						<MealQuickInfoFooter
+							price={this.props.price}
+							numOfGuests={this.props.guests.length}
+							maxGuests={this.props.maxGuests}
+							date={this.props.date}
+							location={this.props.location}
+						/>
 					</div>
 				</div>
 			</Link>

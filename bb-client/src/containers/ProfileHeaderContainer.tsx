@@ -1,9 +1,9 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
+import Topics from "../components/Topics";
 import Topic from "../entities/Topic";
-import "./resources/css/ProfileHeader.css";
+import "./resources/css/ProfileHeaderContainer.css";
 import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
-import Topics from "./Topics";
 
 const months: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -28,11 +28,18 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 	private renderWhiteList(): JSX.Element {
 		if (this.props.whiteList.length !== 0) {
 			return (
-				<Topics topics={this.props.whiteList} />
+				<div>
+					<div>Favorite topics</div>
+					<Topics
+						topics={this.props.whiteList}
+						displayInline={true}
+					/>
+				</div>
 			);
 		}
 
 		return (
+			// TODO: Only display if current user is owner of this page
 			<div>
 				Nada! Try clicking on topics you like to and then add them to your favorites.
 			</div>
@@ -42,11 +49,18 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 	private renderBlackList(): JSX.Element {
 		if (this.props.blackList.length !== 0) {
 			return (
-				<Topics topics={this.props.blackList} />
+				<div>
+					<div>Least favorite topics</div>
+					<Topics
+						topics={this.props.blackList}
+						displayInline={true}
+					/>
+				</div>
 			);
 		}
 
 		return (
+			// TODO: Only display if current user is owner of this page
 			<div>
 				Nada! If you don't care for a topic, try selecting it and adding it to your disliked.
 			</div>

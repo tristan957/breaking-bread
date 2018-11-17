@@ -1,3 +1,7 @@
 #tag {
 	text-transform: lowercase;
 }
+
+#tag-inline {
+	text-transform: lowercase;
+}

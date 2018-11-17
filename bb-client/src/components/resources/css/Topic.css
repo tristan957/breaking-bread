@@ -1,3 +1,8 @@
-#tag {
+#topic {
 	text-transform: lowercase;
+}
+
+#topic-inline {
+	text-transform: lowercase;
+	display: inline;
 }

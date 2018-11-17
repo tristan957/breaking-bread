@@ -33,7 +33,7 @@ export default class MobileSidebar extends React.Component<IDashboardProps, IApp
 
 	public render(): JSX.Element {
 		return (
-			<div id="container">
+			<div id="mobile-container">
 				<div id="left">
 					<Menu burgerButtonClassName={"leftPane"}>
 						<div>
