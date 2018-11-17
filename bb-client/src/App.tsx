@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from "react-router";
+import { Route, Switch } from "react-router";
 import NavigationBar from "./components/NavigationBar";
 import User from "./entities/User";
 import DashboardPage from "./pages/DashboardPage";
@@ -130,13 +130,15 @@ export default class App extends React.Component<{}, IAppState> {
 				<div id="page-content">
 					<div id="content-container">
 						<UserContext.Provider value={{ user: this.state.user }}>
-							<Route exact path="/" render={() => <DashboardPage user={this.state.user} />} />
-							<Route exact path="/m/:mealID" component={() => <MealPage userLoggedIn={this.state.user} />} />
-							{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} /> */}
-							<Route exact path="/p/:userID" component={ProfilePage} />
-							{/* <Route exact path="/p/:userID/e/" component={ProfileEditPage} /> */}
-							<Route exact path="/r/:recipeID" component={() => <RecipePage userLoggedIn={this.state.user} />} />
-							{/* <Route exact path="/r/:recipeID/e/" component={RecipeEditPage} /> */}
+							<Switch>
+								<Route exact path="/" component={DashboardPage} />
+								<Route exact path="/m/:mealID" component={MealPage} />
+								{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} /> */}
+								<Route exact path="/p/:userID" component={ProfilePage} />
+								{/* <Route exact path="/p/:userID/e/" component={ProfileEditPage} /> */}
+								<Route exact path="/r/:recipeID" component={RecipePage} />
+								{/* <Route exact path="/r/:recipeID/e/" component={RecipeEditPage} /> */}
+							</Switch>
 						</UserContext.Provider>
 					</div>
 				</div>

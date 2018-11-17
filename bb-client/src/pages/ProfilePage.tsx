@@ -148,6 +148,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 						userBeingViewed: this.fetchUserFromParams(),
 						userLoggedIn: userContext.user,
 					};
+
 					return (
 						<div>
 							<MediaQuery query="(max-width: 949px)">

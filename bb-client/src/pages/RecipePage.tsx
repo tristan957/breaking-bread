@@ -1,32 +1,21 @@
 // tslint:disable: no-unsafe-any
-import { History, Location } from "history";
 import React from "react";
 import MediaQuery from "react-responsive";
+import { RouteComponentProps } from "react-router-dom";
+import { UserContext } from "../App";
 import Recipe from "../entities/Recipe";
-import User from "../entities/User";
 
-interface IRecipePageProps {
-	history?: History;
-	location?: Location;
-	match?: {
-		params: {
-			userID: number;
-		};
-	};
-	userLoggedIn?: Partial<User>;
+interface IRecipePageParams {
+	recipeID: string;
 }
 
 interface IRecipePageState {
 	recipe: Partial<Recipe>;
 }
 
-export default class RecipePage extends React.Component<IRecipePageProps, IRecipePageState> {
-	constructor(props: IRecipePageProps) {
+export default class RecipePage extends React.Component<RouteComponentProps<IRecipePageParams>, IRecipePageState> {
+	constructor(props: RouteComponentProps<IRecipePageParams>) {
 		super(props);
-
-		this.state = {
-			recipe: {},
-		};
 	}
 
 	public componentWillMount(): void {
@@ -45,18 +34,24 @@ export default class RecipePage extends React.Component<IRecipePageProps, IRecip
 
 	public render(): JSX.Element {
 		return (
-			<div>
-				<MediaQuery query="(max-width: 949px)">
-					<div>
-						<div id="profile-header">
-						</div>
-					</div>
-				</MediaQuery>
+			<UserContext.Consumer>
+				{userContext => {
+					return (
+						<div>
+							<MediaQuery query="(max-width: 949px)">
+								<div>
+									<div id="profile-header">
+									</div>
+								</div>
+							</MediaQuery>
 
-				<MediaQuery query="(min-width: 950px)">
-					<div></div>
-				</MediaQuery>
-			</div>
+							<MediaQuery query="(min-width: 950px)">
+								<div></div>
+							</MediaQuery>
+						</div>
+					);
+				}}
+			</UserContext.Consumer>
 		);
 	}
 }

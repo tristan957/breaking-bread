@@ -1,7 +1,8 @@
 // tslint:disable: no-unsafe-any
-import { History, Location } from "history";
 import React from "react";
 import MediaQuery from "react-responsive";
+import { RouteComponentProps } from "react-router-dom";
+import { UserContext } from "../App";
 import HostSummary from "../components/HostSummary";
 import MealDescription from "../components/MealDescription";
 import GuestsContainer from "../containers/GuestListContainer";
@@ -74,97 +75,91 @@ const loadedMeals: Partial<Meal>[] = [
 	},
 ];
 
-interface IMealPageProps {
-	history?: History;
-	location?: Location;
-	match?: {
-		params: {
-			mealID: number;
-			hostID: number;
-		};
-	};
-	userLoggedIn?: Partial<User>;
+interface IMealPageParams {
+	userID: string;
+	mealID: string;
 }
 
 interface IMealPageState {
+	userLoggedIn?: Partial<User>;
 	meal: Partial<Meal>;
 	host: Partial<User>;
 	guests: Partial<User>[];
 }
 
-export default class MealPage extends React.Component<IMealPageProps, IMealPageState> {
-	constructor(props: IMealPageProps) {
+export default class MealPage extends React.Component<RouteComponentProps<IMealPageParams>, IMealPageState> {
+	constructor(props: RouteComponentProps<IMealPageParams>) {
 		super(props);
-
-		this.state = {
-			meal: {},
-			host: {},
-			guests: [{}],
-		};
 	}
 
-	public componentWillMount(): void {
-		// TODO: Fetch meal from server based on mealID
-		console.log(this.props.match);
-		if (this.props.match === undefined) {
-			return;
-		}
-		const meal: Partial<Meal> = loadedMeals[this.props.match.params.mealID - 1];
-		this.setState({
-			meal,
-			host: meal.host as User,
-			guests: meal.guests as User[],
-		});
-	}
+	// public componentWillMount(): void {
+	// 	// TODO: Fetch meal from server based on mealID
+	// 	console.log(this.props.match);
+	// 	if (this.props.match === undefined) {
+	// 		return;
+	// 	}
+	// 	const meal: Partial<Meal> = loadedMeals[this.props.match.params.mealID - 1];
+	// 	this.setState({
+	// 		meal,
+	// 		host: meal.host as User,
+	// 		guests: meal.guests as User[],
+	// 	});
+	// }
 
 	public render(): JSX.Element {
 		return (
-			<div>
-				<MediaQuery query="(max-width: 949px)">
-					<div>
-						<div id="mobileArticle">
-							<MealDescription
-								meal={this.state.meal}
-							/>
-							<HostSummary
-								id={this.state.host.id as number}
-								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
-								about={this.state.host.about as string}
-								imagePath={this.state.host.imagePath}
-								topics={this.state.host.whitelist || []}
-							/>
-							<GuestsContainer
-								guests={this.state.guests}
-								maxGuests={this.state.meal.maxGuests as number}
-							/>
-						</div>
-					</div>
-				</MediaQuery>
+			<UserContext.Consumer>
+				{userContext => {
+					return (
+						<div>
+							<MediaQuery query="(max-width: 949px)">
+								<div>
+									<div id="mobileArticle">
+										<MealDescription
+											meal={this.state.meal}
+										/>
+										<HostSummary
+											id={this.state.host.id as number}
+											name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
+											about={this.state.host.about as string}
+											imagePath={this.state.host.imagePath}
+											topics={this.state.host.whitelist || []}
+										/>
+										<GuestsContainer
+											guests={this.state.guests}
+											maxGuests={this.state.meal.maxGuests as number}
+										/>
+									</div>
+								</div>
+							</MediaQuery>
 
-				<MediaQuery query="(min-width: 950px)">
-					<div>
-						<div id="Article">
-							<MealDescription
-								meal={this.state.meal}
-							/>
+							<MediaQuery query="(min-width: 950px)">
+								<div>
+									<div id="Article">
+										<MealDescription
+											meal={this.state.meal}
+										/>
+									</div>
+									<div id="ArticleRight">
+										<HostSummary
+											id={this.state.host.id as number}
+											name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
+											about={this.state.host.about as string}
+											imagePath={this.state.host.imagePath}
+											topics={this.state.host.whitelist || []}
+										/>
+										<GuestsContainer
+											guests={this.state.guests}
+											maxGuests={this.state.meal.maxGuests as number}
+										/>
+									</div>
+									{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
+								</div>
+							</MediaQuery>
 						</div>
-						<div id="ArticleRight">
-							<HostSummary
-								id={this.state.host.id as number}
-								name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
-								about={this.state.host.about as string}
-								imagePath={this.state.host.imagePath}
-								topics={this.state.host.whitelist || []}
-							/>
-							<GuestsContainer
-								guests={this.state.guests}
-								maxGuests={this.state.meal.maxGuests as number}
-							/>
-						</div>
-						{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
-					</div>
-				</MediaQuery>
-			</div>
+					);
+				}}
+			</UserContext.Consumer>
 		);
 	}
 }
