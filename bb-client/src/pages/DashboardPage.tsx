@@ -13,7 +13,7 @@ import User from "../entities/User";
 import "./resources/css/DashboardPage.css";
 
 interface IDashboardPageState {
-	user?: Partial<User>;
+	userLoggedIn?: Partial<User>;
 }
 
 export default class DashboardPage extends React.Component<RouteComponentProps, IDashboardPageState> {
@@ -22,7 +22,7 @@ export default class DashboardPage extends React.Component<RouteComponentProps, 
 			<UserContext.Consumer>
 				{userContext => {
 					this.state = {
-						user: userContext.user,
+						userLoggedIn: userContext.user,
 					};
 
 					return (
@@ -41,11 +41,11 @@ export default class DashboardPage extends React.Component<RouteComponentProps, 
 								<div id="dashboard">
 									<div id="left-container">
 										{
-											this.state.user === undefined ? undefined : (
+											this.state.userLoggedIn === undefined ? undefined : (
 												<div>
-													<ProfileSummaryContainer user={this.state.user} />
-													<TagsContainer tags={this.state.user.followedTags || []} />
-													<TopicsContainer topics={this.state.user.whitelist || []} />
+													<ProfileSummaryContainer user={this.state.userLoggedIn} />
+													<TagsContainer tags={this.state.userLoggedIn.followedTags || []} />
+													<TopicsContainer topics={this.state.userLoggedIn.whitelist || []} />
 												</div>
 											)
 										}
@@ -55,8 +55,8 @@ export default class DashboardPage extends React.Component<RouteComponentProps, 
 									</div>
 									<div id="right-container">
 										{
-											this.state.user === undefined ? undefined : (
-												<UpcomingMealsContainer mealsAttending={this.state.user.mealsAttending || []} />
+											this.state.userLoggedIn === undefined ? undefined : (
+												<UpcomingMealsContainer mealsAttending={this.state.userLoggedIn.mealsAttending || []} />
 											)
 										}
 									</div>
