@@ -6,6 +6,7 @@ import { UserContext } from "../App";
 import HostSummary from "../components/HostSummary";
 import MealDescription from "../components/MealDescription";
 import GuestsContainer from "../containers/GuestListContainer";
+import MealActionsContainer from "../containers/MealActionsContainer";
 import Meal from "../entities/Meal";
 import User from "../entities/User";
 import "./resources/css/MealPage.css";
@@ -92,19 +93,19 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 		super(props);
 	}
 
-	// public componentWillMount(): void {
-	// 	// TODO: Fetch meal from server based on mealID
-	// 	console.log(this.props.match);
-	// 	if (this.props.match === undefined) {
-	// 		return;
-	// 	}
-	// 	const meal: Partial<Meal> = loadedMeals[this.props.match.params.mealID - 1];
-	// 	this.setState({
-	// 		meal,
-	// 		host: meal.host as User,
-	// 		guests: meal.guests as User[],
-	// 	});
-	// }
+	public componentWillMount(): void {
+		// TODO: Fetch meal from server based on mealID
+		console.log(this.props.match);
+		if (this.props.match === undefined) {
+			return;
+		}
+		const meal: Partial<Meal> = loadedMeals[Number(this.props.match.params.mealID) - 1];
+		this.setState({
+			meal,
+			host: meal.host as User,
+			guests: meal.guests as User[],
+		});
+	}
 
 	public render(): JSX.Element {
 		return (
@@ -129,6 +130,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 											guests={this.state.guests}
 											maxGuests={this.state.meal.maxGuests as number}
 										/>
+										<MealActionsContainer />
 									</div>
 								</div>
 							</MediaQuery>
@@ -152,6 +154,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 											guests={this.state.guests}
 											maxGuests={this.state.meal.maxGuests as number}
 										/>
+										<MealActionsContainer />
 									</div>
 									{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
 								</div>
