@@ -21,14 +21,6 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 	constructor(props: RouteComponentProps<IProfilePageParams>) {
 		super(props);
 
-		// const user = this.fetchUserFromParams();
-		// console.log(user);
-		// this.state = {
-		// 	userBeingViewed: user,
-		// 	userLoggedIn: undefined,
-		// };
-		// console.log(`CONSTRUCTOR: ${this.state.userBeingViewed.createdAt}`);
-
 		this.fetchUserFromParams = this.fetchUserFromParams.bind(this);
 		this.getUserReviewAverage = this.getUserReviewAverage.bind(this);
 	}
@@ -148,6 +140,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 						userBeingViewed: this.fetchUserFromParams(),
 						userLoggedIn: userContext.user,
 					};
+					console.log(this.state.userLoggedIn);
 
 					return (
 						<div>
@@ -162,7 +155,6 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 								<div>
 									<div id="profile-header">
 										{/* TODO: Need followed tags */}
-										{console.log(this.state.userLoggedIn)}
 										<ProfileHeader
 											name={`${this.state.userBeingViewed.firstName} ${this.state.userBeingViewed.lastName}`}
 											about={this.state.userBeingViewed.about as string}

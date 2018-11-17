@@ -10,16 +10,18 @@ interface IRecipePageParams {
 }
 
 interface IRecipePageState {
+	userLoggedIn?: Partial<Recipe>;
 	recipe: Partial<Recipe>;
 }
 
 export default class RecipePage extends React.Component<RouteComponentProps<IRecipePageParams>, IRecipePageState> {
 	constructor(props: RouteComponentProps<IRecipePageParams>) {
 		super(props);
+
+		this.fetchRecipeFromParams = this.fetchRecipeFromParams.bind(this);
 	}
 
-	public componentWillMount(): void {
-		// TODO: Fetch meal from server based on recipeID
+	private fetchRecipeFromParams(): Partial<Recipe> {
 		const tempRecipe: Partial<Recipe> = {
 			id: 2,
 			name: "Ropa vieja",
@@ -27,15 +29,20 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 			timesFavorited: 10,
 		};
 
-		this.setState({
-			recipe: tempRecipe,
-		});
+		const recipeID: number = parseInt(this.props.match.params.recipeID, 10);
+
+		return tempRecipe;
 	}
 
 	public render(): JSX.Element {
 		return (
 			<UserContext.Consumer>
 				{userContext => {
+					this.state = {
+						userLoggedIn: userContext.user,
+						recipe: this.fetchRecipeFromParams(),
+					};
+
 					return (
 						<div>
 							<MediaQuery query="(max-width: 949px)">
