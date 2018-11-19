@@ -34,6 +34,7 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			render: RenderSide.HostedMeals,
 		};
 		this.changeRender = this.changeRender.bind(this);
+		this.renderActivity = this.renderActivity.bind(this);
 	}
 
 	private changeRender(newRender: RenderSide): void {

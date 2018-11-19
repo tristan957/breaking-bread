@@ -20,7 +20,7 @@ interface IRecipeHeaderProps {
 	allergies: Partial<Allergy>[];
 }
 
-export default class RecipeHeader extends React.Component<IRecipeHeaderProps> {
+export default class RecipeHeaderContainer extends React.Component<IRecipeHeaderProps> {
 	constructor(props: IRecipeHeaderProps) {
 		super(props);
 
