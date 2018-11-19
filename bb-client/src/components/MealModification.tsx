@@ -1,33 +1,21 @@
-// Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import moment from "moment";
 import React from "react";
 import { SingleDatePicker } from "react-dates";
 import Rodal from "rodal";
 import Meal from "../entities/Meal";
-import "./resources/css/MealActions.css";
 
-enum Identity {
-	guest, host,
-}
-
-enum MealStatus {
-	notApplicable, unApplied, applied, accepted, rejected, pending,
-}
-
-interface IMealActionsProps {
+interface IMealModificationProps {
 	meal: Partial<Meal>;
-	setMeal: (
+	setMeal: ((
 		date: Date | undefined,
 		title: string | undefined,
 		location: string | undefined,
 		description: string | undefined,
 		time: string
-	) => void;
+	) => void);
 }
 
-interface IMealActionsState {
-	identity: Identity;
-	mealStatus: MealStatus;
+interface IMealModificationState {
 	deletionModalVisible: boolean;
 	editModalVisible: boolean;
 	mealTitle: string | undefined;
@@ -40,8 +28,8 @@ interface IMealActionsState {
 	testText: string;
 }
 
-export default class MealActions extends React.Component<IMealActionsProps, IMealActionsState> {
-	constructor(props: IMealActionsProps) {
+export default class MealModification extends React.Component<IMealModificationProps, IMealModificationState> {
+	constructor(props: IMealModificationProps) {
 		super(props);
 
 		this.showDeletionModal = this.showDeletionModal.bind(this);
@@ -52,8 +40,6 @@ export default class MealActions extends React.Component<IMealActionsProps, IMea
 
 	public componentWillMount(): void {
 		this.setState({
-			identity: Identity.host,
-			mealStatus: MealStatus.notApplicable,
 			deletionModalVisible: false,
 			editModalVisible: false,
 			mealTitle: this.props.meal.title,
@@ -132,9 +118,9 @@ export default class MealActions extends React.Component<IMealActionsProps, IMea
 		this.hideEditModal();
 	}
 
-	public renderHostAction(): JSX.Element {
+	public render(): JSX.Element {
 		return (
-			<div className="card cardSubstance mealActions">
+			<div className="card cardSubstance MealModification">
 				<button className="actionButton" onClick={this.showEditModal}>edit</button>
 				<button className="actionButton" onClick={this.showDeletionModal}>delete</button>
 				<span>{this.state.testText}</span>
@@ -184,58 +170,5 @@ export default class MealActions extends React.Component<IMealActionsProps, IMea
 				</Rodal>
 			</div>
 		);
-	}
-
-	public renderGuestAction(): JSX.Element {
-		return (
-			<div className="card cardSubstance mealActions">
-				<div><h5>status: {this.renderStatus()}</h5></div>
-				{this.renderButton()}
-			</div>
-		);
-	}
-
-	public renderStatus(): string {
-		switch (this.state.mealStatus) {
-			case MealStatus.unApplied: {
-				return "not applied";
-			}
-			case MealStatus.applied: {
-				return "applied";
-			}
-			case MealStatus.rejected: {
-				return "rejected";
-			}
-			case MealStatus.pending: {
-				return "pending";
-			}
-			case MealStatus.accepted: {
-				return "accepted";
-			}
-			default: {
-				return "";
-			}
-		}
-	}
-
-	public renderButton(): JSX.Element {
-		switch (this.state.mealStatus) {
-			case MealStatus.unApplied: {
-				return <button className="actionButton">apply</button>;
-			}
-			case MealStatus.rejected: {
-				return <button className="actionButton">apply</button>;
-			}
-			default: {
-				return <button className="actionButton">cancel</button>;
-			}
-		}
-	}
-
-	public render(): JSX.Element {
-		if (this.state.identity == Identity.host) {
-			return this.renderHostAction();
-		}
-		return this.renderGuestAction();
 	}
 }
