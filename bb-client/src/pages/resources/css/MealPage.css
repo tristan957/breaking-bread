@@ -3,9 +3,7 @@
     height: 100%;
     float: left;
 	border-collapse: collapse;
-	margin-top: 2em;
 	margin-bottom: 2em;
-	padding-left: 2.6em;	
 }
 
 #ArticleRight {
@@ -14,9 +12,6 @@
 	position: relative;
 	float: left;
 	border-collapse: collapse;
-	padding-left: 1px;
-	margin-top: 2em;
-	padding-right: 1.1em;
 }
 
 #GuestListHeader h3,
