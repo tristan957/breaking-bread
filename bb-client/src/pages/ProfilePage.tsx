@@ -25,23 +25,6 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 		this.getUserReviewAverage = this.getUserReviewAverage.bind(this);
 	}
 
-	private getUserReviewAverage(): number {
-		if (this.state.userBeingViewed.reviews === undefined || this.state.userBeingViewed.reviews.length === 0) {
-			return 0;
-		}
-
-		let sum = 0;
-		let effectiveLength = 0;
-		this.state.userBeingViewed.reviews.forEach(element => {
-			if (element.rating !== undefined) {
-				sum += element.rating;
-				effectiveLength += 1;
-			}
-		});
-
-		return sum / effectiveLength;
-	}
-
 	private fetchUserFromParams(): Partial<User> {
 		const date = new Date("November 15, 2008 18:30:00");
 		return {
@@ -132,6 +115,23 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 		};
 	}
 
+	private getUserReviewAverage(): number {
+		if (this.state.userBeingViewed.reviews === undefined || this.state.userBeingViewed.reviews.length === 0) {
+			return 0;
+		}
+
+		let sum = 0;
+		let effectiveLength = 0;
+		this.state.userBeingViewed.reviews.forEach(element => {
+			if (element.rating !== undefined) {
+				sum += element.rating;
+				effectiveLength += 1;
+			}
+		});
+
+		return sum / effectiveLength;
+	}
+
 	public render(): JSX.Element {
 		return (
 			<UserContext.Consumer>
@@ -163,6 +163,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 											imagePath={this.state.userBeingViewed.imagePath}
 											joinedAt={this.state.userBeingViewed.createdAt as Date}
 											reviewAverage={this.getUserReviewAverage()}
+											timesFavorited={this.state.userBeingViewed.timesFavorited as number}
 										/>
 									</div>
 									<div id="profile-under">  {/* Essentially a mini feed for a specific user */}

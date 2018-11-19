@@ -158,7 +158,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 											guests={this.state.guests}
 											maxGuests={this.state.meal.maxGuests as number}
 										/>
-										<MealActionsContainer />
+										{/* <MealActionsContainer /> */}
 									</div>
 									{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
 								</div>
