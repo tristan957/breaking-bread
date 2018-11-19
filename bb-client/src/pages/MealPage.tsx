@@ -4,6 +4,7 @@ import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
 import MealDescription from "../components/MealDescription";
+import HostSummaryContainer from "../containers/HostSummaryContainer";
 import MealActionsContainer from "../containers/MealActionsContainer";
 import Meal from "../entities/Meal";
 import User from "../entities/User";
@@ -148,7 +149,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										<MealDescription
 											meal={this.state.meal}
 										/>
-										{/* <HostSummary
+										<HostSummaryContainer
 											id={this.state.host.id as number}
 											name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 											about={this.state.host.about as string}
@@ -172,7 +173,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										/>
 									</div>
 									<div id="ArticleRight">
-										{/* <HostSummary
+										<HostSummaryContainer
 											id={this.state.host.id as number}
 											name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 											about={this.state.host.about as string}
@@ -182,8 +183,8 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										{/* <GuestsContainer
 											guests={this.state.guests}
 											maxGuests={this.state.meal.maxGuests as number}
-										/> */}
-										<MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} />
+										/>
+										{/* <MealActionsContainer /> */}
 									</div>
 									{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
 								</div>

@@ -16,6 +16,7 @@ interface IProfileHeaderProps {
 	imagePath?: string;
 	joinedAt: Date;
 	reviewAverage: number;
+	timesFavorited: number;
 }
 
 export default class ProfileHeader extends React.Component<IProfileHeaderProps> {
@@ -23,6 +24,7 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 		super(props);
 
 		this.renderWhiteList = this.renderWhiteList.bind(this);
+		this.renderBlackList = this.renderBlackList.bind(this);
 	}
 
 	private renderWhiteList(): JSX.Element {
@@ -89,6 +91,7 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 					<div id="header-card-right">
 						<div id="username">
 							⭐{parseFloat(this.props.reviewAverage.toFixed(2))}/5
+							❤️x{this.props.timesFavorited} {/* TODO: Add button to make favorite */}
 						</div>
 						<div>
 							Member since {months[this.props.joinedAt.getMonth()]}, {this.props.joinedAt.toLocaleDateString(undefined, { year: "2-digit" })}
