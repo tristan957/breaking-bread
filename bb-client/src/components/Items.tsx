@@ -1,13 +1,12 @@
 import React from "react";
 import Allergy from "../entities/Allergy";
-import Ingredient from "../entities/Ingredient";
 import Tag from "../entities/Tag";
 import Topic from "../entities/Topic";
 import Item from "./Item";
 
 interface IItemsProps {
 	userID?: number;
-	items: Partial<Topic | Tag | Ingredient | Allergy>[];
+	items: Partial<Topic | Tag | Allergy>[];
 	monospace?: boolean;  // Default true
 	leadingChar: string;
 	displayInline?: boolean;  // Default false

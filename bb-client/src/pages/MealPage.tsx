@@ -80,7 +80,6 @@ interface IMealPageParams {
 }
 
 interface IMealPageState {
-	userLoggedIn?: Partial<User>;
 	meal: Partial<Meal>;
 	isGuest: boolean;
 }
@@ -91,10 +90,15 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 
 		this.fetchMealFromParams = this.fetchMealFromParams.bind(this);
 		this.setMeal = this.setMeal.bind(this);
+
+		this.state = {
+			meal: this.fetchMealFromParams(),
+			isGuest: false,
+		};
 	}
 
 	private fetchMealFromParams(): Partial<Meal> {
-		const mealID: number = parseInt(this.props.match.params.mealID, 10); // +1 for array
+		const mealID: number = parseInt(this.props.match.params.mealID, 10);
 		return loadedMeals[mealID];
 	}
 
@@ -113,20 +117,6 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 		return (
 			<UserContext.Consumer>
 				{userContext => {
-					// console.log(this.state);
-					if (this.state === null) {
-						const currentMeal: Partial<Meal> = this.fetchMealFromParams();
-						if (currentMeal.host === undefined || currentMeal.guests === undefined) {
-							return undefined;
-						}
-
-						this.state = {
-							userLoggedIn: userContext.user,
-							meal: currentMeal,
-							isGuest: (userContext.user !== undefined && currentMeal.host!.id === userContext.user.id),
-						};
-					}
-					console.log(this.state.meal);
 					return (
 						<div>
 							<MediaQuery query="(max-width: 949px)">

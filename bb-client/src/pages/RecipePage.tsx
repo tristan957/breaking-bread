@@ -13,7 +13,6 @@ interface IRecipePageParams {
 }
 
 interface IRecipePageState {
-	userLoggedIn?: Partial<Recipe>;
 	recipe: Partial<Recipe>;
 }
 
@@ -23,6 +22,10 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 
 		this.fetchRecipeFromParams = this.fetchRecipeFromParams.bind(this);
 		this.getRecipeReviewAverage = this.getRecipeReviewAverage.bind(this);
+
+		this.state = {
+			recipe: this.fetchRecipeFromParams(),
+		};
 	}
 
 	private fetchRecipeFromParams(): Partial<Recipe> {
@@ -42,16 +45,6 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 			],
 			createdAt: new Date("November 18, 2018 22:00:00"),
 			timesFavorited: 10,
-			ingredients: [
-				{
-					id: 1,
-					name: "Chicken",
-				},
-				{
-					id: 2,
-					name: "Bread",
-				},
-			],
 			reviews: [
 				{
 					id: 1,
@@ -107,11 +100,6 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 		return (
 			<UserContext.Consumer>
 				{userContext => {
-					this.state = {
-						userLoggedIn: userContext.user,
-						recipe: this.fetchRecipeFromParams(),
-					};
-
 					return (
 						<div>
 							<MediaQuery query="(max-width: 949px)">
@@ -137,7 +125,6 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 									<div id="recipe-under">
 										<RecipeDetailsContainer
 											reviews={this.state.recipe.reviews || []}
-											ingredients={this.state.recipe.ingredients || []}
 										/>
 									</div>
 								</div>
