@@ -3,9 +3,7 @@ import React from "react";
 import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
-import HostSummary from "../components/HostSummary";
 import MealDescription from "../components/MealDescription";
-import GuestsContainer from "../containers/GuestListContainer";
 import MealActionsContainer from "../containers/MealActionsContainer";
 import Meal from "../entities/Meal";
 import User from "../entities/User";
@@ -85,6 +83,7 @@ interface IMealPageState {
 	meal: Partial<Meal>;
 	host: Partial<User>;
 	guests: Partial<User>[];
+	// currentMeal: Partial<Meal>
 }
 
 export default class MealPage extends React.Component<RouteComponentProps<IMealPageParams>, IMealPageState> {
@@ -92,6 +91,10 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 		super(props);
 
 		this.fetchMealFromParams = this.fetchMealFromParams.bind(this);
+		this.setMeal = this.setMeal.bind(this);
+		// this.setState({
+		// 	currentMeal: this.fetchMealFromParams(),
+		// })
 	}
 
 	private fetchMealFromParams(): Partial<Meal> {
@@ -99,22 +102,44 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 		return loadedMeals[mealID];
 	}
 
+	public setMeal(
+		date: Date | undefined,
+		title: string | undefined,
+		location: string | undefined,
+		description: string | undefined,
+		time: string
+	): void {
+		// this.state.meal.title = title;
+		// this.state.meal.location = location;
+		// this.state.meal.description = description;
+		// this.state.meal.date = date;
+
+
+		this.setState({ meal: { ...this.state.meal, host: { ...this.state.meal.host, firstName: "TRISTAN PARTIN" } } });
+		// currentMeal = loadedMeals[2];
+		// loadedMeals[1].title = "xxxxxx";
+		// alert(loadedMeals[1].title);
+	}
+
 	public render(): JSX.Element {
 		return (
 			<UserContext.Consumer>
 				{userContext => {
-					const currentMeal: Partial<Meal> = this.fetchMealFromParams();
-					if (currentMeal.host === undefined || currentMeal.guests === undefined) {
-						return undefined;
+					// console.log(this.state);
+					if (this.state === null) {
+						const currentMeal: Partial<Meal> = this.fetchMealFromParams();
+						// if (currentMeal.host === undefined || currentMeal.guests === undefined) {
+						// 	return undefined;
+						// }
+
+						this.state = {
+							userLoggedIn: userContext.user,
+							meal: currentMeal,
+							host: currentMeal.host as Partial<User>,
+							guests: currentMeal.guests as Partial<User>[],
+						};
 					}
-
-					this.state = {
-						userLoggedIn: userContext.user,
-						meal: currentMeal,
-						host: currentMeal.host as Partial<User>,
-						guests: currentMeal.guests as Partial<User>[],
-					};
-
+					console.log(this.state.host);
 					return (
 						<div>
 							<MediaQuery query="(max-width: 949px)">
@@ -123,18 +148,18 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										<MealDescription
 											meal={this.state.meal}
 										/>
-										<HostSummary
+										{/* <HostSummary
 											id={this.state.host.id as number}
 											name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 											about={this.state.host.about as string}
 											imagePath={this.state.host.imagePath}
 											topics={this.state.host.whitelist || []}
-										/>
-										<GuestsContainer
+										/> */}
+										{/* <GuestsContainer
 											guests={this.state.guests}
 											maxGuests={this.state.meal.maxGuests as number}
-										/>
-										<MealActionsContainer />
+										/> */}
+										<MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} />
 									</div>
 								</div>
 							</MediaQuery>
@@ -147,18 +172,18 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										/>
 									</div>
 									<div id="ArticleRight">
-										<HostSummary
+										{/* <HostSummary
 											id={this.state.host.id as number}
 											name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 											about={this.state.host.about as string}
 											imagePath={this.state.host.imagePath}
 											topics={this.state.host.whitelist || []}
-										/>
-										<GuestsContainer
+										/> */}
+										{/* <GuestsContainer
 											guests={this.state.guests}
 											maxGuests={this.state.meal.maxGuests as number}
-										/>
-										<MealActionsContainer />
+										/> */}
+										<MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} />
 									</div>
 									{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
 								</div>
