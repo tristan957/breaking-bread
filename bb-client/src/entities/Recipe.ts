@@ -1,5 +1,4 @@
 import Allergy from "./Allergy";
-import Ingredient from "./Ingredient";
 import RecipeReview from "./RecipeReview";
 import Tag from "./Tag";
 import User from "./User";
@@ -16,7 +15,7 @@ type Recipe = {
 	timesFavorited: number;
 	reviews: Partial<RecipeReview>[];
 	tags: Partial<Tag>[];
-	ingredients: Partial<Ingredient>[];
+	// ingredients: Partial<Ingredient>[]; TODO: Need to get rid of ingredients
 	allergies: Partial<Allergy>[];
 };
 
