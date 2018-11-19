@@ -1,6 +1,6 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
-import Topics from "../components/Topics";
+import Items from "../components/Items";
 import Topic from "../entities/Topic";
 import "./resources/css/ProfileHeaderContainer.css";
 import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
@@ -32,9 +32,10 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 			return (
 				<div>
 					<div>Favorite topics</div>
-					<Topics
-						topics={this.props.whiteList}
+					<Items
+						items={this.props.whiteList}
 						displayInline={true}
+						leadingChar="#"
 					/>
 				</div>
 			);
@@ -53,9 +54,10 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 			return (
 				<div>
 					<div>Least favorite topics</div>
-					<Topics
-						topics={this.props.blackList}
+					<Items
+						items={this.props.blackList}
 						displayInline={true}
+						leadingChar="#"
 					/>
 				</div>
 			);

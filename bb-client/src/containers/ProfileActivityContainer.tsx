@@ -1,11 +1,11 @@
 import React from "react";
 import { Button, ButtonGroup } from "reactstrap";
-import MealSummaries from "../components/MealSummaries";
 import ProfileList from "../components/ProfileList";
 import RecipeSummaries from "../components/RecipeSummaries";
 import Meal from "../entities/Meal";
 import Recipe from "../entities/Recipe";
 import User from "../entities/User";
+import MealSummariesContainer from "./MealSummariesContainer";
 import "./resources/css/ProfileActivityContainer.css";
 
 enum RenderSide {
@@ -34,6 +34,7 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			render: RenderSide.HostedMeals,
 		};
 		this.changeRender = this.changeRender.bind(this);
+		this.renderActivity = this.renderActivity.bind(this);
 	}
 
 	private changeRender(newRender: RenderSide): void {
@@ -53,11 +54,11 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			case RenderSide.HostedMeals: {
 				return (
 					<div>
-						<div className="tags-topics-list-header">Hosted Meals</div>
+						<div className="container-header">Hosted Meals</div>
 						<hr className="seperator" />
 						{
 							this.props.hostedMeals.length === 0 ? nada : (
-								<MealSummaries
+								<MealSummariesContainer
 									meals={this.props.hostedMeals}
 									showHosts={false}
 								/>
@@ -69,7 +70,7 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			case RenderSide.AuthoredRecipes: {
 				return (
 					<div>
-						<div className="tags-topics-list-header">Authored Recipes</div>
+						<div className="container-header">Authored Recipes</div>
 						<hr className="seperator" />
 						{
 							this.props.authoredRecipes.length === 0 ? nada : (
@@ -82,7 +83,7 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			case RenderSide.FavoriteRecipes: {
 				return (
 					<div>
-						<div className="tags-topics-list-header">Favorite Recipes</div>
+						<div className="container-header">Favorite Recipes</div>
 						<hr className="seperator" />
 						{
 							this.props.favoriteRecipes.length === 0 ? nada : (
@@ -96,7 +97,7 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			case RenderSide.FavoriteUsers: {
 				return (
 					<div>
-						<div className="tags-topics-list-header">Favorite Users</div>
+						<div className="container-header">Favorite Users</div>
 						<hr className="seperator" />
 						{
 							this.props.favoriteUsers.length === 0 ? nada : (

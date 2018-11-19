@@ -3,8 +3,10 @@ import React from "react";
 import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
-import RecipeHeader from "../containers/RecipeHeaderContainer";
+import RecipeDetailsContainer from "../containers/RecipeDetailsContainer";
+import RecipeHeaderContainer from "../containers/RecipeHeaderContainer";
 import Recipe from "../entities/Recipe";
+import "./resources/css/RecipePage.css";
 
 interface IRecipePageParams {
 	recipeID: string;
@@ -93,6 +95,15 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 	}
 
 	public render(): JSX.Element {
+		/**
+		 *  NOTE: If the current user isn't the recipe creator,
+		 * the edit button should be a copy and edit instead
+		 * (this should call the api to make a new meal off this one (with the user as the author),
+		 * and then link to that meal's page).
+		 *
+		 * Maybe allow any user to edit if the ingredient list is empty
+		 */
+
 		return (
 			<UserContext.Consumer>
 				{userContext => {
@@ -111,9 +122,9 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 							</MediaQuery>
 
 							<MediaQuery query="(min-width: 950px)">
-								<div>
+								<div className="card">
 									<div id="recipe-header">
-										<RecipeHeader
+										<RecipeHeaderContainer
 											name={this.state.recipe.name as string}
 											description={this.state.recipe.description}
 											tagList={this.state.recipe.tags || []}
@@ -124,7 +135,10 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 										/>
 									</div>
 									<div id="recipe-under">
-
+										<RecipeDetailsContainer
+											reviews={this.state.recipe.reviews || []}
+											ingredients={this.state.recipe.ingredients || []}
+										/>
 									</div>
 								</div>
 							</MediaQuery>

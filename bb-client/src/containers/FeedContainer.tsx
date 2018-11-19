@@ -5,8 +5,8 @@ import "react-dates/initialize";
 import { Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
 import Rodal from "rodal";
 import AutoCompletionSearchBar from "../components/AutoCompletionSearchBar";
-import MealSummaries from "../components/MealSummaries";
 import Meal from "../entities/Meal";
+import MealSummariesContainer from "./MealSummariesContainer";
 import "./resources/css/FeedContainer.css";
 
 interface IFeedContainerState {
@@ -146,7 +146,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 						</Form>
 					</div>
 				</Rodal>
-				<MealSummaries
+				<MealSummariesContainer
 					meals={this.state.loadedMeals}
 					showHosts={true}
 				/>

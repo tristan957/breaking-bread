@@ -1,5 +1,5 @@
 import React from "react";
-import Tags from "../components/Tags";
+import Items from "../components/Items";
 import Tag from "../entities/Tag";
 import "./resources/css/TagsContainer.css";
 
@@ -14,7 +14,10 @@ export default class TagsContainer extends React.Component<ITagsContainerProps> 
 				<div className="card">
 					<div id="tags-topics-list-header" className="container-header">Tags</div>
 					<hr className="separator" />
-					<Tags {...this.props} />
+					<Items
+						items={this.props.tags}
+						leadingChar="#"
+					/>
 				</div>
 			</div >
 		);
