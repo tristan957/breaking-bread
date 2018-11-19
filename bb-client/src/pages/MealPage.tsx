@@ -99,22 +99,14 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 	}
 
 	public setMeal(
-		date: Date | undefined,
-		title: string | undefined,
-		location: string | undefined,
-		description: string | undefined,
-		time: string
+		newDate: Date | undefined,
+		newTitle: string | undefined,
+		newLocation: string | undefined,
+		newDescription: string | undefined,
+		newTime: string
 	): void {
-		// this.state.meal.title = title;
-		// this.state.meal.location = location;
-		// this.state.meal.description = description;
-		// this.state.meal.date = date;
-
-
-		this.setState({ meal: loadedMeals[2] });
-		// currentMeal = loadedMeals[2];
-		// loadedMeals[1].title = "xxxxxx";
-		// alert(loadedMeals[1].title);
+		//TODO: update the date and time
+		this.setState({ meal: { ...this.state.meal, title: newTitle, location: newLocation, description: newLocation } });
 	}
 
 	public render(): JSX.Element {
@@ -142,7 +134,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 									<div id="mobileArticle">
 										<MealDescription
 											meal={this.state.meal}
-											isGuest={false}
+											isGuest={this.state.isGuest}
 											setMeal={this.setMeal}
 										/>
 										<HostSummaryContainer
@@ -155,6 +147,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										<GuestListContainer
 											guests={this.state.meal.guests as Partial<User>[]}
 											maxGuests={this.state.meal.maxGuests as number}
+											isGuest={this.state.isGuest}
 										/>
 										{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}
 									</div>
@@ -166,7 +159,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 									<div id="Article">
 										<MealDescription
 											meal={this.state.meal}
-											isGuest={false}
+											isGuest={this.state.isGuest}
 											setMeal={this.setMeal}
 										/>
 									</div>
@@ -181,6 +174,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										<GuestListContainer
 											guests={this.state.meal.guests as Partial<User>[]}
 											maxGuests={this.state.meal.maxGuests as number}
+											isGuest={this.state.isGuest}
 										/>
 										{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}
 									</div>
