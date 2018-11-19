@@ -9,27 +9,18 @@ import ProfileSummaryContainer from "../containers/ProfileSummaryContainer";
 import TagsContainer from "../containers/TagsContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
-import User from "../entities/User";
 import "./resources/css/DashboardPage.css";
 
-interface IDashboardPageState {
-	userLoggedIn?: Partial<User>;
-}
-
-export default class DashboardPage extends React.Component<RouteComponentProps, IDashboardPageState> {
+export default class DashboardPage extends React.Component<RouteComponentProps> {
 	public render(): JSX.Element {
 		return (
 			<UserContext.Consumer>
 				{userContext => {
-					this.state = {
-						userLoggedIn: userContext.user,
-					};
-
 					return (
 						<div>
 							<MediaQuery query="(max-width: 949px)">
 								<div id="mobileSidebar">
-									<MobileSidebar user={this.state.userLoggedIn} />
+									<MobileSidebar user={userContext.user} />
 								</div>
 								<div id="top-buffer"></div>
 								<div id="mobile-center">
@@ -41,11 +32,11 @@ export default class DashboardPage extends React.Component<RouteComponentProps, 
 								<div id="dashboard">
 									<div id="left-container">
 										{
-											this.state.userLoggedIn === undefined ? undefined : (
+											userContext.user === undefined ? undefined : (
 												<div>
-													<ProfileSummaryContainer user={this.state.userLoggedIn} />
-													<TagsContainer tags={this.state.userLoggedIn.followedTags || []} />
-													<TopicsContainer topics={this.state.userLoggedIn.whitelist || []} />
+													<ProfileSummaryContainer user={userContext.user} />
+													<TagsContainer tags={userContext.user.followedTags || []} />
+													<TopicsContainer topics={userContext.user.whitelist || []} />
 												</div>
 											)
 										}
@@ -55,8 +46,8 @@ export default class DashboardPage extends React.Component<RouteComponentProps, 
 									</div>
 									<div id="right-container">
 										{
-											this.state.userLoggedIn === undefined ? undefined : (
-												<UpcomingMealsContainer mealsAttending={this.state.userLoggedIn.mealsAttending || []} />
+											userContext.user === undefined ? undefined : (
+												<UpcomingMealsContainer mealsAttending={userContext.user.mealsAttending || []} />
 											)
 										}
 									</div>

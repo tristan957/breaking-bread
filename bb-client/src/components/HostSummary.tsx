@@ -22,7 +22,7 @@ export default class HostSummary extends React.Component<IHostSummaryProps> {
 		return (
 			<div>
 				<div>Favorite Topics</div>
-				<ul className="list">
+				<ul className="no-style-list">
 					{this.props.topics.map((topic, i) => {
 						return (
 							<li className="topic" key={i}>

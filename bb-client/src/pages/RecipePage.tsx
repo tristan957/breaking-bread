@@ -13,7 +13,6 @@ interface IRecipePageParams {
 }
 
 interface IRecipePageState {
-	userLoggedIn?: Partial<Recipe>;
 	recipe: Partial<Recipe>;
 }
 
@@ -97,11 +96,6 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 		return (
 			<UserContext.Consumer>
 				{userContext => {
-					this.state = {
-						userLoggedIn: userContext.user,
-						recipe: this.fetchRecipeFromParams(),
-					};
-
 					return (
 						<div>
 							<MediaQuery query="(max-width: 949px)">
