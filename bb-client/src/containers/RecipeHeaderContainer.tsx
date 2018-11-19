@@ -1,6 +1,7 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
 import Tags from "../components/Tags";
+import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
 import "./resources/css/ProfileHeaderContainer.css";
 
@@ -15,19 +16,23 @@ interface IRecipeHeaderProps {
 	createdAt: Date;
 	updatedAt?: Date;
 	reviewAverage: number;
+	timesFavorited: number;
+	allergies: Partial<Allergy>[];
 }
 
 export default class RecipeHeader extends React.Component<IRecipeHeaderProps> {
 	constructor(props: IRecipeHeaderProps) {
 		super(props);
 
+		this.renderTagList = this.renderTagList.bind(this);
+		this.renderAllergyList = this.renderAllergyList.bind(this);
 	}
 
 	private renderTagList(): JSX.Element {
 		if (this.props.tagList.length !== 0) {
 			return (
 				<div>
-					<div></div>
+					<div>Tags</div>
 					<Tags
 						tags={this.props.tagList}
 						displayInline={true}
@@ -40,6 +45,26 @@ export default class RecipeHeader extends React.Component<IRecipeHeaderProps> {
 			// TODO: Only display if current user is owner of this page
 			<div>
 				That's weird, there are no tags associated. 🤷‍
+			</div>
+		);
+	}
+
+	private renderAllergyList(): JSX.Element {
+		if (this.props.allergies.length !== 0) {
+			return (
+				<div>
+					<div>Potential Allergies</div>
+					<Tags
+						tags={this.props.allergies}	// Rendering using tag list. Should not need a function TODO: Maybe make independent
+						displayInline={true}
+					/>
+				</div>
+			);
+		}
+
+		return (
+			<div>
+				That's weird, there are no allergies associated. 🤷‍ Please look over the ingredient list if you have any concerns.
 			</div>
 		);
 	}
@@ -70,6 +95,7 @@ export default class RecipeHeader extends React.Component<IRecipeHeaderProps> {
 					<div id="header-card-right">
 						<div id="username">
 							⭐{parseFloat(this.props.reviewAverage.toFixed(2))}/5
+							❤️x{this.props.timesFavorited} {/* TODO: Add button to make favorite */}
 						</div>
 						<div>
 							Last updated
@@ -82,6 +108,7 @@ export default class RecipeHeader extends React.Component<IRecipeHeaderProps> {
 							}
 						</div>
 						{this.renderTagList()}
+						{this.renderAllergyList()}
 					</div>
 				</div>
 			</div>
