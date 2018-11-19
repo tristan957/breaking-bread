@@ -1,5 +1,6 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
+import HostSummary from "../components/HostSummary";
 import Topic from "../entities/Topic";
 
 interface IHostSummaryContainerProps {
@@ -10,7 +11,7 @@ interface IHostSummaryContainerProps {
 	topics: Partial<Topic>[];
 }
 
-export default class HostSummary extends React.Component<IHostSummaryContainerProps> {
+export default class HostSummaryContainer extends React.Component<IHostSummaryContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
