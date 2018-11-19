@@ -3,9 +3,9 @@ import React from "react";
 import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
-import HostSummary from "../components/HostSummary";
 import MealDescription from "../components/MealDescription";
 import GuestsContainer from "../containers/GuestListContainer";
+import HostSummaryContainer from "../containers/HostSummaryContainer";
 import MealActionsContainer from "../containers/MealActionsContainer";
 import Meal from "../entities/Meal";
 import User from "../entities/User";
@@ -123,7 +123,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										<MealDescription
 											meal={this.state.meal}
 										/>
-										<HostSummary
+										<HostSummaryContainer
 											id={this.state.host.id as number}
 											name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 											about={this.state.host.about as string}
@@ -147,7 +147,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										/>
 									</div>
 									<div id="ArticleRight">
-										<HostSummary
+										<HostSummaryContainer
 											id={this.state.host.id as number}
 											name={`${this.state.host.firstName} ${this.state.host.lastName}` as string}
 											about={this.state.host.about as string}
