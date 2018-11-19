@@ -29,7 +29,7 @@ export default class DashboardPage extends React.Component<RouteComponentProps, 
 						<div>
 							<MediaQuery query="(max-width: 949px)">
 								<div id="mobileSidebar">
-									<MobileSidebar {...this.props} />
+									<MobileSidebar user={this.state.userLoggedIn} />
 								</div>
 								<div id="top-buffer"></div>
 								<div id="mobile-center">
