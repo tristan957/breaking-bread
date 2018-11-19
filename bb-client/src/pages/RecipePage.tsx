@@ -22,6 +22,10 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 
 		this.fetchRecipeFromParams = this.fetchRecipeFromParams.bind(this);
 		this.getRecipeReviewAverage = this.getRecipeReviewAverage.bind(this);
+
+		this.state = {
+			recipe: this.fetchRecipeFromParams(),
+		};
 	}
 
 	private fetchRecipeFromParams(): Partial<Recipe> {

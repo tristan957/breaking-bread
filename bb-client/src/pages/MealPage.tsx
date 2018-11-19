@@ -90,10 +90,15 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 
 		this.fetchMealFromParams = this.fetchMealFromParams.bind(this);
 		this.setMeal = this.setMeal.bind(this);
+
+		this.state = {
+			meal: this.fetchMealFromParams(),
+			isGuest: false,
+		};
 	}
 
 	private fetchMealFromParams(): Partial<Meal> {
-		const mealID: number = parseInt(this.props.match.params.mealID, 10); // +1 for array
+		const mealID: number = parseInt(this.props.match.params.mealID, 10);
 		return loadedMeals[mealID];
 	}
 
@@ -109,7 +114,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 		// this.state.meal.description = description;
 		// this.state.meal.date = date;
 
-		this.setState({ meal: loadedMeals[2] });
+		// this.setState({ meal: loadedMeals[2] });
 		// currentMeal = loadedMeals[2];
 		// loadedMeals[1].title = "xxxxxx";
 		// alert(loadedMeals[1].title);
@@ -150,7 +155,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 									<div id="Article">
 										<MealDescription
 											meal={this.state.meal}
-											isGuest={false}
+											isGuest={this.state.isGuest}
 											setMeal={this.setMeal}
 										/>
 									</div>
