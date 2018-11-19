@@ -4,4 +4,5 @@
 
 #tag-inline {
 	text-transform: lowercase;
+	display: inline;
 }

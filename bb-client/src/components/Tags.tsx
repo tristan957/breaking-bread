@@ -25,6 +25,7 @@ export default class Tags extends React.Component<ITagsProps> {
 								<TagComponent
 									id={tag.id as number}
 									name={tag.name as string}
+									displayInline={this.props.displayInline}
 								/>
 							</li>
 						);

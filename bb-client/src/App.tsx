@@ -133,11 +133,8 @@ export default class App extends React.Component<{}, IAppState> {
 							<Switch>
 								<Route exact path="/" component={DashboardPage} />
 								<Route exact path="/m/:mealID" component={MealPage} />
-								{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} /> */}
 								<Route exact path="/p/:userID" component={ProfilePage} />
-								{/* <Route exact path="/p/:userID/e/" component={ProfileEditPage} /> */}
 								<Route exact path="/r/:recipeID" component={RecipePage} />
-								{/* <Route exact path="/r/:recipeID/e/" component={RecipeEditPage} /> */}
 							</Switch>
 						</UserContext.Provider>
 					</div>
