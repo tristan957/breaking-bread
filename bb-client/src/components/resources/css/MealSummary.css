@@ -1,6 +1,7 @@
 #meal-summary-title {
 	font-size: 20px;
 	flex-grow: 1;
+	font-weight: bold;
 }
 
 #meal-summary-header {

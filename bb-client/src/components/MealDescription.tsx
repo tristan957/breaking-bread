@@ -16,14 +16,18 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 				<img src={this.props.meal.imagePath || defaultImagePic} className="bg" />
 				<div className="articleMain">
 					<div id="meal-article-header">
-						<h3>{this.props.meal.title}</h3>
+						<h3><b>{this.props.meal.title}</b></h3>
 						<h5>
-							{this.props.meal.location} - {this.props.meal.price === undefined ? `Free!` : `$${this.props.meal.price} per person`}
+							<i>
+								{this.props.meal.location} - {this.props.meal.price === undefined ? `Free!` : `$${this.props.meal.price} per person`}
+							</i>
 						</h5>
 						{
 							this.props.meal.date === undefined ? undefined : (
 								<h6>
-									{this.props.meal.date.toLocaleDateString()} at {this.props.meal.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+									<i>
+										{this.props.meal.date.toLocaleDateString()} at {this.props.meal.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+									</i>
 								</h6>
 							)
 						}

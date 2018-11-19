@@ -1,9 +1,10 @@
 #Article {
-	width: 74%;
+	width: 71%;
     height: 100%;
     float: left;
 	border-collapse: collapse;
 	margin-bottom: 2em;
+	margin-right: 1.8em;
 }
 
 #ArticleRight {
@@ -21,7 +22,7 @@
 
 #mobileArticle {
     margin: 0 auto;
-    padding: 1em 0em 1em 1em;
+    padding: 1em;
     width: 100%;
 }
 
