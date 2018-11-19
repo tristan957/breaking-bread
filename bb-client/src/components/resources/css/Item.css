@@ -1,8 +1,8 @@
-#topic {
+#item {
 	text-transform: lowercase;
 }
 
-#topic-inline {
+#item-inline {
 	text-transform: lowercase;
 	display: inline;
 }

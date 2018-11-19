@@ -1,5 +1,5 @@
 import React from "react";
-import Topics from "../components/Topics";
+import Items from "../components/Items";
 import Topic from "../entities/Topic";
 import "./resources/css/TopicsContainer.css";
 
@@ -14,7 +14,10 @@ export default class TopicsContainer extends React.Component<ITopicsContainerPro
 				<div className="card">
 					<div className="tags-topics-list-header container-header">Topics</div>
 					<hr className="seperator" />
-					<Topics {...this.props} />
+					<Items
+						items={this.props.topics}
+						leadingChar="#"
+					/>
 				</div>
 			</div>
 		);

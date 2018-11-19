@@ -1,6 +1,6 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
-import Tags from "../components/Tags";
+import Items from "../components/Items";
 import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
 import "./resources/css/ProfileHeaderContainer.css";
@@ -33,9 +33,10 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 			return (
 				<div>
 					<div>Tags</div>
-					<Tags
-						tags={this.props.tagList}
+					<Items
+						items={this.props.tagList}
 						displayInline={true}
+						leadingChar="#"
 					/>
 				</div>
 			);
@@ -54,9 +55,10 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 			return (
 				<div>
 					<div>Potential Allergies</div>
-					<Tags
-						tags={this.props.allergies}	// Rendering using tag list. Should not need a function TODO: Maybe make independent
+					<Items
+						items={this.props.allergies}	// Rendering using tag list. Should not need a function TODO: Maybe make independent
 						displayInline={true}
+						leadingChar=""
 					/>
 				</div>
 			);

@@ -63,7 +63,7 @@ export default class RecipeDetailsContainer extends React.Component<IRecipeDetai
 					);
 				}
 
-				// TODO: Check if user has a meal with this recipe in their attending meals past
+				// TODO: Check if user has a meal with this recipe in their attending meals past before displaying review container
 			}
 			default: {
 				return undefined;
