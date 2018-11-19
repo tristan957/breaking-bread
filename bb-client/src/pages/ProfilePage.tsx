@@ -13,7 +13,6 @@ interface IProfilePageParams {
 }
 
 interface IProfilePageState {
-	userLoggedIn?: Partial<User>;
 	userBeingViewed: Partial<User>;
 }
 
@@ -136,12 +135,6 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 		return (
 			<UserContext.Consumer>
 				{userContext => {
-					this.state = {
-						userBeingViewed: this.fetchUserFromParams(),
-						userLoggedIn: userContext.user,
-					};
-					console.log(this.state.userLoggedIn);
-
 					return (
 						<div>
 							<MediaQuery query="(max-width: 949px)">

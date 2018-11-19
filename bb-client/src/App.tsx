@@ -14,7 +14,7 @@ export interface IAppContext {
 }
 
 // tslint:disable-next-line: variable-name
-export const UserContext = React.createContext<IAppContext>({});
+export const UserContext = React.createContext<IAppContext>({ user: undefined });
 
 interface IAppState {
 	user?: Partial<User>;
