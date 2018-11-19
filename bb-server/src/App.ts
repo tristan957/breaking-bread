@@ -1,15 +1,11 @@
 /* tslint:disable: strict-boolean-expressions */
+import { ApolloServer } from "apollo-server";
 import { Context } from "apollo-server-core";
-import { makeExecutableSchema } from "apollo-server-express";
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
-import express, { Request, Response } from "express";
-import graphqlHTTP from "express-graphql";
-import jwt, { RequestHandler } from "express-jwt";
-import { GraphQLSchema } from "graphql";
-import JwksRsa from "jwks-rsa";
-import path from "path";
+import { Request } from "express";
+import jwt, { JwtHeader } from "jsonwebtoken";
+import { Jwk, JwksClient } from "jwks-rsa";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
@@ -20,20 +16,41 @@ export interface IAppContext {
 	user: any;
 }
 
-const jwtCheck: RequestHandler = jwt({
-	secret: JwksRsa.expressJwtSecret({
-		cache: true,
-		rateLimit: true,
-		jwksRequestsPerMinute: 5,
-		jwksUri: "https://bbread.auth0.com/.well-known/jwks.json",
-	}),
-	audience: "https://bbread.com/graphql-test",
-	issuer: "https://bbread.auth0.com/",
-	algorithms: ["RS256"],
+const client: JwksClient = new JwksClient({
+	jwksUri: `https://bbread.auth0.com//.well-known/jwks.json`,
 });
 
+function getKey(header: JwtHeader, cb: Function): void {
+	if (header.kid === undefined) {
+		return;
+	}
+	client.getSigningKey(header.kid, (err: Error, key: Jwk) => {
+		const signingKey = key.publicKey || key.rsaPublicKey;
+		// tslint:disable-next-line:no-null-keyword
+		cb(null, signingKey);
+	});
+}
+
+const options = {
+	audience: "https://bbread.com/graphql-test",
+	issuer: `https://bbread.auth0.com/`,
+	algorithms: ["RS256"],
+};
+
 function context(req: Request): Context<IAppContext> {
-	const connection: Connection = getConnection();
+	const connection = getConnection();
+	const token: string | undefined = req.headers.authorization;
+	let user: Promise<{}> | undefined = undefined;
+	if (token !== undefined) {
+		user = new Promise((resolve, reject) => {
+			jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
+				if (err || decoded === null) {
+					return reject(err);
+				}
+				resolve(decoded);
+			});
+		});
+	}
 
 	return {
 		connection,
@@ -42,10 +59,8 @@ function context(req: Request): Context<IAppContext> {
 }
 
 export default class App {
-
 	public connection: Connection;
-	public app: express.Application;
-	// public server: ApolloServer;
+	public server: ApolloServer;
 
 	/**
 	 * Sets up the application to connect to database and create server
@@ -54,36 +69,7 @@ export default class App {
 		dotenv.config();
 
 		this.setupTypeORM();
-		// this.server = new ApolloServer({ typeDefs, resolvers });
-	}
-
-	/**
-		* Sets up Express server
-		*/
-	private setupExpress(): void {
-		this.app = express();
-
-		// React client
-		const clientPath: string = path.join(__dirname, "/./../../bb-client/dist/");
-		this.app.use(express.static(clientPath));
-		this.app.get("/", (_: Request, res: Response) => {
-			res.sendFile(path.join(clientPath, "index.html"));
-		});
-
-		const schema: GraphQLSchema = makeExecutableSchema({
-			typeDefs,
-			resolvers,
-		});
-
-		this.app.use(
-			"/graphql",
-			bodyParser.json(),
-			jwtCheck,
-			graphqlHTTP((req) => ({
-				schema,
-				context,
-			}))
-		);
+		this.server = new ApolloServer({ typeDefs, resolvers, context });
 	}
 
 	/**
@@ -119,9 +105,9 @@ export default class App {
 	public run(): void {
 		let port: number | string = process.env.APP_PORT || "10262";
 		port = parseInt(port, 10);
-		this.app.listen(port, () => {
+		this.server.listen(port, () => {
 			console.log(`Server ready at http://localhost:${port}`);
-			console.log(`GraphQL test at http://localhost:${port}`);
+			console.log(`GraphQL test at http://localhost:${port}${this.server.graphqlPath}`);
 		});
 	}
 }

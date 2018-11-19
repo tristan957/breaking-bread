@@ -7,42 +7,42 @@ import User from "./User";
 
 @Entity()
 export default class Recipe {
-    @PrimaryGeneratedColumn()
-    public id: number;
+	@PrimaryGeneratedColumn()
+	public id: number;
 
-    @Column()
-    public name: string;
+	@Column()
+	public name: string;
 
-    @Column({ type: "text" })
-    public description: string;
+	@Column({ type: "text" })
+	public description: string;
 
-    @Column({ type: "text" })
-    public recipeImageS3Key: string;
+	@Column({ type: "text" })
+	public recipeImageS3Key: string;
 
-    @CreateDateColumn()
-    public createdAt: Date;
+	@CreateDateColumn()
+	public createdAt: Date;
 
-    @UpdateDateColumn()
-    public updatedAt: Date;
+	@UpdateDateColumn()
+	public updatedAt: Date;
 
-    @ManyToOne(type => User, user => user.recipesAuthored, { eager: true })
-    public author: User;
+	@ManyToOne(type => User, user => user.recipesAuthored, { eager: true })
+	public author: User;
 
-    @Column()
-    public timesFavorited: number;
+	@Column()
+	public timesFavorited: number;
 
-    @OneToMany(type => RecipeReview, review => review.subject)
-    public reviews: RecipeReview[];
+	@OneToMany(type => RecipeReview, review => review.subject)
+	public reviews: RecipeReview[];
 
-    @ManyToMany(type => Tag)
-    @JoinTable()
-    public tags: Tag[];
+	@ManyToMany(type => Tag)
+	@JoinTable()
+	public tags: Tag[];
 
-    @ManyToMany(type => Ingredient)
-    @JoinTable()
-    public ingredients: Ingredient[];
+	@ManyToMany(type => Ingredient)
+	@JoinTable()
+	public ingredients: Ingredient[];
 
-    @ManyToMany(type => Allergy)
-    @JoinTable()
-    public allergies: Allergy[];
+	@ManyToMany(type => Allergy)
+	@JoinTable()
+	public allergies: Allergy[];
 }
