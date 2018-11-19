@@ -38,6 +38,7 @@
 @media (max-width: 949px) {
   #content-container {
     margin-top: 0px;
+    width: 100%;
   }
 }
 
