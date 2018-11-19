@@ -39,11 +39,16 @@ export default class RecipeDetailsContainer extends React.Component<IRecipeDetai
 			case RenderSide.Ingredients: {
 				if (this.props.ingredients.length > 0) {
 					return (
-						<div>Ingredients</div>
+						<div>
+							<div className="container-header">Ingredients</div>
+							<hr className="seperator" />
+						</div>
 					);
 				} else {
 					return (
 						<div>
+							<div className="container-header">Ingredients</div>
+							<hr className="seperator" />
 							😲 The creator failed to add ingredients. Feel free to edit the recipe to add ingredients.
 							{/* Assuming we are allowing anyone to edit a meal when not ingredients are listed */}
 						</div>
@@ -53,17 +58,22 @@ export default class RecipeDetailsContainer extends React.Component<IRecipeDetai
 			case RenderSide.Reviews: {
 				if (this.props.reviews.length > 0) {
 					return (
-						<div>Reviews</div>
+						<div>
+							<div className="container-header">Reviews</div>
+							<hr className="seperator" />
+						</div>
 					);
 				} else {
 					return (
 						<div>
+							<div className="container-header">Reviews</div>
+							<hr className="seperator" />
 							This recipe is fresh! If you've been to a meal with this recipe, feel free to add a review.
 						</div>
 					);
 				}
 
-				// TODO: Check if user has a meal with this recipe in their attending meals past
+				// TODO: Check if user has a meal with this recipe in their attending meals past before displaying review container
 			}
 			default: {
 				return undefined;
@@ -80,7 +90,7 @@ export default class RecipeDetailsContainer extends React.Component<IRecipeDetai
 						<Button className="show-filter-modal" active={this.state.render === 1} onClick={() => this.changeRender(RenderSide.Reviews)}>Reviews</Button>
 					</ButtonGroup>
 				</div>
-				<div className="card">
+				<div>
 					{this.renderDetails()}
 				</div>
 			</div>

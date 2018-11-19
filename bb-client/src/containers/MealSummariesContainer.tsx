@@ -1,13 +1,13 @@
 import React from "react";
-import MealSummaryContainer from "../containers/MealSummaryContainer";
 import Meal from "../entities/Meal";
+import MealSummaryContainer from "./MealSummaryContainer";
 
-interface IMealSummariesProps {
+interface IMealSummariesContainerProps {
 	meals: Partial<Meal>[];
 	showHosts?: boolean;
 }
 
-export default class MealSummaries extends React.Component<IMealSummariesProps> {
+export default class MealSummariesContainer extends React.Component<IMealSummariesContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div>

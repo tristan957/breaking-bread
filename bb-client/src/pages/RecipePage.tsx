@@ -122,7 +122,7 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 							</MediaQuery>
 
 							<MediaQuery query="(min-width: 950px)">
-								<div>
+								<div className="card">
 									<div id="recipe-header">
 										<RecipeHeaderContainer
 											name={this.state.recipe.name as string}

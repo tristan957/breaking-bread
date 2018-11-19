@@ -2,8 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Topic from "../entities/Topic";
+import { default as TopicComponent } from "./Item";
 import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
-import { default as TopicComponent } from "./Topic";
 
 interface IHostSummaryProps {
 	id: number;
