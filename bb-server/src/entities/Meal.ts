@@ -7,6 +7,15 @@ export default class Meal {
 	@PrimaryGeneratedColumn()
 	public id: number;
 
+	@Column()
+	public title: string;
+
+	@Column({ type: "money" })
+	public price: number;
+
+	@Column({ length: 512, nullable: true })
+	public description: string;
+
 	@Column({ type: "text" })
 	public location: string;
 
@@ -14,16 +23,10 @@ export default class Meal {
 	public date: Date;
 
 	@Column()
-	public title: string;
-
-	@Column({ length: 512, nullable: true })
-	public description: string;
-
-	@Column()
-	public numberOfGuests: number;
+	public maxGuests: number;
 
 	@Column({ type: "text" })
-	public recipeImageS3Key: string;
+	public imagePath: string;
 
 	@CreateDateColumn()
 	public createdAt: Date;

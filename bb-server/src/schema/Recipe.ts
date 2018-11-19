@@ -4,12 +4,10 @@ import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
 import Allergy from "../entities/Allergy";
-import Ingredient from "../entities/Ingredient";
 import Recipe from "../entities/Recipe";
 import Tag from "../entities/Tag";
 import User from "../entities/User";
 import { getAllergy } from "./Allergy";
-import { getIngredient } from "./Ingredient";
 import { createTag, getTag } from "./Tag";
 import { getUser, updateUser } from "./User";
 
@@ -18,7 +16,6 @@ export const typeDef: DocumentNode = gql`
         createRecipe(input: CreateRecipeInput!): Recipe
         updateRecipe(input: UpdateRecipeInput!): Recipe
         updateTags(recipeId: Int!, tags: [GetTagInput!]!): [Tag!]
-        updateIngredients(recipeId: Int!, ingredients: [GetIngredientInput!]!): [Ingredient!]
         updateAllergies(recipeId: Int!, allergies: [GetAllergyInput!]!): [Allergy!]
         favoriteARecipe(recipeId: Int!, userId: Int!): Recipe
     }
@@ -31,27 +28,26 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         name: String!
         description: String!
-        recipeImageS3Key: String!
+        imagePath: String!
         createdAt: DateTime!
         updatedAt: DateTime!
         author: User!
         reviews: [RecipeReview]!
         tags: [Tag]!
-        ingredients: [Ingredient]!
         allergies: [Allergy]!
     }
 
     input CreateRecipeInput {
         name: String!
         description: String
-		recipeImageS3Key: String
+		imagePath: String
         author: UpdateUserInput!
     }
 
     input UpdateRecipeInput {
         id: Int!
         name: String
-		recipeImageS3Key: String
+		imagePath: String
         description: String
     }
 
@@ -203,65 +199,6 @@ async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undef
 	return newList;
 }
 
-interface IUpdateIngredients {
-	id: number;
-	ingredients: DeepPartial<Ingredient>[];
-}
-
-// tslint:disable-next-line: no-any
-function _updateIngredients(parent: any, args: IUpdateIngredients, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Ingredient[] | undefined> {
-	return updateIngredients(ctx, args.id, args.ingredients);
-}
-
-export async function updateIngredients(ctx: Context<IAppContext>, recipeId: number, ingredients: DeepPartial<Ingredient>[]): Promise<Ingredient[] | undefined> {
-	try {
-		const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
-		if (recipe === undefined) {
-			return Promise.resolve(undefined);
-		}
-		// TODO: Need to verify id with JWT from context (owner of recipe)
-
-		recipe.ingredients = await newIngredients(
-			ctx,
-			await ingredients.map(ingredient => ingredient.name),
-			await recipe.ingredients.map(ingredient => ingredient.name)
-		);
-		ctx.connection.getRepository(Recipe).save(recipe);
-
-		return recipe.ingredients;
-	} catch (reason) {
-		console.log(reason);
-		return Promise.reject(undefined);
-	}
-}
-
-async function newIngredients(ctx: Context<IAppContext>, toggleIngredients: (string | undefined)[], recipeIngredients: (string | undefined)[]): Promise<Ingredient[]> {
-	const namesRemoved: (string | undefined)[] = [];
-	for (const name of recipeIngredients) {
-		const index: number = toggleIngredients.indexOf(name);
-		if (index >= 0) {
-			await toggleIngredients.splice(index, 1);
-			namesRemoved.push(name);
-		}
-	}
-	for (const name of namesRemoved) {
-		await recipeIngredients.splice(
-			recipeIngredients.indexOf(name), 1
-		);
-	}
-
-	const newIngredientNames: (string | undefined)[] = [...toggleIngredients, ...recipeIngredients];
-	const newList: Ingredient[] = [];
-	for (const newName of newIngredientNames) {
-		const ingredient: Ingredient | undefined = await getIngredient(ctx, { name: newName });
-		if (ingredient !== undefined) {
-			newList.push(ingredient);
-		}
-	}
-
-	return newList;
-}
-
 interface IUpdateAllergies {
 	id: number;
 	allergies: DeepPartial<Allergy>[];
@@ -312,7 +249,7 @@ async function newAllergies(ctx: Context<IAppContext>, toggleAllergies: (string 
 	const newAllergyNames: (string | undefined)[] = [...toggleAllergies, ...recipeAllergies];
 	const newList: Allergy[] = [];
 	for (const newName of newAllergyNames) {
-		const allery: Ingredient | undefined = await getAllergy(ctx, { name: newName });
+		const allery: Allergy | undefined = await getAllergy(ctx, { name: newName });
 		if (allery !== undefined) {
 			newList.push(allery);
 		}
@@ -401,7 +338,6 @@ export const resolvers: IResolvers = {
 		createRecipe: _createRecipe,
 		updateRecipe: _updateRecipe,
 		updateTags: _updateTagList,
-		updateIngredients: _updateIngredients,
 		updateAllergies: _updateAllergies,
 		favoriteARecipe: _favoriteARecipe,
 	},

@@ -26,9 +26,10 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         location: String!
         date: DateTime!
+		price: number!
         title: String!
 		description: String!
-		recipeImageS3Key: String!
+		imagePath: String!
 		numberOfGuests: Int!
         createdAt: DateTime!
         updatedAt: DateTime!
@@ -40,10 +41,11 @@ export const typeDef: DocumentNode = gql`
     input CreateMealInput {
         location: String!
         date: DateTime!
+		price: number!
         title: String!
 		description: String
         host: UpdateUserInput!  # TODO: Verify request is from designated host JWT
-		recipeImageS3Key: String
+		imagePath: String
 		numberOfGuests: Int!
     }
 
@@ -51,9 +53,10 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         location: String
         date: DateTime
+		price: number  # TODO: Def need to email on meal edit for price especially
         title: String
 		description: String
-		recipeImageS3Key: String
+		imagePath: String
 		numberOfGuests: Int
     }
 `;

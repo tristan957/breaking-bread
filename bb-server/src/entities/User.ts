@@ -19,7 +19,7 @@ export default class User {
 	public lastName: string;
 
 	@Column({ type: "text" })
-	public profilePictureS3Key: string;
+	public imagePath: string;
 
 	@Column({ length: 255 })
 	public oAuthSub: string;

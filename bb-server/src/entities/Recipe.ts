@@ -1,6 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Allergy from "./Allergy";
-import Ingredient from "./Ingredient";
 import RecipeReview from "./RecipeReview";
 import Tag from "./Tag";
 import User from "./User";
@@ -17,7 +16,7 @@ export default class Recipe {
 	public description: string;
 
 	@Column({ type: "text" })
-	public recipeImageS3Key: string;
+	public imagePath: string;
 
 	@CreateDateColumn()
 	public createdAt: Date;
@@ -37,10 +36,6 @@ export default class Recipe {
 	@ManyToMany(type => Tag)
 	@JoinTable()
 	public tags: Tag[];
-
-	@ManyToMany(type => Ingredient)
-	@JoinTable()
-	public ingredients: Ingredient[];
 
 	@ManyToMany(type => Allergy)
 	@JoinTable()

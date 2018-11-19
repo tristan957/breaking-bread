@@ -5,24 +5,24 @@ import User from "./User";
 @Entity()
 @Check(`"rating" >= 1 AND "rating" <= 5`)
 export default class RecipeReview {
-    @PrimaryGeneratedColumn()
-    public id: number;
+	@PrimaryGeneratedColumn()
+	public id: number;
 
-    @Column({ type: "int4" })
-    public rating: number;
+	@Column({ type: "int4" })
+	public rating: number;
 
-    @Column({ type: "text", nullable: true })
-    public description: string;
+	@Column({ type: "text", nullable: true })
+	public description: string;
 
-    @CreateDateColumn()
-    public createdAt: Date;
+	@CreateDateColumn()
+	public createdAt: Date;
 
-    @UpdateDateColumn()
-    public updatedAt: Date;
+	@UpdateDateColumn()
+	public updatedAt: Date;
 
-    @ManyToOne(type => Recipe, recipe => recipe.reviews, { eager: true })
-    public subject: Recipe;
+	@ManyToOne(type => Recipe, recipe => recipe.reviews, { eager: true })
+	public subject: Recipe;
 
-    @ManyToOne(type => User, user => user.recipeReviewsAuthored, { eager: true })
-    public author: User;
+	@ManyToOne(type => User, user => user.recipeReviewsAuthored, { eager: true })
+	public author: User;
 }

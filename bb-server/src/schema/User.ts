@@ -28,7 +28,7 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         firstName: String!
         lastName: String!
-        profilePictureS3Key: String!
+        imagePath: String!
         about: String!
         email: String!
         phoneNumber: DateTime!
@@ -41,7 +41,7 @@ export const typeDef: DocumentNode = gql`
     input CreateUserInput {
         firstName: String!
         lastName: String!
-        profilePictureS3Key: String!
+        imagePath: String!
         about: String
         email: String!
         phoneNumber: String!
@@ -49,7 +49,7 @@ export const typeDef: DocumentNode = gql`
 
     input UpdateUserInput {
         id: Int!
-        profilePictureS3Key: String
+        imagePath: String
         about: String
         email: String
         phoneNumber: String
