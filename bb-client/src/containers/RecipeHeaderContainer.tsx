@@ -74,7 +74,7 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 	public render(): JSX.Element {
 		return (
 			// TODO: Seperate to container and sub components
-			<div id="header-container" className="card">
+			<div id="header-container">
 				<div id="header-component">
 					<div id="header-card-left">
 						<div id="username">
