@@ -1,0 +1,34 @@
+#profile-info {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#profile-info > div {
+	margin-right: 1.2em;
+}
+
+#profile-info > div:last-child {
+	margin-right: 0em;
+}
+
+#profile-info-left {
+	height: 100%;
+	flex-grow: 1;
+}
+
+#profile-info-right, #profile-info-center {
+	min-width: 300px;
+}
+
+#profile-info-center, #profile-info-right {
+	display: flex;
+	flex-direction: column;
+}
+
+#profile-info-center > * {
+	flex-grow: 1;
+}
+
+#profile-info-right > * {
+	flex-grow: 1;
+}

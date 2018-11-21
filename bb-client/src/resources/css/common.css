@@ -31,6 +31,7 @@
 
 .card {
     padding: 1em;
+    margin: 0em;
     margin-bottom: 1.2em;
     overflow: hidden;
     background: white;
