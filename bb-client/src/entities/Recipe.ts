@@ -11,7 +11,7 @@ type Recipe = {
 	createdAt: Date;
 	updatedAt: Date;
 	author: Partial<User>;
-	timesFavorited: number;
+	timesSaved: number;
 	reviews: Partial<RecipeReview>[];
 	tags: Partial<Tag>[];
 	allergies: Partial<Allergy>[];

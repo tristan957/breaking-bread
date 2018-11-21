@@ -2,8 +2,8 @@
 import { ApolloServer, makeExecutableSchema } from "apollo-server";
 import { Context } from "apollo-server-core";
 import dotenv from "dotenv";
+import { Request, Response } from "express";
 // tslint:disable-next-line: match-default-export-name
-import { Request } from "express";
 import { GraphQLSchema } from "graphql";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
 import { entities } from "./entities";
@@ -11,49 +11,27 @@ import { resolvers, typeDefs } from "./schema";
 
 export interface IAppContext {
 	connection: Connection;
-	// tslint:disable-next-line:no-any
-	// user: any;
+	// user: Promise<User | undefined>;
 }
 
-// const client: JwksClient = new JwksClient({
-// 	jwksUri: `https://bbread.auth0.com//.well-known/jwks.json`,
-// });
+interface IContextParams {
+	req: Request;
+	res: Response;
+}
 
-// function getKey(header: JwtHeader, cb: Function): void {
-// 	if (header.kid === undefined) {
-// 		return;
-// 	}
-// 	client.getSigningKey(header.kid, (err: Error, key: Jwk) => {
-// 		const signingKey = key.publicKey || key.rsaPublicKey;
-// 		// tslint:disable-next-line:no-null-keyword
-// 		cb(null, signingKey);
-// 	});
-// }
-
-const options = {
-	audience: "https://bbread.com/graphql-test",
-	issuer: `https://bbread.auth0.com/`,
-	algorithms: ["RS256"],
-};
-
-function context(req: Request): Context<IAppContext> {
-	const connection = getConnection();
-	// const token: string | undefined = req.headers.authorization;
-	const user: Promise<{}> | undefined = undefined;
-	// if (token !== undefined) {
-	// 	user = new Promise((resolve, reject) => {
-	// 		jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
-	// 			if (err || decoded === null) {
-	// 				return reject(err);
-	// 			}
-	// 			resolve(decoded);
-	// 		});
-	// 	});
+function context(params: IContextParams): Context<IAppContext> {
+	// if (params.req.headers.oauthsub === undefined) {  // TODO: Replace with token then get sub from token
+	// 	throw Error;  // TODO: Need more elegant failure
 	// }
+
+	const connection: Connection = getConnection();
+	const authSub: string = params.req.headers.oauthsub as string;
+	// const user = getUserFromAuthSub(connection, authSub);
+	// user = getUserWithToken(token);
 
 	return {
 		connection,
-		// user: req.user,
+		// user,
 	};
 }
 
@@ -109,7 +87,6 @@ export default class App {
 		port = parseInt(port, 10);
 		this.server.listen(port, () => {
 			console.log(`Server ready at http://localhost:${port}`);
-			console.log(`GraphQL test at http://localhost:${port}${this.server.graphqlPath}`);
 		});
 	}
 }

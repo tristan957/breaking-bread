@@ -26,15 +26,15 @@ export const typeDef: DocumentNode = gql`
 		name: String!
 		createdAt: DateTime!
 		updatedAt: DateTime!
-		subject: Recipe!
-		author: User!
+		subject: Recipe
+		author: User
 	}
 
 	input CreateRecipeReviewInput {
 		rating: Int!
 		description: String
-		subject: UpdateRecipeInput!
-		author: UpdateUserInput!
+		subjectID: Int!
+		authorID: Int!
 	}
 
 	input UpdateRecipeReviewInput {
@@ -121,11 +121,11 @@ function _getRecipeReview(parent: any, args: IGetRecipeReview, ctx: Context<IApp
 	return getRecipeReview(ctx, args.id);
 }
 
-async function getRecipeReview(ctx: Context<IAppContext>, reviewId: number): Promise<RecipeReview | undefined> {
+async function getRecipeReview(ctx: Context<IAppContext>, reviewID: number): Promise<RecipeReview | undefined> {
 	return ctx.connection.getRepository(RecipeReview)
 		.findOne({
 			where: {
-				id: reviewId,
+				id: reviewID,
 			},
 			relations: ["subject", "author"],
 		});

@@ -100,7 +100,7 @@ export default class App extends React.Component<{}, IAppState> {
 						id: 2,
 						name: "Ropa vieja",
 						description: "A classic and a national dish of Cuba",
-						timesFavorited: 10,
+						timesSaved: 10,
 					},
 				],
 				reviews: [

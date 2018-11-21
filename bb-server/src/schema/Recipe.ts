@@ -15,9 +15,9 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createRecipe(input: CreateRecipeInput!): Recipe
         updateRecipe(input: UpdateRecipeInput!): Recipe
-        updateTags(recipeId: Int!, tags: [GetTagInput!]!): [Tag!]
-        updateAllergies(recipeId: Int!, allergies: [GetAllergyInput!]!): [Allergy!]
-        saveARecipe(recipeId: Int!, userId: Int!): Recipe
+        updateTags(recipeID: Int!, tags: [GetTagInput!]!): [Tag!]
+        updateAllergies(recipeID: Int!, allergies: [GetAllergyInput!]!): [Allergy!]
+        saveARecipe(recipeID: Int!, userID: Int!): Recipe
     }
 
     extend type Query {
@@ -31,8 +31,8 @@ export const typeDef: DocumentNode = gql`
         imagePath: String!
         createdAt: DateTime!
         updatedAt: DateTime!
-        author: User!
-        reviews: [RecipeReview]!
+        author: User
+        reviews: [RecipeReview]
 		timesSaved: Int!
         tags: [Tag]!
         allergies: [Allergy]!
@@ -127,8 +127,9 @@ export async function updateRecipe(ctx: Context<IAppContext>, input: DeepPartial
 	}
 }
 
-async function makeRecipeCopy(ctx: Context<IAppContext>, recipeId: number): Promise<Recipe | undefined> {
-	const original: DeepPartial<Recipe> | undefined = await getRecipe(ctx, { id: recipeId });
+// TODO: This. Maybe just front end
+async function makeRecipeCopy(ctx: Context<IAppContext>, recipeID: number): Promise<Recipe | undefined> {
+	const original: DeepPartial<Recipe> | undefined = await getRecipe(ctx, { id: recipeID });
 	if (original === undefined) {
 		return Promise.resolve(undefined);
 	}
@@ -148,9 +149,9 @@ function _updateTagList(parent: any, args: IUpdateTagList, ctx: Context<IAppCont
 	return updateTagList(ctx, args.id, args.tags);
 }
 
-export async function updateTagList(ctx: Context<IAppContext>, recipeId: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
+export async function updateTagList(ctx: Context<IAppContext>, recipeID: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
 	try {
-		const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
+		const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
 		if (recipe === undefined) {
 			return Promise.resolve(undefined);
 		}
@@ -210,9 +211,9 @@ function _updateAllergies(parent: any, args: IUpdateAllergies, ctx: Context<IApp
 	return updateAllergies(ctx, args.id, args.allergies);
 }
 
-export async function updateAllergies(ctx: Context<IAppContext>, recipeId: number, allergies: DeepPartial<Allergy>[]): Promise<Allergy[] | undefined> {
+export async function updateAllergies(ctx: Context<IAppContext>, recipeID: number, allergies: DeepPartial<Allergy>[]): Promise<Allergy[] | undefined> {
 	try {
-		const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
+		const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
 		if (recipe === undefined) {
 			return Promise.resolve(undefined);
 		}
@@ -260,18 +261,18 @@ async function newAllergies(ctx: Context<IAppContext>, toggleAllergies: (string 
 }
 
 interface ISaveRecipe {
-	recipeId: number;
-	userId: number;
+	recipeID: number;
+	userID: number;
 }
 
 // tslint:disable-next-line: no-any
 function _saveARecipe(parent: any, args: ISaveRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
-	return saveARecipe(ctx, args.recipeId, args.userId);
+	return saveARecipe(ctx, args.recipeID, args.userID);
 }
 
-export async function saveARecipe(ctx: Context<IAppContext>, recipeId: number, userId: number): Promise<Recipe | undefined> {
-	let user: User | undefined = await getUser(ctx, userId);
-	const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
+export async function saveARecipe(ctx: Context<IAppContext>, recipeID: number, userID: number): Promise<Recipe | undefined> {
+	let user: User | undefined = await getUser(ctx, userID);
+	const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
 	if (user === undefined) {
 		return Promise.resolve(undefined);
 	}
@@ -286,7 +287,7 @@ export async function saveARecipe(ctx: Context<IAppContext>, recipeId: number, u
 
 	recipe.timesSaved += 1;
 	return ctx.connection.getRepository(Recipe).save({
-		...getRecipe(ctx, { id: recipeId }),
+		...getRecipe(ctx, { id: recipeID }),
 		...recipe,
 	});
 }

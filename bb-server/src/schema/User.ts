@@ -4,9 +4,11 @@ import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
+import Recipe from "../entities/Recipe";
 import Tag from "../entities/Tag";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
+import { getRecipe } from "./Recipe";
 import { createTag, getTag } from "./Tag";
 import { createTopic, getTopic } from "./Topic";
 
@@ -14,10 +16,11 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createUser(input: CreateUserInput!): User
         updateUser(input: UpdateUserInput!): User
-        updateWhitelist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
-        updateBlacklist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
-		updateFollowedTags(userId: Int!, tags: [CreateTagInput]!): [Tag]
-        followAUser(subjectId: Int!, actorId: Int!): User
+        updateWhitelist(userID: Int!, topics: [CreateTopicInput]!): [Topic]
+        updateBlacklist(userID: Int!, topics: [CreateTopicInput]!): [Topic]
+		updateFollowedTags(userID: Int!, tags: [CreateTagInput]!): [Tag]
+        updateFollowedUsers(subjectID: Int!, actorID: Int!): User
+		updateSavedRecipes(recipeID: Int!, userID: Int!): Recipe
     }
 
     extend type Query {
@@ -36,12 +39,14 @@ export const typeDef: DocumentNode = gql`
 		timesFollowed: Int!
 		hostedMeals: [Meal]
 		mealsAttending: [Meal]	# NOTE: Anything that could be cyclical should not be required (this limits depth to 1)
-		followedUsers: [User]
         whitelist: [Topic]!
         blacklist: [Topic]!
-		savedRecipes: [Recipe]
-		recipesAuthored: [Recipe]
+		savedRecipes: [Recipe]!  # NOTE: Should not be able to save if you are author of the recipe
+		followedUsers: [User]  # NOTE: Should not be able to follow yourself
+		followedTags: [Tag]!
         reviews: [UserReview]
+		userReviewsAuthored: [UserReview]
+		recipesAuthored: [Recipe]
 		recipeReviewsAuthored: [RecipeReview]
     }
 
@@ -123,13 +128,13 @@ export async function updateUser(ctx: Context<IAppContext>, input: DeepPartial<U
 }
 
 interface IUpdateWhitelist {
-	userId: number;
+	userID: number;	// TODO: get from context
 	topics: DeepPartial<Topic>[];
 }
 
 // tslint:disable-next-line: no-any
 function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-	return updateWhitelist(ctx, args.userId, args.topics);
+	return updateWhitelist(ctx, args.userID, args.topics);
 }
 
 export async function updateWhitelist(ctx: Context<IAppContext>, id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
@@ -159,7 +164,7 @@ export async function updateWhitelist(ctx: Context<IAppContext>, id: number, top
 
 // tslint:disable-next-line: no-any
 function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-	return updateBlacklist(args.userId, args.topics, ctx);
+	return updateBlacklist(args.userID, args.topics, ctx);
 }
 
 export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
@@ -215,18 +220,18 @@ async function newTopicList(ctx: Context<IAppContext>, toggleTopics: (string | u
 }
 
 interface IUpdateSavedTags {
-	userId: number;
+	userID: number; // TODO: get from context
 	tags: DeepPartial<Tag>[];
 }
 
 // tslint:disable-next-line:no-any
 function _updateFollowedTags(parent: any, args: IUpdateSavedTags, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-	return updateSavedTags(ctx, args.userId, args.tags);
+	return updateFollowedTags(ctx, args.userID, args.tags);
 }
 
-export async function updateSavedTags(ctx: Context<IAppContext>, userId: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
+export async function updateFollowedTags(ctx: Context<IAppContext>, userID: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
 	try {
-		const user: User | undefined = await getUser(ctx, userId);
+		const user: User | undefined = await getUser(ctx, userID);
 		if (user === undefined) {
 			return Promise.resolve(undefined);
 		}
@@ -276,35 +281,85 @@ async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undef
 	return newList;
 }
 
-interface IFollowUser {
-	subjectId: number;
-	actorId: number;
+interface IUpdateFollowedUsers {
+	subjectID: number;
+	actorID: number;  // TODO: Get this from context when auth works
 }
 
 // tslint:disable-next-line: no-any
-function _followAUser(parent: any, args: IFollowUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-	return followAUser(ctx, args.subjectId, args.actorId);
+function _updateFollowedUsers(parent: any, args: IUpdateFollowedUsers, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
+	return updateFollowedUsers(ctx, args.subjectID, args.actorID);
 }
 
-export async function followAUser(ctx: Context<IAppContext>, subjectId: number, actorId: number): Promise<User | undefined> {
-	let user: User | undefined = await getUser(ctx, actorId);
-	const subject: User | undefined = await getUser(ctx, subjectId);
+export async function updateFollowedUsers(ctx: Context<IAppContext>, subjectID: number, actorID: number): Promise<User | undefined> {
+	let user: User | undefined = await getUser(ctx, actorID);
+	const subject: User | undefined = await getUser(ctx, subjectID);
 	if (user === undefined) {
 		return Promise.resolve(undefined);
 	}
 	if (subject === undefined) {
 		return Promise.resolve(undefined);
 	}
-	user.followedUsers.push(subject);
+
+	const followedUserIDs: number[] = user.followedUsers.map(a => a.id);
+	if (followedUserIDs.includes(subjectID)) {
+		const index: number = followedUserIDs.indexOf(subjectID);
+		user.followedUsers.splice(index, 1);
+		subject.timesFollowed -= 1;
+	} else {
+		user.followedUsers.push(subject);
+		subject.timesFollowed += 1;
+	}
+
 	user = await updateUser(ctx, user);    // User verification from ctx done here
 	if (user === undefined) {
 		Promise.resolve(undefined);
 	}
 
-	subject.timesFollowed += 1;
 	return ctx.connection.getRepository(User).save({
-		...getUser(ctx, subjectId),
+		...getUser(ctx, subjectID),
 		...subject,
+	});
+}
+
+interface IUpdateSavedRecipes {
+	recipeID: number;
+	userID: number;  // TODO: Get this from context when auth works
+}
+
+// tslint:disable-next-line: no-any
+function _updateSavedRecipes(parent: any, args: IUpdateSavedRecipes, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
+	return updateSavedRecipes(ctx, args.recipeID, args.userID);
+}
+
+export async function updateSavedRecipes(ctx: Context<IAppContext>, recipeID: number, userID: number): Promise<Recipe | undefined> {
+	let user: User | undefined = await getUser(ctx, userID);
+	const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
+	if (user === undefined) {
+		return Promise.resolve(undefined);
+	}
+	if (recipe === undefined) {
+		return Promise.resolve(undefined);
+	}
+
+	const savedRecipeIDs: number[] = user.savedRecipes.map(a => a.id);
+	if (savedRecipeIDs.includes(recipeID)) {
+		const index: number = savedRecipeIDs.indexOf(recipeID);
+		user.savedRecipes.splice(index, 1);
+		recipe.timesSaved -= 1;
+	} else {
+		user.savedRecipes.push(recipe);
+		recipe.timesSaved += 1;
+	}
+
+	user = await updateUser(ctx, user);    // User verification from ctx done here
+	if (user === undefined) {
+		Promise.resolve(undefined);
+	}
+
+	return ctx.connection.getRepository(User).save({
+		...getRecipe(ctx, { id: recipeID }),
+		...recipe,
 	});
 }
 
@@ -321,7 +376,7 @@ function _getUser(parent: any, args: IGetUser, ctx: Context<IAppContext>, info: 
 	return getUser(ctx, args.id);
 }
 
-export async function getUser(ctx: Context<IAppContext>, userId: number): Promise<User | undefined> {
+export async function getUser(ctx: Context<IAppContext>, userID: number): Promise<User | undefined> {
 	const neededRelations: string[] = [
 		"hostedMeals", "mealsAttending", "whitelist", "blacklist",
 		"reviews", "userReviewsAuthored", "recipeReviewsAuthored",
@@ -330,7 +385,7 @@ export async function getUser(ctx: Context<IAppContext>, userId: number): Promis
 		.getRepository(User)
 		.findOne({
 			where: {
-				id: userId,
+				id: userID,
 			},
 			relations: neededRelations,
 		});
@@ -343,7 +398,8 @@ export const resolvers: IResolvers = {
 		updateWhitelist: _updateWhitelist,
 		updateBlacklist: _updateBlacklist,
 		updateFollowedTags: _updateFollowedTags,
-		followAUser: _followAUser,
+		updateFollowedUsers: _updateFollowedUsers,
+		updateSavedRecipes: _updateSavedRecipes,
 	},
 	Query: {
 		getUser: _getUser,

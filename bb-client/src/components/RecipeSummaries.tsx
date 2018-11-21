@@ -18,7 +18,7 @@ export default class RecipeSummaries extends React.Component<IRecipeSummariesPro
 								name={recipe.name as string}
 								description={recipe.description as string}
 								imagePath={recipe.imagePath}
-								timesFavorited={recipe.timesFavorited || 0}
+								timesFavorited={recipe.timesSaved || 0}
 							/>
 						</li>;
 					})}

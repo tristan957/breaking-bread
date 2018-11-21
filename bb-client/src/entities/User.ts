@@ -21,8 +21,8 @@ type User = {
 	mealsAttending: Partial<Meal>[];
 	whitelist: Partial<Topic>[];
 	blacklist: Partial<Topic>[];
-	savedRecipes: Partial<Recipe>[];		// TODO: Change to saved. Same with users and everything. Times saved too.
-	savedUsers: Partial<User>[];
+	savedRecipes: Partial<Recipe>[];
+	followedUsers: Partial<User>[];
 	followedTags: Partial<Tag>[];
 	reviews: Partial<UserReview>[];
 	userReviewsAuthored: Partial<UserReview>[];

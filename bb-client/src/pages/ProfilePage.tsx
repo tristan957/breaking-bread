@@ -98,7 +98,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 					id: 2,
 					name: "Ropa vieja",
 					description: "A classic and a national dish of Cuba",
-					timesFavorited: 10,
+					timesSaved: 10,
 				},
 			],
 			reviews: [
@@ -171,7 +171,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 												hostedMeals={this.state.userBeingViewed.hostedMeals || []}
 												authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
 												favoriteRecipes={this.state.userBeingViewed.savedRecipes || []}
-												favoriteUsers={this.state.userBeingViewed.savedUsers || []}
+												favoriteUsers={this.state.userBeingViewed.followedUsers || []}
 											/>
 										</div>
 										<div>
