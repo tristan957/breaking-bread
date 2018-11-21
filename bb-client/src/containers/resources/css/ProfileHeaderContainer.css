@@ -4,15 +4,15 @@
 	justify-content: space-between;
 }
 
-#left-container {
+#profile-header-left-container {
 	text-align: center;
 }
 
-#left-container > * {
+#profile-header-left-container > * {
 	margin-bottom: 15px;
 }
 
-#left-container div:last-child {
+#profile-header-left-container div:last-child {
 	margin-bottom: 0px;
 }
 
@@ -22,4 +22,5 @@
 
 #profile-picture {
 	border-radius: 50%;
+	width: 50%;
 }

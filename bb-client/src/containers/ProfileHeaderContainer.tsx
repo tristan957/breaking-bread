@@ -1,6 +1,6 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
-// import Rating from "react-rating";
+import Rating from "react-rating";
 import { Button } from "reactstrap";
 import Items from "../components/Items";
 import Topic from "../entities/Topic";
@@ -73,21 +73,20 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 	public render(): JSX.Element {
 		return (
 			<div id="profile-header-container" className="card">
-				<div id="left-container">
+				<div id="profile-header-left-container">
 					<img id="profile-picture" src={this.props.imagePath || defaultUserPic} alt="Profile Picture" />
 					<div id="profile-name">{this.props.name}</div>
 					<div>
 						<Button>Follow</Button>
 					</div>
 				</div>
-				<div id="right-container">
+				<div id="profile-header-right-container">
 					<div>Joined {this.props.joinedAt.getMonth()}/{this.props.joinedAt.getDate()}/{this.props.joinedAt.getFullYear()}</div>
-					{/* <Rating
-						emptySymbol="fa fa-star-o fa-2x"
-						fullSymbol="fa fa-star fa-2x"
+					<Rating
 						fractions={2}
 						readonly
-					/> */}
+						initialRating={this.props.reviewAverage}
+					/>
 				</div>
 			</div>
 		);
