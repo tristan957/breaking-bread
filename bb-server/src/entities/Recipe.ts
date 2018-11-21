@@ -15,7 +15,7 @@ export default class Recipe {
 	@Column({ type: "text" })
 	public description: string;
 
-	@Column({ type: "text" })
+	@Column({ type: "text", nullable: true })
 	public imagePath: string;
 
 	@CreateDateColumn()
@@ -28,7 +28,7 @@ export default class Recipe {
 	public author: User;
 
 	@Column()
-	public timesFavorited: number;
+	public timesSaved: number;
 
 	@OneToMany(type => RecipeReview, review => review.subject)
 	public reviews: RecipeReview[];

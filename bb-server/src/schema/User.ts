@@ -16,8 +16,8 @@ export const typeDef: DocumentNode = gql`
         updateUser(input: UpdateUserInput!): User
         updateWhitelist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
         updateBlacklist(userId: Int!, topics: [CreateTopicInput]!): [Topic]
-		updateFavoriteTags(userId: Int!, tags: [CreateTagInput]!): [Tag]
-        favoriteAUser(subjectId: Int!, actorId: Int!): User
+		updateFollowedTags(userId: Int!, tags: [CreateTagInput]!): [Tag]
+        followAUser(subjectId: Int!, actorId: Int!): User
     }
 
     extend type Query {
@@ -31,11 +31,18 @@ export const typeDef: DocumentNode = gql`
         imagePath: String!
         about: String!
         email: String!
-        phoneNumber: DateTime!
+		phoneNumber: String!
         createdAt: DateTime!
+		timesFollowed: Int!
+		hostedMeals: [Meal]
+		mealsAttending: [Meal]	# NOTE: Anything that could be cyclical should not be required (this limits depth to 1)
+		followedUsers: [User]
         whitelist: [Topic]!
         blacklist: [Topic]!
-        reviews: [UserReview]!
+		savedRecipes: [Recipe]
+		recipesAuthored: [Recipe]
+        reviews: [UserReview]
+		recipeReviewsAuthored: [RecipeReview]
     }
 
     input CreateUserInput {
@@ -72,12 +79,12 @@ function _createUser(parent: any, args: ICreateUser, ctx: Context<IAppContext>, 
 export async function createUser(ctx: Context<IAppContext>, newUser: DeepPartial<User>): Promise<DeepPartial<User> | undefined> {
 	try {
 		// TODO: Get oAuthSub from context
-		if (ctx.user === undefined) {
-			Promise.reject(undefined);
-		}
-		newUser.oAuthSub = ctx.user.sub;
-		if (newUser.timesFavorited === undefined) {
-			newUser.timesFavorited = 0;
+		// if (ctx.user === undefined) {
+		// 	Promise.reject(undefined);
+		// }
+		// newUser.oAuthSub = ctx.user.sub;
+		if (newUser.timesFollowed === undefined) {
+			newUser.timesFollowed = 0;
 		}
 
 		const user: DeepPartial<User> = await ctx.connection.getRepository(User).save(newUser);
@@ -207,17 +214,17 @@ async function newTopicList(ctx: Context<IAppContext>, toggleTopics: (string | u
 	return newList;
 }
 
-interface IUpdateFavoriteTags {
+interface IUpdateSavedTags {
 	userId: number;
 	tags: DeepPartial<Tag>[];
 }
 
 // tslint:disable-next-line:no-any
-function _updateFavoriteTags(parent: any, args: IUpdateFavoriteTags, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
-	return updateFavoriteTags(ctx, args.userId, args.tags);
+function _updateFollowedTags(parent: any, args: IUpdateSavedTags, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+	return updateSavedTags(ctx, args.userId, args.tags);
 }
 
-export async function updateFavoriteTags(ctx: Context<IAppContext>, userId: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
+export async function updateSavedTags(ctx: Context<IAppContext>, userId: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
 	try {
 		const user: User | undefined = await getUser(ctx, userId);
 		if (user === undefined) {
@@ -228,23 +235,23 @@ export async function updateFavoriteTags(ctx: Context<IAppContext>, userId: numb
 			await createTag(ctx, { name: tag.name });
 		}
 
-		user.favoriteTags = await newTagList(
+		user.followedTags = await newTagList(
 			ctx,
 			await tags.map(tag => tag.name),
-			await user.favoriteTags.map(tag => tag.name)
+			await user.followedTags.map(tag => tag.name)
 		);
 		ctx.connection.getRepository(Tag).save(user);
 
-		return user.favoriteTags;
+		return user.followedTags;
 	} catch (reason) {
 		console.log(reason);
 		return Promise.reject(undefined);
 	}
 }
 
-async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undefined)[], userFavoriteTags: (string | undefined)[]): Promise<Tag[]> {
+async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undefined)[], userSavedTags: (string | undefined)[]): Promise<Tag[]> {
 	const namesRemoved: (string | undefined)[] = [];
-	for (const name of userFavoriteTags) {
+	for (const name of userSavedTags) {
 		const index: number = toggleTags.indexOf(name);
 		if (index >= 0) {
 			await toggleTags.splice(index, 1);
@@ -252,12 +259,12 @@ async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undef
 		}
 	}
 	for (const name of namesRemoved) {
-		await userFavoriteTags.splice(
-			userFavoriteTags.indexOf(name), 1
+		await userSavedTags.splice(
+			userSavedTags.indexOf(name), 1
 		);
 	}
 
-	const newTagNames: (string | undefined)[] = [...toggleTags, ...userFavoriteTags];
+	const newTagNames: (string | undefined)[] = [...toggleTags, ...userSavedTags];
 	const newList: Tag[] = [];
 	for (const newName of newTagNames) {
 		const tag: Tag | undefined = await getTag(ctx, { name: newName });
@@ -269,17 +276,17 @@ async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undef
 	return newList;
 }
 
-interface IMakeFavoriteUser {
+interface IFollowUser {
 	subjectId: number;
 	actorId: number;
 }
 
 // tslint:disable-next-line: no-any
-function _favoriteAUser(parent: any, args: IMakeFavoriteUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-	return favoriteAUser(ctx, args.subjectId, args.actorId);
+function _followAUser(parent: any, args: IFollowUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
+	return followAUser(ctx, args.subjectId, args.actorId);
 }
 
-export async function favoriteAUser(ctx: Context<IAppContext>, subjectId: number, actorId: number): Promise<User | undefined> {
+export async function followAUser(ctx: Context<IAppContext>, subjectId: number, actorId: number): Promise<User | undefined> {
 	let user: User | undefined = await getUser(ctx, actorId);
 	const subject: User | undefined = await getUser(ctx, subjectId);
 	if (user === undefined) {
@@ -288,13 +295,13 @@ export async function favoriteAUser(ctx: Context<IAppContext>, subjectId: number
 	if (subject === undefined) {
 		return Promise.resolve(undefined);
 	}
-	user.favoriteUsers.push(subject);
+	user.followedUsers.push(subject);
 	user = await updateUser(ctx, user);    // User verification from ctx done here
 	if (user === undefined) {
 		Promise.resolve(undefined);
 	}
 
-	subject.timesFavorited += 1;
+	subject.timesFollowed += 1;
 	return ctx.connection.getRepository(User).save({
 		...getUser(ctx, subjectId),
 		...subject,
@@ -316,9 +323,9 @@ function _getUser(parent: any, args: IGetUser, ctx: Context<IAppContext>, info: 
 
 export async function getUser(ctx: Context<IAppContext>, userId: number): Promise<User | undefined> {
 	const neededRelations: string[] = [
-		"hostedMeals", "whitelist", "blacklist",
+		"hostedMeals", "mealsAttending", "whitelist", "blacklist",
 		"reviews", "userReviewsAuthored", "recipeReviewsAuthored",
-		"favoriteRecipes", "favoriteUsers", "recipesAuthored"];
+		"savedRecipes", "followedUsers", "recipesAuthored", "followedTags"];
 	return ctx.connection
 		.getRepository(User)
 		.findOne({
@@ -335,8 +342,8 @@ export const resolvers: IResolvers = {
 		updateUser: _updateUser,
 		updateWhitelist: _updateWhitelist,
 		updateBlacklist: _updateBlacklist,
-		updateFavoriteTags: _updateFavoriteTags,
-		favoriteAUser: _favoriteAUser,
+		updateFollowedTags: _updateFollowedTags,
+		followAUser: _followAUser,
 	},
 	Query: {
 		getUser: _getUser,

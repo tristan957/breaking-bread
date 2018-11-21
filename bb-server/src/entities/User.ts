@@ -7,7 +7,7 @@ import Topic from "./Topic";
 import UserReview from "./UserReview";
 
 @Entity()
-@Unique(["oAuthSub", "profilePictureS3Key", "email", "phoneNumber"])
+@Unique(["oAuthSub", "imagePath", "email", "phoneNumber"])
 export default class User {
 	@PrimaryGeneratedColumn()
 	public id: number;
@@ -18,7 +18,7 @@ export default class User {
 	@Column()
 	public lastName: string;
 
-	@Column({ type: "text" })
+	@Column({ type: "text", nullable: true })
 	public imagePath: string;
 
 	@Column({ length: 255 })
@@ -40,10 +40,14 @@ export default class User {
 	public updatedAt: Date;
 
 	@Column()
-	public timesFavorited: number;
+	public timesFollowed: number;
 
 	@OneToMany(type => Meal, meal => meal.host)
 	public hostedMeals: Meal[];
+
+	@ManyToMany(type => Meal)
+	@JoinTable()
+	public mealsAttending: Meal[];  // TODO: Needs implementation
 
 	@ManyToMany(type => Topic)
 	@JoinTable()
@@ -55,15 +59,15 @@ export default class User {
 
 	@ManyToMany(type => Recipe)
 	@JoinTable()
-	public favoriteRecipes: Recipe[];
+	public savedRecipes: Recipe[];
 
 	@ManyToMany(type => User)
 	@JoinTable()
-	public favoriteUsers: User[];
+	public followedUsers: User[];  // TODO:
 
 	@ManyToMany(type => Tag)
 	@JoinTable()
-	public favoriteTags: Tag[];
+	public followedTags: Tag[];
 
 	@OneToMany(type => UserReview, review => review.subject)
 	public reviews: UserReview[];

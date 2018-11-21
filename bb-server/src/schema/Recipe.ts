@@ -17,7 +17,7 @@ export const typeDef: DocumentNode = gql`
         updateRecipe(input: UpdateRecipeInput!): Recipe
         updateTags(recipeId: Int!, tags: [GetTagInput!]!): [Tag!]
         updateAllergies(recipeId: Int!, allergies: [GetAllergyInput!]!): [Allergy!]
-        favoriteARecipe(recipeId: Int!, userId: Int!): Recipe
+        saveARecipe(recipeId: Int!, userId: Int!): Recipe
     }
 
     extend type Query {
@@ -33,6 +33,7 @@ export const typeDef: DocumentNode = gql`
         updatedAt: DateTime!
         author: User!
         reviews: [RecipeReview]!
+		timesSaved: Int!
         tags: [Tag]!
         allergies: [Allergy]!
     }
@@ -85,8 +86,8 @@ export async function createRecipe(ctx: Context<IAppContext>, newRecipe: DeepPar
 			return Promise.resolve(undefined);
 		}
 
-		if (newRecipe.timesFavorited === undefined) {
-			newRecipe.timesFavorited = 0;
+		if (newRecipe.timesSaved === undefined) {
+			newRecipe.timesSaved = 0;
 		}
 		newRecipe.author = author;
 		const recipe: DeepPartial<Recipe> = await ctx.connection.getRepository(Recipe).save(newRecipe);
@@ -258,17 +259,17 @@ async function newAllergies(ctx: Context<IAppContext>, toggleAllergies: (string 
 	return newList;
 }
 
-interface IMakeFavoriteRecipe {
+interface ISaveRecipe {
 	recipeId: number;
 	userId: number;
 }
 
 // tslint:disable-next-line: no-any
-function _favoriteARecipe(parent: any, args: IMakeFavoriteRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
-	return favoriteARecipe(ctx, args.recipeId, args.userId);
+function _saveARecipe(parent: any, args: ISaveRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
+	return saveARecipe(ctx, args.recipeId, args.userId);
 }
 
-export async function favoriteARecipe(ctx: Context<IAppContext>, recipeId: number, userId: number): Promise<Recipe | undefined> {
+export async function saveARecipe(ctx: Context<IAppContext>, recipeId: number, userId: number): Promise<Recipe | undefined> {
 	let user: User | undefined = await getUser(ctx, userId);
 	const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeId });
 	if (user === undefined) {
@@ -277,13 +278,13 @@ export async function favoriteARecipe(ctx: Context<IAppContext>, recipeId: numbe
 	if (recipe === undefined) {
 		return Promise.resolve(undefined);
 	}
-	user.favoriteRecipes.push(recipe);
+	user.savedRecipes.push(recipe);
 	user = await updateUser(ctx, user);    // User verification from ctx done here
 	if (user === undefined) {
 		Promise.resolve(undefined);
 	}
 
-	recipe.timesFavorited += 1;
+	recipe.timesSaved += 1;
 	return ctx.connection.getRepository(Recipe).save({
 		...getRecipe(ctx, { id: recipeId }),
 		...recipe,
@@ -305,7 +306,7 @@ function _getRecipe(parent: any, args: IGetRecipe, ctx: Context<IAppContext>, in
 
 export async function getRecipe(ctx: Context<IAppContext>, recipe: DeepPartial<Recipe>): Promise<Recipe | undefined> {
 	const neededRelations: string[] = [
-		"author", "tags", "ingredients", "reviews", "allergies",
+		"author", "reviews", "tags", "allergies",
 	];
 
 	if (recipe.id !== undefined) {
@@ -339,7 +340,7 @@ export const resolvers: IResolvers = {
 		updateRecipe: _updateRecipe,
 		updateTags: _updateTagList,
 		updateAllergies: _updateAllergies,
-		favoriteARecipe: _favoriteARecipe,
+		saveARecipe: _saveARecipe,
 	},
 	Query: {
 		getRecipe: _getRecipe,

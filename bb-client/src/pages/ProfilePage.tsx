@@ -160,7 +160,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 											imagePath={this.state.userBeingViewed.imagePath}
 											joinedAt={this.state.userBeingViewed.createdAt as Date}
 											reviewAverage={this.getUserReviewAverage()}
-											timesFavorited={this.state.userBeingViewed.timesFavorited as number}
+											timesFavorited={this.state.userBeingViewed.timesSaved as number}
 										/>
 									</div>
 									<div id="profile-under">  {/* Essentially a mini feed for a specific user */}
@@ -170,8 +170,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 											<ProfileActivityContainer
 												hostedMeals={this.state.userBeingViewed.hostedMeals || []}
 												authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
-												favoriteRecipes={this.state.userBeingViewed.favoriteRecipes || []}
-												favoriteUsers={this.state.userBeingViewed.favoriteUsers || []}
+												favoriteRecipes={this.state.userBeingViewed.savedRecipes || []}
+												favoriteUsers={this.state.userBeingViewed.savedUsers || []}
 											/>
 										</div>
 										<div>

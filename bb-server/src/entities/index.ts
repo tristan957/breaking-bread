@@ -1,5 +1,4 @@
 import Allergy from "./Allergy";
-import Ingredient from "./Ingredient";
 import Meal from "./Meal";
 import Recipe from "./Recipe";
 import RecipeReview from "./RecipeReview";
@@ -10,5 +9,5 @@ import UserReview from "./UserReview";
 
 // tslint:disable-next-line: no-any
 export const entities: any[] = [
-    Ingredient, Meal, Recipe, Allergy, UserReview, RecipeReview, Tag, Topic, User,
+	Meal, Recipe, Allergy, UserReview, RecipeReview, Tag, Topic, User,
 ];

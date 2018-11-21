@@ -25,7 +25,7 @@ export default class Meal {
 	@Column()
 	public maxGuests: number;
 
-	@Column({ type: "text" })
+	@Column({ type: "text", nullable: true })
 	public imagePath: string;
 
 	@CreateDateColumn()

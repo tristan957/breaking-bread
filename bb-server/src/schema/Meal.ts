@@ -26,7 +26,7 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         location: String!
         date: DateTime!
-		price: number!
+		price: Float!
         title: String!
 		description: String!
 		imagePath: String!
@@ -41,7 +41,7 @@ export const typeDef: DocumentNode = gql`
     input CreateMealInput {
         location: String!
         date: DateTime!
-		price: number!
+		price: Float!
         title: String!
 		description: String
         host: UpdateUserInput!  # TODO: Verify request is from designated host JWT
@@ -53,7 +53,7 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         location: String
         date: DateTime
-		price: number  # TODO: Def need to email on meal edit for price especially
+		price: Float  # TODO: Def need to email on meal edit for price especially
         title: String
 		description: String
 		imagePath: String

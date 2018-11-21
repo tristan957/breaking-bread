@@ -1,11 +1,10 @@
 /* tslint:disable: strict-boolean-expressions */
-import { ApolloServer } from "apollo-server";
+import { ApolloServer, makeExecutableSchema } from "apollo-server";
 import { Context } from "apollo-server-core";
 import dotenv from "dotenv";
 // tslint:disable-next-line: match-default-export-name
 import { Request } from "express";
-import jwt, { JwtHeader } from "jsonwebtoken";
-import { Jwk, JwksClient } from "jwks-rsa";
+import { GraphQLSchema } from "graphql";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
 import { entities } from "./entities";
 import { resolvers, typeDefs } from "./schema";
@@ -13,23 +12,23 @@ import { resolvers, typeDefs } from "./schema";
 export interface IAppContext {
 	connection: Connection;
 	// tslint:disable-next-line:no-any
-	user: any;
+	// user: any;
 }
 
-const client: JwksClient = new JwksClient({
-	jwksUri: `https://bbread.auth0.com//.well-known/jwks.json`,
-});
+// const client: JwksClient = new JwksClient({
+// 	jwksUri: `https://bbread.auth0.com//.well-known/jwks.json`,
+// });
 
-function getKey(header: JwtHeader, cb: Function): void {
-	if (header.kid === undefined) {
-		return;
-	}
-	client.getSigningKey(header.kid, (err: Error, key: Jwk) => {
-		const signingKey = key.publicKey || key.rsaPublicKey;
-		// tslint:disable-next-line:no-null-keyword
-		cb(null, signingKey);
-	});
-}
+// function getKey(header: JwtHeader, cb: Function): void {
+// 	if (header.kid === undefined) {
+// 		return;
+// 	}
+// 	client.getSigningKey(header.kid, (err: Error, key: Jwk) => {
+// 		const signingKey = key.publicKey || key.rsaPublicKey;
+// 		// tslint:disable-next-line:no-null-keyword
+// 		cb(null, signingKey);
+// 	});
+// }
 
 const options = {
 	audience: "https://bbread.com/graphql-test",
@@ -39,22 +38,22 @@ const options = {
 
 function context(req: Request): Context<IAppContext> {
 	const connection = getConnection();
-	const token: string | undefined = req.headers.authorization;
-	let user: Promise<{}> | undefined = undefined;
-	if (token !== undefined) {
-		user = new Promise((resolve, reject) => {
-			jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
-				if (err || decoded === null) {
-					return reject(err);
-				}
-				resolve(decoded);
-			});
-		});
-	}
+	// const token: string | undefined = req.headers.authorization;
+	const user: Promise<{}> | undefined = undefined;
+	// if (token !== undefined) {
+	// 	user = new Promise((resolve, reject) => {
+	// 		jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: null | {} | string) => {    // Decoded may need an Interface so context user is usable
+	// 			if (err || decoded === null) {
+	// 				return reject(err);
+	// 			}
+	// 			resolve(decoded);
+	// 		});
+	// 	});
+	// }
 
 	return {
 		connection,
-		user: req.user,
+		// user: req.user,
 	};
 }
 
@@ -69,7 +68,8 @@ export default class App {
 		dotenv.config();
 
 		this.setupTypeORM();
-		this.server = new ApolloServer({ typeDefs, resolvers, context });
+		const schema: GraphQLSchema = makeExecutableSchema({ typeDefs, resolvers });
+		this.server = new ApolloServer({ schema, context });
 	}
 
 	/**
@@ -92,7 +92,9 @@ export default class App {
 			entities,
 			synchronize: true,
 		})
-			.then((value: Connection) => this.connection = value)
+			.then((value: Connection) => {
+				this.connection = value;
+			})
 			.catch((reason: void) => {
 				console.log(`Unable to create database connection: ${reason}`);
 				process.exit(1);
