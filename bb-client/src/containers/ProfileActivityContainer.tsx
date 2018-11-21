@@ -8,22 +8,22 @@ import User from "../entities/User";
 import MealSummariesContainer from "./MealSummariesContainer";
 import "./resources/css/ProfileActivityContainer.css";
 
-enum RenderSide {
+enum RenderedComponent {
 	HostedMeals,
 	AuthoredRecipes,
-	FavoriteRecipes,
-	FavoriteUsers,
+	SavedRecipes,
+	FollowedUsers,
 }
 
 interface IProfileActivityContainerProps {
 	hostedMeals: Partial<Meal>[];
 	authoredRecipes: Partial<Recipe>[];
-	favoriteRecipes: Partial<Recipe>[];
-	favoriteUsers: Partial<User>[];
+	savedRecipes: Partial<Recipe>[];
+	followedUsers: Partial<User>[];
 }
 
 interface IProfileActivityContainerState {
-	render: RenderSide;
+	renderedComponent: RenderedComponent;
 }
 
 export default class ProfileActivityContainer extends React.Component<IProfileActivityContainerProps, IProfileActivityContainerState> {
@@ -31,81 +31,32 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 		super(props);
 
 		this.state = {
-			render: RenderSide.HostedMeals,
+			renderedComponent: RenderedComponent.HostedMeals,
 		};
-		this.changeRender = this.changeRender.bind(this);
-		this.renderActivity = this.renderActivity.bind(this);
 	}
 
-	private changeRender(newRender: RenderSide): void {
-		this.setState({
-			render: newRender,
-		});
-	}
-
-	private renderActivity(): JSX.Element | undefined {
-		const nada: JSX.Element = (
-			<div>
-				😯 Nada! Get out there! Eat some food, meet some people!
-			</div>
-		);
-
-		switch (this.state.render) {
-			case RenderSide.HostedMeals: {
-				return (
-					<div>
-						<div className="container-header">Hosted Meals</div>
-						<hr className="seperator" />
-						{
-							this.props.hostedMeals.length === 0 ? nada : (
-								<MealSummariesContainer
-									meals={this.props.hostedMeals}
-									showHosts={false}
-								/>
-							)
-						}
-					</div>
-				);
+	private renderActivity = (): JSX.Element | undefined => {
+		const nada = <div id="nada" className="card">None</div>;
+		switch (this.state.renderedComponent) {
+			case RenderedComponent.HostedMeals: {
+				return this.props.hostedMeals.length === 0
+					? nada
+					: <MealSummariesContainer meals={this.props.hostedMeals} />;
 			}
-			case RenderSide.AuthoredRecipes: {
-				return (
-					<div>
-						<div className="container-header">Authored Recipes</div>
-						<hr className="seperator" />
-						{
-							this.props.authoredRecipes.length === 0 ? nada : (
-								<RecipeSummaries recipes={this.props.authoredRecipes} />
-							)
-						}
-					</div>
-				);
+			case RenderedComponent.AuthoredRecipes: {
+				return this.props.authoredRecipes.length === 0
+					? nada
+					: <RecipeSummaries recipes={this.props.authoredRecipes} />;
 			}
-			case RenderSide.FavoriteRecipes: {
-				return (
-					<div>
-						<div className="container-header">Favorite Recipes</div>
-						<hr className="seperator" />
-						{
-							this.props.favoriteRecipes.length === 0 ? nada : (
-								<RecipeSummaries recipes={this.props.favoriteRecipes} />
-							)
-
-						}
-					</div>
-				);
+			case RenderedComponent.SavedRecipes: {
+				return this.props.savedRecipes.length === 0
+					? nada
+					: <RecipeSummaries recipes={this.props.savedRecipes} />;
 			}
-			case RenderSide.FavoriteUsers: {
-				return (
-					<div>
-						<div className="container-header">Favorite Users</div>
-						<hr className="seperator" />
-						{
-							this.props.favoriteUsers.length === 0 ? nada : (
-								<ProfileList users={this.props.favoriteUsers} />
-							)
-						}
-					</div>
-				);
+			case RenderedComponent.FollowedUsers: {
+				return this.props.followedUsers.length === 0
+					? nada
+					: <ProfileList users={this.props.followedUsers} />;
 			}
 			default: {
 				return undefined;
@@ -116,15 +67,39 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 	public render(): JSX.Element {
 		return (
 			<div id="profile-activity-container" className="profile-activity-container-class">
-				<div>
+				<div id="profile-activity-selector">
 					<ButtonGroup>
-						<Button className="show-filter-modal" active={this.state.render === 0} onClick={() => this.changeRender(RenderSide.HostedMeals)}>Hosted Meals</Button>
-						<Button className="show-filter-modal" active={this.state.render === 1} onClick={() => this.changeRender(RenderSide.AuthoredRecipes)}>Authored Recipes</Button>
-						<Button className="show-filter-modal" active={this.state.render === 2} onClick={() => this.changeRender(RenderSide.FavoriteRecipes)}>Favorite Recipes</Button>
-						<Button className="show-filter-modal" active={this.state.render === 3} onClick={() => this.changeRender(RenderSide.FavoriteUsers)}>Favorite Users</Button>
+						<Button
+							className="show-filter-modal"
+							active={this.state.renderedComponent === 0}
+							onClick={() => this.setState({ renderedComponent: RenderedComponent.HostedMeals })}
+						>
+							Hosted Meals
+						</Button>
+						<Button
+							className="show-filter-modal"
+							active={this.state.renderedComponent === 1}
+							onClick={() => this.setState({ renderedComponent: RenderedComponent.AuthoredRecipes })}
+						>
+							Authored Recipes
+						</Button>
+						<Button
+							className="show-filter-modal"
+							active={this.state.renderedComponent === 2}
+							onClick={() => this.setState({ renderedComponent: RenderedComponent.SavedRecipes })}
+						>
+							Saved Recipes
+						</Button>
+						<Button
+							className="show-filter-modal"
+							active={this.state.renderedComponent === 3}
+							onClick={() => this.setState({ renderedComponent: RenderedComponent.FollowedUsers })}
+						>
+							Followed Users
+						</Button>
 					</ButtonGroup>
 				</div>
-				<div className="card">
+				<div>
 					{this.renderActivity()}
 				</div>
 			</div>

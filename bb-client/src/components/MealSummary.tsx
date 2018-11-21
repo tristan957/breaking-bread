@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Recipe from "../entities/Recipe";
 import User from "../entities/User";
 import MealQuickInfoFooter from "./MealQuickInfoFooter";
-import MealItems from "./MealTags";
+import MealTags from "./MealTags";
 import "./resources/css/MealSummary.css";
 import { default as defaultImagePic } from "./resources/images/default_meal_pic.jpg";
 import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
@@ -25,13 +25,15 @@ export interface IMealSummaryProps {
 }
 
 export default class MealSummary extends React.Component<IMealSummaryProps> {
+	private getTagNames = (): (string | undefined)[] => {
+		const tags = this.props.recipes.map(recipe => recipe.tags!.map(tag => tag.name));
+		if (tags === undefined || tags.length === 0) {
+			return [];
+		}
+		return Array.from(new Set(tags.reduce((prev, val) => prev.concat(val))));
+	}
+
 	public render(): JSX.Element {
-		const arr = Array.from(new Set(this.props.recipes.map(recipe => recipe.tags!.map(tag => tag.name)).reduce((prev, val) => prev.concat(val))));
-		// this.props.recipes.forEach(recipe => {
-		// 	recipe.tags!.forEach(tag => {
-		// 		console.log(tag.name);
-		// 	});
-		// });
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">
 				<div id="meal-summary" className="no-link">
@@ -39,7 +41,7 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 					<div id="meal-summary-header">
 						<div id="tags-title-container">
 							<div id="meal-summary-title">{this.props.title}</div>
-							<MealItems color="info" names={Array.from(new Set(this.props.recipes.map(recipe => recipe.tags!.map(tag => tag.name)).reduce((prev, val) => prev.concat(val))))} />
+							<MealTags color="info" names={this.getTagNames()} />
 						</div>
 						{this.props.showHost !== true
 							? undefined

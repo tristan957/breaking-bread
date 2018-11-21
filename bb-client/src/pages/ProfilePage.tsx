@@ -116,6 +116,63 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 					rating: 2,
 				},
 			],
+			hostedMeals: [
+				{
+					id: 1,
+					date: new Date("December 21, 2018 18:30:00"),
+					location: "College Station, TX",
+					title: "Cuban Delight",
+					guests: [
+						{
+							id: 4,
+							firstName: "Micky",
+							lastName: "Li",
+						},
+						{
+							id: 5,
+							firstName: "Greg",
+							lastName: "Noonan",
+						},
+						{
+							id: 6,
+							firstName: "Jon",
+							lastName: "Wang",
+						},
+					],
+					price: 40,
+					maxGuests: 3,
+				},
+				{
+					id: 2,
+					host: {
+						id: 5,
+						firstName: "Jonathan",
+						lastName: "Wang",
+					},
+					date: new Date("December 17, 2018 19:24:00"),
+					location: "College Station, TX",
+					title: "Mexican Night Out",
+					guests: [],
+					maxGuests: 4,
+				},
+			],
+			followedUsers: [
+				{
+					id: 4,
+					firstName: "Micky",
+					lastName: "Li",
+				},
+				{
+					id: 5,
+					firstName: "Greg",
+					lastName: "Noonan",
+				},
+				{
+					id: 6,
+					firstName: "Jon",
+					lastName: "Wang",
+				},
+			],
 		};
 	}
 
@@ -169,8 +226,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 								<ProfileActivityContainer
 									hostedMeals={this.state.userBeingViewed.hostedMeals || []}
 									authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
-									favoriteRecipes={this.state.userBeingViewed.favoriteRecipes || []}
-									favoriteUsers={this.state.userBeingViewed.favoriteUsers || []}
+									savedRecipes={this.state.userBeingViewed.savedRecipes || []}
+									followedUsers={this.state.userBeingViewed.followedUsers || []}
 								/>
 							</div>
 						</div>

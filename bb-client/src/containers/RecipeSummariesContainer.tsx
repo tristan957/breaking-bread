@@ -3,11 +3,11 @@ import React from "react";
 import RecipeSummaries from "../components/RecipeSummaries";
 import Recipe from "../entities/Recipe";
 
-interface IRecipesContainerProps {
+interface IRecipeSummariesContainerProps {
 	recipes: Partial<Recipe>[];
 }
 
-export default class RecipesContainer extends React.Component<IRecipesContainerProps> {
+export default class RecipeSummariesContainer extends React.Component<IRecipeSummariesContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div>

@@ -6,7 +6,7 @@ import User from "../entities/User";
 interface IGuestListContainerProps {
 	guests: Partial<User>[];
 	maxGuests: number;
-	isGuest: boolean
+	isGuest: boolean;
 }
 
 export default class GuestsContainer extends React.Component<IGuestListContainerProps> {
