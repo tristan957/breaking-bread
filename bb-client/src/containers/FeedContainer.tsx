@@ -66,7 +66,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 					},
 					date: new Date(),
 					location: "College Station, TX",
-					title: "Cuban delight",
+					title: "Cuban Delight",
 					guests: [
 						{
 							id: 4,
@@ -76,6 +76,25 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 					],
 					price: 40,
 					maxGuests: 3,
+					recipes: [
+						{
+							tags: [
+								{
+									name: "veget",
+								},
+								{
+									name: "vegan",
+								},
+							],
+						},
+						{
+							tags: [
+								{
+									name: "vegan",
+								},
+							],
+						},
+					],
 				},
 				{
 					id: 2,
@@ -89,6 +108,22 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 					title: "Mexican Night Out",
 					guests: [],
 					maxGuests: 4,
+					recipes: [
+						{
+							tags: [
+								{
+									name: "veget",
+								},
+							],
+						},
+						{
+							tags: [
+								{
+									name: "meaty",
+								},
+							],
+						},
+					],
 				},
 			],
 		});

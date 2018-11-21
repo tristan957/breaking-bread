@@ -8,7 +8,7 @@ interface IItemsProps {
 	userID?: number;
 	items: Partial<Topic | Tag | Allergy>[];
 	monospace?: boolean;  // Default true
-	leadingChar: string;
+	leadingChar?: string;
 	displayInline?: boolean;  // Default false
 }
 
@@ -29,9 +29,9 @@ export default class Items extends React.Component<IItemsProps> {
 								<Item
 									id={item.id as number}
 									name={item.name as string}
-									monospace={this.props.monospace}
+									monospace={this.props.monospace || false}
 									leadingChar={this.props.leadingChar}
-									displayInline={this.props.displayInline}
+									displayInline={this.props.displayInline || false}
 								/>
 							</li>
 						);

@@ -109,7 +109,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 		newDescription: string | undefined,
 		newTime: string
 	): void {
-		//TODO: update the date and time
+		// TODO: update the date and time
 		this.setState({ meal: { ...this.state.meal, title: newTitle, location: newLocation, description: newLocation } });
 	}
 
