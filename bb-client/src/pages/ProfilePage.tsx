@@ -142,47 +142,37 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 				{userContext => {
 					return (
 						<div>
-							{/* <MediaQuery query="(max-width: 949px)">
-								<div>
-									<div id="profile-header">
-									</div>
+							<div id="profile-info">
+								<div id="profile-info-top">
+									<ProfileHeader
+										name={`${this.state.userBeingViewed.firstName} ${this.state.userBeingViewed.lastName}`}
+										about={this.state.userBeingViewed.about as string}
+										whiteList={this.state.userBeingViewed.whitelist || []}
+										blackList={this.state.userBeingViewed.blacklist || []}
+										imagePath={this.state.userBeingViewed.imagePath}
+										joinedAt={this.state.userBeingViewed.createdAt as Date}
+										reviewAverage={this.getUserReviewAverage()}
+										timesFavorited={this.state.userBeingViewed.timesFavorited as number}
+									/>
 								</div>
-							</MediaQuery> */}
-
-							{/* <MediaQuery query="(min-width: 950px)"> */}
-							<div>
-								<div id="profile-info">
-									<div id="profile-info-left">
-										<ProfileHeader
-											name={`${this.state.userBeingViewed.firstName} ${this.state.userBeingViewed.lastName}`}
-											about={this.state.userBeingViewed.about as string}
-											whiteList={this.state.userBeingViewed.whitelist || []}
-											blackList={this.state.userBeingViewed.blacklist || []}
-											imagePath={this.state.userBeingViewed.imagePath}
-											joinedAt={this.state.userBeingViewed.createdAt as Date}
-											reviewAverage={this.getUserReviewAverage()}
-											timesFavorited={this.state.userBeingViewed.timesFavorited as number}
-										/>
-									</div>
-									<div id="profile-info-center">
+								<div id="profile-info-bottom">
+									<div id="profile-info-topics">
 										<TopicsContainer topics={this.state.userBeingViewed.whitelist || []} />
 										<TopicsContainer topics={this.state.userBeingViewed.blacklist || []} />
 									</div>
-									<div id="profile-info-right">
+									<div id="profile-info-upcoming">
 										<UpcomingMealsContainer mealsAttending={this.state.userBeingViewed.mealsAttending || []} />
 									</div>
 								</div>
-								<div id="profile-under">  {/* Essentially a mini feed for a specific user */}
-									<ProfileActivityContainer
-										hostedMeals={this.state.userBeingViewed.hostedMeals || []}
-										authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
-										favoriteRecipes={this.state.userBeingViewed.favoriteRecipes || []}
-										favoriteUsers={this.state.userBeingViewed.favoriteUsers || []}
-									/>
-									{/* TODO: If this isn't current user, and you have been in a meal with them => show ability to review, or show previous for editing */}
-								</div>
 							</div>
-							{/* </MediaQuery> */}
+							<div id="profile-details">  {/* Essentially a mini feed for a specific user */}
+								<ProfileActivityContainer
+									hostedMeals={this.state.userBeingViewed.hostedMeals || []}
+									authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
+									favoriteRecipes={this.state.userBeingViewed.favoriteRecipes || []}
+									favoriteUsers={this.state.userBeingViewed.favoriteUsers || []}
+								/>
+							</div>
 						</div>
 					);
 				}}

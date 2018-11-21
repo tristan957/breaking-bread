@@ -22,8 +22,8 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 		return (
 			<div id="profile-header-container" className="card">
 				<div id="profile-header-left-container">
-					<img id="profile-picture" src={this.props.imagePath || defaultUserPic} alt="Profile Picture" />
-					<div id="profile-name">{this.props.name}</div>
+					<img id="profile-header-picture" src={this.props.imagePath || defaultUserPic} alt="Profile Picture" />
+					<div id="profile-header-name">{this.props.name}</div>
 					<Rating
 						fractions={2}
 						readonly
@@ -35,7 +35,7 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 				</div>
 				<div id="profile-header-right-container">
 					<div id="profile-header-about-container">
-						<p id="profile-header-about">Your moom</p>
+						<p id="profile-header-about">This is why folks still use tables for grid layout. Vertical align (or anything with height & dynamic data) can be challenging with pure CSS. You have to be willing to do weird hacks like this (somewhat defeats the "separating content from layout" idea), or take the multi-pass rendering hit and use non-static tables. I've never once had complaints from end users for table despite that I routinely break CSS fanboys' hearts. Most of em design only simple blogs & static sites. Some of us build business software and need dense data display, and our users care more about functionality.</p>
 					</div>
 					<div id="profile-header-joined">Joined {this.props.joinedAt.getMonth()}/{this.props.joinedAt.getDate()}/{this.props.joinedAt.getFullYear()}</div>
 				</div>

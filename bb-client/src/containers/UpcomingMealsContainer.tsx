@@ -10,7 +10,7 @@ interface IUpcomingMealsContainerProps {
 export default class UpcomingMealsContainer extends React.Component<IUpcomingMealsContainerProps> {
 	public render(): JSX.Element {
 		return (
-			<div className="card container">
+			<div className="card">
 				<div className="container-header">Your Upcoming Meals</div>
 				<hr className="separator" />
 				<UpcomingMeals {...this.props} />
