@@ -1,22 +1,25 @@
-#header-component {
+#profile-header-container {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
 }
 
-#header-card-left {
-	width: 65%;
-	margin: 0px;
-	padding: 0px 1em 0em 1em;
+#left-container {
+	text-align: center;
 }
 
-#header-card-right {
-	width: 45%;
-	margin: 0px;
-	padding: 0px 1em 0em 1em;
+#left-container > * {
+	margin-bottom: 15px;
 }
 
-#profile-header-img {
-	max-height: 220px;
-	max-height: 220px;
-	border-radius: 200px;
+#left-container div:last-child {
+	margin-bottom: 0px;
+}
+
+#profile-name {
+	font-size: 30px;
+}
+
+#profile-picture {
+	border-radius: 50%;
 }

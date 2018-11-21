@@ -125,9 +125,9 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 
 		let sum = 0;
 		let effectiveLength = 0;
-		this.state.userBeingViewed.reviews.forEach(element => {
-			if (element.rating !== undefined) {
-				sum += element.rating;
+		this.state.userBeingViewed.reviews.forEach(review => {
+			if (review.rating !== undefined) {
+				sum += review.rating;
 				effectiveLength += 1;
 			}
 		});
@@ -164,18 +164,12 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 										/>
 									</div>
 									<div id="profile-under">  {/* Essentially a mini feed for a specific user */}
-										<div>
-										</div>
-										<div>
-											<ProfileActivityContainer
-												hostedMeals={this.state.userBeingViewed.hostedMeals || []}
-												authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
-												favoriteRecipes={this.state.userBeingViewed.favoriteRecipes || []}
-												favoriteUsers={this.state.userBeingViewed.favoriteUsers || []}
-											/>
-										</div>
-										<div>
-										</div>
+										<ProfileActivityContainer
+											hostedMeals={this.state.userBeingViewed.hostedMeals || []}
+											authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
+											favoriteRecipes={this.state.userBeingViewed.favoriteRecipes || []}
+											favoriteUsers={this.state.userBeingViewed.favoriteUsers || []}
+										/>
 										{/* TODO: If this isn't current user, and you have been in a meal with them => show ability to review, or show previous for editing */}
 									</div>
 								</div>

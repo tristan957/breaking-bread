@@ -63,3 +63,7 @@ hr.separator {
     width: 100%;
     margin: 10px auto;
 }
+
+button.btn.btn-secondary {
+    margin-bottom: 0px;
+}
