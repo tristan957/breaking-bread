@@ -62,7 +62,7 @@ export default class User {
 
 	@ManyToMany(type => User)
 	@JoinTable()
-	public followedUsers: User[];  // TODO:
+	public followedUsers: User[];  // TODO: Bi-directional?
 
 	@ManyToMany(type => Tag)
 	@JoinTable()

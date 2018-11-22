@@ -12,8 +12,8 @@ CREATE TABLE "public"."allergy" (
 INSERT INTO "allergy" ("id", "name") VALUES
 (1,	'peanuts'),
 (2,	'shell fish'),
-(3,	'death'),
-(4,	'school');
+(3,	'gluten'),
+(4,	'dairy');
 
 CREATE SEQUENCE tag_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 4 CACHE 1;
 
@@ -42,7 +42,7 @@ CREATE TABLE "public"."topic" (
 INSERT INTO "topic" ("id", "name") VALUES
 (1,	'frasier'),
 (2,	'politics'),
-(3,	'Pandas'),
+(3,	'oandas'),
 (4,	'communism');
 
 CREATE SEQUENCE user_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 8 CACHE 1;
@@ -86,12 +86,11 @@ CREATE TABLE "public"."recipe" (
 
 INSERT INTO "recipe" ("id", "name", "description", "imagePath", "createdAt", "updatedAt", "timesSaved", "authorId") VALUES
 (1,	'Mexican Fried Rice',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus e
-
 ',	NULL,	'2018-11-21 05:28:40.421513',	'2018-11-21 05:28:40.421513',	'0',	1),
 (2,	'Cuban',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, ',	NULL,	'2018-11-21 05:29:00.32459',	'2018-11-21 05:29:00.32459',	'0',	1),
 (3,	'Spaget',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus e
-
-',	NULL,	'2018-11-21 05:29:28.111622',	'2018-11-21 05:29:28.111622',	'0',	3);
+',	NULL,	'2018-11-21 05:29:28.111622',	'2018-11-21 05:29:28.111622',	'0',	3),
+(4,	'Chicken caprese',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes',	NULL,	'2018-10-21 05:29:28.111622',	'2018-11-20 05:29:28.111622',	'0',	2);
 
 CREATE TABLE "public"."user_blacklist_topic" (
     "userId" integer NOT NULL,
@@ -205,7 +204,8 @@ CREATE TABLE "public"."meal" (
 
 INSERT INTO "meal" ("id", "title", "price", "description", "location", "date", "maxGuests", "imagePath", "createdAt", "updatedAt", "hostId") VALUES
 (1,	'Mexicano on the beach',	4,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus e',	'My house',	'2018-11-21 05:37:52.621683',	3,	NULL,	'2018-11-21 05:37:52.621143',	'2018-11-21 05:37:52.621143',	1),
-(2,	'Spring water and fresh greens',	0,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. ',	'My shack',	'2018-12-21 05:38:37.943961',	2,	NULL,	'2018-11-21 05:38:37.942728',	'2018-11-21 05:38:37.942728',	2);
+(2,	'Spring water and fresh greens',	0,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. ',	'My shack',	'2018-12-21 05:38:37.943961',	2,	NULL,	'2018-11-21 05:38:37.942728',	'2018-11-21 05:38:37.942728',	2),
+(3,	'Light Italian',	12,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. ',	'Lot 50',	'2019-5-25 05:38:37.943961',	4,	NULL,	'2018-11-21 05:38:37.942728',	'2018-11-21 05:38:37.942728',	3);
 
 CREATE TABLE "public"."recipe_allergies_allergy" (
     "recipeId" integer NOT NULL,
@@ -218,7 +218,8 @@ CREATE TABLE "public"."recipe_allergies_allergy" (
 INSERT INTO "recipe_allergies_allergy" ("recipeId", "allergyId") VALUES
 (1,	1),
 (2,	2),
-(2,	3);
+(2,	3),
+(3, 4);
 
 CREATE SEQUENCE recipe_review_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 4 CACHE 1;
 
@@ -274,7 +275,8 @@ INSERT INTO "user_saved_recipes_recipe" ("userId", "recipeId") VALUES
 (1,	1),
 (2,	1),
 (2,	2),
-(3,	3);
+(3,	3),
+(1, 3);
 
 CREATE TABLE "public"."meal_guests_user" (
     "mealId" integer NOT NULL,
@@ -287,7 +289,8 @@ CREATE TABLE "public"."meal_guests_user" (
 INSERT INTO "meal_guests_user" ("mealId", "userId") VALUES
 (1,	2),
 (1,	3),
-(2,	4);
+(2,	4),
+(3, 2);
 
 CREATE TABLE "public"."meal_recipes_recipe" (
     "mealId" integer NOT NULL,
@@ -300,6 +303,8 @@ CREATE TABLE "public"."meal_recipes_recipe" (
 INSERT INTO "meal_recipes_recipe" ("mealId", "recipeId") VALUES
 (1,	1),
 (2,	3),
-(2,	2);
+(2,	2),
+(3, 3),
+(3, 4);
 
 -- 2018-11-21 05:56:38.102657+00

@@ -29,7 +29,7 @@ export default class Recipe {
 	public author: User;
 
 	@Column()
-	public timesSaved: number;
+	public timesSaved: number; // TODO: Bi-directional
 
 	@OneToMany(type => RecipeReview, review => review.subject)
 	public reviews: RecipeReview[];
