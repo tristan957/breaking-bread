@@ -34,14 +34,14 @@ export default class Meal {
 	@UpdateDateColumn()
 	public updatedAt: Date;
 
-	@ManyToOne(type => User, { eager: true })
+	@ManyToOne(type => User)
 	public host: User;
 
-	@ManyToMany(type => User)
+	@ManyToMany(type => User, user => user.mealsAttending)
 	@JoinTable()
 	public guests: User[];
 
-	@ManyToMany(type => Recipe)
+	@ManyToMany(type => Recipe, recipe => recipe.mealsServedAt)
 	@JoinTable()
 	public recipes: Recipe[];
 }

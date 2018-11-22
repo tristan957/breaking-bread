@@ -8,7 +8,7 @@ import Recipe from "../entities/Recipe";
 import Tag from "../entities/Tag";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
-import { getRecipe } from "./Recipe";
+import { getRecipe, updateRecipe } from "./Recipe";
 import { createTag, getTag } from "./Tag";
 import { createTopic, getTopic } from "./Topic";
 
@@ -19,8 +19,8 @@ export const typeDef: DocumentNode = gql`
         updateWhitelist(userID: Int!, topics: [CreateTopicInput]!): [Topic]
         updateBlacklist(userID: Int!, topics: [CreateTopicInput]!): [Topic]
 		updateFollowedTags(userID: Int!, tags: [CreateTagInput]!): [Tag]
-        updateFollowedUsers(subjectID: Int!, actorID: Int!): User
-		updateSavedRecipes(recipeID: Int!, userID: Int!): Recipe
+        toggleFollowedUser(subjectID: Int!, actorID: Int!): [User]
+		toggleSavedRecipe(recipeID: Int!, userID: Int!): [Recipe]
     }
 
     extend type Query {
@@ -88,6 +88,8 @@ export async function createUser(ctx: Context<IAppContext>, newUser: DeepPartial
 		// 	Promise.reject(undefined);
 		// }
 		// newUser.oAuthSub = ctx.user.sub;
+
+		// TODO: Should do light email verification before sending verification email
 		if (newUser.timesFollowed === undefined) {
 			newUser.timesFollowed = 0;
 		}
@@ -281,23 +283,20 @@ async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undef
 	return newList;
 }
 
-interface IUpdateFollowedUsers {
+interface IToggleFollowedUser {
 	subjectID: number;
 	actorID: number;  // TODO: Get this from context when auth works
 }
 
 // tslint:disable-next-line: no-any
-function _updateFollowedUsers(parent: any, args: IUpdateFollowedUsers, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-	return updateFollowedUsers(ctx, args.subjectID, args.actorID);
+function _toggleFollowedUser(parent: any, args: IToggleFollowedUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User[] | undefined> {
+	return toggleFollowedUser(ctx, args.subjectID, args.actorID);
 }
 
-export async function updateFollowedUsers(ctx: Context<IAppContext>, subjectID: number, actorID: number): Promise<User | undefined> {
+export async function toggleFollowedUser(ctx: Context<IAppContext>, subjectID: number, actorID: number): Promise<User[] | undefined> {
 	let user: User | undefined = await getUser(ctx, actorID);
 	const subject: User | undefined = await getUser(ctx, subjectID);
-	if (user === undefined) {
-		return Promise.resolve(undefined);
-	}
-	if (subject === undefined) {
+	if (user === undefined || subject === undefined) {
 		return Promise.resolve(undefined);
 	}
 
@@ -315,24 +314,23 @@ export async function updateFollowedUsers(ctx: Context<IAppContext>, subjectID: 
 	if (user === undefined) {
 		Promise.resolve(undefined);
 	}
+	await updateUser(ctx, subject);
 
-	return ctx.connection.getRepository(User).save({
-		...getUser(ctx, subjectID),
-		...subject,
-	});
+	// tslint:disable-next-line:no-non-null-assertion
+	return user!.followedUsers;
 }
 
-interface IUpdateSavedRecipes {
+interface IToggleSavedRecipe {
 	recipeID: number;
 	userID: number;  // TODO: Get this from context when auth works
 }
 
 // tslint:disable-next-line: no-any
-function _updateSavedRecipes(parent: any, args: IUpdateSavedRecipes, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
-	return updateSavedRecipes(ctx, args.recipeID, args.userID);
+function _toggleSavedRecipe(parent: any, args: IToggleSavedRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe[] | undefined> {
+	return toggleSavedRecipe(ctx, args.recipeID, args.userID);
 }
 
-export async function updateSavedRecipes(ctx: Context<IAppContext>, recipeID: number, userID: number): Promise<Recipe | undefined> {
+export async function toggleSavedRecipe(ctx: Context<IAppContext>, recipeID: number, userID: number): Promise<Recipe[] | undefined> {
 	let user: User | undefined = await getUser(ctx, userID);
 	const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
 	if (user === undefined) {
@@ -356,11 +354,10 @@ export async function updateSavedRecipes(ctx: Context<IAppContext>, recipeID: nu
 	if (user === undefined) {
 		Promise.resolve(undefined);
 	}
+	await updateRecipe(ctx, recipe);
 
-	return ctx.connection.getRepository(User).save({
-		...getRecipe(ctx, { id: recipeID }),
-		...recipe,
-	});
+	// tslint:disable-next-line:no-non-null-assertion
+	return user!.savedRecipes;
 }
 
 /**
@@ -398,8 +395,8 @@ export const resolvers: IResolvers = {
 		updateWhitelist: _updateWhitelist,
 		updateBlacklist: _updateBlacklist,
 		updateFollowedTags: _updateFollowedTags,
-		updateFollowedUsers: _updateFollowedUsers,
-		updateSavedRecipes: _updateSavedRecipes,
+		toggleFollowedUser: _toggleFollowedUser,
+		toggleSavedRecipe: _toggleSavedRecipe,
 	},
 	Query: {
 		getUser: _getUser,

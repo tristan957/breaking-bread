@@ -11,11 +11,11 @@ import { getUser } from "./User";
 
 export const typeDef: DocumentNode = gql`
     extend type Mutation {
-        createMeal(input: CreateRecipeInput!): Meal
+        createMeal(input: CreateMealInput!): Meal
         deleteMeal(mealID: Int!): Meal
-        updateGuests(mealID: Int!, guests: [Int!]): Meal
+        toggleGuest(mealID: Int!, guestID: Int!): [User]
         updateMeal(input: UpdateMealInput!): Meal
-        updateRecipes(mealID: Int!, recipes: [UpdateRecipeInput!]!): Meal
+        updateRecipes(mealID: Int!, recipes: [GetRecipeInput]!): Meal # FIXME: out->recipeList in<-recipeIDs?
     }
 
     extend type Query {
@@ -44,7 +44,6 @@ export const typeDef: DocumentNode = gql`
 		price: Float!
         title: String!
 		description: String
-        host: UpdateUserInput!  # TODO: Verify request is from designated host JWT
 		imagePath: String
 		maxGuests: Int!
     }
@@ -76,7 +75,15 @@ function _createMeal(parent: any, args: ICreateMeal, ctx: Context<IAppContext>, 
 
 export async function createMeal(ctx: Context<IAppContext>, newMeal: DeepPartial<Meal>): Promise<DeepPartial<Meal> | undefined> {
 	try {
+		const host: User | undefined = await ctx.user;
+		if (host === undefined) {
+			throw Error;
+		}
+
+		// TODO: Check if the host has a conflict
+		newMeal.host = host;
 		const meal: DeepPartial<Meal> = await ctx.connection.getRepository(Meal).save(newMeal);
+
 		return meal;
 	} catch (reason) {
 		console.log(reason);
@@ -99,7 +106,8 @@ export async function deleteMeal(ctx: Context<IAppContext>, mealID: number): Pro
 		return Promise.resolve(undefined);
 	}
 
-	ctx.connection.getRepository(Meal).delete(meal);
+	ctx.connection.getRepository(Meal).remove(meal);
+
 	return meal;
 }
 
@@ -131,18 +139,18 @@ export async function updateMeal(ctx: Context<IAppContext>, input: DeepPartial<M
 }
 
 interface IUpdateRecipes {
-	id: number;
+	mealID: number;
 	recipes: DeepPartial<Recipe>[];
 }
 
 // tslint:disable-next-line: no-any
 function _updateRecipes(parent: any, args: IUpdateRecipes, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Meal | undefined> {
-	return updateRecipes(ctx, args.id, args.recipes);
+	return updateRecipes(ctx, args.mealID, args.recipes);
 }
 
-export async function updateRecipes(ctx: Context<IAppContext>, id: number, recipes: DeepPartial<Recipe>[]): Promise<Meal | undefined> {
+export async function updateRecipes(ctx: Context<IAppContext>, mealID: number, recipes: DeepPartial<Recipe>[]): Promise<Meal | undefined> {
 	try {
-		const meal: Meal | undefined = await getMeal(ctx, id);
+		const meal: Meal | undefined = await getMeal(ctx, mealID);
 		if (meal === undefined) {
 			return Promise.resolve(undefined);
 		}
@@ -195,72 +203,41 @@ async function newRecipeList(ctx: Context<IAppContext>, toggleRecipes: (number |
 	return newList;
 }
 
-interface IUpdateGuests {
+interface IToggleGuest {
 	mealID: number;
-	guests: number[];
+	guestID: number;
 }
 
 // tslint:disable-next-line: no-any
-function _updateGuests(parent: any, args: IUpdateGuests, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Meal | undefined> {
-	return updateGuests(ctx, args.mealID, args.guests);
+function _toggleGuest(parent: any, args: IToggleGuest, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User[] | undefined> {
+	return toggleGuest(ctx, args.mealID, args.guestID);
 }
 
-export async function updateGuests(ctx: Context<IAppContext>, mealID: number, guests: number[]): Promise<Meal | undefined> {
+export async function toggleGuest(ctx: Context<IAppContext>, mealID: number, guestID: number): Promise<User[] | undefined> {
 	try {
 		const meal: Meal | undefined = await getMeal(ctx, mealID);
-		if (meal === undefined) {
+		const guest: User | undefined = await getUser(ctx, guestID);
+		if (meal === undefined || guest === undefined) {
 			return Promise.resolve(undefined);
 		}
+		// TODO: Check that the new guest is not the host
 
 		// TODO: Need to verify id with JWT from context
-		for (const guestID of guests) {
-			const guest: User | undefined = await getUser(ctx, guestID);
-			if (guest === undefined || guest.id === meal.host.id) {
-				return Promise.resolve(undefined);
-			}
+		const guestIDs: number[] = meal.guests.map(a => a.id);
+		if (guestIDs.includes(guestID)) {
+			const index: number = guestIDs.indexOf(guestID);
+			meal.guests.splice(index, 1);
+		} else {
+			meal.guests.push(guest);
 		}
 
-		meal.guests = await newGuestList(
-			ctx,
-			guests,
-			await meal.guests.map(guest => guest.id)
-		);
+		await updateMeal(ctx, meal);
 
-		ctx.connection.getRepository(Meal).save(meal);
-		return meal;
+		return meal.guests;
 	} catch (reason) {
 		console.log(reason);
 		return Promise.reject(undefined);
 	}
-}
-
-async function newGuestList(ctx: Context<IAppContext>, toggleGuests: (number | undefined)[], mealGuests: (number | undefined)[]): Promise<User[]> {
-	const idsRemoved: (number | undefined)[] = [];
-	for (const id of mealGuests) {
-		const index: number = toggleGuests.indexOf(id);
-		if (index >= 0) {
-			await toggleGuests.splice(index, 1);
-			idsRemoved.push(id);
-		}
-	}
-	for (const id of idsRemoved) {
-		await mealGuests.splice(
-			mealGuests.indexOf(id), 1
-		);
-	}
-
-	const newGuestIDs: (number | undefined)[] = [...toggleGuests, ...mealGuests];
-	const newList: User[] = [];
-	for (const newID of newGuestIDs) {
-		if (newID !== undefined) {
-			const guest: User | undefined = await getUser(ctx, newID);
-			if (guest !== undefined) {
-				newList.push(guest);
-			}
-		}
-	}
-
-	return newList;
 }
 
 /**
@@ -294,7 +271,7 @@ export const resolvers: IResolvers = {
 	Mutation: {
 		createMeal: _createMeal,
 		deleteMeal: _deleteMeal,
-		updateGuests: _updateGuests,
+		toggleGuest: _toggleGuest,
 		updateMeal: _updateMeal,
 		updateRecipes: _updateRecipes,
 	},

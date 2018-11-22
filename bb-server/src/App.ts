@@ -6,12 +6,14 @@ import { Request, Response } from "express";
 // tslint:disable-next-line: match-default-export-name
 import { GraphQLSchema } from "graphql";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
+import { getUserFromAuthSub } from "./auth";
 import { entities } from "./entities";
+import User from "./entities/User";
 import { resolvers, typeDefs } from "./schema";
 
 export interface IAppContext {
 	connection: Connection;
-	// user: Promise<User | undefined>;
+	user: Promise<User | undefined>;
 }
 
 interface IContextParams {
@@ -20,18 +22,18 @@ interface IContextParams {
 }
 
 function context(params: IContextParams): Context<IAppContext> {
-	// if (params.req.headers.oauthsub === undefined) {  // TODO: Replace with token then get sub from token
-	// 	throw Error;  // TODO: Need more elegant failure
-	// }
+	if (params.req.headers.oauthsub === undefined) {  // TODO: Replace with token then get sub from token
+		throw Error;  // TODO: Need more elegant failure
+	}
 
 	const connection: Connection = getConnection();
 	const authSub: string = params.req.headers.oauthsub as string;
-	// const user = getUserFromAuthSub(connection, authSub);
+	const user = getUserFromAuthSub(connection, authSub);
 	// user = getUserWithToken(token);
 
 	return {
 		connection,
-		// user,
+		user,
 	};
 }
 

@@ -302,17 +302,4 @@ INSERT INTO "meal_recipes_recipe" ("mealId", "recipeId") VALUES
 (2,	3),
 (2,	2);
 
-CREATE TABLE "public"."user_meals_attending_meal" (
-    "userId" integer NOT NULL,
-    "mealId" integer NOT NULL,
-    CONSTRAINT "PK_f49c7c98f733eb328151d6f1a33" PRIMARY KEY ("userId", "mealId"),
-    CONSTRAINT "FK_29edefc5fcbb8e50f55944d5b06" FOREIGN KEY ("mealId") REFERENCES meal(id) ON DELETE CASCADE NOT DEFERRABLE,
-    CONSTRAINT "FK_34aecf579de43ab2de1d3da1a23" FOREIGN KEY ("userId") REFERENCES "user"(id) ON DELETE CASCADE NOT DEFERRABLE
-) WITH (oids = false);
-
-INSERT INTO "user_meals_attending_meal" ("userId", "mealId") VALUES
-(2,	1),
-(3,	1),
-(4,	2);
-
 -- 2018-11-21 05:56:38.102657+00

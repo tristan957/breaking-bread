@@ -33,6 +33,7 @@ export const typeDef: DocumentNode = gql`
         updatedAt: DateTime!
         author: User
         reviews: [RecipeReview]
+		mealsServedAt: [Meal]
 		timesSaved: Int!
         tags: [Tag]!
         allergies: [Allergy]!
@@ -307,7 +308,7 @@ function _getRecipe(parent: any, args: IGetRecipe, ctx: Context<IAppContext>, in
 
 export async function getRecipe(ctx: Context<IAppContext>, recipe: DeepPartial<Recipe>): Promise<Recipe | undefined> {
 	const neededRelations: string[] = [
-		"author", "reviews", "tags", "allergies",
+		"author", "reviews", "tags", "allergies", "mealsServedAt",
 	];
 
 	if (recipe.id !== undefined) {

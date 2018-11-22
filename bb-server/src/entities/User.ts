@@ -45,8 +45,7 @@ export default class User {
 	@OneToMany(type => Meal, meal => meal.host)
 	public hostedMeals: Meal[];
 
-	@ManyToMany(type => Meal)
-	@JoinTable()
+	@ManyToMany(type => Meal, meal => meal.guests)
 	public mealsAttending: Meal[];  // TODO: Needs implementation
 
 	@ManyToMany(type => Topic)

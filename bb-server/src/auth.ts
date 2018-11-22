@@ -37,7 +37,7 @@ export function getUserFromAuthSub(connection: Connection, oAuthSub: string): Pr
 		"savedRecipes", "followedUsers", "recipesAuthored", "followedTags"];
 	return connection
 		.getRepository(User)
-		.findOneOrFail({
+		.findOne({
 			where: { oAuthSub },
 			relations: neededRelations,
 		});

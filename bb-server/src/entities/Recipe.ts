@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Allergy from "./Allergy";
+import Meal from "./Meal";
 import RecipeReview from "./RecipeReview";
 import Tag from "./Tag";
 import User from "./User";
@@ -24,7 +25,7 @@ export default class Recipe {
 	@UpdateDateColumn()
 	public updatedAt: Date;
 
-	@ManyToOne(type => User, user => user.recipesAuthored, { eager: true })
+	@ManyToOne(type => User, user => user.recipesAuthored)
 	public author: User;
 
 	@Column()
@@ -33,7 +34,10 @@ export default class Recipe {
 	@OneToMany(type => RecipeReview, review => review.subject)
 	public reviews: RecipeReview[];
 
-	@ManyToMany(type => Tag)
+	@ManyToMany(type => Meal, meal => meal.recipes)
+	public mealsServedAt: Meal[];
+
+	@ManyToMany(type => Tag, tag => tag.associatedRecipes)
 	@JoinTable()
 	public tags: Tag[];
 
