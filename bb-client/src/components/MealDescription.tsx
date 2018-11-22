@@ -47,7 +47,7 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 						<h2>Recipes</h2>
 						<RecipeSummariesContainer recipes={this.props.meal.recipes || []} />
 					</div>
-					{(this.props.isGuest !== undefined && this.props.isGuest === false && this.props.setMeal !== undefined) &&
+					{(this.props.isGuest !== undefined && !this.props.isGuest && this.props.setMeal !== undefined) &&
 						<MealModification meal={this.props.meal} setMeal={this.props.setMeal} />}
 					<div id="footer"></div>
 				</div>

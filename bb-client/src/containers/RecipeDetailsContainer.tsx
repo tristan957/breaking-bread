@@ -1,3 +1,4 @@
+// tslint:disable: no-unsafe-any
 import React from "react";
 import RecipeReview from "../entities/RecipeReview";
 import "./resources/css/ProfileActivityContainer.css";

@@ -30,7 +30,7 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps> 
 							<div id="recipe-summary-name">{this.props.name}</div>
 							<ItemTags color="info" names={this.props.tags.map(tag => tag.name)} />
 						</div>
-						{this.props.showAuthor !== true
+						{!this.props.showAuthor
 							? undefined
 							: (
 								<Link to={`/p/${this.props.author.id}`}>

@@ -1,3 +1,4 @@
+// tslint:disable: no-unsafe-any no-any
 import moment from "moment";
 import React from "react";
 import { SingleDatePicker } from "react-dates";
@@ -100,7 +101,7 @@ export default class MealModification extends React.Component<IMealModificationP
 
 	public handleTimeChange(event: any): void {
 		this.setState({
-			mealTime: event.target.value
+			mealTime: event.target.value,
 		});
 	}
 

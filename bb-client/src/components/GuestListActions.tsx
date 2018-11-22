@@ -1,4 +1,4 @@
-// Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
+// tslint:disable: no-unsafe-any no-any
 import React from "react";
 import "./resources/css/MealActions.css";
 
@@ -27,7 +27,6 @@ export default class GuestListActions extends React.Component<IMealActionsProps,
 			mealStatus: MealStatus.unApplied,
 		});
 	}
-
 
 	public renderHostAction(): JSX.Element {
 		return (

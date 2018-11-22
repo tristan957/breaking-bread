@@ -1,3 +1,4 @@
+// tslint:disable: no-unsafe-any no-any
 import moment from "moment";
 import React from "react";
 import { SingleDatePicker } from "react-dates";

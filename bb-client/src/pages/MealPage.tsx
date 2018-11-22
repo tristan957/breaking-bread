@@ -4,12 +4,13 @@ import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
 import MealDescription from "../components/MealDescription";
-import GuestListContainer from "../containers/GuestListContainer";
+import GuestsContainer from "../containers/GuestsContainer";
 import HostSummaryContainer from "../containers/HostSummaryContainer";
 import Meal from "../entities/Meal";
 import User from "../entities/User";
 import "./resources/css/MealPage.css";
 
+// tslint:disable-next-line: no-any
 const loadedMeals: any = {
 	1: {
 		id: 1,
@@ -129,12 +130,12 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										/>
 										<HostSummaryContainer
 											id={this.state.meal.host!.id as number}
-											name={`${this.state.meal.host!.firstName} ${this.state.meal.host!.lastName}` as string}
+											name={`${this.state.meal.host!.firstName} ${this.state.meal.host!.lastName}`}
 											about={this.state.meal.host!.about as string}
 											imagePath={this.state.meal.host!.imagePath}
 											topics={this.state.meal.host!.whitelist || []}
 										/>
-										<GuestListContainer
+										<GuestsContainer
 											guests={this.state.meal.guests as Partial<User>[]}
 											maxGuests={this.state.meal.maxGuests as number}
 											isGuest={this.state.isGuest}
@@ -156,12 +157,12 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 									<div id="ArticleRight">
 										<HostSummaryContainer
 											id={this.state.meal.host!.id as number}
-											name={`${this.state.meal.host!.firstName} ${this.state.meal.host!.lastName}` as string}
+											name={`${this.state.meal.host!.firstName} ${this.state.meal.host!.lastName}`}
 											about={this.state.meal.host!.about as string}
 											imagePath={this.state.meal.host!.imagePath}
 											topics={this.state.meal.host!.whitelist || []}
 										/>
-										<GuestListContainer
+										<GuestsContainer
 											guests={this.state.meal.guests as Partial<User>[]}
 											maxGuests={this.state.meal.maxGuests as number}
 											isGuest={this.state.isGuest}

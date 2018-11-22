@@ -1,4 +1,4 @@
-// Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
+// tslint:disable: no-unsafe-any
 import React from "react";
 import Items from "../components/Items";
 import Allergy from "../entities/Allergy";
