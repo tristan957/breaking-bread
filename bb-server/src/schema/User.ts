@@ -8,7 +8,7 @@ import Recipe from "../entities/Recipe";
 import Tag from "../entities/Tag";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
-import { getRecipe, updateRecipe } from "./Recipe";
+import { getRecipe } from "./Recipe";
 import { createTag, getTag } from "./Tag";
 import { createTopic, getTopic } from "./Topic";
 
@@ -36,13 +36,13 @@ export const typeDef: DocumentNode = gql`
         email: String!
 		phoneNumber: String!
         createdAt: DateTime!
-		timesFollowed: Int!
 		hostedMeals: [Meal]
 		mealsAttending: [Meal]	# NOTE: Anything that could be cyclical should not be required (this limits depth to 1)
         whitelist: [Topic]!
         blacklist: [Topic]!
 		savedRecipes: [Recipe]!  # NOTE: Should not be able to save if you are author of the recipe
 		followedUsers: [User]  # NOTE: Should not be able to follow yourself
+		followedBy: [User]
 		followedTags: [Tag]!
         reviews: [UserReview]
 		userReviewsAuthored: [UserReview]
@@ -90,9 +90,6 @@ export async function createUser(ctx: Context<IAppContext>, newUser: DeepPartial
 		// newUser.oAuthSub = ctx.user.sub;
 
 		// TODO: Should do light email verification before sending verification email
-		if (newUser.timesFollowed === undefined) {
-			newUser.timesFollowed = 0;
-		}
 
 		const user: DeepPartial<User> = await ctx.connection.getRepository(User).save(newUser);
 		return user;
@@ -227,7 +224,7 @@ interface IUpdateSavedTags {
 }
 
 // tslint:disable-next-line:no-any
-function _updateFollowedTags(parent: any, args: IUpdateSavedTags, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+function _updateFollowedTags(parent: any, args: IUpdateSavedTags, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag[] | undefined> {
 	return updateFollowedTags(ctx, args.userID, args.tags);
 }
 
@@ -304,20 +301,16 @@ export async function toggleFollowedUser(ctx: Context<IAppContext>, subjectID: n
 	if (followedUserIDs.includes(subjectID)) {
 		const index: number = followedUserIDs.indexOf(subjectID);
 		user.followedUsers.splice(index, 1);
-		subject.timesFollowed -= 1;
 	} else {
 		user.followedUsers.push(subject);
-		subject.timesFollowed += 1;
 	}
 
 	user = await updateUser(ctx, user);    // User verification from ctx done here
 	if (user === undefined) {
-		Promise.resolve(undefined);
+		return Promise.resolve(undefined);
 	}
-	await updateUser(ctx, subject);
 
-	// tslint:disable-next-line:no-non-null-assertion
-	return user!.followedUsers;
+	return user.followedUsers;
 }
 
 interface IToggleSavedRecipe {
@@ -344,20 +337,16 @@ export async function toggleSavedRecipe(ctx: Context<IAppContext>, recipeID: num
 	if (savedRecipeIDs.includes(recipeID)) {
 		const index: number = savedRecipeIDs.indexOf(recipeID);
 		user.savedRecipes.splice(index, 1);
-		recipe.timesSaved -= 1;
 	} else {
 		user.savedRecipes.push(recipe);
-		recipe.timesSaved += 1;
 	}
 
 	user = await updateUser(ctx, user);    // User verification from ctx done here
 	if (user === undefined) {
-		Promise.resolve(undefined);
+		return Promise.resolve(undefined);
 	}
-	await updateRecipe(ctx, recipe);
 
-	// tslint:disable-next-line:no-non-null-assertion
-	return user!.savedRecipes;
+	return user.savedRecipes;
 }
 
 /**
@@ -377,7 +366,7 @@ export async function getUser(ctx: Context<IAppContext>, userID: number): Promis
 	const neededRelations: string[] = [
 		"hostedMeals", "mealsAttending", "whitelist", "blacklist",
 		"reviews", "userReviewsAuthored", "recipeReviewsAuthored",
-		"savedRecipes", "followedUsers", "recipesAuthored", "followedTags"];
+		"savedRecipes", "followedUsers", "followedBy", "recipesAuthored", "followedTags"];
 	return ctx.connection
 		.getRepository(User)
 		.findOne({

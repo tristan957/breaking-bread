@@ -39,14 +39,11 @@ export default class User {
 	@UpdateDateColumn()
 	public updatedAt: Date;
 
-	@Column()
-	public timesFollowed: number;
-
 	@OneToMany(type => Meal, meal => meal.host)
 	public hostedMeals: Meal[];
 
 	@ManyToMany(type => Meal, meal => meal.guests)
-	public mealsAttending: Meal[];  // TODO: Needs implementation
+	public mealsAttending: Meal[];
 
 	@ManyToMany(type => Topic)
 	@JoinTable()
@@ -56,15 +53,18 @@ export default class User {
 	@JoinTable()
 	public blacklist: Topic[];
 
-	@ManyToMany(type => Recipe)
+	@ManyToMany(type => Recipe, recipe => recipe.savedBy)
 	@JoinTable()
 	public savedRecipes: Recipe[];
 
-	@ManyToMany(type => User)
+	@ManyToMany(type => User, user => user.followedBy)
 	@JoinTable()
-	public followedUsers: User[];  // TODO: Bi-directional?
+	public followedUsers: User[];
 
-	@ManyToMany(type => Tag)
+	@ManyToMany(type => User, user => user.followedUsers)
+	public followedBy: User[];
+
+	@ManyToMany(type => Tag, tag => tag.followedBy)
 	@JoinTable()
 	public followedTags: Tag[];
 

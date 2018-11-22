@@ -17,6 +17,8 @@ export const typeDef: DocumentNode = gql`
 	type Topic {
 		id: Int!
 		name: String!
+		whiteListedBy: [User]
+		blackListedBy: [User]
 	}
 
 	input GetTopicInput {
@@ -68,16 +70,27 @@ function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info
 }
 
 export async function getTopic(ctx: Context<IAppContext>, topic: DeepPartial<Topic>): Promise<Topic | undefined> {
+	const neededRelations: string[] = ["whiteListedBy", "blackListedBy"];
 	if (topic.id !== undefined) {
-		return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
-			.where("topic.id = :id", { id: topic.id })
-			.getOne();
+		return ctx.connection
+			.getRepository(Topic)
+			.findOne({
+				where: {
+					id: topic.id,
+				},
+				relations: neededRelations,
+			});
 	}
 
 	if (topic.name !== undefined) {
-		return ctx.connection.getRepository(Topic).createQueryBuilder("topic")
-			.where("topic.name = :name", { name: topic.name })
-			.getOne();
+		return ctx.connection
+			.getRepository(Topic)
+			.findOne({
+				where: {
+					id: topic.name,
+				},
+				relations: neededRelations,
+			});
 	}
 
 	return Promise.resolve(undefined);

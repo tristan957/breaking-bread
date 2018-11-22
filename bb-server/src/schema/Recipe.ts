@@ -9,7 +9,6 @@ import Tag from "../entities/Tag";
 import User from "../entities/User";
 import { getAllergy } from "./Allergy";
 import { createTag, getTag } from "./Tag";
-import { getUser, updateUser } from "./User";
 
 export const typeDef: DocumentNode = gql`
     extend type Mutation {
@@ -17,7 +16,6 @@ export const typeDef: DocumentNode = gql`
         updateRecipe(input: UpdateRecipeInput!): Recipe
         updateTags(recipeID: Int!, tags: [GetTagInput!]!): [Tag!]
         updateAllergies(recipeID: Int!, allergies: [GetAllergyInput!]!): [Allergy!]
-        saveARecipe(recipeID: Int!, userID: Int!): Recipe
     }
 
     extend type Query {
@@ -34,7 +32,7 @@ export const typeDef: DocumentNode = gql`
         author: User
         reviews: [RecipeReview]
 		mealsServedAt: [Meal]
-		timesSaved: Int!
+		savedBy: [User]
         tags: [Tag]!
         allergies: [Allergy]!
     }
@@ -87,9 +85,6 @@ export async function createRecipe(ctx: Context<IAppContext>, newRecipe: DeepPar
 			return Promise.resolve(undefined);
 		}
 
-		if (newRecipe.timesSaved === undefined) {
-			newRecipe.timesSaved = 0;
-		}
 		newRecipe.author = author;
 		const recipe: DeepPartial<Recipe> = await ctx.connection.getRepository(Recipe).save(newRecipe);
 		return recipe;
@@ -261,38 +256,6 @@ async function newAllergies(ctx: Context<IAppContext>, toggleAllergies: (string 
 	return newList;
 }
 
-interface ISaveRecipe {
-	recipeID: number;
-	userID: number;
-}
-
-// tslint:disable-next-line: no-any
-function _saveARecipe(parent: any, args: ISaveRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
-	return saveARecipe(ctx, args.recipeID, args.userID);
-}
-
-export async function saveARecipe(ctx: Context<IAppContext>, recipeID: number, userID: number): Promise<Recipe | undefined> {
-	let user: User | undefined = await getUser(ctx, userID);
-	const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
-	if (user === undefined) {
-		return Promise.resolve(undefined);
-	}
-	if (recipe === undefined) {
-		return Promise.resolve(undefined);
-	}
-	user.savedRecipes.push(recipe);
-	user = await updateUser(ctx, user);    // User verification from ctx done here
-	if (user === undefined) {
-		Promise.resolve(undefined);
-	}
-
-	recipe.timesSaved += 1;
-	return ctx.connection.getRepository(Recipe).save({
-		...getRecipe(ctx, { id: recipeID }),
-		...recipe,
-	});
-}
-
 /**
  * Query Resolvers
  */
@@ -308,7 +271,7 @@ function _getRecipe(parent: any, args: IGetRecipe, ctx: Context<IAppContext>, in
 
 export async function getRecipe(ctx: Context<IAppContext>, recipe: DeepPartial<Recipe>): Promise<Recipe | undefined> {
 	const neededRelations: string[] = [
-		"author", "reviews", "tags", "allergies", "mealsServedAt",
+		"author", "reviews", "tags", "allergies", "mealsServedAt", "savedBy",
 	];
 
 	if (recipe.id !== undefined) {
@@ -342,7 +305,6 @@ export const resolvers: IResolvers = {
 		updateRecipe: _updateRecipe,
 		updateTags: _updateTagList,
 		updateAllergies: _updateAllergies,
-		saveARecipe: _saveARecipe,
 	},
 	Query: {
 		getRecipe: _getRecipe,

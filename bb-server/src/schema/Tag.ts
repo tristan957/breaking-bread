@@ -17,7 +17,8 @@ export const typeDef: DocumentNode = gql`
     type Tag {
         id: Int!
         name: String!
-		associatedRecipes: [Recipe]!
+		associatedRecipes: [Recipe]
+		followedBy: [User]
     }
 
     input GetTagInput {
@@ -70,22 +71,27 @@ function _getTag(parent: any, args: IGetTag, ctx: Context<IAppContext>, info: Gr
 }
 
 export async function getTag(ctx: Context<IAppContext>, tag: DeepPartial<Tag>): Promise<Tag | undefined> {
+	const neededRelations: string[] = ["associatedRecipes", "followedBy"];
 	if (tag.id !== undefined) {
-		return ctx.connection.getRepository(Tag).findOne({
-			where: {
-				id: tag.id,
-			},
-			relations: ["associatedRecipes"],
-		});
+		return ctx.connection
+			.getRepository(Tag)
+			.findOne({
+				where: {
+					id: tag.id,
+				},
+				relations: neededRelations,
+			});
 	}
 
 	if (tag.name !== undefined) {
-		return ctx.connection.getRepository(Tag).findOne({
-			where: {
-				name: tag.name,
-			},
-			relations: ["associatedRecipes"],
-		});
+		return ctx.connection
+			.getRepository(Tag)
+			.findOne({
+				where: {
+					name: tag.name,
+				},
+				relations: neededRelations,
+			});
 	}
 
 	return Promise.resolve(undefined);
