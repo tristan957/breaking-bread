@@ -122,17 +122,17 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 							<MediaQuery query="(max-width: 949px)">
 								<div>
 									<div id="mobileArticle">
-										<MealDescription
-											meal={this.state.meal}
-											isGuest={this.state.isGuest}
-											setMeal={this.setMeal}
-										/>
 										<HostSummaryContainer
 											id={this.state.meal.host!.id as number}
 											name={`${this.state.meal.host!.firstName} ${this.state.meal.host!.lastName}` as string}
 											about={this.state.meal.host!.about as string}
 											imagePath={this.state.meal.host!.imagePath}
 											topics={this.state.meal.host!.whitelist || []}
+										/>
+										<MealDescription
+											meal={this.state.meal}
+											isGuest={this.state.isGuest}
+											setMeal={this.setMeal}
 										/>
 										<GuestListContainer
 											guests={this.state.meal.guests as Partial<User>[]}

@@ -11,7 +11,7 @@ interface IRecipeSummaryContainerProps {
 export default class RecipeSummaryContainer extends React.Component<IRecipeSummaryContainerProps> {
 	public render(): JSX.Element {
 		return (
-			<div className="card">
+			<div>
 				<RecipeSummary
 					id={this.props.recipe.id as number}
 					author={this.props.recipe.author as Partial<User>}

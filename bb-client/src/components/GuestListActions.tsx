@@ -1,5 +1,6 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
+import { Button } from "reactstrap";
 import "./resources/css/MealActions.css";
 
 enum MealStatus {
@@ -28,11 +29,13 @@ export default class GuestListActions extends React.Component<IMealActionsProps,
 		});
 	}
 
-
 	public renderHostAction(): JSX.Element {
 		return (
-			<div className="card cardSubstance mealActions">
-				<button className="actionButton">delete guest</button>
+			/*
+				Removed card cardSubstance mealActions from className
+			*/
+			<div id="profile-summary">
+				<Button type="submit" className="actionButton">Remove Guest</Button>
 			</div>
 		);
 	}

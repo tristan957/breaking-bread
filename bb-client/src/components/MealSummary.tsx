@@ -26,7 +26,7 @@ export interface IMealSummaryProps {
 
 export default class MealSummary extends React.Component<IMealSummaryProps> {
 	private getTagNames = (): (string | undefined)[] => {
-		const tags = this.props.recipes.map(recipe => recipe.tags!.map(tag => tag.name));
+		const tags = this.props.recipes.map(recipe => recipe.tags!.map(tag => `#${tag.name}`));
 		if (tags === undefined || tags.length === 0) {
 			return [];
 		}

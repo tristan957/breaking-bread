@@ -22,30 +22,35 @@ interface IRecipeSummaryProps {
 export default class RecipeSummary extends React.Component<IRecipeSummaryProps> {
 	public render(): JSX.Element {
 		return (
-			<Link to={`/r/${this.props.id}`} className="no-link">
-				<div id="recipe-summary" className="no-link">
-					<img className="bg" src={this.props.imagePath || defaultMealPic} alt="Recipe Picture" />
-					<div id="recipe-summary-header">
-						<div id="tags-title-container">
-							<div id="recipe-summary-name">{this.props.name}</div>
-							<ItemTags color="info" names={this.props.tags.map(tag => tag.name)} />
+			<div id="recipe-summary-container">
+				<hr className="recipe-summary-seperator" />
+				<Link to={`/r/${this.props.id}`} className="no-link">
+					<div id="recipe-summary" className="no-link">
+						<img className="bg" src={this.props.imagePath || defaultMealPic} alt="Recipe Picture" />
+						<div id="recipe-summary-info">
+							<div id="recipe-summary-header">
+								<div id="tags-title-container">
+									<div id="recipe-summary-name">{this.props.name}</div>
+									<ItemTags color="info" names={this.props.tags.map(tag => tag.name)} />
+								</div>
+								{this.props.showAuthor !== true
+									? undefined
+									: (
+										<Link to={`/p/${this.props.author.id}`}>
+											<div id="recipe-summary-author" className="no-link">
+												<img id="recipe-summary-author-img" src={this.props.author.imagePath || defaultUserPic} alt="Author Picture" />
+												<div id="recipe-summary-author-name">{`${this.props.author.firstName} ${this.props.author.lastName}`}</div>
+											</div>
+										</Link>
+									)
+								}
+							</div>
+							<div id="recipe-summary-description">PLACE HOLDER DESCRIPTION {this.props.description}</div>
+							<RecipeInfoFooter timesSaved={this.props.timesSaved} />
 						</div>
-						{this.props.showAuthor !== true
-							? undefined
-							: (
-								<Link to={`/p/${this.props.author.id}`}>
-									<div id="recipe-summary-author" className="no-link">
-										<img id="recipe-summary-author-img" src={this.props.author.imagePath || defaultUserPic} alt="Author Picture" />
-										<div id="recipe-summary-author-name">{`${this.props.author.firstName} ${this.props.author.lastName}`}</div>
-									</div>
-								</Link>
-							)
-						}
 					</div>
-					<div id="recipe-summary-description">PLACE HOLDER DESCRIPTION {this.props.description}</div>
-					<RecipeInfoFooter timesSaved={this.props.timesSaved} />
-				</div>
-			</Link>
+				</Link>
+			</div>
 		);
 	}
 }
