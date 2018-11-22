@@ -93,13 +93,35 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 				{
 					id: 1,
 					name: "Arroz con pollo",
+					author: {
+						id: 5,
+						firstName: "Jonathan",
+						lastName: "Wang",
+					},
+					tags: [
+						{
+							id: 5,
+							name: "veget",
+						},
+					],
 					description: "Traditional chicken and rice",
 				},
 				{
 					id: 2,
 					name: "Ropa vieja",
+					author: {
+						id: 5,
+						firstName: "Jonathan",
+						lastName: "Wang",
+					},
+					tags: [
+						{
+							id: 5,
+							name: "veget",
+						},
+					],
 					description: "A classic and a national dish of Cuba",
-					timesFavorited: 10,
+					timesSaved: 10,
 				},
 			],
 			reviews: [

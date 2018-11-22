@@ -1,11 +1,11 @@
 import React from "react";
 import { Button, ButtonGroup } from "reactstrap";
-import ProfileList from "../components/ProfileList";
-import RecipeSummaries from "../components/RecipeSummaries";
 import Meal from "../entities/Meal";
 import Recipe from "../entities/Recipe";
 import User from "../entities/User";
 import MealSummariesContainer from "./MealSummariesContainer";
+import ProfileSummaries from "./ProfileSummaries";
+import RecipeSummariesContainer from "./RecipeSummariesContainer";
 import "./resources/css/ProfileActivityContainer.css";
 
 enum RenderedComponent {
@@ -46,17 +46,17 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			case RenderedComponent.AuthoredRecipes: {
 				return this.props.authoredRecipes.length === 0
 					? nada
-					: <RecipeSummaries recipes={this.props.authoredRecipes} />;
+					: <RecipeSummariesContainer recipes={this.props.authoredRecipes} />;
 			}
 			case RenderedComponent.SavedRecipes: {
 				return this.props.savedRecipes.length === 0
 					? nada
-					: <RecipeSummaries recipes={this.props.savedRecipes} />;
+					: <RecipeSummariesContainer recipes={this.props.savedRecipes} />;
 			}
 			case RenderedComponent.FollowedUsers: {
 				return this.props.followedUsers.length === 0
 					? nada
-					: <ProfileList users={this.props.followedUsers} />;
+					: <ProfileSummaries users={this.props.followedUsers} showAsCards />;
 			}
 			default: {
 				return undefined;

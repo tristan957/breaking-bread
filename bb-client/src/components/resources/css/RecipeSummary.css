@@ -1,37 +1,37 @@
-#meal-summary > * {
+#recipe-summary > * {
 	margin-bottom: 1em;
 }
 
-#meal-summary div:last-child {
+#recipe-summary div:last-child {
 	margin-bottom: 0em;
 }
 
-#meal-summary-title {
+#recipe-summary-name {
 	font-size: 20px;
 	flex-grow: 1;
 	font-weight: bold;
 }
 
-#meal-summary-header {
+#recipe-summary-header {
 	display: flex;
 	justify-content: space-between;
 }
 
-#meal-summary-tags-title-container {
+#recipe-summary-tags-title-container {
 	flex-grow: 1;
 	margin-right: 1em;
 }
 
-#meal-summary-host-name {
+#recipe-summary-author-name {
 	text-align: center;
 }
 
-#meal-summary-host {
+#recipe-summary-author {
 	flex-grow: 0;
 	align-content: center;
 }
 
-#meal-summary-host-img {
+#recipe-summary-author-img {
 	display: block;
 	width: 50px;
 	height: 50px;

@@ -1,7 +1,7 @@
 import React from "react";
 import GuestListActions from "../components/GuestListActions";
-import ProfileList from "../components/ProfileList";
 import User from "../entities/User";
+import ProfileSummaries from "./ProfileSummaries";
 
 interface IGuestListContainerProps {
 	guests: Partial<User>[];
@@ -16,7 +16,7 @@ export default class GuestsContainer extends React.Component<IGuestListContainer
 				<div id="GuestListHeader">
 					<h3>Guests</h3><h5> - {`${this.props.guests.length}/${this.props.maxGuests} 👨`}</h5>
 				</div>
-				<ProfileList users={this.props.guests} />
+				<ProfileSummaries users={this.props.guests} />
 				<GuestListActions isGuest={this.props.isGuest} />
 			</div >
 		);

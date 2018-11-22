@@ -1,8 +1,8 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
+import RecipeSummariesContainer from "../containers/RecipeSummariesContainer";
 import Meal from "../entities/Meal";
 import MealModification from "./MealModification";
-import RecipeSummaries from "./RecipeSummaries";
 import { default as defaultImagePic } from "./resources/images/default_meal_pic.jpg";
 
 interface IMealDescriptionProps {
@@ -44,7 +44,8 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 					</div>
 					<hr className="seperator" />
 					<div id="recipe-section">
-						<RecipeSummaries recipes={this.props.meal.recipes || []} />
+						<h2>Recipes</h2>
+						<RecipeSummariesContainer recipes={this.props.meal.recipes || []} />
 					</div>
 					{(this.props.isGuest !== undefined && this.props.isGuest === false && this.props.setMeal !== undefined) &&
 						<MealModification meal={this.props.meal} setMeal={this.props.setMeal} />}

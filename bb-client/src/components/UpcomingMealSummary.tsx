@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import User from "../entities/User";
-import MealQuickInfoFooter from "./MealQuickInfoFooter";
+import MealInfoFooter from "./MealInfoFooter";
 import "./resources/css/UpcomingMealSummary.css";
 
 interface IUpcomingMealSummaryProps {
@@ -21,7 +21,7 @@ export default class UpcomingMealSummary extends React.Component<IUpcomingMealSu
 				<div id="upcoming-meal-summary" className="no-link">
 					<div id="upcoming-meal-summary-header">{this.props.title}</div>
 					<div id="upcoming-meal-summary-body">
-						<MealQuickInfoFooter
+						<MealInfoFooter
 							price={this.props.price}
 							numOfGuests={this.props.guests.length}
 							maxGuests={this.props.maxGuests}
