@@ -25,7 +25,6 @@ interface IMealModificationState {
 	createdAt: moment.Moment | null;
 	calendarFocused: boolean;
 	mealTime: string;
-	testText: string;
 }
 
 export default class MealModification extends React.Component<IMealModificationProps, IMealModificationState> {
@@ -46,7 +45,6 @@ export default class MealModification extends React.Component<IMealModificationP
 			mealDate: this.props.meal.date,
 			mealLocation: this.props.meal.location,
 			mealDescription: this.props.meal.description,
-			testText: "xxy",
 		});
 	}
 
@@ -105,8 +103,6 @@ export default class MealModification extends React.Component<IMealModificationP
 	}
 
 	public modifyMeal(): void {
-		this.setState({ testText: "zzz" });
-
 		this.props.setMeal(
 			this.state.mealDate,
 			this.state.mealTitle,
@@ -123,7 +119,6 @@ export default class MealModification extends React.Component<IMealModificationP
 			<div className="card cardSubstance MealModification">
 				<button className="actionButton" onClick={this.showEditModal}>edit</button>
 				<button className="actionButton" onClick={this.showDeletionModal}>delete</button>
-				<span>{this.state.testText}</span>
 
 				<Rodal visible={this.state.deletionModalVisible} onClose={this.hideDeletionModal}>
 					<div>are you sure?</div>
