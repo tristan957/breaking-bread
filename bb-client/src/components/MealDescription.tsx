@@ -21,34 +21,38 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 	public render(): JSX.Element {
 		return (
 			// TODO: Edit link to editMealPage if current user is the meal host
-			<div className="card">
-				<img src={this.props.meal.imagePath || defaultImagePic} className="bg" />
-				<div className="articleMain">
-					<div id="meal-article-header">
-						<h3><b>{this.props.meal.title}</b></h3>
-						<h5>
-							<i>
-								{this.props.meal.location} - {this.props.meal.price === undefined ? `Free!` : `$${this.props.meal.price} per person`}
-							</i>
-						</h5>
-						{
-							this.props.meal.date === undefined ? undefined : (
-								<h6>
-									<i>
-										{this.props.meal.date.toLocaleDateString()} at {this.props.meal.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-									</i>
-								</h6>
-							)
-						}
-						<h6>{this.props.meal.description}</h6>
+			<div>
+				<div className="card">
+					<img src={this.props.meal.imagePath || defaultImagePic} className="bg" />
+					<div className="articleMain">
+						<div id="meal-article-header">
+							<h2><b>{this.props.meal.title}</b></h2>
+							<h5>
+								<i>
+									{this.props.meal.location} - {this.props.meal.price === undefined ? `Free!` : `$${this.props.meal.price} per person`}
+								</i>
+							</h5>
+							{
+								this.props.meal.date === undefined ? undefined : (
+									<h6>
+										<i>
+											{this.props.meal.date.toLocaleDateString()} at {this.props.meal.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+										</i>
+									</h6>
+								)
+							}
+							<hr className="seperator" />
+							<h6>{this.props.meal.description}</h6>
+							{(this.props.isGuest !== undefined && this.props.isGuest === false && this.props.setMeal !== undefined) &&
+								<MealModification meal={this.props.meal} setMeal={this.props.setMeal} />}
+						</div>
 					</div>
-					<hr className="seperator" />
+				</div>
+				<div className="card">
 					<div id="recipe-section">
-						<h2>Recipes</h2>
+						<h2><b>Recipes in {this.props.meal.title}</b></h2>
 						<RecipeSummariesContainer recipes={this.props.meal.recipes || []} />
 					</div>
-					{(this.props.isGuest !== undefined && !this.props.isGuest && this.props.setMeal !== undefined) &&
-						<MealModification meal={this.props.meal} setMeal={this.props.setMeal} />}
 					<div id="footer"></div>
 				</div>
 			</div>
