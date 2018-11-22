@@ -2,7 +2,7 @@ import React from "react";
 import GuestListActions from "../components/GuestListActions";
 import User from "../entities/User";
 import ProfileSummaries from "./ProfileSummaries";
-import "./resources/css/GuestListContainer.css";
+import "./resources/css/GuestsContainer.css";
 
 interface IGuestListContainerProps {
 	guests: Partial<User>[];

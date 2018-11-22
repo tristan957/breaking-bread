@@ -48,20 +48,6 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps> 
 							<div id="recipe-summary-description">PLACE HOLDER DESCRIPTION {this.props.description}</div>
 							<RecipeInfoFooter timesSaved={this.props.timesSaved} />
 						</div>
-<<<<<<< HEAD
-						{!this.props.showAuthor
-							? undefined
-							: (
-								<Link to={`/p/${this.props.author.id}`}>
-									<div id="recipe-summary-author" className="no-link">
-										<img id="recipe-summary-author-img" src={this.props.author.imagePath || defaultUserPic} alt="Author Picture" />
-										<div id="recipe-summary-author-name">{`${this.props.author.firstName} ${this.props.author.lastName}`}</div>
-									</div>
-								</Link>
-							)
-						}
-=======
->>>>>>> css2
 					</div>
 				</Link>
 			</div>
