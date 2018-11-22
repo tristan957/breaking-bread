@@ -1,0 +1,29 @@
+#profile-info-top {
+	flex-grow: 1;
+}
+
+#profile-info-bottom {
+	flex-grow: 1;
+	display: flex;
+}
+
+#profile-info-bottom > div {
+	margin-right: 1.2em;
+}
+
+#profile-info-bottom > div:last-child {
+	margin-right: 0em;
+}
+
+#profile-info-topics, #profile-info-upcoming {
+	width: 50%;
+}
+
+#profile-info-topics, #profile-info-upcoming {
+	display: flex;
+	flex-direction: column;
+}
+
+#profile-info-topics > *, #profile-info-upcoming > * {
+	flex-grow: 1;
+}

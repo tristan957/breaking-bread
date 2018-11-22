@@ -1,10 +1,20 @@
 import React from "react";
-import { Route } from "react-router";
-import "./App.css";
-import Dashboard from "./components/Dashboard";
-import MealPage from "./components/MealPage";
+import { Route, Switch } from "react-router";
 import NavigationBar from "./components/NavigationBar";
 import User from "./entities/User";
+import DashboardPage from "./pages/DashboardPage";
+import MealPage from "./pages/MealPage";
+import ProfilePage from "./pages/ProfilePage";
+import RecipePage from "./pages/RecipePage";
+import "./resources/css/App.css";
+import "./resources/css/common.css";
+
+export interface IAppContext {
+	user?: Partial<User>;
+}
+
+// tslint:disable-next-line: variable-name
+export const UserContext = React.createContext<IAppContext>({ user: undefined });
 
 interface IAppState {
 	user?: Partial<User>;
@@ -26,20 +36,26 @@ export default class App extends React.Component<{}, IAppState> {
 				id: 5,
 				firstName: "Tristan",
 				lastName: "Partin",
+				about: "Rough tough white boy stuff.",
+				createdAt: new Date("November 15, 2018 18:30:00"),
 				whitelist: [
 					{ id: 1, name: "Food" },
 					{ id: 2, name: "Nuts" },
+				],
+				blacklist: [
+					{ id: 3, name: "Fun" },
+					{ id: 4, name: "Music" },
 				],
 				followedTags: [
 					{ id: 1, name: "Vegan" },
 					{ id: 2, name: "Veget" },
 				],
-				mealsAttending: [
+				mealsAttending: [ // TODO: Sort and sansity on the backend (remove past meals, sort by next coming)
 					{
 						id: 1,
 						date: new Date("December 21, 2018 18:30:00"),
 						location: "College Station, TX",
-						title: "Cuban delight",
+						title: "Cuban Delight",
 						guests: [
 							{
 								id: 4,
@@ -47,10 +63,12 @@ export default class App extends React.Component<{}, IAppState> {
 								lastName: "Li",
 							},
 							{
+								id: 5,
 								firstName: "Greg",
 								lastName: "Noonan",
 							},
 							{
+								id: 6,
 								firstName: "Jon",
 								lastName: "Wang",
 							},
@@ -72,6 +90,33 @@ export default class App extends React.Component<{}, IAppState> {
 						maxGuests: 4,
 					},
 				],
+				recipesAuthored: [
+					{
+						id: 1,
+						name: "Arroz con pollo",
+						description: "Traditional chicken and rice",
+					},
+					{
+						id: 2,
+						name: "Ropa vieja",
+						description: "A classic and a national dish of Cuba",
+						timesSaved: 10,
+					},
+				],
+				reviews: [
+					{
+						id: 1,
+						rating: 5,
+					},
+					{
+						id: 2,
+						rating: 4,
+					},
+					{
+						id: 3,
+						rating: 2,
+					},
+				],
 			},
 		});
 	}
@@ -82,14 +127,18 @@ export default class App extends React.Component<{}, IAppState> {
 				<div id="Top">
 					<NavigationBar />
 				</div>
-				<div id="TopPlaceHolder"></div>
-				<Route exact path="/" render={() => <Dashboard user={this.state.user} />} />
-				<Route exact path="/m/:mealID" component={MealPage} />
-				{/* <Route exact path="/m/:mealID/e/" component={MealEditPage} />
-				<Route exact path="/p/:userID" component={ProfilePage} />
-				<Route exact path="/p/:userID/e/" component={ProfileEditPage} />
-				<Route exact path="/r/:recipeID" component={RecipePage} />
-				<Route exact path="/r/:recipeID/e/" component={RecipeEditPage} /> */}
+				<div id="page-content">
+					<div id="content-container">
+						<UserContext.Provider value={{ user: this.state.user }}>
+							<Switch>
+								<Route exact path="/" component={DashboardPage} />
+								<Route exact path="/m/:mealID" component={MealPage} />
+								<Route exact path="/p/:userID" component={ProfilePage} />
+								<Route exact path="/r/:recipeID" component={RecipePage} />
+							</Switch>
+						</UserContext.Provider>
+					</div>
+				</div>
 			</div >
 		);
 	}

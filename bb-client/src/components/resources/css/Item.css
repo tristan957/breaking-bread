@@ -1,0 +1,8 @@
+#item {
+	text-transform: lowercase;
+}
+
+#item-inline {
+	text-transform: lowercase;
+	display: inline;
+}

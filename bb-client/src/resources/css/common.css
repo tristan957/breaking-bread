@@ -1,0 +1,70 @@
+@font-face {
+    font-family: "SFMonoSemiBold";
+    src: url("../fonts/SF-Mono/SFMono-Semibold.otf");
+}
+
+@font-face {
+    font-family: "SFMonoRegular";
+    src: url("../fonts/SF-Mono/SFMono-Regular.otf");
+}
+
+.no-link {
+	text-decoration: none;
+	color: black;
+}
+
+.no-link a:hover {
+	text-decoration: none;
+}
+
+.no-link:focus {
+	text-decoration: none;
+}
+
+.no-link:active {
+	text-decoration: none;
+}
+
+.no-link:link {
+	text-decoration: none;
+}
+
+.card {
+    padding: 1em;
+    margin: 0em;
+    margin-bottom: 1.2em;
+    overflow: hidden;
+    background: white;
+    color: #0a0a0a;
+    border-radius: 3px;
+    border: 1px solid #d6d6d6;
+    box-shadow: 3px 3px 0px #bababa;
+}
+
+.container-header {
+    font-size: 18px;
+}
+
+.no-style-list {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+ul.list-inline li {
+    display: inline;
+    margin-right: .4em;
+}
+
+.monospace {
+    font-family: "SFMono-Regular", "courier", "monospace";
+}
+
+hr.separator {
+    width: 100%;
+    margin: 10px auto;
+}
+
+button.btn.btn-secondary {
+    margin-bottom: 0px;
+}

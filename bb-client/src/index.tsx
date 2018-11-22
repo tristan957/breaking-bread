@@ -10,7 +10,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import "rodal/lib/rodal.css";
 import App from "./App";
-import "./index.css";
+import "./resources/css/index.css";
 import * as serviceWorker from "./serviceWorker";
 
 dotenv.config();

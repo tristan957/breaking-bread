@@ -1,0 +1,21 @@
+#feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#show-filter-modal {
+    margin: 0px;
+}
+
+/* #filter {
+    float: right;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+    z-index: 2222;
+} */
+
+#feed-title {
+    font-size: 25px;
+}

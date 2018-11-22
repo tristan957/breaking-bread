@@ -1,0 +1,13 @@
+#upcoming-meals-list > li {
+	margin-bottom: 10px;
+	padding-left: 5px;
+	border-left: solid gray 3px;
+}
+
+#upcoming-meals-list > li:hover {
+	border-left-color: #2eb1dc;
+}
+
+#upcoming-meals-list:last-child {
+	margin-bottom: 0px;
+}

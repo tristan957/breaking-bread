@@ -1,6 +1,5 @@
-#container {
+#mobile-container {
 	width: 100%;
-	text-align: center;
 }
 
 /* Position and sizing of burger button */
@@ -8,19 +7,33 @@
 	position: relative;
 	width: 36px;
 	height: 30px;
-	left: 36px;
-	top: 15px;
+	/* padding-top: 20px; */
+	/* left: 36px; */
+	top: 1em;
+	/* bottom: 1em; */
 	z-index: 0 !important;
 }
 
+/* .bm-menu-wrap {
+	height: 0%;
+	padding: 0px;
+	width: 0%;
+} */
+
+/* .bm-menu {
+	height: 0%;
+	padding: 0px;
+	width: 0%;
+} */
+
 .leftPane {
 	float: left;
-	margin-left: .5rem;
+	margin-left: 1.75em;
 }
 
 .rightPane {
 	float: right;
-	margin-right: 5rem;
+	margin-right: 1.75em;
 }
 
 /* Color/shape of burger icon bars */
@@ -43,7 +56,7 @@
 /* General sidebar styles */
 .bm-menu {
 	background: white;
-	padding: 2.5em 1.5em 0;
+	padding: 1.5em 1em;
 	font-size: 1.15em;
 }
 
@@ -65,5 +78,6 @@
 
 /* Styling of overlay */
 .bm-overlay {
+	height: 100%;
 	background: rgba(0, 0, 0, 0.3);
 }

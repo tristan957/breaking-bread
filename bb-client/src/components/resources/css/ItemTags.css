@@ -1,0 +1,10 @@
+#item-tags-container {
+	display: flex;
+	align-content: center;
+}
+
+.item-tag-badge {
+	padding: 5px;
+	margin-right: .5em;
+	margin-top: 5px;
+}

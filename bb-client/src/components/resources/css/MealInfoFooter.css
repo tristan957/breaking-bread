@@ -1,0 +1,11 @@
+.meal-info-footer {
+    display: flex;
+	flex-wrap: wrap;
+	margin-top: -5px;
+}
+
+.meal-info-footer-item {
+	padding: 5px;
+	margin-right: .5em;
+	margin-top: 5px;
+}

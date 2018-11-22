@@ -1,0 +1,41 @@
+#mobile-center {
+    /* margin: 0 auto; */
+	padding: 1em 1em 1em 1em;
+    width: 100%;
+}
+
+#dashboard {
+	display: flex;
+}
+
+#top-buffer {
+	width: 100%;
+	padding-top: 1em;
+	padding-bottom: 2em;
+}
+
+#left-container {
+    width: 300px;
+    height: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+#center-container {
+    height: 100%;
+	margin-left: 1.8em;
+	margin-right: 1.8em;
+	flex-grow: 2;
+}
+
+#right-container {
+	width: 300px;
+	height: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+.bg {
+	width: 100%;
+	z-index: 0;
+}
