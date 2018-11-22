@@ -1,3 +1,11 @@
+#meal-summary > * {
+	margin-bottom: 1em;
+}
+
+#meal-summary div:last-child {
+	margin-bottom: 0em;
+}
+
 #meal-summary-title {
 	font-size: 20px;
 	flex-grow: 1;
@@ -7,7 +15,11 @@
 #meal-summary-header {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+}
+
+#tags-title-container {
+	flex-grow: 1;
+	margin-right: 1em;
 }
 
 #host-name {
@@ -17,15 +29,12 @@
 #host {
 	flex-grow: 0;
 	align-content: center;
-	/* padding-left: 5px; */
-	/* border: dashed gray 2px; */
-	/* border-bottom: dashed gray 2px; */
-	/* border-left: dashed gray 2px; */
 }
 
 #host-img {
 	display: block;
-	width: 35px;
-	height: 35px;
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
 	margin: auto;
 }

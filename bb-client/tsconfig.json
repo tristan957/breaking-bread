@@ -16,7 +16,8 @@
     "lib": [
       "dom",
       "esnext.asynciterable",
-      "es2015"
+      "es2015",
+      "es6"
     ]
   },
   "include": [

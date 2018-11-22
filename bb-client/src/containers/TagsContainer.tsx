@@ -17,6 +17,7 @@ export default class TagsContainer extends React.Component<ITagsContainerProps> 
 					<Items
 						items={this.props.tags}
 						leadingChar="#"
+						monospace
 					/>
 				</div>
 			</div >

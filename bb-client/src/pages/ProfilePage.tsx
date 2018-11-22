@@ -1,10 +1,11 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
-import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
 import ProfileActivityContainer from "../containers/ProfileActivityContainer";
 import ProfileHeader from "../containers/ProfileHeaderContainer";
+import TopicsContainer from "../containers/TopicsContainer";
+import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import User from "../entities/User";
 import "./resources/css/ProfilePage.css";
 
@@ -115,6 +116,63 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 					rating: 2,
 				},
 			],
+			hostedMeals: [
+				{
+					id: 1,
+					date: new Date("December 21, 2018 18:30:00"),
+					location: "College Station, TX",
+					title: "Cuban Delight",
+					guests: [
+						{
+							id: 4,
+							firstName: "Micky",
+							lastName: "Li",
+						},
+						{
+							id: 5,
+							firstName: "Greg",
+							lastName: "Noonan",
+						},
+						{
+							id: 6,
+							firstName: "Jon",
+							lastName: "Wang",
+						},
+					],
+					price: 40,
+					maxGuests: 3,
+				},
+				{
+					id: 2,
+					host: {
+						id: 5,
+						firstName: "Jonathan",
+						lastName: "Wang",
+					},
+					date: new Date("December 17, 2018 19:24:00"),
+					location: "College Station, TX",
+					title: "Mexican Night Out",
+					guests: [],
+					maxGuests: 4,
+				},
+			],
+			followedUsers: [
+				{
+					id: 4,
+					firstName: "Micky",
+					lastName: "Li",
+				},
+				{
+					id: 5,
+					firstName: "Greg",
+					lastName: "Noonan",
+				},
+				{
+					id: 6,
+					firstName: "Jon",
+					lastName: "Wang",
+				},
+			],
 		};
 	}
 
@@ -125,9 +183,9 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 
 		let sum = 0;
 		let effectiveLength = 0;
-		this.state.userBeingViewed.reviews.forEach(element => {
-			if (element.rating !== undefined) {
-				sum += element.rating;
+		this.state.userBeingViewed.reviews.forEach(review => {
+			if (review.rating !== undefined) {
+				sum += review.rating;
 				effectiveLength += 1;
 			}
 		});
@@ -141,45 +199,37 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 				{userContext => {
 					return (
 						<div>
-							<MediaQuery query="(max-width: 949px)">
-								<div>
-									<div id="profile-header">
+							<div id="profile-info">
+								<div id="profile-info-top">
+									<ProfileHeader
+										name={`${this.state.userBeingViewed.firstName} ${this.state.userBeingViewed.lastName}`}
+										about={this.state.userBeingViewed.about as string}
+										whiteList={this.state.userBeingViewed.whitelist || []}
+										blackList={this.state.userBeingViewed.blacklist || []}
+										imagePath={this.state.userBeingViewed.imagePath}
+										joinedAt={this.state.userBeingViewed.createdAt as Date}
+										reviewAverage={this.getUserReviewAverage()}
+										timesFavorited={this.state.userBeingViewed.timesFavorited as number}
+									/>
+								</div>
+								<div id="profile-info-bottom">
+									<div id="profile-info-topics">
+										<TopicsContainer topics={this.state.userBeingViewed.whitelist || []} />
+										<TopicsContainer topics={this.state.userBeingViewed.blacklist || []} />
+									</div>
+									<div id="profile-info-upcoming">
+										<UpcomingMealsContainer mealsAttending={this.state.userBeingViewed.mealsAttending || []} />
 									</div>
 								</div>
-							</MediaQuery>
-
-							<MediaQuery query="(min-width: 950px)">
-								<div>
-									<div id="profile-header">
-										{/* TODO: Need followed tags */}
-										<ProfileHeader
-											name={`${this.state.userBeingViewed.firstName} ${this.state.userBeingViewed.lastName}`}
-											about={this.state.userBeingViewed.about as string}
-											whiteList={this.state.userBeingViewed.whitelist || []}
-											blackList={this.state.userBeingViewed.blacklist || []}
-											imagePath={this.state.userBeingViewed.imagePath}
-											joinedAt={this.state.userBeingViewed.createdAt as Date}
-											reviewAverage={this.getUserReviewAverage()}
-											timesFavorited={this.state.userBeingViewed.timesFavorited as number}
-										/>
-									</div>
-									<div id="profile-under">  {/* Essentially a mini feed for a specific user */}
-										<div>
-										</div>
-										<div>
-											<ProfileActivityContainer
-												hostedMeals={this.state.userBeingViewed.hostedMeals || []}
-												authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
-												favoriteRecipes={this.state.userBeingViewed.favoriteRecipes || []}
-												favoriteUsers={this.state.userBeingViewed.favoriteUsers || []}
-											/>
-										</div>
-										<div>
-										</div>
-										{/* TODO: If this isn't current user, and you have been in a meal with them => show ability to review, or show previous for editing */}
-									</div>
-								</div>
-							</MediaQuery>
+							</div>
+							<div id="profile-details">  {/* Essentially a mini feed for a specific user */}
+								<ProfileActivityContainer
+									hostedMeals={this.state.userBeingViewed.hostedMeals || []}
+									authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
+									savedRecipes={this.state.userBeingViewed.savedRecipes || []}
+									followedUsers={this.state.userBeingViewed.followedUsers || []}
+								/>
+							</div>
 						</div>
 					);
 				}}

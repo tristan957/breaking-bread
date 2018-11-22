@@ -21,8 +21,8 @@ type User = {
 	mealsAttending: Partial<Meal>[];  // TODO: add to db, also when a meal is completed remove the meal from the list
 	whitelist: Partial<Topic>[];
 	blacklist: Partial<Topic>[];
-	favoriteRecipes: Partial<Recipe>[];		// TODO: Change to saved. Same with users and everything. Times saved too.
-	favoriteUsers: Partial<User>[];
+	savedRecipes: Partial<Recipe>[];		// TODO: Change to saved. Same with users and everything. Times saved too.
+	followedUsers: Partial<User>[];
 	reviews: Partial<UserReview>[];
 	userReviewsAuthored: Partial<UserReview>[];
 	recipeReviewsAuthored: Partial<RecipeReview>[];

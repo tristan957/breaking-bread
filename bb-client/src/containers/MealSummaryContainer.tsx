@@ -23,6 +23,7 @@ export default class MealSummaryContainer extends React.Component<IMealSummaryCo
 					guests={this.props.meal.guests || []}
 					maxGuests={this.props.meal.maxGuests || 0}
 					price={this.props.meal.price || 0}
+					recipes={this.props.meal.recipes || []}
 					showHost={this.props.showHost}
 				/>
 			</div>

@@ -10,15 +10,14 @@ interface ITopicsContainerProps {
 export default class TopicsContainer extends React.Component<ITopicsContainerProps> {
 	public render(): JSX.Element {
 		return (
-			<div id="followed-topics-card" className="followed-topics-card">
-				<div className="card">
-					<div className="tags-topics-list-header container-header">Topics</div>
-					<hr className="seperator" />
-					<Items
-						items={this.props.topics}
-						leadingChar="#"
-					/>
-				</div>
+			<div id="topics-container" className="card">
+				<div className="tags-topics-list-header container-header">Topics</div>
+				<hr className="seperator" />
+				<Items
+					items={this.props.topics}
+					leadingChar="#"
+					monospace
+				/>
 			</div>
 		);
 	}

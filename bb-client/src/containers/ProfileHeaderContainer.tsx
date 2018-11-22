@@ -1,12 +1,10 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
-import Items from "../components/Items";
+import Rating from "react-rating";
+import { Button } from "reactstrap";
 import Topic from "../entities/Topic";
 import "./resources/css/ProfileHeaderContainer.css";
 import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
-
-const months: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 interface IProfileHeaderProps {
 	name: string;
@@ -20,87 +18,26 @@ interface IProfileHeaderProps {
 }
 
 export default class ProfileHeader extends React.Component<IProfileHeaderProps> {
-	constructor(props: IProfileHeaderProps) {
-		super(props);
-
-		this.renderWhiteList = this.renderWhiteList.bind(this);
-		this.renderBlackList = this.renderBlackList.bind(this);
-	}
-
-	private renderWhiteList(): JSX.Element {
-		if (this.props.whiteList.length !== 0) {
-			return (
-				<div>
-					<div>Favorite topics</div>
-					<Items
-						items={this.props.whiteList}
-						displayInline={true}
-						leadingChar="#"
-					/>
-				</div>
-			);
-		}
-
-		return (
-			// TODO: Only display if current user is owner of this page
-			<div>
-				Nada! Try clicking on topics you like to and then add them to your favorites.
-			</div>
-		);
-	}
-
-	private renderBlackList(): JSX.Element {
-		if (this.props.blackList.length !== 0) {
-			return (
-				<div>
-					<div>Least favorite topics</div>
-					<Items
-						items={this.props.blackList}
-						displayInline={true}
-						leadingChar="#"
-					/>
-				</div>
-			);
-		}
-
-		return (
-			// TODO: Only display if current user is owner of this page
-			<div>
-				Nada! If you don't care for a topic, try selecting it and adding it to your disliked.
-			</div>
-		);
-	}
-
 	public render(): JSX.Element {
 		return (
-			// TODO: Seperate to container and sub components
-			<div id="header-container" className="card">
-				<div id="header-component">
-					<div id="header-card-left">
-						<div id="username">
-							<img id="profile-header-img" src={this.props.imagePath === undefined ? defaultUserPic : this.props.imagePath} alt="Profile Picture" />
-							{this.props.name}
-							{
-								this.props.about === undefined ? undefined : (
-									<div>
-										About
-										<p>{this.props.about}</p>
-									</div>
-								)
-							}
-						</div>
+			<div id="profile-header-container" className="card">
+				<div id="profile-header-left-container">
+					<img id="profile-header-picture" src={this.props.imagePath || defaultUserPic} alt="Profile Picture" />
+					<div id="profile-header-name">{this.props.name}</div>
+					<Rating
+						fractions={2}
+						readonly
+						initialRating={this.props.reviewAverage}
+					/>
+					<div>
+						<Button>Follow</Button>
 					</div>
-					<div id="header-card-right">
-						<div id="username">
-							⭐{parseFloat(this.props.reviewAverage.toFixed(2))}/5
-							❤️x{this.props.timesFavorited} {/* TODO: Add button to make favorite */}
-						</div>
-						<div>
-							Member since {months[this.props.joinedAt.getMonth()]}, {this.props.joinedAt.toLocaleDateString(undefined, { year: "2-digit" })}
-						</div>
-						{this.renderWhiteList()}
-						{this.renderBlackList()}
+				</div>
+				<div id="profile-header-right-container">
+					<div id="profile-header-about-container">
+						<p id="profile-header-about">This is why folks still use tables for grid layout. Vertical align (or anything with height & dynamic data) can be challenging with pure CSS. You have to be willing to do weird hacks like this (somewhat defeats the "separating content from layout" idea), or take the multi-pass rendering hit and use non-static tables. I've never once had complaints from end users for table despite that I routinely break CSS fanboys' hearts. Most of em design only simple blogs & static sites. Some of us build business software and need dense data display, and our users care more about functionality.</p>
 					</div>
+					<div id="profile-header-joined">Joined {this.props.joinedAt.getMonth()}/{this.props.joinedAt.getDate()}/{this.props.joinedAt.getFullYear()}</div>
 				</div>
 			</div>
 		);

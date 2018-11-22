@@ -31,6 +31,7 @@
 
 .card {
     padding: 1em;
+    margin: 0em;
     margin-bottom: 1.2em;
     overflow: hidden;
     background: white;
@@ -62,4 +63,8 @@ ul.list-inline li {
 hr.separator {
     width: 100%;
     margin: 10px auto;
+}
+
+button.btn.btn-secondary {
+    margin-bottom: 0px;
 }

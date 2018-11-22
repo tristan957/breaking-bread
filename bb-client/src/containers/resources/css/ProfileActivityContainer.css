@@ -1,0 +1,9 @@
+#profile-activity-selector {
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: 1.2em;
+}
+
+#nada {
+	text-align: center;
+}
