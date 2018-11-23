@@ -15,7 +15,6 @@ export default class HostSummaryContainer extends React.Component<IHostSummaryCo
 	public render(): JSX.Element {
 		return (
 			<div id="profile-card" className="profile card no-link">
-				<h3>Host</h3>
 				<HostSummary
 					{...this.props}
 				/>

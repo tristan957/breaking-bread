@@ -1,6 +1,7 @@
 #profile-summary {
 	display: flex;
     flex-direction: row;
+    margin: .75em 1em 0em 1em;
 }
 
 #profile-summary-picture {

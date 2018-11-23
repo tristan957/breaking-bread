@@ -1,8 +1,10 @@
 import moment from "moment";
 import React from "react";
 import { SingleDatePicker } from "react-dates";
+import { Button } from "reactstrap";
 import Rodal from "rodal";
 import Meal from "../entities/Meal";
+import "./resources/css/MealModification.css";
 
 interface IMealModificationProps {
 	meal: Partial<Meal>;
@@ -98,7 +100,7 @@ export default class MealModification extends React.Component<IMealModificationP
 
 	public handleTimeChange(event: any): void {
 		this.setState({
-			mealTime: event.target.value
+			mealTime: event.target.value,
 		});
 	}
 
@@ -116,9 +118,14 @@ export default class MealModification extends React.Component<IMealModificationP
 
 	public render(): JSX.Element {
 		return (
-			<div className="card cardSubstance MealModification">
-				<button className="actionButton" onClick={this.showEditModal}>edit</button>
-				<button className="actionButton" onClick={this.showDeletionModal}>delete</button>
+			/* Removed card cardSubstance MealModification from className */
+			<div>
+				<div id="meal-buttons">
+					<Button className="actionButton edit-meal" onClick={this.showEditModal}>Edit Meal</Button>
+					<Button className="actionButton delete-meal" onClick={this.showDeletionModal}>Delete Meal</Button>
+				</div>
+
+				{/* <span>{this.state.testText}</span> */}
 
 				<Rodal visible={this.state.deletionModalVisible} onClose={this.hideDeletionModal}>
 					<div>are you sure?</div>

@@ -44,7 +44,7 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 				},
 			],
 			createdAt: new Date("November 18, 2018 22:00:00"),
-			timesFavorited: 10,
+			timesSaved: 10,
 			reviews: [
 				{
 					id: 1,
@@ -118,7 +118,7 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 											tagList={this.state.recipe.tags || []}
 											createdAt={this.state.recipe.createdAt as Date}
 											reviewAverage={this.getRecipeReviewAverage()}
-											timesFavorited={this.state.recipe.timesFavorited as number}
+											timesFavorited={this.state.recipe.timesSaved as number}
 											allergies={this.state.recipe.allergies || []}
 										/>
 									</div>

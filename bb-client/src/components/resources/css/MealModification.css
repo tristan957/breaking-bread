@@ -1,0 +1,14 @@
+#meal-buttons {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	margin-top: 1.25em;
+}
+
+.edit-meal {
+	width: auto;
+}
+
+.delete-meal {
+	width: auto;
+}

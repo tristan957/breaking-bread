@@ -17,21 +17,21 @@
 	justify-content: space-between;
 }
 
-#tags-title-container {
+#meal-summary-tags-title-container {
 	flex-grow: 1;
 	margin-right: 1em;
 }
 
-#host-name {
+#meal-summary-host-name {
 	text-align: center;
 }
 
-#host {
+#meal-summary-host {
 	flex-grow: 0;
 	align-content: center;
 }
 
-#host-img {
+#meal-summary-host-img {
 	display: block;
 	width: 50px;
 	height: 50px;
