@@ -37,7 +37,7 @@ export default class Recipe {
 	@ManyToMany(type => Meal, meal => meal.recipes)
 	public mealsServedAt: Meal[];
 
-	@ManyToMany(type => Tag, tag => tag.associatedRecipes)
+	@ManyToMany(type => Tag, tag => tag.associatedRecipes, { eager: true })  // For use with MealFeed
 	@JoinTable()
 	public tags: Tag[];
 

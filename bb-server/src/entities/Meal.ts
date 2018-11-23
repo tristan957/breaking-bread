@@ -41,7 +41,7 @@ export default class Meal {
 	@JoinTable()
 	public guests: User[];
 
-	@ManyToMany(type => Recipe, recipe => recipe.mealsServedAt)
+	@ManyToMany(type => Recipe, recipe => recipe.mealsServedAt, { eager: true })
 	@JoinTable()
 	public recipes: Recipe[];
 }
