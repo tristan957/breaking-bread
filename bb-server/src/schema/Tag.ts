@@ -32,6 +32,16 @@ export const typeDef: DocumentNode = gql`
     }
 `;
 
+export const resolvers: IResolvers = {
+	Mutation: {
+		createTag: _createTag,
+	},
+	Query: {
+		getTag: _getTag,
+		getTags: _getTags,
+	},
+};
+
 /**
  * Mutator Resolvers
  */
@@ -107,13 +117,3 @@ function _getTags(parent: any, args: any, ctx: Context<IAppContext>, info: Graph
 			relations: neededRelations,
 		});
 }
-
-export const resolvers: IResolvers = {
-	Mutation: {
-		createTag: _createTag,
-	},
-	Query: {
-		getTag: _getTag,
-		getTags: _getTags,
-	},
-};

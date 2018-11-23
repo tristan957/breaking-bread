@@ -32,6 +32,16 @@ export const typeDef: DocumentNode = gql`
 	}
 `;
 
+export const resolvers: IResolvers = {
+	Mutation: {
+		createTopic: _createTopic,
+	},
+	Query: {
+		getTopic: _getTopic,
+		getTopics: _getTopics,
+	},
+};
+
 /**
  * Mutator Resolvers
  */
@@ -107,13 +117,3 @@ function _getTopics(parent: any, args: any, ctx: Context<IAppContext>, info: Gra
 			relations: neededRelations,
 		});
 }
-
-export const resolvers: IResolvers = {
-	Mutation: {
-		createTopic: _createTopic,
-	},
-	Query: {
-		getTopic: _getTopic,
-		getTopics: _getTopics,
-	},
-};

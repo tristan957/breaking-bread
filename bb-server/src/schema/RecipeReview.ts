@@ -44,6 +44,16 @@ export const typeDef: DocumentNode = gql`
 	}
 `;
 
+export const resolvers: IResolvers = {
+	Mutation: {
+		createRecipeReview: _createRecipeReview,
+		updateRecipeReview: _updateRecipeReview,
+	},
+	Query: {
+		getRecipeReview: _getRecipeReview,
+	},
+};
+
 /**
  * Mutator Resolvers
  */
@@ -130,13 +140,3 @@ async function getRecipeReview(ctx: Context<IAppContext>, reviewID: number): Pro
 			relations: ["subject", "author"],
 		});
 }
-
-export const resolvers: IResolvers = {
-	Mutation: {
-		createRecipeReview: _createRecipeReview,
-		updateRecipeReview: _updateRecipeReview,
-	},
-	Query: {
-		getRecipeReview: _getRecipeReview,
-	},
-};

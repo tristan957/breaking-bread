@@ -29,6 +29,19 @@ export const typeDef: DocumentNode = gql`
 	}
 `;
 
+export const resolvers: IResolvers = {
+	Mutation: {
+		createAllergy: _createAllergy,
+	},
+	Query: {
+		getAllergy: _getAllergy,
+	},
+};
+
+/**
+ * Mutation Resolvers
+ */
+
 interface ICreateAllergy {
 	input: DeepPartial<Allergy>;
 }
@@ -50,6 +63,10 @@ export async function createAllergy(ctx: Context<IAppContext>, allergy: DeepPart
 		return foundAllergy;
 	}
 }
+
+/**
+ * Query Resolvers
+ */
 
 interface IGetAllergy {
 	input: DeepPartial<Allergy>;
@@ -75,12 +92,3 @@ export async function getAllergy(ctx: Context<IAppContext>, allergy: DeepPartial
 
 	return Promise.resolve(undefined);
 }
-
-export const resolvers: IResolvers = {
-	Mutation: {
-		createAllergy: _createAllergy,
-	},
-	Query: {
-		getAllergy: _getAllergy,
-	},
-};

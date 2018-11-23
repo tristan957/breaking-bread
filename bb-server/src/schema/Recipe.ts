@@ -14,8 +14,8 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createRecipe(input: CreateRecipeInput!): Recipe
         updateRecipe(input: UpdateRecipeInput!): Recipe
-        updateTags(recipeID: Int!, tags: [GetTagInput!]!): [Tag!]
-        updateAllergies(recipeID: Int!, allergies: [GetAllergyInput!]!): [Allergy!]
+        updateTags(recipeID: Int!, tags: [GetTagInput]!): Recipe
+        updateAllergies(recipeID: Int!, allergies: [GetAllergyInput]!): Recipe
     }
 
     extend type Query {
@@ -56,6 +56,18 @@ export const typeDef: DocumentNode = gql`
         name: String
     }
 `;
+
+export const resolvers: IResolvers = {
+	Mutation: {
+		createRecipe: _createRecipe,
+		updateRecipe: _updateRecipe,
+		updateTags: _updateTagList,
+		updateAllergies: _updateAllergies,
+	},
+	Query: {
+		getRecipe: _getRecipe,
+	},
+};
 
 /**
  * Mutator Resolvers
@@ -141,11 +153,11 @@ interface IUpdateTagList {
 }
 
 // tslint:disable-next-line: no-any
-function _updateTagList(parent: any, args: IUpdateTagList, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag[] | undefined> {
+function _updateTagList(parent: any, args: IUpdateTagList, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
 	return updateTagList(ctx, args.id, args.tags);
 }
 
-export async function updateTagList(ctx: Context<IAppContext>, recipeID: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
+export async function updateTagList(ctx: Context<IAppContext>, recipeID: number, tags: DeepPartial<Tag>[]): Promise<Recipe | undefined> {
 	try {
 		const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
 		if (recipe === undefined) {
@@ -161,9 +173,7 @@ export async function updateTagList(ctx: Context<IAppContext>, recipeID: number,
 			await tags.map(tag => tag.name),
 			await recipe.tags.map(tag => tag.name)
 		);
-		ctx.connection.getRepository(Tag).save(recipe);
-
-		return recipe.tags;
+		return ctx.connection.getRepository(Tag).save(recipe);
 	} catch (reason) {
 		console.log(reason);
 		return Promise.reject(undefined);
@@ -203,11 +213,11 @@ interface IUpdateAllergies {
 }
 
 // tslint:disable-next-line: no-any
-function _updateAllergies(parent: any, args: IUpdateAllergies, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Allergy[] | undefined> {
+function _updateAllergies(parent: any, args: IUpdateAllergies, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe | undefined> {
 	return updateAllergies(ctx, args.id, args.allergies);
 }
 
-export async function updateAllergies(ctx: Context<IAppContext>, recipeID: number, allergies: DeepPartial<Allergy>[]): Promise<Allergy[] | undefined> {
+export async function updateAllergies(ctx: Context<IAppContext>, recipeID: number, allergies: DeepPartial<Allergy>[]): Promise<Recipe | undefined> {
 	try {
 		const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
 		if (recipe === undefined) {
@@ -220,9 +230,7 @@ export async function updateAllergies(ctx: Context<IAppContext>, recipeID: numbe
 			await allergies.map(allergy => allergy.name),
 			await recipe.allergies.map(allergy => allergy.name)
 		);
-		ctx.connection.getRepository(Recipe).save(recipe);
-
-		return recipe.allergies;
+		return ctx.connection.getRepository(Recipe).save(recipe);
 	} catch (reason) {
 		console.log(reason);
 		return Promise.reject(undefined);
@@ -298,15 +306,3 @@ export async function getRecipe(ctx: Context<IAppContext>, recipe: DeepPartial<R
 
 	return Promise.resolve(undefined);
 }
-
-export const resolvers: IResolvers = {
-	Mutation: {
-		createRecipe: _createRecipe,
-		updateRecipe: _updateRecipe,
-		updateTags: _updateTagList,
-		updateAllergies: _updateAllergies,
-	},
-	Query: {
-		getRecipe: _getRecipe,
-	},
-};

@@ -16,11 +16,11 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createUser(input: CreateUserInput!): User
         updateUser(input: UpdateUserInput!): User
-        updateWhitelist(userID: Int!, topics: [GetTopicInput]!): [Topic]
-        updateBlacklist(userID: Int!, topics: [GetTopicInput]!): [Topic]
-		updateFollowedTags(userID: Int!, tags: [GetTagInput]!): [Tag]
-        toggleFollowedUser(subjectID: Int!, actorID: Int!): [User]
-		toggleSavedRecipe(recipeID: Int!, userID: Int!): [Recipe]
+        updateWhitelist(userID: Int!, topics: [GetTopicInput]!): User
+        updateBlacklist(userID: Int!, topics: [GetTopicInput]!): User
+		updateFollowedTags(userID: Int!, tags: [GetTagInput]!): User
+        toggleFollowedUser(subjectID: Int!, actorID: Int!): User
+		toggleSavedRecipe(recipeID: Int!, userID: Int!): User
     }
 
     extend type Query {
@@ -67,6 +67,21 @@ export const typeDef: DocumentNode = gql`
         phoneNumber: String
     }
 `;
+
+export const resolvers: IResolvers = {
+	Mutation: {
+		createUser: _createUser,
+		updateUser: _updateUser,
+		updateWhitelist: _updateWhitelist,
+		updateBlacklist: _updateBlacklist,
+		updateFollowedTags: _updateFollowedTags,
+		toggleFollowedUser: _toggleFollowedUser,
+		toggleSavedRecipe: _toggleSavedRecipe,
+	},
+	Query: {
+		getUser: _getUser,
+	},
+};
 
 /**
  * Mutator Resolvers
@@ -132,11 +147,11 @@ interface IUpdateWhitelist {
 }
 
 // tslint:disable-next-line: no-any
-function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+function _updateWhitelist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
 	return updateWhitelist(ctx, args.userID, args.topics);
 }
 
-export async function updateWhitelist(ctx: Context<IAppContext>, id: number, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+export async function updateWhitelist(ctx: Context<IAppContext>, id: number, topics: DeepPartial<Topic>[]): Promise<User | undefined> {
 	try {
 		const user: User | undefined = await getUser(ctx, id);
 		if (user === undefined) {
@@ -152,9 +167,7 @@ export async function updateWhitelist(ctx: Context<IAppContext>, id: number, top
 			await topics.map(topic => topic.name),
 			await user.whitelist.map(topic => topic.name)
 		);
-		ctx.connection.getRepository(User).save(user);
-
-		return user.whitelist;
+		return ctx.connection.getRepository(User).save(user);
 	} catch (reason) {
 		console.log(reason);
 		return Promise.reject(undefined);
@@ -162,11 +175,11 @@ export async function updateWhitelist(ctx: Context<IAppContext>, id: number, top
 }
 
 // tslint:disable-next-line: no-any
-function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[] | undefined> {
+function _updateBlacklist(parent: any, args: IUpdateWhitelist, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
 	return updateBlacklist(args.userID, args.topics, ctx);
 }
 
-export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<Topic[] | undefined> {
+export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], ctx: Context<IAppContext>): Promise<User | undefined> {
 	try {
 		const user: User | undefined = await getUser(ctx, id);
 		if (user === undefined) {
@@ -182,9 +195,7 @@ export async function updateBlacklist(id: number, topics: DeepPartial<Topic>[], 
 			await topics.map(topic => topic.name),
 			await user.blacklist.map(topic => topic.name)
 		);
-		ctx.connection.getRepository(User).save(user);
-
-		return user.blacklist;
+		return ctx.connection.getRepository(User).save(user);
 	} catch (reason) {
 		console.log(reason);
 		return Promise.reject(undefined);
@@ -224,11 +235,11 @@ interface IUpdateSavedTags {
 }
 
 // tslint:disable-next-line:no-any
-function _updateFollowedTags(parent: any, args: IUpdateSavedTags, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag[] | undefined> {
+function _updateFollowedTags(parent: any, args: IUpdateSavedTags, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
 	return updateFollowedTags(ctx, args.userID, args.tags);
 }
 
-export async function updateFollowedTags(ctx: Context<IAppContext>, userID: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
+export async function updateFollowedTags(ctx: Context<IAppContext>, userID: number, tags: DeepPartial<Tag>[]): Promise<User | undefined> {
 	try {
 		const user: User | undefined = await getUser(ctx, userID);
 		if (user === undefined) {
@@ -244,9 +255,7 @@ export async function updateFollowedTags(ctx: Context<IAppContext>, userID: numb
 			await tags.map(tag => tag.name),
 			await user.followedTags.map(tag => tag.name)
 		);
-		ctx.connection.getRepository(Tag).save(user);
-
-		return user.followedTags;
+		return ctx.connection.getRepository(Tag).save(user);
 	} catch (reason) {
 		console.log(reason);
 		return Promise.reject(undefined);
@@ -286,12 +295,12 @@ interface IToggleFollowedUser {
 }
 
 // tslint:disable-next-line: no-any
-function _toggleFollowedUser(parent: any, args: IToggleFollowedUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User[] | undefined> {
+function _toggleFollowedUser(parent: any, args: IToggleFollowedUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
 	return toggleFollowedUser(ctx, args.subjectID, args.actorID);
 }
 
-export async function toggleFollowedUser(ctx: Context<IAppContext>, subjectID: number, actorID: number): Promise<User[] | undefined> {
-	let user: User | undefined = await getUser(ctx, actorID);
+export async function toggleFollowedUser(ctx: Context<IAppContext>, subjectID: number, actorID: number): Promise<User | undefined> {
+	const user: User | undefined = await getUser(ctx, actorID);
 	const subject: User | undefined = await getUser(ctx, subjectID);
 	if (user === undefined || subject === undefined) {
 		return Promise.resolve(undefined);
@@ -305,12 +314,7 @@ export async function toggleFollowedUser(ctx: Context<IAppContext>, subjectID: n
 		user.followedUsers.push(subject);
 	}
 
-	user = await updateUser(ctx, user);    // User verification from ctx done here
-	if (user === undefined) {
-		return Promise.resolve(undefined);
-	}
-
-	return user.followedUsers;
+	return updateUser(ctx, user);    // User verification from ctx done here
 }
 
 interface IToggleSavedRecipe {
@@ -319,12 +323,12 @@ interface IToggleSavedRecipe {
 }
 
 // tslint:disable-next-line: no-any
-function _toggleSavedRecipe(parent: any, args: IToggleSavedRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Recipe[] | undefined> {
+function _toggleSavedRecipe(parent: any, args: IToggleSavedRecipe, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
 	return toggleSavedRecipe(ctx, args.recipeID, args.userID);
 }
 
-export async function toggleSavedRecipe(ctx: Context<IAppContext>, recipeID: number, userID: number): Promise<Recipe[] | undefined> {
-	let user: User | undefined = await getUser(ctx, userID);
+export async function toggleSavedRecipe(ctx: Context<IAppContext>, recipeID: number, userID: number): Promise<User | undefined> {
+	const user: User | undefined = await getUser(ctx, userID);
 	const recipe: Recipe | undefined = await getRecipe(ctx, { id: recipeID });
 	if (user === undefined) {
 		return Promise.resolve(undefined);
@@ -341,12 +345,7 @@ export async function toggleSavedRecipe(ctx: Context<IAppContext>, recipeID: num
 		user.savedRecipes.push(recipe);
 	}
 
-	user = await updateUser(ctx, user);    // User verification from ctx done here
-	if (user === undefined) {
-		return Promise.resolve(undefined);
-	}
-
-	return user.savedRecipes;
+	return updateUser(ctx, user);    // User verification from ctx done here
 }
 
 /**
@@ -376,18 +375,3 @@ export async function getUser(ctx: Context<IAppContext>, userID: number): Promis
 			relations: neededRelations,
 		});
 }
-
-export const resolvers: IResolvers = {
-	Mutation: {
-		createUser: _createUser,
-		updateUser: _updateUser,
-		updateWhitelist: _updateWhitelist,
-		updateBlacklist: _updateBlacklist,
-		updateFollowedTags: _updateFollowedTags,
-		toggleFollowedUser: _toggleFollowedUser,
-		toggleSavedRecipe: _toggleSavedRecipe,
-	},
-	Query: {
-		getUser: _getUser,
-	},
-};

@@ -41,6 +41,16 @@ export const typeDef: DocumentNode = gql`
 	}
 `;
 
+export const resolvers: IResolvers = {
+	Mutation: {
+		createUserReview: _createUserReview,
+		updateUserReview: _updateUserReview,
+	},
+	Query: {
+		getUserReview: _getUserReview,
+	},
+};
+
 /**
  * Mutator Resolvers
  */
@@ -127,13 +137,3 @@ async function getUserReview(ctx: Context<IAppContext>, reviewID: number): Promi
 			relations: ["subject", "author"],
 		});
 }
-
-export const resolvers: IResolvers = {
-	Mutation: {
-		createUserReview: _createUserReview,
-		updateUserReview: _updateUserReview,
-	},
-	Query: {
-		getUserReview: _getUserReview,
-	},
-};

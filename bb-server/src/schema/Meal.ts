@@ -60,6 +60,19 @@ export const typeDef: DocumentNode = gql`
     }
 `;
 
+export const resolvers: IResolvers = {
+	Mutation: {
+		createMeal: _createMeal,
+		deleteMeal: _deleteMeal,
+		toggleGuest: _toggleGuest,
+		updateMeal: _updateMeal,
+		updateRecipes: _updateRecipes,
+	},
+	Query: {
+		getMeal: _getMeal,
+	},
+};
+
 /**
  * Mutation Resolvers
  */
@@ -266,16 +279,3 @@ export async function getMeal(ctx: Context<IAppContext>, mealID: number): Promis
 			relations: neededRelations,
 		});
 }
-
-export const resolvers: IResolvers = {
-	Mutation: {
-		createMeal: _createMeal,
-		deleteMeal: _deleteMeal,
-		toggleGuest: _toggleGuest,
-		updateMeal: _updateMeal,
-		updateRecipes: _updateRecipes,
-	},
-	Query: {
-		getMeal: _getMeal,
-	},
-};
