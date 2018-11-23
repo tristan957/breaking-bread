@@ -1,15 +1,15 @@
 import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
-import * as CRC32 from "crc-32";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { IAppContext } from "../App";
 import Meal from "../entities/Meal";
 import Tag from "../entities/Tag";
+import generatePagination from "./genericHelpers/paginatedFeed";
 
 export const typeDef: DocumentNode = gql`
-    extend type Query {
+	extend type Query {
 		getMealFeed(filterOptions: GetMealsFilterOptions, first: Int!, after: String): MealFeed  # first: Amount to return, after: return this cursor and up to amount
-    }
+	}
 
 	type MealFeed {
 		edges: [MealEdge]!
@@ -95,42 +95,5 @@ async function getMealFeed(ctx: Context<IAppContext>, options: IGetMealsOptions 
 		return Promise.resolve(undefined);
 	}
 	// TODO: filter meals based on options
-	return Promise.resolve(generateMealFeed(meals, first, after));
-}
-
-function generateMealFeed(meals: Meal[], first: number, after: string | undefined): IMealFeed | undefined {
-	const cursors: string[] = [];
-	let edges: IMealEdge[] = meals.map((meal: Meal, i: number) => {
-		const cursor: string = CRC32.str(`${i}${meal.createdAt.toString()}`).toString();  // Unique cursor generation
-		cursors.push(cursor);
-		return ({
-			node: meal,
-			cursor,
-		});
-	});
-
-	let index = 0;
-	if (after !== undefined) {
-		index = cursors.indexOf(after);
-		if (index < 0) {
-			return undefined;
-		}
-	}
-
-	let getAmount: number = first;
-	let hasNextPage = true;
-	if ((meals.length - index) <= first) {
-		getAmount = edges.length - index;
-		hasNextPage = false;
-	}
-
-	edges = edges.splice(index, getAmount);
-	return {
-		edges,
-		pageInfo: {
-			endCursor: edges[edges.length - 1].cursor,
-			hasNextPage,
-		},
-		totalCount: meals.length,
-	};
+	return Promise.resolve(generatePagination(meals, first, after));
 }

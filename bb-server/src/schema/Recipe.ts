@@ -135,18 +135,6 @@ export async function updateRecipe(ctx: Context<IAppContext>, input: DeepPartial
 	}
 }
 
-// TODO: This. Maybe just front end
-async function makeRecipeCopy(ctx: Context<IAppContext>, recipeID: number): Promise<Recipe | undefined> {
-	const original: DeepPartial<Recipe> | undefined = await getRecipe(ctx, { id: recipeID });
-	if (original === undefined) {
-		return Promise.resolve(undefined);
-	}
-
-	original.id = undefined;
-	// TODO: Set author to user from JWT in context
-	createRecipe(ctx, original);
-}
-
 interface IUpdateTagList {
 	id: number;
 	tags: DeepPartial<Tag>[];
