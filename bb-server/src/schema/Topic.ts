@@ -12,6 +12,7 @@ export const typeDef: DocumentNode = gql`
 
 	extend type Query {
 		getTopic(input: GetTopicInput!): Topic
+		getTopics: [Topic]
 	}
 
 	type Topic {
@@ -22,7 +23,8 @@ export const typeDef: DocumentNode = gql`
 	}
 
 	input GetTopicInput {
-		name: String!
+		id: Int
+		name: String
 	}
 
 	input CreateTopicInput {
@@ -96,11 +98,22 @@ export async function getTopic(ctx: Context<IAppContext>, topic: DeepPartial<Top
 	return Promise.resolve(undefined);
 }
 
+// tslint:disable-next-line: no-any
+function _getTopics(parent: any, args: any, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Topic[]> {
+	const neededRelations: string[] = ["whiteListedBy", "blackListedBy"];
+	return ctx.connection
+		.getRepository(Topic)
+		.find({
+			relations: neededRelations,
+		});
+}
+
 export const resolvers: IResolvers = {
 	Mutation: {
 		createTopic: _createTopic,
 	},
 	Query: {
 		getTopic: _getTopic,
+		getTopics: _getTopics,
 	},
 };

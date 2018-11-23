@@ -16,9 +16,9 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createUser(input: CreateUserInput!): User
         updateUser(input: UpdateUserInput!): User
-        updateWhitelist(userID: Int!, topics: [CreateTopicInput]!): [Topic]
-        updateBlacklist(userID: Int!, topics: [CreateTopicInput]!): [Topic]
-		updateFollowedTags(userID: Int!, tags: [CreateTagInput]!): [Tag]
+        updateWhitelist(userID: Int!, topics: [GetTopicInput]!): [Topic]
+        updateBlacklist(userID: Int!, topics: [GetTopicInput]!): [Topic]
+		updateFollowedTags(userID: Int!, tags: [GetTagInput]!): [Tag]
         toggleFollowedUser(subjectID: Int!, actorID: Int!): [User]
 		toggleSavedRecipe(recipeID: Int!, userID: Int!): [Recipe]
     }

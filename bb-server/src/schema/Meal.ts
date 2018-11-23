@@ -13,9 +13,9 @@ export const typeDef: DocumentNode = gql`
     extend type Mutation {
         createMeal(input: CreateMealInput!): Meal
         deleteMeal(mealID: Int!): Meal
-        toggleGuest(mealID: Int!, guestID: Int!): [User]
+        toggleGuest(mealID: Int!, guestID: Int!): Meal
         updateMeal(input: UpdateMealInput!): Meal
-        updateRecipes(mealID: Int!, recipes: [GetRecipeInput]!): Meal # FIXME: out->recipeList in<-recipeIDs?
+        updateRecipes(mealID: Int!, recipes: [GetRecipeInput]!): Meal
     }
 
     extend type Query {
@@ -209,11 +209,11 @@ interface IToggleGuest {
 }
 
 // tslint:disable-next-line: no-any
-function _toggleGuest(parent: any, args: IToggleGuest, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User[] | undefined> {
+function _toggleGuest(parent: any, args: IToggleGuest, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Meal | undefined> {
 	return toggleGuest(ctx, args.mealID, args.guestID);
 }
 
-export async function toggleGuest(ctx: Context<IAppContext>, mealID: number, guestID: number): Promise<User[] | undefined> {
+export async function toggleGuest(ctx: Context<IAppContext>, mealID: number, guestID: number): Promise<Meal | undefined> {
 	try {
 		const meal: Meal | undefined = await getMeal(ctx, mealID);
 		const guest: User | undefined = await getUser(ctx, guestID);
@@ -233,7 +233,7 @@ export async function toggleGuest(ctx: Context<IAppContext>, mealID: number, gue
 
 		await updateMeal(ctx, meal);
 
-		return meal.guests;
+		return meal;
 	} catch (reason) {
 		console.log(reason);
 		return Promise.reject(undefined);

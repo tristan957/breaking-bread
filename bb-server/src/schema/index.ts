@@ -4,6 +4,7 @@ import merge from "lodash.merge";
 import { resolvers as allergyResolvers, typeDef as Allergy } from "./Allergy";
 import { resolvers as dateResolvers, typeDef as DateTime } from "./DateTime";
 import { resolvers as mealResolvers, typeDef as Meal } from "./Meal";
+import { resolvers as mealFeedResolvers, typeDef as MealFeed } from "./MealFeed";
 import { resolvers as recipeResolvers, typeDef as Recipe } from "./Recipe";
 import { resolvers as recipeReviewResolvers, typeDef as RecipeReview } from "./RecipeReview";
 import { resolvers as tagResolvers, typeDef as Tag } from "./Tag";
@@ -28,12 +29,12 @@ const Query: DocumentNode = gql`
 export const typeDefs: DocumentNode[] = [
 	Allergy, DateTime, Meal, Mutation, Query,
 	User, Topic, Tag, Recipe,
-	UserReview, RecipeReview,
+	UserReview, RecipeReview, MealFeed,
 ];
 
 // tslint:disable-next-line: no-unsafe-any
 export const resolvers: IResolvers = merge(
 	allergyResolvers, dateResolvers, mealResolvers, userResolvers,
 	topicResolvers, tagResolvers, recipeResolvers,
-	userReviewResolvers, recipeReviewResolvers
+	userReviewResolvers, recipeReviewResolvers, mealFeedResolvers
 );

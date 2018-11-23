@@ -12,6 +12,7 @@ export const typeDef: DocumentNode = gql`
 
     extend type Query {
         getTag(input: GetTagInput!): Tag
+		getTags: [Tag]
     }
 
     type Tag {
@@ -97,11 +98,22 @@ export async function getTag(ctx: Context<IAppContext>, tag: DeepPartial<Tag>): 
 	return Promise.resolve(undefined);
 }
 
+// tslint:disable-next-line: no-any
+function _getTags(parent: any, args: any, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Tag[]> {
+	const neededRelations: string[] = ["associatedRecipes", "followedBy"];
+	return ctx.connection
+		.getRepository(Tag)
+		.find({
+			relations: neededRelations,
+		});
+}
+
 export const resolvers: IResolvers = {
 	Mutation: {
 		createTag: _createTag,
 	},
 	Query: {
 		getTag: _getTag,
+		getTags: _getTags,
 	},
 };
