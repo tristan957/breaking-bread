@@ -31,7 +31,7 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         firstName: String!
         lastName: String!
-        imagePath: String!
+        imagePath: String
         about: String!
         email: String!
 		phoneNumber: String!

@@ -1,3 +1,4 @@
+import { gql } from "graphql-tag";
 import React from "react";
 import { Route, Switch } from "react-router";
 import NavigationBar from "./components/NavigationBar";
@@ -8,6 +9,10 @@ import ProfilePage from "./pages/ProfilePage";
 import RecipePage from "./pages/RecipePage";
 import "./resources/css/App.css";
 import "./resources/css/common.css";
+
+const GET_USER = gql`
+
+`;
 
 export interface IAppContext {
 	user?: Partial<User>;

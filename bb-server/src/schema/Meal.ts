@@ -273,7 +273,7 @@ function _getMeal(parent: any, args: IGetMeal, ctx: Context<IAppContext>, info: 
 
 export async function getMeal(ctx: Context<IAppContext>, mealID: number): Promise<Meal | undefined> {
 	const neededRelations: string[] = [
-		"host", "guests", "recipes",
+		"recipes",
 	];
 	return ctx.connection
 		.getRepository(Meal)

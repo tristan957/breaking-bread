@@ -15,7 +15,8 @@ import * as serviceWorker from "./serviceWorker";
 
 dotenv.config();
 
-const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/graphql" : "future url";
+const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/" : "future url";
+console.log(`URI: ${uri}`);
 
 const client = new ApolloClient({
 	link: new HttpLink({ uri }),
