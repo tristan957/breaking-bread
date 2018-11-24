@@ -81,8 +81,13 @@ function _getTag(parent: any, args: IGetTag, ctx: Context<IAppContext>, info: Gr
 	return getTag(ctx, args.input);
 }
 
-export async function getTag(ctx: Context<IAppContext>, tag: DeepPartial<Tag>): Promise<Tag | undefined> {
-	const neededRelations: string[] = ["associatedRecipes", "followedBy"];
+// tslint:disable-next-line:no-inferrable-types
+export async function getTag(ctx: Context<IAppContext>, tag: DeepPartial<Tag>, withRelations: boolean = true): Promise<Tag | undefined> {
+	let neededRelations: string[] = [];
+	if (withRelations) {
+		neededRelations = ["associatedRecipes", "followedBy"];
+	}
+
 	if (tag.id !== undefined) {
 		return ctx.connection
 			.getRepository(Tag)

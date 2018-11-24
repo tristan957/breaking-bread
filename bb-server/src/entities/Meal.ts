@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Recipe from "./Recipe";
+import Tag from "./Tag";
 import User from "./User";
 
 @Entity()
@@ -41,7 +42,23 @@ export default class Meal {
 	@JoinTable()
 	public guests: User[];
 
-	@ManyToMany(type => Recipe, recipe => recipe.mealsServedAt, { eager: true })
+	@ManyToMany(type => Recipe, recipe => recipe.mealsServedAt)
 	@JoinTable()
 	public recipes: Recipe[];
+
+	public getRecipeTags(): Tag[] | undefined {
+		if (this.recipes === undefined) {
+			return undefined;
+		}
+
+		return this.recipes.flatMap(recipe => recipe.tags);
+	}
+
+	public seatsRemaining(): Boolean | undefined {
+		if (this.guests === undefined) {
+			return undefined;
+		}
+
+		return this.guests.length < this.maxGuests;
+	}
 }

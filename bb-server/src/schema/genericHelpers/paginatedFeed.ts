@@ -17,13 +17,14 @@ interface IPageFeed<T> {
 }
 
 interface IEntityGeneric {
+	id: number;
 	createdAt: Date;
 }
 
-export default function generatePagination<T extends IEntityGeneric>(nodes: T[], first: number, after: string | undefined): IPageFeed<T> | undefined {
+export default function generatePagination<T extends IEntityGeneric>(nodes: T[], uniqueCursorString: string, first: number, after: string | undefined): IPageFeed<T> | undefined {
 	const cursors: string[] = [];
-	let edges: IEdge<T>[] = nodes.map((node: T, i: number) => {
-		const cursor: string = CRC32.str(`${i}${node.createdAt.toString()}`).toString();  // Unique cursor generation
+	let edges: IEdge<T>[] = nodes.map((node: T) => {
+		const cursor: string = CRC32.str(`${uniqueCursorString}${node.id}${node.createdAt.toString()}`).toString();  // Unique cursor generation
 		cursors.push(cursor);
 		return ({
 			node,

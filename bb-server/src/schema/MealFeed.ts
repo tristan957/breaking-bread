@@ -1,11 +1,13 @@
 import { Context } from "apollo-server-core";
 import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { MoreThan, Not } from "typeorm";
+import { DeepPartial, MoreThan, Not } from "typeorm";
 import { IAppContext } from "../App";
 import Meal from "../entities/Meal";
 import Tag from "../entities/Tag";
+import includesEntity from "./genericHelpers/includesEntity";
 import generatePagination from "./genericHelpers/paginatedFeed";
+import { getTag } from "./Tag";
 
 export const typeDef: DocumentNode = gql`
 	extend type Query {
@@ -70,7 +72,7 @@ interface ILocationOptions {
 interface IGetMealFeedOptions {
 	// location?: ILocationOptions;
 	maxGuests?: number;
-	tags?: Tag[];
+	tags?: DeepPartial<Tag>[];
 }
 
 interface IGetMealFeed {
@@ -91,13 +93,14 @@ async function getMealFeed(ctx: Context<IAppContext>, filterOptions: IGetMealFee
 
 	// Max Guest filtering
 	let where: {} = {};
-	if (filterOptions !== undefined) {
+	if (filterOptions !== undefined && filterOptions.maxGuests !== undefined) {
 		where = {
 			maxGuests: Not(MoreThan(filterOptions.maxGuests)),
 		};
 	}
 
-	const meals: Meal[] = await ctx.connection
+	// Getting all meals
+	let meals: Meal[] = await ctx.connection
 		.getRepository(Meal)
 		.find({
 			where,
@@ -106,10 +109,63 @@ async function getMealFeed(ctx: Context<IAppContext>, filterOptions: IGetMealFee
 	if (meals.length === 0) {
 		return Promise.resolve(undefined);
 	}
-	// TODO: Splice where no spots are remaining
+	meals = filterFilledMeals(meals);  // NOTE: This might fuck up the pagination idea, as meals may fill up
 
-	// Tags filtering
-	// TODO: Collect tags from recipes
+	if (filterOptions !== undefined && filterOptions.tags !== undefined) {
+		meals = await filterTags(ctx, meals, filterOptions.tags);
+	}
 
-	return Promise.resolve(generatePagination(meals, first, after));
+	return Promise.resolve(generatePagination(meals, JSON.stringify([{}, filterOptions]), first, after));
+}
+
+function filterFilledMeals(meals: Meal[]): Meal[] {
+	const filteredMeals: Meal[] = [];
+
+	meals.forEach((meal: Meal) => {
+		const open: Boolean | undefined = meal.seatsRemaining();
+		if (open === undefined) {
+			throw Error;  // Should be more elegant
+		}
+		if (open) {
+			filteredMeals.push(meal);
+		}
+	});
+
+	return filteredMeals;
+}
+
+async function filterTags(ctx: Context<IAppContext>, meals: Meal[], tagsReq: DeepPartial<Tag>[]): Promise<Meal[]> {
+	const tags: Tag[] = [];
+	for (const tag of tagsReq) {
+		const tempTag: Tag | undefined = await getTag(ctx, tag, false);
+		if (tempTag !== undefined) {
+			tags.push(tempTag);
+		}
+	}
+
+	const filteredMeals: Meal[] = [];
+	if (tags.length > 0) {
+		for (const meal of meals) {
+			const mealTags: Tag[] | undefined = meal.getRecipeTags();
+			if (mealTags === undefined) {
+				return Promise.reject(meals); // Some issue with relations
+			}
+
+			// If mealtags has the requested tags add the meal to the filtered meals
+			let add = true;
+			for (const tag of tags) {
+				if (!includesEntity(mealTags, tag)) {
+					add = false;
+				}
+			}
+
+			if (add) {
+				filteredMeals.push(meal);
+			}
+		}
+	} else {
+		return Promise.reject(meals);  // Tags must have been invalid in how they were entered. Should consider throwing error
+	}
+
+	return Promise.resolve(filteredMeals);
 }
