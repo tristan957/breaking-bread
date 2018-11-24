@@ -19,9 +19,9 @@ export default class UserReview {
 	@UpdateDateColumn()
 	public updatedAt: Date;
 
-	@ManyToOne(type => User, user => user.reviews, { eager: true })
+	@ManyToOne(type => User, user => user.reviews)
 	public subject: User;
 
-	@ManyToOne(type => User, user => user.userReviewsAuthored, { eager: true })
+	@ManyToOne(type => User, user => user.userReviewsAuthored)
 	public author: User;
 }

@@ -81,8 +81,13 @@ function _getTopic(parent: any, args: IGetTopic, ctx: Context<IAppContext>, info
 	return getTopic(ctx, args.input);
 }
 
-export async function getTopic(ctx: Context<IAppContext>, topic: DeepPartial<Topic>): Promise<Topic | undefined> {
-	const neededRelations: string[] = ["whiteListedBy", "blackListedBy"];
+// tslint:disable-next-line:no-inferrable-types
+export async function getTopic(ctx: Context<IAppContext>, topic: DeepPartial<Topic>, withRelations: boolean = true): Promise<Topic | undefined> {
+	let neededRelations: string[] = [];
+	if (withRelations) {
+		neededRelations = ["whiteListedBy", "blackListedBy"];
+	}
+
 	if (topic.id !== undefined) {
 		return ctx.connection
 			.getRepository(Topic)

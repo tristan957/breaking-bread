@@ -363,9 +363,9 @@ function _getUser(parent: any, args: IGetUser, ctx: Context<IAppContext>, info: 
 
 export async function getUser(ctx: Context<IAppContext>, userID: number): Promise<User | undefined> {
 	const neededRelations: string[] = [
-		"hostedMeals", "mealsAttending", "whitelist", "blacklist",
-		"reviews", "userReviewsAuthored", "recipeReviewsAuthored",
-		"savedRecipes", "followedUsers", "followedBy", "recipesAuthored", "followedTags"];
+		"hostedMeals", "mealsAttending", "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
+		"savedRecipes", "followedUsers", "followedBy", "recipesAuthored", "followedTags",
+	];
 	return ctx.connection
 		.getRepository(User)
 		.findOne({

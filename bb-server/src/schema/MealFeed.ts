@@ -5,9 +5,11 @@ import { DeepPartial, MoreThan, Not } from "typeorm";
 import { IAppContext } from "../App";
 import Meal from "../entities/Meal";
 import Tag from "../entities/Tag";
-import includesEntity from "./genericHelpers/includesEntity";
+import Topic from "../entities/Topic";
+import filterByChildren from "./genericHelpers/filterByChildren";
 import generatePagination from "./genericHelpers/paginatedFeed";
 import { getTag } from "./Tag";
+import { getTopic } from "./Topic";
 
 export const typeDef: DocumentNode = gql`
 	extend type Query {
@@ -34,6 +36,7 @@ export const typeDef: DocumentNode = gql`
 		# location: LocationFilter
 		maxGuests: Int
 		tags: [GetTagInput]
+		topics: [GetTopicInput]
 	}
 
 	input LocationFilter {
@@ -73,6 +76,7 @@ interface IGetMealFeedOptions {
 	// location?: ILocationOptions;
 	maxGuests?: number;
 	tags?: DeepPartial<Tag>[];
+	topics?: DeepPartial<Topic>[];
 }
 
 interface IGetMealFeed {
@@ -109,63 +113,57 @@ async function getMealFeed(ctx: Context<IAppContext>, filterOptions: IGetMealFee
 	if (meals.length === 0) {
 		return Promise.resolve(undefined);
 	}
-	meals = filterFilledMeals(meals);  // NOTE: This might fuck up the pagination idea, as meals may fill up
 
+	// Filtering
+	meals = filterFilledMeals(meals);
 	if (filterOptions !== undefined && filterOptions.tags !== undefined) {
-		meals = await filterTags(ctx, meals, filterOptions.tags);
+		meals = await filterByChildren(ctx, meals, filterOptions.tags, getTag, getMealRecipeTags);
+	}
+	if (filterOptions !== undefined && filterOptions.topics !== undefined) {
+		meals = await filterByChildren(ctx, meals, filterOptions.topics, getTopic, getMealHostTopics);
 	}
 
-	return Promise.resolve(generatePagination(meals, JSON.stringify([{}, filterOptions]), first, after));
+	return Promise.resolve(
+		generatePagination(meals, JSON.stringify([{}, filterOptions]), first, after)
+	);
 }
 
 function filterFilledMeals(meals: Meal[]): Meal[] {
 	const filteredMeals: Meal[] = [];
 
-	meals.forEach((meal: Meal) => {
-		const open: Boolean | undefined = meal.seatsRemaining();
+	for (const meal of meals) {
+		const open: Boolean | undefined = mealHasSeatsOpen(meal);
 		if (open === undefined) {
 			throw Error;  // Should be more elegant
 		}
 		if (open) {
 			filteredMeals.push(meal);
 		}
-	});
+	}
 
 	return filteredMeals;
 }
 
-async function filterTags(ctx: Context<IAppContext>, meals: Meal[], tagsReq: DeepPartial<Tag>[]): Promise<Meal[]> {
-	const tags: Tag[] = [];
-	for (const tag of tagsReq) {
-		const tempTag: Tag | undefined = await getTag(ctx, tag, false);
-		if (tempTag !== undefined) {
-			tags.push(tempTag);
-		}
+function mealHasSeatsOpen(meal: Meal): Boolean | undefined {
+	if (meal.guests === undefined) {
+		return undefined;
 	}
 
-	const filteredMeals: Meal[] = [];
-	if (tags.length > 0) {
-		for (const meal of meals) {
-			const mealTags: Tag[] | undefined = meal.getRecipeTags();
-			if (mealTags === undefined) {
-				return Promise.reject(meals); // Some issue with relations
-			}
+	return meal.guests.length < meal.maxGuests;
+}
 
-			// If mealtags has the requested tags add the meal to the filtered meals
-			let add = true;
-			for (const tag of tags) {
-				if (!includesEntity(mealTags, tag)) {
-					add = false;
-				}
-			}
-
-			if (add) {
-				filteredMeals.push(meal);
-			}
-		}
-	} else {
-		return Promise.reject(meals);  // Tags must have been invalid in how they were entered. Should consider throwing error
+function getMealRecipeTags(meal: Meal): Tag[] | undefined {
+	if (meal.recipes === undefined) {
+		return undefined;
 	}
 
-	return Promise.resolve(filteredMeals);
+	return meal.recipes.flatMap(recipe => recipe.tags);
+}
+
+function getMealHostTopics(meal: Meal): Topic[] | undefined {
+	if (meal.host === undefined) {
+		return undefined;
+	}
+
+	return meal.host.whitelist;
 }

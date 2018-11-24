@@ -35,7 +35,7 @@ export const typeDef: DocumentNode = gql`
         updatedAt: DateTime!
         host: User
         guests: [User]
-        recipes: [Recipe]!
+        recipes: [Recipe]
     }
 
     input CreateMealInput {
