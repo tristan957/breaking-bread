@@ -37,10 +37,10 @@ export default class Meal {
 	@UpdateDateColumn()
 	public updatedAt: Date;
 
-	@ManyToOne(type => User, { eager: true })
+	@ManyToOne(type => User)
 	public host: User;
 
-	@ManyToMany(type => User, user => user.mealsAttending, { eager: true })
+	@ManyToMany(type => User, user => user.mealsAttending)
 	@JoinTable()
 	public guests: User[];
 
