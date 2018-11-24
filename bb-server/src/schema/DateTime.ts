@@ -1,4 +1,4 @@
-import { gql, IResolvers } from "apollo-server-express";
+import { gql, IResolvers } from "apollo-server";
 import { DocumentNode, GraphQLScalarType } from "graphql";
 import { Kind, ValueNode } from "graphql/language";
 

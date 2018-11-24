@@ -1,6 +1,6 @@
 // TODO: Find and seperate out newTagList, newTopicList, etc. to generic function
+import { gql, IResolvers } from "apollo-server";
 import { Context } from "apollo-server-core";
-import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";

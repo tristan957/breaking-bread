@@ -1,4 +1,4 @@
-import { gql, IResolvers } from "apollo-server-express";
+import { gql, IResolvers } from "apollo-server";
 import { DocumentNode } from "graphql";
 import merge from "lodash.merge";
 import { resolvers as allergyResolvers, typeDef as Allergy } from "./Allergy";

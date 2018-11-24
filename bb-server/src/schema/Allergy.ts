@@ -1,5 +1,5 @@
+import { gql, IResolvers } from "apollo-server";
 import { Context } from "apollo-server-core";
-import { gql, IResolvers } from "apollo-server-express";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial, Repository } from "typeorm";
 import { IAppContext } from "../App";
