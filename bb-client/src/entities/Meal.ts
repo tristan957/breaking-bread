@@ -4,12 +4,13 @@ import User from "./User";
 type Meal = {
 	id: number;
 	title: string;
-	price: number;  // TODO: Add to db if not in there already (undefined/null if meal is free)
+	price: number;
 	description: string;
-	imagePath: string;
 	location: string;
+	startTime: Date;
+	endTime: Date;
 	maxGuests: number;
-	date: Date;
+	imagePath: string;
 	createdAt: Date;
 	updatedAt: Date;
 	host: Partial<User>;

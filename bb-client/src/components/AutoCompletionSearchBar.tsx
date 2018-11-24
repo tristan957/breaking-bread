@@ -1,65 +1,10 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
-import Autosuggest from "react-autosuggest";
+import Autosuggest, { SuggestionsFetchRequestedParams } from "react-autosuggest";
 import Tag from "../entities/Tag";
 import theme from "./resources/css/AutoSuggestionSearchBar.css";
 
-// const theme = {
-//   container: {
-//     position: 'relative'
-//   },
-//   input: {
-//     width: 240,
-//     height: 30,
-//     padding: '10px 20px',
-//     fontFamily: 'Helvetica, sans-serif',
-//     fontWeight: 300,
-//     fontSize: 16,
-//     border: '1px solid #ce8650',
-//     borderTopLeftRadius: 4,
-//     borderTopRightRadius: 4,
-//     borderBottomLeftRadius: 4,
-//     borderBottomRightRadius: 4,
-//   },
-//   inputFocused: {
-//     outline: 'none'
-//   },
-//   inputOpen: {
-//     borderBottomLeftRadius: 0,
-//     borderBottomRightRadius: 0
-//   },
-//   suggestionsContainer: {
-//     display: 'none'
-//   },
-//   suggestionsContainerOpen: {
-//     display: 'block',
-//     position: 'absolute',
-//     top: 51,
-//     width: 280,
-//     border: '1px solid #aaa',
-//     backgroundColor: '#fff',
-//     fontFamily: 'Helvetica, sans-serif',
-//     fontWeight: 300,
-//     fontSize: 16,
-//     borderBottomLeftRadius: 4,
-//     borderBottomRightRadius: 4,
-//     zIndex: 2
-//   },
-//   suggestionsList: {
-//     margin: 0,
-//     padding: 0,
-//     listStyleType: 'none',
-//   },
-//   suggestion: {
-//     cursor: 'pointer',
-//     padding: '10px 20px'
-//   },
-//   suggestionHighlighted: {
-//     backgroundColor: '#ddd'
-//   }
-// };
-
-const languages: Tag[] = [
+const languages: Partial<Tag>[] = [
 	{
 		name: "indian",
 		id: 1,
@@ -90,22 +35,22 @@ const languages: Tag[] = [
 	},
 ];
 
-const getSuggestions = (value: String) => {
+const getSuggestions = (value: String): Partial<Tag>[] => {
 	const inputValue = value.trim().toLowerCase();
 	const inputLength = inputValue.length;
 
 	return inputLength === 0 ? [] : languages.filter(lang =>
-		lang.name.toLowerCase().slice(0, inputLength) === inputValue
+		lang.name!.toLowerCase().slice(0, inputLength) === inputValue
 	);
 };
 
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
 // input value for every given suggestion.
-const getSuggestionValue = (suggestion: Tag) => suggestion.name;
+const getSuggestionValue = (suggestion: Partial<Tag>): string => suggestion.name!;
 
 // Use your imagination to render suggestions.
-const renderSuggestion = (suggestion: Tag) => (
+const renderSuggestion = (suggestion: Partial<Tag>) => (
 	<div>
 		#{suggestion.name}
 	</div>
@@ -113,7 +58,7 @@ const renderSuggestion = (suggestion: Tag) => (
 
 interface IAppState {
 	value: string;
-	suggestions: Tag[];
+	suggestions: Partial<Tag>[];
 }
 
 export default class AutoCompletionSearchBar extends React.Component<{}, IAppState> {
@@ -139,9 +84,9 @@ export default class AutoCompletionSearchBar extends React.Component<{}, IAppSta
 	// Autosuggest will call this function every time you need to update suggestions.
 	// You already implemented this logic above, so just use it.
 	// tslint:disable-next-line: no-any
-	public onSuggestionsFetchRequested({ value }: any): void {
+	public onSuggestionsFetchRequested = (params: SuggestionsFetchRequestedParams): void => {
 		this.setState({
-			suggestions: getSuggestions(value),
+			suggestions: getSuggestions(params.value),
 		});
 	}
 

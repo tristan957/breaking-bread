@@ -1,48 +1,47 @@
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Allergy from "./Allergy";
-import Ingredient from "./Ingredient";
+import Meal from "./Meal";
 import RecipeReview from "./RecipeReview";
 import Tag from "./Tag";
 import User from "./User";
 
 @Entity()
 export default class Recipe {
-    @PrimaryGeneratedColumn()
-    public id: number;
+	@PrimaryGeneratedColumn()
+	public id: number;
 
-    @Column()
-    public name: string;
+	@Column()
+	public name: string;
 
-    @Column({ type: "text" })
-    public description: string;
+	@Column({ type: "text" })
+	public description: string;
 
-    @Column({ type: "text" })
-    public recipeImageS3Key: string;
+	@Column({ type: "text", nullable: true })
+	public imagePath: string;
 
-    @CreateDateColumn()
-    public createdAt: Date;
+	@CreateDateColumn()
+	public createdAt: Date;
 
-    @UpdateDateColumn()
-    public updatedAt: Date;
+	@UpdateDateColumn()
+	public updatedAt: Date;
 
-    @ManyToOne(type => User, user => user.recipesAuthored, { eager: true })
-    public author: User;
+	@ManyToOne(type => User, user => user.recipesAuthored)
+	public author: User;
 
-    @Column()
-    public timesFavorited: number;
+	@ManyToMany(type => User, user => user.savedRecipes)
+	public savedBy: User[];
 
-    @OneToMany(type => RecipeReview, review => review.subject)
-    public reviews: RecipeReview[];
+	@OneToMany(type => RecipeReview, review => review.subject)
+	public reviews: RecipeReview[];
 
-    @ManyToMany(type => Tag)
-    @JoinTable()
-    public tags: Tag[];
+	@ManyToMany(type => Meal, meal => meal.recipes)
+	public mealsServedAt: Meal[];
 
-    @ManyToMany(type => Ingredient)
-    @JoinTable()
-    public ingredients: Ingredient[];
+	@ManyToMany(type => Tag, tag => tag.associatedRecipes, { eager: true })  // For use with MealFeed
+	@JoinTable()
+	public tags: Tag[];
 
-    @ManyToMany(type => Allergy)
-    @JoinTable()
-    public allergies: Allergy[];
+	@ManyToMany(type => Allergy)
+	@JoinTable()
+	public allergies: Allergy[];
 }

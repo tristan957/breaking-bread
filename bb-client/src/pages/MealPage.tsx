@@ -104,14 +104,14 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 	}
 
 	public setMeal(
-		newDate: Date | undefined,
-		newTitle: string | undefined,
-		newLocation: string | undefined,
-		newDescription: string | undefined,
-		newTime: string
+		startTime?: Date,
+		endTime?: Date,
+		title?: string,
+		location?: string,
+		description?: string
 	): void {
 		// TODO: update the date and time
-		this.setState({ meal: { ...this.state.meal, title: newTitle, location: newLocation, description: newLocation } });
+		this.setState({ meal: { ...this.state.meal, title: title!, location: location!, description: description! } });
 	}
 
 	public render(): JSX.Element {

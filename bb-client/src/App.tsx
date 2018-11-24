@@ -53,7 +53,8 @@ export default class App extends React.Component<{}, IAppState> {
 				mealsAttending: [ // TODO: Sort and sansity on the backend (remove past meals, sort by next coming)
 					{
 						id: 1,
-						date: new Date("December 21, 2018 18:30:00"),
+						startTime: new Date("December 21, 2018 18:30:00"),
+						endTime: new Date("December 22, 2018 18:30:00"),
 						location: "College Station, TX",
 						title: "Cuban Delight",
 						guests: [
@@ -83,7 +84,8 @@ export default class App extends React.Component<{}, IAppState> {
 							firstName: "Jonathan",
 							lastName: "Wang",
 						},
-						date: new Date("December 17, 2018 19:24:00"),
+						startTime: new Date("December 21, 2018 18:30:00"),
+						endTime: new Date("December 22, 2018 18:30:00"),
 						location: "College Station, TX",
 						title: "Mexican Night Out",
 						guests: [],

@@ -14,7 +14,7 @@ interface IProfileHeaderProps {
 	imagePath?: string;
 	joinedAt: Date;
 	reviewAverage: number;
-	timesFavorited: number;
+	numberOfFollowers: number;
 }
 
 export default class ProfileHeader extends React.Component<IProfileHeaderProps> {

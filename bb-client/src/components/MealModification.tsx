@@ -10,112 +10,104 @@ import "./resources/css/MealModification.css";
 interface IMealModificationProps {
 	meal: Partial<Meal>;
 	setMeal: ((
-		date: Date | undefined,
-		title: string | undefined,
-		location: string | undefined,
-		description: string | undefined,
-		time: string
+		startTime?: Date,
+		endTime?: Date,
+		title?: string,
+		location?: string,
+		description?: string
 	) => void);
 }
 
 interface IMealModificationState {
 	deletionModalVisible: boolean;
 	editModalVisible: boolean;
-	mealTitle: string | undefined;
-	mealDate: Date | undefined;
-	mealLocation: string | undefined;
-	mealDescription: string | undefined;
-	createdAt: moment.Moment | null;
+	mealTitle?: string;
+	mealStartTime?: Date;
+	mealEndTime?: Date;
+	mealLocation?: string;
+	mealDescription?: string;
+	createdAt?: moment.Moment;
 	calendarFocused: boolean;
 	mealTime: string;
 	testText: string;
 }
 
 export default class MealModification extends React.Component<IMealModificationProps, IMealModificationState> {
-	constructor(props: IMealModificationProps) {
-		super(props);
-
-		this.showDeletionModal = this.showDeletionModal.bind(this);
-		this.hideDeletionModal = this.hideDeletionModal.bind(this);
-		this.showEditModal = this.showEditModal.bind(this);
-		this.hideEditModal = this.hideEditModal.bind(this);
-	}
-
 	public componentWillMount(): void {
 		this.setState({
 			deletionModalVisible: false,
 			editModalVisible: false,
 			mealTitle: this.props.meal.title,
-			mealDate: this.props.meal.date,
+			mealStartTime: this.props.meal.startTime,
 			mealLocation: this.props.meal.location,
 			mealDescription: this.props.meal.description,
 			testText: "xxy",
 		});
 	}
 
-	public showDeletionModal(): void {
+	public showDeletionModal = (): void => {
 		this.setState({
 			deletionModalVisible: true,
 		});
 	}
 
-	public hideDeletionModal(): void {
+	public hideDeletionModal = (): void => {
 		this.setState({
 			deletionModalVisible: false,
 		});
 	}
 
-	public showEditModal(): void {
+	public showEditModal = (): void => {
 		this.setState({
 			editModalVisible: true,
 		});
 	}
 
-	public hideEditModal(): void {
+	public hideEditModal = (): void => {
 		this.setState({
 			editModalVisible: false,
 		});
 	}
 
-	public handleTitleChange(event: any): void {
+	public handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
 		this.setState({ mealTitle: event.target.value });
 	}
 
-	public handleLocationChange(event: any): void {
-		this.setState({ mealDate: event.target.value });
+	public handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+		this.setState({ mealLocation: event.target.value });
 	}
 
-	public handleDescriptionChange(event: any): void {
+	public handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
 		this.setState({ mealDescription: event.target.value });
 	}
 
-	public onDateChange(date: moment.Moment | null): void {
+	public onDateChange = (date: moment.Moment | undefined): void => {
 		this.setState({
 			createdAt: date,
 		});
 	}
 
-	public onFocusChange(): void {
+	public onFocusChange = (): void => {
 		this.setState({
 			calendarFocused: !this.state.calendarFocused,
 		});
 	}
 
-	public handleTimeChange(event: any): void {
+	public handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
 		this.setState({
 			mealTime: event.target.value,
 		});
 	}
 
-	public modifyMeal(): void {
+	public modifyMeal = (): void => {
 		this.setState({ testText: "zzz" });
 
 		this.props.setMeal(
-			this.state.mealDate,
+			this.state.mealStartTime,
+			this.state.mealEndTime,
 			this.state.mealTitle,
 			this.state.mealLocation,
-			this.state.mealDescription,
-			this.state.mealTime
+			this.state.mealDescription
 		);
 
 		this.hideEditModal();
@@ -146,7 +138,7 @@ export default class MealModification extends React.Component<IMealModificationP
 					<div>
 						<span>Date: </span>
 						<SingleDatePicker
-							date={moment(this.state.mealDate)}
+							date={moment(this.state.mealStartTime)}
 							focused={this.state.calendarFocused}
 							onDateChange={this.onDateChange.bind(this)}
 							onFocusChange={this.onFocusChange.bind(this)}

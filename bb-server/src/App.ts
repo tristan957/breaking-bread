@@ -1,51 +1,45 @@
 /* tslint:disable: strict-boolean-expressions */
+import { ApolloServer, makeExecutableSchema } from "apollo-server";
 import { Context } from "apollo-server-core";
-import { makeExecutableSchema } from "apollo-server-express";
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import { Request, Response } from "express";
 // tslint:disable-next-line: match-default-export-name
-import express, { Request, Response } from "express";
-import graphqlHTTP from "express-graphql";
-import jwt, { RequestHandler } from "express-jwt";
 import { GraphQLSchema } from "graphql";
-import JwksRsa from "jwks-rsa";
-import path from "path";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
+import { getUserFromAuthSub } from "./auth";
 import { entities } from "./entities";
+import User from "./entities/User";
 import { resolvers, typeDefs } from "./schema";
 
 export interface IAppContext {
 	connection: Connection;
-	// tslint:disable-next-line:no-any
-	user: any;
+	user: Promise<User | undefined>;
 }
 
-const jwtCheck: RequestHandler = jwt({
-	secret: JwksRsa.expressJwtSecret({
-		cache: true,
-		rateLimit: true,
-		jwksRequestsPerMinute: 5,
-		jwksUri: "https://bbread.auth0.com/.well-known/jwks.json",
-	}),
-	audience: "https://bbread.com/graphql-test",
-	issuer: "https://bbread.auth0.com/",
-	algorithms: ["RS256"],
-});
+interface IContextParams {
+	req: Request;
+	res: Response;
+}
 
-function context(req: Request): Context<IAppContext> {
+function context(params: IContextParams): Context<IAppContext> {
+	if (params.req.headers.oauthsub === undefined) {  // TODO: Replace with token then get sub from token
+		throw Error;  // TODO: Need more elegant failure
+	}
+
 	const connection: Connection = getConnection();
+	const authSub: string = params.req.headers.oauthsub as string;
+	const user = getUserFromAuthSub(connection, authSub);
+	// user = getUserWithToken(token);
 
 	return {
 		connection,
-		user: req.user,
+		user,
 	};
 }
 
 export default class App {
-
 	public connection: Connection;
-	public app: express.Application;
-	// public server: ApolloServer;
+	public server: ApolloServer;
 
 	/**
 	 * Sets up the application to connect to database and create server
@@ -54,36 +48,8 @@ export default class App {
 		dotenv.config();
 
 		this.setupTypeORM();
-		// this.server = new ApolloServer({ typeDefs, resolvers });
-	}
-
-	/**
-		* Sets up Express server
-		*/
-	private setupExpress(): void {
-		this.app = express();
-
-		// React client
-		const clientPath: string = path.join(__dirname, "/./../../bb-client/dist/");
-		this.app.use(express.static(clientPath));
-		this.app.get("/", (_: Request, res: Response) => {
-			res.sendFile(path.join(clientPath, "index.html"));
-		});
-
-		const schema: GraphQLSchema = makeExecutableSchema({
-			typeDefs,
-			resolvers,
-		});
-
-		this.app.use(
-			"/graphql",
-			bodyParser.json(),
-			jwtCheck,
-			graphqlHTTP((req) => ({
-				schema,
-				context,
-			}))
-		);
+		const schema: GraphQLSchema = makeExecutableSchema({ typeDefs, resolvers });
+		this.server = new ApolloServer({ schema, context });
 	}
 
 	/**
@@ -106,7 +72,9 @@ export default class App {
 			entities,
 			synchronize: true,
 		})
-			.then((value: Connection) => this.connection = value)
+			.then((value: Connection) => {
+				this.connection = value;
+			})
 			.catch((reason: void) => {
 				console.log(`Unable to create database connection: ${reason}`);
 				process.exit(1);
@@ -119,9 +87,8 @@ export default class App {
 	public run(): void {
 		let port: number | string = process.env.APP_PORT || "10262";
 		port = parseInt(port, 10);
-		this.app.listen(port, () => {
+		this.server.listen(port, () => {
 			console.log(`Server ready at http://localhost:${port}`);
-			console.log(`GraphQL test at http://localhost:${port}`);
 		});
 	}
 }

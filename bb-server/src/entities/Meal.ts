@@ -4,32 +4,47 @@ import User from "./User";
 
 @Entity()
 export default class Meal {
-    @PrimaryGeneratedColumn()
-    public id: number;
+	@PrimaryGeneratedColumn()
+	public id: number;
 
-    @Column({ type: "text" })
-    public location: string;
+	@Column()
+	public title: string;
 
-    @Column()
-    public date: Date;
+	@Column({ type: "money" })
+	public price: number;
 
-    @Column()
-    public name: string;
+	@Column({ length: 512, nullable: true })
+	public description: string;
 
-    @CreateDateColumn()
-    public createdAt: Date;
+	@Column({ type: "text" })
+	public location: string;
 
-    @UpdateDateColumn()
-    public updatedAt: Date;
+	@Column()
+	public startTime: Date;
 
-    @ManyToOne(type => User, { eager: true })
-    public host: User;
+	@Column()
+	public endTime: Date;
 
-    @ManyToMany(type => User)
-    @JoinTable()
-    public guests: User[];
+	@Column()
+	public maxGuests: number;
 
-    @ManyToMany(type => Recipe)
-    @JoinTable()
-    public recipes: Recipe[];
+	@Column({ type: "text", nullable: true })
+	public imagePath: string;
+
+	@CreateDateColumn()
+	public createdAt: Date;
+
+	@UpdateDateColumn()
+	public updatedAt: Date;
+
+	@ManyToOne(type => User)
+	public host: User;
+
+	@ManyToMany(type => User, user => user.mealsAttending)
+	@JoinTable()
+	public guests: User[];
+
+	@ManyToMany(type => Recipe, recipe => recipe.mealsServedAt)
+	@JoinTable()
+	public recipes: Recipe[];
 }

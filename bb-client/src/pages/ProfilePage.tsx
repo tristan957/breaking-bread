@@ -52,7 +52,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 			mealsAttending: [ // TODO: Sort and sansity on the backend (remove past meals, sort by next coming)
 				{
 					id: 1,
-					date: new Date("December 21, 2018 18:30:00"),
+					startTime: new Date("December 21, 2018 18:30:00"),
+					endTime: new Date("December 22, 2018 18:30:00"),
 					location: "College Station, TX",
 					title: "Cuban Delight",
 					guests: [
@@ -82,7 +83,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 						firstName: "Jonathan",
 						lastName: "Wang",
 					},
-					date: new Date("December 17, 2018 19:24:00"),
+					startTime: new Date("December 21, 2018 18:30:00"),
+					endTime: new Date("December 22, 2018 18:30:00"),
 					location: "College Station, TX",
 					title: "Mexican Night Out",
 					guests: [],
@@ -141,7 +143,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 			hostedMeals: [
 				{
 					id: 1,
-					date: new Date("December 21, 2018 18:30:00"),
+					startTime: new Date("December 21, 2018 18:30:00"),
+					endTime: new Date("December 21, 2018 20:30:00"),
 					location: "College Station, TX",
 					title: "Cuban Delight",
 					guests: [
@@ -171,7 +174,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 						firstName: "Jonathan",
 						lastName: "Wang",
 					},
-					date: new Date("December 17, 2018 19:24:00"),
+					startTime: new Date("December 21, 2018 18:30:00"),
+					endTime: new Date("December 22, 2018 18:30:00"),
 					location: "College Station, TX",
 					title: "Mexican Night Out",
 					guests: [],
@@ -231,7 +235,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 										imagePath={this.state.userBeingViewed.imagePath}
 										joinedAt={this.state.userBeingViewed.createdAt as Date}
 										reviewAverage={this.getUserReviewAverage()}
-										timesFavorited={this.state.userBeingViewed.timesFavorited as number}
+										numberOfFollowers={this.state.userBeingViewed.followedUsers!.length || 0}
 									/>
 								</div>
 								<div id="profile-info-bottom">

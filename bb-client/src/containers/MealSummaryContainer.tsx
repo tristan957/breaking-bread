@@ -1,7 +1,6 @@
 import React from "react";
 import MealSummary from "../components/MealSummary";
 import Meal from "../entities/Meal";
-import User from "../entities/User";
 
 interface IMealSummaryContainerProps {
 	showHost?: boolean;
@@ -13,13 +12,14 @@ export default class MealSummaryContainer extends React.Component<IMealSummaryCo
 		return (
 			<div className="card">
 				<MealSummary
-					id={this.props.meal.id as number}
-					location={this.props.meal.location as string}
+					id={this.props.meal.id!}
+					location={this.props.meal.location!}
 					imagePath={this.props.meal.imagePath}
-					title={this.props.meal.title as string}
-					description={this.props.meal.description as string}
-					host={this.props.meal.host as User}
-					date={this.props.meal.date as Date}
+					title={this.props.meal.title!}
+					description={this.props.meal.description!}
+					host={this.props.meal.host!}
+					startTime={this.props.meal.startTime!}
+					endTime={this.props.meal.endTime!}
 					guests={this.props.meal.guests || []}
 					maxGuests={this.props.meal.maxGuests || 0}
 					price={this.props.meal.price || 0}

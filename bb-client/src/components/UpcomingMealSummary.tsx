@@ -8,7 +8,8 @@ interface IUpcomingMealSummaryProps {
 	id: number;
 	title: string;
 	price: number;
-	date: Date;
+	startTime: Date;
+	endTime: Date;
 	guests: Partial<User>[];
 	maxGuests: number;
 	location: string;
@@ -25,7 +26,8 @@ export default class UpcomingMealSummary extends React.Component<IUpcomingMealSu
 							price={this.props.price}
 							numOfGuests={this.props.guests.length}
 							maxGuests={this.props.maxGuests}
-							date={this.props.date}
+							startTime={this.props.startTime}
+							endTime={this.props.endTime}
 							location={this.props.location}
 						/>
 					</div>

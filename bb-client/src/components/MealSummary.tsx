@@ -15,8 +15,9 @@ export interface IMealSummaryProps {
 	imagePath?: string;
 	title: string;
 	description: string;
-	host: User;
-	date: Date;
+	host: Partial<User>;
+	startTime: Date;
+	endTime: Date;
 	guests: Partial<User>[];
 	maxGuests: number;
 	price: number;
@@ -27,7 +28,7 @@ export interface IMealSummaryProps {
 export default class MealSummary extends React.Component<IMealSummaryProps> {
 	private getTagNames = (): (string | undefined)[] => {
 		const tags = this.props.recipes.map(recipe => recipe.tags!.map(tag => `#${tag.name}`));
-		if (tags === undefined || tags.length === 0) {
+		if (tags.length === 0) {
 			return [];
 		}
 		return Array.from(new Set(tags.reduce((prev, val) => prev.concat(val))));
@@ -60,7 +61,8 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 						price={this.props.price}
 						numOfGuests={this.props.guests.length}
 						maxGuests={this.props.maxGuests}
-						date={this.props.date}
+						startTime={this.props.startTime}
+						endTime={this.props.endTime}
 						location={this.props.location}
 					/>
 				</div>

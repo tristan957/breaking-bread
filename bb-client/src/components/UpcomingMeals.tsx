@@ -16,13 +16,14 @@ export default class UpcomingMeals extends React.Component<IUpcomingMealsProps> 
 						return (
 							<li key={i}>
 								<UpcomingMealSummary
-									id={meal.id as number}
-									title={meal.title as string}
+									id={meal.id!}
+									title={meal.title!}
 									price={meal.price || 0}
-									date={meal.date as Date}
+									startTime={meal.startTime!}
+									endTime={meal.endTime!}
 									guests={meal.guests || []}
 									maxGuests={meal.maxGuests || 0}
-									location={meal.location as string}
+									location={meal.location!}
 								/>
 							</li>
 						);

@@ -29,25 +29,25 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 		};
 	}
 
-	public showModal(): void {
+	public showModal = (): void => {
 		this.setState({
 			visible: true,
 		});
 	}
 
-	public hideModal(): void {
+	public hideModal = (): void => {
 		this.setState({
 			visible: false,
 		});
 	}
 
-	public onDateChange(date: moment.Moment | null): void {
+	public onDateChange = (date: moment.Moment | null): void => {
 		this.setState({
 			createdAt: date,
 		});
 	}
 
-	public onFocusChange(): void {
+	public onFocusChange = (): void => {
 		this.setState({
 			calendarFocused: !this.state.calendarFocused,
 		});
@@ -65,7 +65,8 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 						firstName: "Fank",
 						lastName: "Food",
 					},
-					date: new Date(),
+					startTime: new Date("December 21, 2018 18:30:00"),
+					endTime: new Date("December 22, 2018 18:30:00"),
 					location: "College Station, TX",
 					title: "Cuban Delight",
 					guests: [
@@ -104,7 +105,8 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 						firstName: "Jonathan",
 						lastName: "Wang",
 					},
-					date: new Date(),
+					startTime: new Date("December 21, 2018 18:30:00"),
+					endTime: new Date("December 22, 2018 18:30:00"),
 					location: "College Station, TX",
 					title: "Mexican Night Out",
 					guests: [],
@@ -135,10 +137,10 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 			<div id="feed-container">
 				<div id="feed-header">
 					<span id="feed-title">Feed</span>
-					<Button type="submit" onClick={this.showModal.bind(this)} id="show-filter-modal">Filter</Button>
+					<Button type="submit" onClick={this.showModal} id="show-filter-modal">Filter</Button>
 				</div>
 
-				<Rodal visible={this.state.visible} onClose={this.hideModal.bind(this)}>
+				<Rodal visible={this.state.visible} onClose={this.hideModal}>
 					<div className="header">Filters</div>
 					<div className="body">
 						<Form>

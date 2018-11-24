@@ -16,18 +16,19 @@ type User = {
 	phoneNumber: string;
 	createdAt: Date;
 	updatedAt: Date;
-	timesFavorited: number;
+	timesSaved: number;
 	hostedMeals: Partial<Meal>[];
-	mealsAttending: Partial<Meal>[];  // TODO: add to db, also when a meal is completed remove the meal from the list
+	mealsAttending: Partial<Meal>[];
 	whitelist: Partial<Topic>[];
 	blacklist: Partial<Topic>[];
-	savedRecipes: Partial<Recipe>[];		// TODO: Change to saved. Same with users and everything. Times saved too.
+	savedRecipes: Partial<Recipe>[];
 	followedUsers: Partial<User>[];
+	followers: Partial<User>[];
+	followedTags: Partial<Tag>[];
 	reviews: Partial<UserReview>[];
 	userReviewsAuthored: Partial<UserReview>[];
 	recipeReviewsAuthored: Partial<RecipeReview>[];
 	recipesAuthored: Partial<Recipe>[];
-	followedTags: Partial<Tag>[];
 };
 
 export default User;
