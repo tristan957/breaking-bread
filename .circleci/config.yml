@@ -1,35 +1,6 @@
 version: 2
 jobs:
-  build-client:
-    environment:
-      BB_CLIENT_DIR: bb-client
-
-    docker:
-      - image: circleci/node:8
-
-    working_directory: ~/breaking-bread
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-          - v2-client-dependencies-{{ arch }}-{{ .Branch }}-{{ checksum "bb-client/yarn.lock" }}
-          - v2-client-dependencies-{{ arch }}-{{ .Branch }}-
-          - v2-client-dependencies-{{ arch }}-
-          - v2-client-dependencies-
-
-      - run: yarn --cwd $BB_CLIENT_DIR install
-
-      - save_cache:
-          paths:
-            - bb-client/node_modules
-          key: v2-client-dependencies-{{ arch }}-{{ .Branch }}-{{ checksum "bb-client/yarn.lock" }}
-
-      - run: yarn --cwd $BB_CLIENT_DIR tslint
-      - run: yarn --cwd $BB_CLIENT_DIR build
-
-  build-server:
+  build:
     environment:
       BB_CLIENT_DIR: bb-client
       BB_SERVER_DIR: bb-server
@@ -44,17 +15,21 @@ jobs:
 
       - restore_cache:
           keys:
-          - v2-server-dependencies-{{ arch }}-{{ .Branch }}-{{ checksum "bb-server/yarn.lock" }}
-          - v2-server-dependencies-{{ arch }}-{{ .Branch }}-
-          - v2-server-dependencies-{{ arch }}-
-          - v2-server-dependencies-
+            - v2-bb-dependencies-{{ arch }}-{{ .Branch }}-{{ checksum "bb-server/yarn.lock" }}-{{ checksum "bb-client/yarn.lock" }}
+            - v2-bb-dependencies-{{ arch }}-{{ .Branch }}-
+            - v2-bb-dependencies-{{ arch }}-
+            - v2-bb-dependencies-
 
+      - run: yarn --cwd $BB_CLIENT_DIR install
       - run: yarn --cwd $BB_SERVER_DIR install
 
       - save_cache:
           paths:
             - bb-server/node_modules
-          key: v2-server-dependencies-{{ arch }}-{{ .Branch }}-{{ checksum "bb-server/yarn.lock" }}
+            - bb-client/node_modules
+          key: v2-bb-dependencies-{{ arch }}-{{ .Branch }}-{{ checksum "bb-server/yarn.lock" }}-{{ checksum "bb-client/yarn.lock" }}
 
+      - run: yarn --cwd $BB_CLIENT_DIR tslint
+      - run: yarn --cwd $BB_CLIENT_DIR build
       - run: yarn --cwd $BB_SERVER_DIR tslint
       - run: yarn --cwd $BB_SERVER_DIR build
