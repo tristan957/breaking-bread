@@ -20,7 +20,10 @@ export default class Meal {
 	public location: string;
 
 	@Column()
-	public date: Date;
+	public startTime: Date;
+
+	@Column()
+	public endTime: Date;
 
 	@Column()
 	public maxGuests: number;

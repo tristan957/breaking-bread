@@ -31,10 +31,15 @@ const options = {
 // }
 
 export function getUserFromAuthSub(connection: Connection, oAuthSub: string): Promise<User | undefined> {
+	const relations: string[] = [
+		"hostedMeals", "mealsAttending", "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
+		"savedRecipes", "followedUsers", "followedBy", "recipesAuthored", "followedTags",
+	];
 	return connection
 		.getRepository(User)
 		.findOne({
 			where: { oAuthSub },
+			relations,
 		});
 }
 

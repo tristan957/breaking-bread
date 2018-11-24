@@ -190,7 +190,8 @@ CREATE TABLE "public"."meal" (
     "price" money NOT NULL,
     "description" character varying(512),
     "location" text NOT NULL,
-    "date" timestamp NOT NULL,
+    "startTime" timestamp NOT NULL,
+    "endTime" timestamp NOT NULL,
     "maxGuests" integer NOT NULL,
     "imagePath" text,
     "createdAt" timestamp DEFAULT now() NOT NULL,
@@ -200,10 +201,10 @@ CREATE TABLE "public"."meal" (
     CONSTRAINT "FK_132bc692514e13e7abc6ae9633c" FOREIGN KEY ("hostId") REFERENCES "user"(id) NOT DEFERRABLE
 ) WITH (oids = false);
 
-INSERT INTO "meal" ("id", "title", "price", "description", "location", "date", "maxGuests", "imagePath", "createdAt", "updatedAt", "hostId") VALUES
-(1,	'Mexicano on the beach',	4,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus e',	'My house',	'2018-11-21 05:37:52.621683',	3,	NULL,	'2018-11-21 05:37:52.621143',	'2018-11-21 05:37:52.621143',	1),
-(2,	'Spring water and fresh greens',	0,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. ',	'My shack',	'2018-12-21 05:38:37.943961',	2,	NULL,	'2018-11-21 05:38:37.942728',	'2018-11-21 05:38:37.942728',	2),
-(3,	'Light Italian',	12,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. ',	'Lot 50',	'2019-5-25 05:38:37.943961',	4,	NULL,	'2018-11-22 05:38:37.942728',	'2018-11-21 05:38:37.942728',	3);
+INSERT INTO "meal" ("id", "title", "price", "description", "location", "startTime", "endTime", "maxGuests", "imagePath", "createdAt", "updatedAt", "hostId") VALUES
+(1,	'Mexicano on the beach',	4,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus e',	'My house',	'2018-11-21 05:37:52.621683', '2018-11-21 07:37:52.621683',	3,	NULL,	'2018-11-21 05:37:52.621143',	'2018-11-21 05:37:52.621143',	1),
+(2,	'Spring water and fresh greens',	0,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. ',	'My shack',	'2018-12-21 05:38:37.943961', '2018-12-21 10:38:37.943961',	2,	NULL,	'2018-11-21 05:38:37.942728',	'2018-11-21 05:38:37.942728',	2),
+(3,	'Light Italian',	12,	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. ',	'Lot 50',	'2019-5-25 05:38:37.943961', '2019-5-25 08:38:37.943961',	4,	NULL,	'2018-11-22 05:38:37.942728',	'2018-11-21 05:38:37.942728',	4);
 
 CREATE TABLE "public"."recipe_allergies_allergy" (
     "recipeId" integer NOT NULL,

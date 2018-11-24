@@ -25,7 +25,8 @@ export const typeDef: DocumentNode = gql`
     type Meal {
         id: Int!
         location: String!
-        date: DateTime!
+        startTime: DateTime!
+        endTime: DateTime!
 		price: Float!
         title: String!
 		description: String!
@@ -39,8 +40,9 @@ export const typeDef: DocumentNode = gql`
     }
 
     input CreateMealInput {
-        location: String!
-        date: DateTime!
+        location: String!  # Address or lat and lon
+        startTime: DateTime!
+        endTime: DateTime!
 		price: Float!
         title: String!
 		description: String
@@ -51,8 +53,9 @@ export const typeDef: DocumentNode = gql`
     input UpdateMealInput {
         id: Int!
         location: String
-        date: DateTime
-		price: Float  # TODO: Def need to email on meal edit for price especially
+        startTime: DateTime  # TODO: Email on time, price changes
+        endTime: DateTime
+		price: Float
         title: String
 		description: String
 		imagePath: String
@@ -93,7 +96,9 @@ export async function createMeal(ctx: Context<IAppContext>, newMeal: DeepPartial
 			throw Error;
 		}
 
-		// TODO: Check if the host has a conflict
+		// TODO: Verify location with google place api
+
+		// TODO: Check if the host has a conflict SHOULD ALSO be done on frontend
 		newMeal.host = host;
 		const meal: DeepPartial<Meal> = await ctx.connection.getRepository(Meal).save(newMeal);
 
@@ -234,8 +239,8 @@ export async function toggleGuest(ctx: Context<IAppContext>, mealID: number, gue
 			return Promise.resolve(undefined);
 		}
 		// TODO: Check that the new guest is not the host
+		// Need to also check if the guest does not have a conflict hosting or guesting
 
-		// TODO: Need to verify id with JWT from context
 		const guestIDs: number[] = meal.guests.map(a => a.id);
 		if (guestIDs.includes(guestID)) {
 			const index: number = guestIDs.indexOf(guestID);

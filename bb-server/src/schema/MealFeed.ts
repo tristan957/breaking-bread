@@ -33,7 +33,7 @@ export const typeDef: DocumentNode = gql`
 	}
 
 	input GetMealFeedOptions {
-		# location: LocationFilter
+		location: LocationFilter
 		maxGuests: Int
 		tags: [GetTagInput]
 		topics: [GetTopicInput]
@@ -41,7 +41,7 @@ export const typeDef: DocumentNode = gql`
 
 	input LocationFilter {
 		distanceMI: Int!
-		fromLocation: String!
+		fromLocation: String!	# Either an address or a lat and lon
 	}
 `;
 
@@ -73,7 +73,7 @@ interface ILocationOptions {
 }
 
 interface IGetMealFeedOptions {
-	// location?: ILocationOptions;
+	location?: ILocationOptions;
 	maxGuests?: number;
 	tags?: DeepPartial<Tag>[];
 	topics?: DeepPartial<Topic>[];
@@ -107,7 +107,10 @@ async function getMealFeed(ctx: Context<IAppContext>, filterOptions: IGetMealFee
 	let meals: Meal[] = await ctx.connection
 		.getRepository(Meal)
 		.find({
-			where,
+			where: {
+				...where,
+				startTime: MoreThan(new Date(new Date().getTime() + 60 * 60000)),  // Now +60 minutes  TODO: Date filtering
+			},
 			relations: ["host", "guests", "recipes"],
 		});
 	if (meals.length === 0) {
