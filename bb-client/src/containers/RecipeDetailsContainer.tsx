@@ -1,7 +1,9 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
+import { Badge } from "reactstrap";
 import RecipeReview from "../entities/RecipeReview";
 import "./resources/css/ProfileActivityContainer.css";
+import "./resources/css/RecipeDetailsContainer.css";
 
 interface IRecipeDetailsContainerProps {
 	reviews: Partial<RecipeReview>[];
@@ -19,9 +21,24 @@ export default class RecipeDetailsContainer extends React.Component<IRecipeDetai
 		if (this.props.reviews.length > 0) {
 			return (
 				<div>
-					<div className="container-header">Reviews</div>
-					<hr className="seperator" />
-					{/* TODO: need Reviews list component */}
+					<div id="recipe-details-header-title">Reviews</div>
+					<div>
+						<ul className="no-style-list">
+							{this.props.reviews.map((review, i) => {
+								return (
+									<div>
+										<hr className="seperator" />
+										<li key={i}>
+											<Badge className="recipe-details-badge-item" color="primary">
+												⭐{review.rating}/5
+											</Badge>
+											<p>{review.description}</p>
+										</li>
+									</div>
+								);
+							})}
+						</ul>
+					</div>
 				</div>
 			);
 		} else {

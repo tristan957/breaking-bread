@@ -1,0 +1,44 @@
+#recipe-header-component {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#recipe-header-card-left {
+	flex-grow: 1;
+}
+
+#recipe-header-card-right {
+	flex-grow: 1;
+    max-width: 50%;
+	display: flex;
+	text-align: center;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+}
+
+#recipe-header-title {
+	font-size: 2em;
+    flex-grow: 1;
+    font-weight: bold;
+}
+
+#recipe-header-sub-title {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+#recipe-header-description {
+	font-size: 1em;
+}
+
+.recipe-header-badge-item {
+	margin-right: .5em;
+}
+
+.recipe-header-updated {
+	color: rgb(125, 125, 125);
+	font-style: italic;
+	font-size: .75em;
+}

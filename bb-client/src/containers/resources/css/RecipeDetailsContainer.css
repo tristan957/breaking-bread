@@ -1,0 +1,9 @@
+#recipe-details-header-title {
+	font-size: 2em;
+    flex-grow: 1;
+    font-weight: bold;
+}
+
+.recipe-details-badge-item {
+	margin: 0 0 .5em 0;
+}

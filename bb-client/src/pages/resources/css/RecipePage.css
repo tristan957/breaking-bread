@@ -1,5 +1,16 @@
-#recipe-header {
-	height: 100%;
-	margin-top: 2em;
+#Article {
+	width: 71%;
+    height: 100%;
+    float: left;
+	border-collapse: collapse;
 	margin-bottom: 2em;
+	margin-right: 1.8em;
+}
+
+#ArticleRight {
+	width: 26%;
+	height: 100%;
+	position: relative;
+	float: left;
+	border-collapse: collapse;
 }

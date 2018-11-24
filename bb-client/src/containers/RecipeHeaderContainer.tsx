@@ -1,9 +1,11 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
+import { Badge } from "reactstrap";
 import Items from "../components/Items";
 import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
 import "./resources/css/ProfileHeaderContainer.css";
+import "./resources/css/RecipeHeaderContainer.css";
 
 const months: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -32,11 +34,12 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 		if (this.props.tagList.length !== 0) {
 			return (
 				<div>
-					<div>Tags</div>
+					<div id="recipe-header-sub-title">Tags</div>
 					<Items
 						items={this.props.tagList}
 						displayInline={true}
 						leadingChar="#"
+						monospace={true}
 					/>
 				</div>
 			);
@@ -54,7 +57,7 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 		if (this.props.allergies.length !== 0) {
 			return (
 				<div>
-					<div>Potential Allergies</div>
+					<div id="recipe-header-sub-title">Potential Allergies</div>
 					<Items
 						items={this.props.allergies}	// Rendering using tag list. Should not need a function TODO: Maybe make independent
 						displayInline={true}
@@ -74,41 +77,46 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 	public render(): JSX.Element {
 		return (
 			// TODO: Seperate to container and sub components
-			<div id="header-container">
-				<div id="header-component">
-					<div id="header-card-left">
-						<div id="username">
+			<div id="recipe-header-container">
+				<div id="recipe-header-component">
+					<div id="recipe-header-card-left">
+						<div>
 							{
 								this.props.imagePath === undefined ? undefined : (
 									<img id="recipe-header-img" src={this.props.imagePath} alt="Profile Picture" />
 								)
 							}
-							{this.props.name}
+							<div id="recipe-header-title">
+								{this.props.name}
+							</div>
+							<span className="recipe-header-updated">Last updated on&nbsp;
+								{
+									this.props.updatedAt === undefined ? (
+										months[this.props.createdAt.getMonth()], this.props.createdAt.toLocaleDateString(undefined, { year: "2-digit" })
+									) : (
+											months[this.props.updatedAt.getMonth()], this.props.updatedAt.toLocaleDateString(undefined, { year: "2-digit" })
+										)
+								}
+							</span>
 							{
 								this.props.description === undefined ? undefined : (
-									<div>
-										Description
+									<div id="recipe-header-description">
 										<p>{this.props.description}</p>
 									</div>
 								)
 							}
+							<div id="recipe-header-badges">
+								<Badge className="recipe-header-badge-item" color="primary">
+									⭐{parseFloat(this.props.reviewAverage.toFixed(2))}/5
+								</Badge>
+								<Badge className="recipe-header-badge-item" color="primary">
+									❤️x{this.props.timesFavorited}
+									{/* TODO: Add button to make favorite */}
+								</Badge>
+							</div>
 						</div>
 					</div>
-					<div id="header-card-right">
-						<div id="username">
-							⭐{parseFloat(this.props.reviewAverage.toFixed(2))}/5
-							❤️x{this.props.timesFavorited} {/* TODO: Add button to make favorite */}
-						</div>
-						<div>
-							Last updated
-							{
-								this.props.updatedAt === undefined ? (
-									months[this.props.createdAt.getMonth()], this.props.createdAt.toLocaleDateString(undefined, { year: "2-digit" })
-								) : (
-										months[this.props.updatedAt.getMonth()], this.props.updatedAt.toLocaleDateString(undefined, { year: "2-digit" })
-									)
-							}
-						</div>
+					<div id="recipe-header-card-right">
 						{this.renderTagList()}
 						{this.renderAllergyList()}
 					</div>

@@ -3,6 +3,7 @@ import React from "react";
 import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
+import HostSummaryContainer from "../containers/HostSummaryContainer";
 import RecipeDetailsContainer from "../containers/RecipeDetailsContainer";
 import RecipeHeaderContainer from "../containers/RecipeHeaderContainer";
 import Recipe from "../entities/Recipe";
@@ -110,23 +111,36 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 							</MediaQuery>
 
 							<MediaQuery query="(min-width: 950px)">
-								<div className="card">
-									<div id="recipe-header">
-										<RecipeHeaderContainer
-											name={this.state.recipe.name as string}
-											description={this.state.recipe.description}
-											tagList={this.state.recipe.tags || []}
-											createdAt={this.state.recipe.createdAt as Date}
-											reviewAverage={this.getRecipeReviewAverage()}
-											timesFavorited={this.state.recipe.timesSaved as number}
-											allergies={this.state.recipe.allergies || []}
-										/>
+								<div id="Article">
+									<div className="card">
+										<div id="recipe-header">
+											<RecipeHeaderContainer
+												name={this.state.recipe.name as string}
+												description={this.state.recipe.description}
+												tagList={this.state.recipe.tags || []}
+												createdAt={this.state.recipe.createdAt as Date}
+												reviewAverage={this.getRecipeReviewAverage()}
+												timesFavorited={this.state.recipe.timesSaved as number}
+												allergies={this.state.recipe.allergies || []}
+											/>
+										</div>
 									</div>
-									<div id="recipe-under">
-										<RecipeDetailsContainer
-											reviews={this.state.recipe.reviews || []}
-										/>
+									<div className="card">
+										<div id="recipe-under">
+											<RecipeDetailsContainer
+												reviews={this.state.recipe.reviews || []}
+											/>
+										</div>
 									</div>
+								</div>
+								<div id="ArticleRight">
+									<HostSummaryContainer
+										id={1}
+										name={`${"Jonathan"} ${"Wang"}`}
+										about={"Yeet"}
+										imagePath={undefined}
+										topics={[]}
+									/>
 								</div>
 							</MediaQuery>
 						</div>
