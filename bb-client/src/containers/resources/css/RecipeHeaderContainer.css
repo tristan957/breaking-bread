@@ -16,8 +16,15 @@
 	margin-right: 15px;
 }
 
+#recipe-header-buttons {
+	margin-top: 10px;
+	display: flex;
+	justify-content: left;
+}
+
 #recipe-header-buttons > .recipe-header-action {
 	margin-right: 10px;
+	margin-bottom: 0px;
 }
 
 #recipe-header-buttons > .recipe-header-action:last-child {

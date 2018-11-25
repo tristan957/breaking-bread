@@ -49,19 +49,17 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 										)
 								}
 							</span>
-							<div id="recipe-header-badges-buttons">
-								<div id="recipe-header-badges">
-									<Badge className="recipe-header-badge-item" color="primary">
-										⭐ {parseFloat(this.props.reviewAverage.toFixed(2))}/5
-									</Badge>
-									<Badge className="recipe-header-badge-item" color="primary">
-										❤️ {this.props.timesFavorited}
-									</Badge>
-								</div>
-								<div id="recipe-header-buttons">
-									<Button className="recipe-header-action">Review</Button>
-									<Button className="recipe-header-action">Save</Button>
-								</div>
+							<div id="recipe-header-badges">
+								<Badge className="recipe-header-badge-item" color="primary">
+									⭐ {parseFloat(this.props.reviewAverage.toFixed(2))}/5
+								</Badge>
+								<Badge className="recipe-header-badge-item" color="primary">
+									❤️ {this.props.timesFavorited}
+								</Badge>
+							</div>
+							<div id="recipe-header-buttons">
+								<Button outline color="secondary" className="recipe-header-action">Review</Button>
+								<Button outline color="secondary" className="recipe-header-action">Save</Button>
 							</div>
 						</div>
 						<div id="recipe-header-card-right">
