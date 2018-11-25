@@ -26,14 +26,14 @@ export const typeDef: DocumentNode = gql`
         id: Int!
         name: String!
         description: String!
-        imagePath: String!
+        imagePath: String
         createdAt: DateTime!
         updatedAt: DateTime!
         author: User
         reviews: [RecipeReview]
 		mealsServedAt: [Meal]
-		savedBy: [User]
-        tags: [Tag]!
+		timesSaved: Int!
+        tags: [Tag]
         allergies: [Allergy]!
     }
 

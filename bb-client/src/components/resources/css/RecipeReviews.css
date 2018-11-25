@@ -1,0 +1,29 @@
+#recipe-review-rating-author-container {
+	display: flex;
+	justify-content: space-between;
+	flex-grow: 1;
+}
+
+#recipe-review-author-name {
+	font-weight: bold;
+}
+
+#recipe-review-container {
+	display: flex;
+	flex-direction: column;
+}
+
+#recipe-review-description {
+	font-style: italic;
+	margin: 0px;
+	padding: 0px 15px;
+	text-align: justify;
+}
+
+#recipe-review-container > * {
+	margin-bottom: 0.75em;
+}
+
+#recipe-review-container > *:last-child {
+	margin-bottom: 0em;
+}

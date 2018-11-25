@@ -1,0 +1,8 @@
+#profile-summaries-containers {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#profile-summaries-containers > div {
+	margin-right: 1.2em;
+}

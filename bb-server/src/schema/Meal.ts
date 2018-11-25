@@ -20,6 +20,7 @@ export const typeDef: DocumentNode = gql`
 
     extend type Query {
         getMeal(id: Int!): Meal
+		getMeals(ids: [Int]!): [Meal]
     }
 
     type Meal {
@@ -73,6 +74,7 @@ export const resolvers: IResolvers = {
 	},
 	Query: {
 		getMeal: _getMeal,
+		getMeals: _getMeals,
 	},
 };
 
@@ -283,4 +285,38 @@ export async function getMeal(ctx: Context<IAppContext>, mealID: number): Promis
 			},
 			relations: neededRelations,
 		});
+}
+
+interface IGetMeals {
+	ids: number[];
+}
+
+// tslint:disable-next-line: no-any
+function _getMeals(parent: any, args: IGetMeals, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Meal[] | undefined> {
+	return getMeals(ctx, args.ids);
+}
+
+export async function getMeals(ctx: Context<IAppContext>, mealIDs: number[]): Promise<Meal[] | undefined> {
+	const retVal: Meal[] = [];
+	const neededRelations: string[] = [
+		"host", "guests", "recipes",
+	];
+
+	for (const mealID of mealIDs) {
+		const tempMeal: Meal | undefined = await ctx.connection
+			.getRepository(Meal)
+			.findOne({
+				where: {
+					id: mealID,
+				},
+				relations: neededRelations,
+			});
+
+		if (tempMeal === undefined) {
+			return Promise.resolve(undefined);
+		}
+		retVal.push(tempMeal);
+	}
+
+	return Promise.resolve(retVal);
 }

@@ -104,8 +104,8 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 	}
 
 	public setMeal(
-		startTime?: Date,
-		endTime?: Date,
+		startTime?: number,
+		endTime?: number,
 		title?: string,
 		location?: string,
 		description?: string

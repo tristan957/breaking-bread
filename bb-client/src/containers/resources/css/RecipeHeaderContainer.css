@@ -1,7 +1,12 @@
 #recipe-header-component {
 	display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    /* justify-content: space-around; */
+}
+
+#recipe-header-information {
+	display: flex;
+	justify-content: space-between;
 }
 
 #recipe-header-card-left {
@@ -12,19 +17,14 @@
 	flex-grow: 1;
     max-width: 50%;
 	display: flex;
-	text-align: center;
+	text-align: left;
     flex-direction: column;
     justify-content: space-between;
     align-content: center;
 }
 
-#recipe-header-title {
-	font-size: 2em;
-    flex-grow: 1;
-    font-weight: bold;
-}
-
-#recipe-header-sub-title {
+#recipe-header-tags,
+#recipe-header-allergies {
 	font-size: 1em;
 	font-weight: bold;
 }

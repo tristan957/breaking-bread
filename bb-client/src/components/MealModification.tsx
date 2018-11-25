@@ -10,8 +10,8 @@ import "./resources/css/MealModification.css";
 interface IMealModificationProps {
 	meal: Partial<Meal>;
 	setMeal: ((
-		startTime?: Date,
-		endTime?: Date,
+		startTime?: number,
+		endTime?: number,
 		title?: string,
 		location?: string,
 		description?: string
@@ -22,8 +22,8 @@ interface IMealModificationState {
 	deletionModalVisible: boolean;
 	editModalVisible: boolean;
 	mealTitle?: string;
-	mealStartTime?: Date;
-	mealEndTime?: Date;
+	mealStartTime?: number;
+	mealEndTime?: number;
 	mealLocation?: string;
 	mealDescription?: string;
 	createdAt?: moment.Moment;

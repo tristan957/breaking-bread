@@ -1,16 +1,15 @@
-#Article {
-	width: 71%;
-    height: 100%;
-    float: left;
-	border-collapse: collapse;
-	margin-bottom: 2em;
-	margin-right: 1.8em;
+#article {
+	display: flex;
 }
 
-#ArticleRight {
-	width: 26%;
-	height: 100%;
-	position: relative;
-	float: left;
-	border-collapse: collapse;
+#article-left {
+	flex-grow: 50%;
+}
+
+#article-right {
+	width: 50%;
+}
+
+#recipe-description > p {
+	margin: 0px;
 }

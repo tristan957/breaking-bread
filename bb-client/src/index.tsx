@@ -1,6 +1,5 @@
+import DefaultClient from "apollo-boost";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { ApolloClient } from "apollo-client";
-import { HttpLink } from "apollo-link-http";
 import "bootstrap/dist/css/bootstrap.min.css";
 import dotenv from "dotenv";
 import React from "react";
@@ -18,8 +17,11 @@ dotenv.config();
 const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/" : "future url";
 console.log(`URI: ${uri}`);
 
-const client = new ApolloClient({
-	link: new HttpLink({ uri }),
+const client = new DefaultClient({
+	headers: {
+		oAuthSub: "adjijdfaa",
+	},
+	uri,
 	cache: new InMemoryCache(),
 });
 

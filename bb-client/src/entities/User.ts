@@ -14,8 +14,8 @@ type User = {
 	about: string;
 	email: string;
 	phoneNumber: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: number;
+	updatedAt: number;
 	timesSaved: number;
 	hostedMeals: Partial<Meal>[];
 	mealsAttending: Partial<Meal>[];

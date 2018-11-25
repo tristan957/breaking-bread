@@ -28,8 +28,8 @@ export default class Recipe {
 	@ManyToOne(type => User, user => user.recipesAuthored)
 	public author: User;
 
-	@ManyToMany(type => User, user => user.savedRecipes)
-	public savedBy: User[];
+	@Column({ default: 0 })
+	public timesSaved: number;
 
 	@OneToMany(type => RecipeReview, review => review.subject)
 	public reviews: RecipeReview[];

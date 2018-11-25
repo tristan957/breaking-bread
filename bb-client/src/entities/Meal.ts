@@ -7,15 +7,19 @@ type Meal = {
 	price: number;
 	description: string;
 	location: string;
-	startTime: Date;
-	endTime: Date;
+	startTime: number;
+	endTime: number;
 	maxGuests: number;
 	imagePath: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: number;
+	updatedAt: number;
 	host: Partial<User>;
 	guests: Partial<User>[];
 	recipes: Partial<Recipe>[];
 };
+
+// export function getTagsFromRecipes(meal: Meal): Partial<Tag>[] {
+// 	return meal.recipes.flatMap
+// }
 
 export default Meal;

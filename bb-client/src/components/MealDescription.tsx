@@ -9,8 +9,8 @@ interface IMealDescriptionProps {
 	meal: Partial<Meal>;
 	isGuest: boolean | undefined;
 	setMeal: undefined | ((
-		startTime?: Date,
-		endTime?: Date,
+		startTime?: number,
+		endTime?: number,
 		title?: string,
 		location?: string,
 		description?: string
@@ -32,15 +32,11 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 									{this.props.meal.location} - {this.props.meal.price === undefined ? `Free!` : `$${this.props.meal.price} per person`}
 								</i>
 							</h5>
-							{
-								this.props.meal.startTime === undefined ? undefined : (
-									<h6>
-										<i>
-											{this.props.meal.startTime.toLocaleDateString()} at {this.props.meal.startTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-										</i>
-									</h6>
-								)
-							}
+							<h6>
+								<i>
+									{new Date(this.props.meal.startTime!).toLocaleDateString()} at {new Date(this.props.meal.startTime!).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+								</i>
+							</h6>
 							<hr className="seperator" />
 							<h6>{this.props.meal.description}</h6>
 							{(this.props.isGuest !== undefined && !this.props.isGuest && this.props.setMeal !== undefined) &&

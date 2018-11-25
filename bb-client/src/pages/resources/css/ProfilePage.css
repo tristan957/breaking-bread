@@ -27,3 +27,19 @@
 #profile-info-topics > *, #profile-info-upcoming > * {
 	flex-grow: 1;
 }
+
+@media only screen
+  	and (max-width: 750px) {
+		#profile-info-bottom {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		#profile-info-topics, #profile-info-upcoming {
+			width: 100%;
+		}
+
+		#profile-info-bottom > div {
+			margin-right: 0em;
+		}
+	}

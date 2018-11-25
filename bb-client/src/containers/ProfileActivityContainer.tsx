@@ -4,7 +4,7 @@ import Meal from "../entities/Meal";
 import Recipe from "../entities/Recipe";
 import User from "../entities/User";
 import MealSummariesContainer from "./MealSummariesContainer";
-import ProfileSummaries from "./ProfileSummaries";
+import ProfileSummariesContainers from "./ProfileSummariesContainers";
 import RecipeSummariesContainer from "./RecipeSummariesContainer";
 import "./resources/css/ProfileActivityContainer.css";
 
@@ -56,7 +56,7 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			case RenderedComponent.FollowedUsers: {
 				return this.props.followedUsers.length === 0
 					? nada
-					: <ProfileSummaries users={this.props.followedUsers} showAsCards />;
+					: <ProfileSummariesContainers users={this.props.followedUsers} />;
 			}
 			default: {
 				return undefined;

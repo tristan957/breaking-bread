@@ -23,7 +23,6 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps> 
 	public render(): JSX.Element {
 		return (
 			<div id="recipe-summary-container">
-				<hr className="recipe-summary-seperator" />
 				<Link to={`/r/${this.props.id}`} className="no-link">
 					<div id="recipe-summary" className="no-link">
 						<img className="bg" src={this.props.imagePath || defaultMealPic} alt="Recipe Picture" />

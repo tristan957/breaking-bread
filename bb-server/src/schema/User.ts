@@ -8,7 +8,7 @@ import Recipe from "../entities/Recipe";
 import Tag from "../entities/Tag";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
-import { getRecipe } from "./Recipe";
+import { getRecipe, updateRecipe } from "./Recipe";
 import { createTag, getTag } from "./Tag";
 import { createTopic, getTopic } from "./Topic";
 
@@ -341,10 +341,13 @@ export async function toggleSavedRecipe(ctx: Context<IAppContext>, recipeID: num
 	if (savedRecipeIDs.includes(recipeID)) {
 		const index: number = savedRecipeIDs.indexOf(recipeID);
 		user.savedRecipes.splice(index, 1);
+		recipe.timesSaved -= 1;
 	} else {
 		user.savedRecipes.push(recipe);
+		recipe.timesSaved += 1;
 	}
 
+	updateRecipe(ctx, recipe);
 	return updateUser(ctx, user);    // User verification from ctx done here
 }
 

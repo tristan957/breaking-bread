@@ -9,8 +9,8 @@ type Recipe = {
 	name: string;
 	description: string;
 	imagePath: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: number;
+	updatedAt: number;
 	author: Partial<User>;
 	timesSaved: number;
 	reviews: Partial<RecipeReview>[];

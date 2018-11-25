@@ -10,7 +10,7 @@ export default class Meal {
 	@Column()
 	public title: string;
 
-	@Column({ type: "money" })
+	@Column({ type: "numeric" })
 	public price: number;
 
 	@Column({ length: 512, nullable: true })

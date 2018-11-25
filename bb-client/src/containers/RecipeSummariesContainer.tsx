@@ -15,6 +15,7 @@ export default class RecipeSummariesContainer extends React.Component<IRecipeSum
 					{this.props.recipes.map((recipe, i) => {
 						return (
 							<li key={i}>
+								<hr className="recipe-summary-seperator" />
 								<RecipeSummaryContainer recipe={recipe} showHost={this.props.showHost || false} />
 							</li>
 						);

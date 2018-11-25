@@ -30,7 +30,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 	}
 
 	private fetchUserFromParams(): Partial<User> {
-		const date = new Date("November 15, 2008 18:30:00");
+		const date = new Date("November 15, 2008 18:30:00").valueOf();
 		return {
 			id: 3,
 			firstName: "Fank",
@@ -52,8 +52,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 			mealsAttending: [ // TODO: Sort and sansity on the backend (remove past meals, sort by next coming)
 				{
 					id: 1,
-					startTime: new Date("December 21, 2018 18:30:00"),
-					endTime: new Date("December 22, 2018 18:30:00"),
+					startTime: new Date("December 21, 2018 18:30:00").valueOf(),
+					endTime: new Date("December 22, 2018 18:30:00").valueOf(),
 					location: "College Station, TX",
 					title: "Cuban Delight",
 					guests: [
@@ -83,8 +83,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 						firstName: "Jonathan",
 						lastName: "Wang",
 					},
-					startTime: new Date("December 21, 2018 18:30:00"),
-					endTime: new Date("December 22, 2018 18:30:00"),
+					startTime: new Date("December 21, 2018 18:30:00").valueOf(),
+					endTime: new Date("December 22, 2018 18:30:00").valueOf(),
 					location: "College Station, TX",
 					title: "Mexican Night Out",
 					guests: [],
@@ -143,8 +143,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 			hostedMeals: [
 				{
 					id: 1,
-					startTime: new Date("December 21, 2018 18:30:00"),
-					endTime: new Date("December 21, 2018 20:30:00"),
+					startTime: new Date("December 21, 2018 18:30:00").valueOf(),
+					endTime: new Date("December 21, 2018 20:30:00").valueOf(),
 					location: "College Station, TX",
 					title: "Cuban Delight",
 					guests: [
@@ -174,8 +174,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 						firstName: "Jonathan",
 						lastName: "Wang",
 					},
-					startTime: new Date("December 21, 2018 18:30:00"),
-					endTime: new Date("December 22, 2018 18:30:00"),
+					startTime: new Date("December 21, 2018 18:30:00").valueOf(),
+					endTime: new Date("December 22, 2018 18:30:00").valueOf(),
 					location: "College Station, TX",
 					title: "Mexican Night Out",
 					guests: [],
@@ -233,7 +233,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 										whiteList={this.state.userBeingViewed.whitelist || []}
 										blackList={this.state.userBeingViewed.blacklist || []}
 										imagePath={this.state.userBeingViewed.imagePath}
-										joinedAt={this.state.userBeingViewed.createdAt as Date}
+										joinedAt={this.state.userBeingViewed.createdAt as number}
 										reviewAverage={this.getUserReviewAverage()}
 										numberOfFollowers={this.state.userBeingViewed.followedUsers!.length || 0}
 									/>

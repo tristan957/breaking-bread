@@ -1,6 +1,8 @@
-import { gql } from "graphql-tag";
+import { gql } from "apollo-boost";
 import React from "react";
+import { Query, QueryResult } from "react-apollo";
 import { Route, Switch } from "react-router";
+import Loading from "./components/Loading";
 import NavigationBar from "./components/NavigationBar";
 import User from "./entities/User";
 import DashboardPage from "./pages/DashboardPage";
@@ -10,143 +12,91 @@ import RecipePage from "./pages/RecipePage";
 import "./resources/css/App.css";
 import "./resources/css/common.css";
 
-const GET_USER = gql`
-
+const GET_LOGGED_IN_USER = gql`
+	{
+		getLoggedInUser {
+			id
+			firstName
+			lastName
+			imagePath
+			whitelist {
+				id
+				name
+			}
+			blacklist {
+				id
+				name
+			}
+			followedTags {
+				id
+				name
+			}
+			mealsAttending {
+				id
+			}
+			reviews {
+				id
+				rating
+			}
+			recipesAuthored {
+				id
+				name
+				imagePath
+				description
+				timesSaved
+			}
+		}
+	}
 `;
 
 export interface IAppContext {
 	user?: Partial<User>;
 }
 
+interface IGetLoggedInUserResult {
+	getLoggedInUser: Partial<User>;
+}
+
 // tslint:disable-next-line: variable-name
 export const UserContext = React.createContext<IAppContext>({ user: undefined });
 
-interface IAppState {
-	user?: Partial<User>;
-}
-
-export default class App extends React.Component<{}, IAppState> {
-	constructor(props: Readonly<{}>) {
-		super(props);
-
-		this.state = {
-			user: undefined,
-		};
-	}
-
-	public componentWillMount(): void {
-		// check local storage for user already logged in, if not undefined
-		this.setState({
-			user: {
-				id: 5,
-				firstName: "Tristan",
-				lastName: "Partin",
-				about: "Rough tough white boy stuff.",
-				createdAt: new Date("November 15, 2018 18:30:00"),
-				whitelist: [
-					{ id: 1, name: "Food" },
-					{ id: 2, name: "Nuts" },
-				],
-				blacklist: [
-					{ id: 3, name: "Fun" },
-					{ id: 4, name: "Music" },
-				],
-				followedTags: [
-					{ id: 1, name: "Vegan" },
-					{ id: 2, name: "Veget" },
-				],
-				mealsAttending: [ // TODO: Sort and sansity on the backend (remove past meals, sort by next coming)
-					{
-						id: 1,
-						startTime: new Date("December 21, 2018 18:30:00"),
-						endTime: new Date("December 22, 2018 18:30:00"),
-						location: "College Station, TX",
-						title: "Cuban Delight",
-						guests: [
-							{
-								id: 4,
-								firstName: "Micky",
-								lastName: "Li",
-							},
-							{
-								id: 5,
-								firstName: "Greg",
-								lastName: "Noonan",
-							},
-							{
-								id: 6,
-								firstName: "Jon",
-								lastName: "Wang",
-							},
-						],
-						price: 40,
-						maxGuests: 3,
-					},
-					{
-						id: 2,
-						host: {
-							id: 5,
-							firstName: "Jonathan",
-							lastName: "Wang",
-						},
-						startTime: new Date("December 21, 2018 18:30:00"),
-						endTime: new Date("December 22, 2018 18:30:00"),
-						location: "College Station, TX",
-						title: "Mexican Night Out",
-						guests: [],
-						maxGuests: 4,
-					},
-				],
-				recipesAuthored: [
-					{
-						id: 1,
-						name: "Arroz con pollo",
-						description: "Traditional chicken and rice",
-					},
-					{
-						id: 2,
-						name: "Ropa vieja",
-						description: "A classic and a national dish of Cuba",
-						timesSaved: 10,
-					},
-				],
-				reviews: [
-					{
-						id: 1,
-						rating: 5,
-					},
-					{
-						id: 2,
-						rating: 4,
-					},
-					{
-						id: 3,
-						rating: 2,
-					},
-				],
-			},
-		});
-	}
-
+export default class App extends React.Component<{}> {
 	public render(): JSX.Element {
 		return (
-			<div>
-				<div id="Top">
-					<NavigationBar />
-				</div>
-				<div id="page-content">
-					<div id="content-container">
-						<UserContext.Provider value={{ user: this.state.user }}>
-							<Switch>
-								<Route exact path="/" component={DashboardPage} />
-								<Route exact path="/m/:mealID" component={MealPage} />
-								<Route exact path="/p/:userID" component={ProfilePage} />
-								<Route exact path="/r/:recipeID" component={RecipePage} />
-							</Switch>
-						</UserContext.Provider>
-					</div>
-				</div>
-			</div >
+			<Query query={GET_LOGGED_IN_USER}>
+				{(result: QueryResult<IGetLoggedInUserResult>) => {
+					if (result.loading) {
+						return <Loading />;
+					}
+					if (result.error) {
+						return (
+							<div>
+								{`Error! Something terrible has happened! ${result.error.message}`}
+							</div>
+						);
+					}
+
+					return (
+						<div>
+							<div id="Top">
+								<NavigationBar />
+							</div>
+							<div id="page-content">
+								<div id="content-container">
+									<UserContext.Provider value={{ user: result.data!.getLoggedInUser }}>
+										<Switch>
+											<Route exact path="/" component={DashboardPage} />
+											<Route exact path="/m/:mealID" component={MealPage} />
+											<Route exact path="/p/:userID" component={ProfilePage} />
+											<Route exact path="/r/:recipeID" component={RecipePage} />
+										</Switch>
+									</UserContext.Provider>
+								</div>
+							</div>
+						</div>
+					);
+				}}
+			</Query>
 		);
 	}
 }

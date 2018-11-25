@@ -77,18 +77,19 @@ CREATE TABLE "public"."recipe" (
     "imagePath" text,
     "createdAt" timestamp DEFAULT now() NOT NULL,
     "updatedAt" timestamp DEFAULT now() NOT NULL,
+    "timesSaved" integer DEFAULT 0 NOT NULL,
     "authorId" integer,
     CONSTRAINT "PK_e365a2fedf57238d970e07825ca" PRIMARY KEY ("id"),
     CONSTRAINT "FK_1370c876f9d4a525a45a9b50d81" FOREIGN KEY ("authorId") REFERENCES "user"(id) NOT DEFERRABLE
 ) WITH (oids = false);
 
-INSERT INTO "recipe" ("id", "name", "description", "imagePath", "createdAt", "updatedAt", "authorId") VALUES
+INSERT INTO "recipe" ("id", "name", "description", "imagePath", "createdAt", "updatedAt", "timesSaved", "authorId") VALUES
 (1,	'Mexican Fried Rice',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus e
-',	NULL,	'2018-11-21 05:28:40.421513',	'2018-11-21 05:28:40.421513',	1),
-(2,	'Cuban',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, ',	NULL,	'2018-11-21 05:29:00.32459',	'2018-11-21 05:29:00.32459',	1),
+',	NULL,	'2018-11-21 05:28:40.421513',	'2018-11-21 05:28:40.421513',   2,	1),
+(2,	'Cuban',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, ',	NULL,	'2018-11-21 05:29:00.32459',	'2018-11-21 05:29:00.32459',    1,	1),
 (3,	'Spaget',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus e
-',	NULL,	'2018-11-21 05:29:28.111622',	'2018-11-21 05:29:28.111622',	3),
-(4,	'Chicken caprese',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes',	NULL,	'2018-10-21 05:29:28.111622',	'2018-11-20 05:29:28.111622',	2);
+',	NULL,	'2018-11-21 05:29:28.111622',	'2018-11-21 05:29:28.111622',   3,	3),
+(4,	'Chicken caprese',	'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes',	NULL,	'2018-10-21 05:29:28.111622',	'2018-11-20 05:29:28.111622',   0,	2);
 
 CREATE TABLE "public"."user_blacklist_topic" (
     "userId" integer NOT NULL,
@@ -187,7 +188,7 @@ CREATE SEQUENCE meal_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 2 C
 CREATE TABLE "public"."meal" (
     "id" integer DEFAULT nextval('meal_id_seq') NOT NULL,
     "title" character varying NOT NULL,
-    "price" money NOT NULL,
+    "price" numeric(2) NOT NULL,
     "description" character varying(512),
     "location" text NOT NULL,
     "startTime" timestamp NOT NULL,

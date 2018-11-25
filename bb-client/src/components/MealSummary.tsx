@@ -16,8 +16,8 @@ export interface IMealSummaryProps {
 	title: string;
 	description: string;
 	host: Partial<User>;
-	startTime: Date;
-	endTime: Date;
+	startTime: number;
+	endTime: number;
 	guests: Partial<User>[];
 	maxGuests: number;
 	price: number;
