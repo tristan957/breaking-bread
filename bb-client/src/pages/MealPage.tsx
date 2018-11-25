@@ -48,7 +48,7 @@ const GET_MEAL = gql`
 `;
 
 interface IGetMealResult {
-	getMeal: Partial<Meal>;
+	getMeal: Partial<Meal> | null;
 }
 
 interface IMealPageParams {
@@ -89,28 +89,36 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										</div>
 									);
 								}
+								if (result.data!.getMeal === null) {
+									return (
+										<div>
+											{`Error! This page does not exist! It may have been deleted.`}
+										</div>
+									);
+								}
+
 								console.log(result);
-								const loggedInUserIsGuest = result.data!.getMeal.host!.id! === userContext.user!.id!;
+								const loggedInUserIsGuest = result.data!.getMeal!.host!.id! === userContext.user!.id!;
 								return (
 									<div>
 										<MediaQuery query="(max-width: 949px)">
 											<div>
 												<div id="mobileArticle">
 													<HostSummaryContainer
-														id={result.data!.getMeal.host!.id as number}
-														name={`${result.data!.getMeal.host!.firstName} ${result.data!.getMeal.host!.lastName}`}
-														about={result.data!.getMeal.host!.about as string}
-														imagePath={result.data!.getMeal.host!.imagePath}
-														topics={result.data!.getMeal.host!.whitelist || []}
+														id={result.data!.getMeal!.host!.id as number}
+														name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
+														about={result.data!.getMeal!.host!.about as string}
+														imagePath={result.data!.getMeal!.host!.imagePath}
+														topics={result.data!.getMeal!.host!.whitelist || []}
 													/>
 													<MealDescription
-														meal={result.data!.getMeal}
+														meal={result.data!.getMeal!}
 														isGuest={loggedInUserIsGuest}
 														setMeal={this.setMeal}
 													/>
 													<GuestsContainer
-														guests={result.data!.getMeal.guests as Partial<User>[]}
-														maxGuests={result.data!.getMeal.maxGuests as number}
+														guests={result.data!.getMeal!.guests as Partial<User>[]}
+														maxGuests={result.data!.getMeal!.maxGuests as number}
 														isGuest={loggedInUserIsGuest}
 													/>
 													{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}
@@ -122,22 +130,22 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 											<div>
 												<div id="Article">
 													<MealDescription
-														meal={result.data!.getMeal}
+														meal={result.data!.getMeal!}
 														isGuest={loggedInUserIsGuest}
 														setMeal={this.setMeal}
 													/>
 												</div>
 												<div id="ArticleRight">
 													<HostSummaryContainer
-														id={result.data!.getMeal.host!.id as number}
-														name={`${result.data!.getMeal.host!.firstName} ${result.data!.getMeal.host!.lastName}`}
-														about={result.data!.getMeal.host!.about as string}
-														imagePath={result.data!.getMeal.host!.imagePath}
-														topics={result.data!.getMeal.host!.whitelist || []}
+														id={result.data!.getMeal!.host!.id as number}
+														name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
+														about={result.data!.getMeal!.host!.about as string}
+														imagePath={result.data!.getMeal!.host!.imagePath}
+														topics={result.data!.getMeal!.host!.whitelist || []}
 													/>
 													<GuestsContainer
-														guests={result.data!.getMeal.guests as Partial<User>[]}
-														maxGuests={result.data!.getMeal.maxGuests as number}
+														guests={result.data!.getMeal!.guests as Partial<User>[]}
+														maxGuests={result.data!.getMeal!.maxGuests as number}
 														isGuest={loggedInUserIsGuest}
 													/>
 													{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}
