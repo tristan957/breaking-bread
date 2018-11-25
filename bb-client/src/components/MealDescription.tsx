@@ -23,7 +23,14 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 			// TODO: Edit link to editMealPage if current user is the meal host
 			<div>
 				<div className="card">
-					<img src={this.props.meal.imagePath || defaultImagePic} className="bg" />
+					{
+						this.props.meal.imagePath === null ?
+							(
+								<img src={defaultImagePic} className="bg" />
+							) : (
+								<img src={this.props.meal.imagePath || defaultImagePic} className="bg" />
+							)
+					}
 					<div className="articleMain">
 						<div id="meal-article-header">
 							<h2><b>{this.props.meal.title}</b></h2>

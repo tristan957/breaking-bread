@@ -14,9 +14,9 @@ import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import Meal from "../entities/Meal";
 import "./resources/css/DashboardPage.css";
 
-const GET_ATTENDING_MEALS = gql`
-	query AttendingMeals($ids: [Int]!) {
-		getMeals(ids: $ids) {
+export const GET_UPCOMING_MEALS = gql`
+	query UpcomingMeals($ids: [Int]!) {
+		getUpcomingMeals(ids: $ids) {
 			id
 			title
 			price
@@ -32,7 +32,7 @@ const GET_ATTENDING_MEALS = gql`
 `;
 
 interface IGetAttendingMealsResult {
-	getMeals: Partial<Meal>[];
+	getUpcomingMeals: Partial<Meal>[];
 }
 
 export default class DashboardPage extends React.Component<RouteComponentProps> {
@@ -42,7 +42,7 @@ export default class DashboardPage extends React.Component<RouteComponentProps> 
 				{userContext => {
 					return (
 						<Query
-							query={GET_ATTENDING_MEALS}
+							query={GET_UPCOMING_MEALS}
 							variables={{ ids: userContext.user!.mealsAttending!.map(meal => meal.id!) }}
 						>
 							{(result: QueryResult<IGetAttendingMealsResult>) => {
@@ -56,7 +56,6 @@ export default class DashboardPage extends React.Component<RouteComponentProps> 
 										</div>
 									);
 								}
-								console.log(typeof result.data!.getMeals[0].startTime);
 
 								return (
 									<div>
@@ -89,7 +88,7 @@ export default class DashboardPage extends React.Component<RouteComponentProps> 
 												<div id="right-container">
 													{
 														userContext.user === undefined ? undefined : (
-															<UpcomingMealsContainer mealsAttending={result.data!.getMeals || []} />
+															<UpcomingMealsContainer mealsAttending={result.data!.getUpcomingMeals || []} />
 														)
 													}
 												</div>

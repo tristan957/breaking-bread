@@ -11,7 +11,7 @@ interface IHostSummaryProps {
 	id: number;
 	name: string;
 	about?: string;
-	imagePath?: string;
+	imagePath?: string | null;
 	topics: Partial<Topic>[];
 }
 
@@ -46,7 +46,7 @@ export default class HostSummary extends React.Component<IHostSummaryProps> {
 					return (
 						<Link to={`/p/${this.props.id}`}>
 							<div className="no-link">
-								<img id="picture" className="profile" src={this.props.imagePath === undefined ? defaultUserPic : this.props.imagePath} alt="Profile Picture" />
+								<img id="picture" className="profile" src={this.props.imagePath === undefined || this.props.imagePath === null ? defaultUserPic : this.props.imagePath} alt="Profile Picture" />
 
 								<div id="username" className="profile">
 									<h6 id="host-summary-name">{this.props.name}</h6>

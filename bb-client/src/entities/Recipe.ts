@@ -8,7 +8,7 @@ type Recipe = {
 	id: number;
 	name: string;
 	description: string;
-	imagePath: string;
+	imagePath: string | null;
 	createdAt: number;
 	updatedAt: number;
 	author: Partial<User>;

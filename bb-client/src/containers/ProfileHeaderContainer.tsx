@@ -11,7 +11,7 @@ interface IProfileHeaderProps {
 	about?: string;
 	whiteList: Partial<Topic>[];
 	blackList: Partial<Topic>[];
-	imagePath?: string;
+	imagePath?: string | null;
 	joinedAt: number;
 	reviewAverage: number;
 	numberOfFollowers: number;
@@ -22,7 +22,14 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 		return (
 			<div id="profile-header-container" className="card">
 				<div id="profile-header-left-container">
-					<img id="profile-header-picture" src={this.props.imagePath || defaultUserPic} alt="Profile Picture" />
+					{
+						this.props.imagePath === null ?
+							(
+								<img src={defaultUserPic} alt="Profile Picture" id="profile-header-picture" />
+							) : (
+								<img src={this.props.imagePath || defaultUserPic} alt="Profile Picture" id="profile-header-picture" />
+							)
+					}
 					<div id="profile-header-name">{this.props.name}</div>
 					<Rating
 						fractions={2}

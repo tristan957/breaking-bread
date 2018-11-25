@@ -26,7 +26,8 @@ const loadedMeals: any = {
 				},
 			],
 		},
-		date: new Date("December 21, 2018 18:30:00"),
+		startTime: new Date("December 21, 2018 18:30:00").valueOf(),
+		endTime: new Date("December 21, 2018 20:30:00").valueOf(),
 		description: "I'll be cooking cuban food over a wood grill in my backyard. These are family recipes that never fail to satisfy.",
 		location: "College Station, TX",
 		title: "Cuban delight",
@@ -61,14 +62,15 @@ const loadedMeals: any = {
 		price: 40,
 		maxGuests: 3,
 	},
-	2: {
-		id: 2,
+	3: {
+		id: 3,
 		host: {
 			id: 5,
 			firstName: "Jonathan",
 			lastName: "Wang",
 		},
-		date: new Date("December 17, 2018 19:24:00"),
+		startTime: new Date("December 17, 2018 19:24:00").valueOf(),
+		endTime: new Date("December 17, 2018 21:24:00").valueOf(),
 		location: "College Station, TX",
 		title: "Mexican Night Out",
 		guests: [],

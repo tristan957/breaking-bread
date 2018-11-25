@@ -82,7 +82,7 @@
     "no-irregular-whitespace": true,
     "no-misused-new": true,
     "no-non-null-assertion": false,
-    "no-null-keyword": true,
+    "no-null-keyword": false,
     "no-parameter-properties": true,
     "no-parameter-reassignment": true,
     "no-reference": true,

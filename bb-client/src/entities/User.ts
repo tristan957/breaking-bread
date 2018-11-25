@@ -9,8 +9,7 @@ type User = {
 	id: number;
 	firstName: string;
 	lastName: string;
-	imagePath: string;
-	oAuthSub: string;
+	imagePath: string | null;
 	about: string;
 	email: string;
 	phoneNumber: string;

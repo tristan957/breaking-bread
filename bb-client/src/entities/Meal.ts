@@ -10,16 +10,12 @@ type Meal = {
 	startTime: number;
 	endTime: number;
 	maxGuests: number;
-	imagePath: string;
+	imagePath: string | null;
 	createdAt: number;
 	updatedAt: number;
 	host: Partial<User>;
 	guests: Partial<User>[];
 	recipes: Partial<Recipe>[];
 };
-
-// export function getTagsFromRecipes(meal: Meal): Partial<Tag>[] {
-// 	return meal.recipes.flatMap
-// }
 
 export default Meal;

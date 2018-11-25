@@ -14,7 +14,7 @@ interface IRecipeSummaryProps {
 	name: string;
 	description: string;
 	tags: Partial<Tag>[];
-	imagePath?: string;
+	imagePath?: string | null;
 	timesSaved: number;
 	showAuthor: boolean;
 }
@@ -25,7 +25,14 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps> 
 			<div id="recipe-summary-container">
 				<Link to={`/r/${this.props.id}`} className="no-link">
 					<div id="recipe-summary" className="no-link">
-						<img className="bg" src={this.props.imagePath || defaultMealPic} alt="Recipe Picture" />
+						{
+							this.props.imagePath === null ?
+								(
+									<img src={defaultMealPic} alt="Recipe Picture" className="bg" />
+								) : (
+									<img src={this.props.imagePath || defaultMealPic} alt="Recipe Picture" className="bg" />
+								)
+						}
 						<div id="recipe-summary-info">
 							<div id="recipe-summary-header">
 								<div id="tags-title-container">
@@ -37,7 +44,14 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps> 
 									: (
 										<Link to={`/p/${this.props.author.id}`}>
 											<div id="recipe-summary-author" className="no-link">
-												<img id="recipe-summary-author-img" src={this.props.author.imagePath || defaultUserPic} alt="Author Picture" />
+												{
+													this.props.author.imagePath === null ?
+														(
+															<img src={defaultUserPic} alt="Author Picture" id="recipe-summary-author-img" />
+														) : (
+															<img src={this.props.author.imagePath || defaultUserPic} alt="Author Picture" id="recipe-summary-author-img" />
+														)
+												}
 												<div id="recipe-summary-author-name">{`${this.props.author.firstName} ${this.props.author.lastName}`}</div>
 											</div>
 										</Link>

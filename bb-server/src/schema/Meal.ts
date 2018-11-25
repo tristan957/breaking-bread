@@ -20,7 +20,7 @@ export const typeDef: DocumentNode = gql`
 
     extend type Query {
         getMeal(id: Int!): Meal
-		getMeals(ids: [Int]!): [Meal]
+		getUpcomingMeals(ids: [Int]!): [Meal]
     }
 
     type Meal {
@@ -74,7 +74,7 @@ export const resolvers: IResolvers = {
 	},
 	Query: {
 		getMeal: _getMeal,
-		getMeals: _getMeals,
+		getUpcomingMeals: _getUpcomingMeals,
 	},
 };
 
@@ -292,11 +292,11 @@ interface IGetMeals {
 }
 
 // tslint:disable-next-line: no-any
-function _getMeals(parent: any, args: IGetMeals, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Meal[] | undefined> {
-	return getMeals(ctx, args.ids);
+function _getUpcomingMeals(parent: any, args: IGetMeals, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<Meal[] | undefined> {
+	return getUpcomingMeals(ctx, args.ids);
 }
 
-export async function getMeals(ctx: Context<IAppContext>, mealIDs: number[]): Promise<Meal[] | undefined> {
+export async function getUpcomingMeals(ctx: Context<IAppContext>, mealIDs: number[]): Promise<Meal[] | undefined> {
 	const retVal: Meal[] = [];
 	const neededRelations: string[] = [
 		"host", "guests", "recipes",
@@ -315,7 +315,10 @@ export async function getMeals(ctx: Context<IAppContext>, mealIDs: number[]): Pr
 		if (tempMeal === undefined) {
 			return Promise.resolve(undefined);
 		}
-		retVal.push(tempMeal);
+
+		if (tempMeal.startTime > new Date()) {  // If the meal is in the future
+			retVal.push(tempMeal);
+		}
 	}
 
 	return Promise.resolve(retVal);

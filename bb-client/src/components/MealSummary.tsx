@@ -6,13 +6,13 @@ import User from "../entities/User";
 import ItemTags from "./ItemTags";
 import MealInfoFooter from "./MealInfoFooter";
 import "./resources/css/MealSummary.css";
-import { default as defaultImagePic } from "./resources/images/default_meal_pic.jpg";
+import { default as defaultMealPic } from "./resources/images/default_meal_pic.jpg";
 import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
 
 export interface IMealSummaryProps {
 	id: number;
 	location: string;
-	imagePath?: string;
+	imagePath?: string | null;
 	title: string;
 	description: string;
 	host: Partial<User>;
@@ -38,7 +38,14 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 		return (
 			<Link to={`/m/${this.props.id}`} className="no-link">
 				<div id="meal-summary" className="no-link">
-					<img src={this.props.imagePath || defaultImagePic} className="bg" />
+					{
+						this.props.imagePath === null ?
+							(
+								<img src={defaultMealPic} className="bg" />
+							) : (
+								<img src={this.props.imagePath || defaultMealPic} className="bg" />
+							)
+					}
 					<div id="meal-summary-header">
 						<div id="meal-summary-tags-title-container">
 							<div id="meal-summary-title">{this.props.title}</div>
@@ -49,7 +56,14 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 							: (
 								<Link to={`/p/${this.props.host.id}`}>
 									<div id="meal-summary-host" className="no-link">
-										<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
+										{
+											this.props.host.imagePath === null ?
+												(
+													<img src={defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
+												) : (
+													<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
+												)
+										}
 										<div id="meal-summary-host-name">{`${this.props.host.firstName} ${this.props.host.lastName}`}</div>
 									</div>
 								</Link>

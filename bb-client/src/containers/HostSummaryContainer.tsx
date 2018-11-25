@@ -7,7 +7,7 @@ interface IHostSummaryContainerProps {
 	id: number;
 	name: string;
 	about?: string;
-	imagePath?: string;
+	imagePath?: string | null;
 	topics: Partial<Topic>[];
 }
 

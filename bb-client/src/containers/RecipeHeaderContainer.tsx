@@ -32,7 +32,14 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 			// TODO: Seperate to container and sub components
 			<div id="recipe-header-container">
 				<div id="recipe-header-component">
-					<img id="recipe-header-img" src={this.props.imagePath || defaultMealPic} alt="Recipe Picture" />
+					{
+						this.props.imagePath === null ?
+							(
+								<img src={defaultMealPic} id="recipe-header-img" alt="Recipe Picture" />
+							) : (
+								<img src={this.props.imagePath || defaultMealPic} id="recipe-header-img" alt="Recipe Picture" />
+							)
+					}
 					<div id="recipe-header-information">
 						<div id="recipe-header-card-left">
 							<h1 id="recipe-header-name">
