@@ -1,0 +1,21 @@
+#large-profile-summary-picture {
+	width: 250px;
+	height: 250px;
+	border-radius: 50%;
+}
+
+#large-profile-summary-name {
+	font-size: 30px;
+}
+
+#large-profile-summary {
+	text-align: center;
+}
+
+#large-profile-summary > * {
+	margin-bottom: 15px;
+}
+
+#large-profile-summary > *:last-child {
+	margin-bottom: 0px;
+}

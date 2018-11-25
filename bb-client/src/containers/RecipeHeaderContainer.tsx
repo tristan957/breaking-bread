@@ -1,6 +1,6 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
-import { Badge } from "reactstrap";
+import { Badge, Button } from "reactstrap";
 import ItemTags from "../components/ItemTags";
 import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
@@ -52,11 +52,14 @@ export default class RecipeHeaderContainer extends React.Component<IRecipeHeader
 							<div id="recipe-header-badges">
 								<Badge className="recipe-header-badge-item" color="primary">
 									⭐ {parseFloat(this.props.reviewAverage.toFixed(2))}/5
-									</Badge>
+								</Badge>
 								<Badge className="recipe-header-badge-item" color="primary">
 									❤️ {this.props.timesFavorited}
-									{/* TODO: Add button to make favorite */}
 								</Badge>
+							</div>
+							<div id="recipe-header-buttons">
+								<Button outline color="secondary" className="recipe-header-action">Review</Button>
+								<Button outline color="secondary" className="recipe-header-action">Save</Button>
 							</div>
 						</div>
 						<div id="recipe-header-card-right">

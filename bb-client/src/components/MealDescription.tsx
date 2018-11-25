@@ -3,7 +3,7 @@ import React from "react";
 import RecipeSummariesContainer from "../containers/RecipeSummariesContainer";
 import Meal from "../entities/Meal";
 import MealModification from "./MealModification";
-import { default as defaultImagePic } from "./resources/images/default_meal_pic.jpg";
+import { default as defaultMealPic } from "./resources/images/default_meal_pic.jpg";
 
 interface IMealDescriptionProps {
 	meal: Partial<Meal>;
@@ -23,14 +23,7 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 			// TODO: Edit link to editMealPage if current user is the meal host
 			<div>
 				<div className="card">
-					{
-						this.props.meal.imagePath === null ?
-							(
-								<img src={defaultImagePic} className="bg" />
-							) : (
-								<img src={this.props.meal.imagePath || defaultImagePic} className="bg" />
-							)
-					}
+					<img src={this.props.meal.imagePath || defaultMealPic} />
 					<div className="articleMain">
 						<div id="meal-article-header">
 							<h2><b>{this.props.meal.title}</b></h2>

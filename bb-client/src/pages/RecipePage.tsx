@@ -1,6 +1,5 @@
 // tslint:disable: no-unsafe-any
 import React from "react";
-import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
 import HostSummaryContainer from "../containers/HostSummaryContainer";
@@ -110,49 +109,38 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 			<UserContext.Consumer>
 				{userContext => {
 					return (
-						<div>
-							<MediaQuery query="(max-width: 949px)">
-								<div>
-									<div>
-									</div>
+						<div id="recipe-page">
+							<div id="recipe-page-left">
+								<div className="card">
+									<RecipeHeaderContainer
+										name={this.state.recipe.name!}
+										tagList={this.state.recipe.tags || []}
+										createdAt={this.state.recipe.createdAt!}
+										reviewAverage={this.getRecipeReviewAverage()}
+										timesFavorited={this.state.recipe.timesSaved!}
+										allergies={this.state.recipe.allergies || []}
+									/>
 								</div>
-							</MediaQuery>
-
-							<MediaQuery query="(min-width: 950px)">
-								<div id="article">
-									<div id="article-left">
-										<div className="card">
-											<RecipeHeaderContainer
-												name={this.state.recipe.name!}
-												tagList={this.state.recipe.tags || []}
-												createdAt={this.state.recipe.createdAt!}
-												reviewAverage={this.getRecipeReviewAverage()}
-												timesFavorited={this.state.recipe.timesSaved!}
-												allergies={this.state.recipe.allergies || []}
-											/>
-										</div>
-										<div id="recipe-description" className="card">
-											<h3>Description</h3>
-											<hr />
-											<p>{this.state.recipe.description}</p>
-										</div>
-										<div id="recipe-reviews">
-											<RecipeReviewsContainer
-												reviews={this.state.recipe.reviews || []}
-											/>
-										</div>
-									</div>
-									<div id="article-right">
-										<HostSummaryContainer
-											id={1}
-											name={`${"Jonathan"} ${"Wang"}`}
-											about={"Yeet"}
-											imagePath={undefined}
-											topics={[]}
-										/>
-									</div>
+								<div id="recipe-page-description" className="card">
+									<h3>Description</h3>
+									<hr />
+									<p>{this.state.recipe.description}</p>
 								</div>
-							</MediaQuery>
+								<div id="recipe-page-reviews">
+									<RecipeReviewsContainer
+										reviews={this.state.recipe.reviews || []}
+									/>
+								</div>
+							</div>
+							<div id="recipe-page-right">
+								<HostSummaryContainer
+									id={1}
+									name={`${"Jonathan"} ${"Wang"}`}
+									about={"Yeet"}
+									imagePath={undefined}
+									topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
+								/>
+							</div>
 						</div>
 					);
 				}}

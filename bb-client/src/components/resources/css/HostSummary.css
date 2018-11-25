@@ -1,38 +1,4 @@
-#picture {
-    width: 150px;
-    height: 150px;
-    border-radius: 125px;
-	display: block;
-	margin: 5px auto 5px auto;
-	border: 7px solid #ce8650;
-}
-
-#host-summary-name {
-	text-align: center;
-	font-weight: bold;
-	color: #ce8650;
-	margin-bottom: 25px; 
-	font-size: 2em;
-}
-
-#about {
-	text-align: center;
-}
-
-#host-summary-about-header {
-	font-weight: bold;
-	margin-bottom: .1em;
-}
-
-#host-summary-about {
-	font-style: italic;
-}
-
-#host-summary-interests {
-	text-align: center;
-	font-weight: bold;
-}
-
-.topic {
+#host-summary-topics-container {
+	/* margin-top: 15px; */
 	text-align: center;
 }
