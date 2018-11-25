@@ -36,7 +36,7 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 							<h2><b>{this.props.meal.title}</b></h2>
 							<h5>
 								<i>
-									{this.props.meal.location} - {this.props.meal.price === undefined ? `Free!` : `$${this.props.meal.price} per person`}
+									{this.props.meal.location} - {this.props.meal.price === undefined || this.props.meal.price === 0 ? `Free!` : `$${this.props.meal.price} per person`}
 								</i>
 							</h5>
 							<h6>
