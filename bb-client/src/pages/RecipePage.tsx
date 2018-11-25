@@ -119,8 +119,8 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 							</MediaQuery>
 
 							<MediaQuery query="(min-width: 950px)">
-								<div id="article">
-									<div id="article-left">
+								<div id="recipe-page">
+									<div id="recipe-page-left">
 										<div className="card">
 											<RecipeHeaderContainer
 												name={this.state.recipe.name!}
@@ -131,24 +131,24 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 												allergies={this.state.recipe.allergies || []}
 											/>
 										</div>
-										<div id="recipe-description" className="card">
+										<div id="recipe-page-description" className="card">
 											<h3>Description</h3>
 											<hr />
 											<p>{this.state.recipe.description}</p>
 										</div>
-										<div id="recipe-reviews">
+										<div id="recipe-page-reviews">
 											<RecipeReviewsContainer
 												reviews={this.state.recipe.reviews || []}
 											/>
 										</div>
 									</div>
-									<div id="article-right">
+									<div id="recipe-page-right">
 										<HostSummaryContainer
 											id={1}
 											name={`${"Jonathan"} ${"Wang"}`}
 											about={"Yeet"}
 											imagePath={undefined}
-											topics={[]}
+											topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
 										/>
 									</div>
 								</div>

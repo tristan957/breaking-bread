@@ -1,7 +1,27 @@
 #recipe-header-component {
 	display: flex;
     flex-direction: column;
-    /* justify-content: space-around; */
+}
+
+#recipe-header-badges-buttons {
+	display: flex;
+	justify-content: space-between;
+}
+
+#recipe-header-img {
+	margin-bottom: 1em;
+}
+
+#recipe-header-badges {
+	margin-right: 15px;
+}
+
+#recipe-header-buttons > .recipe-header-action {
+	margin-right: 10px;
+}
+
+#recipe-header-buttons > .recipe-header-action:last-child {
+	margin-right: 0px;
 }
 
 #recipe-header-information {
@@ -11,6 +31,7 @@
 
 #recipe-header-card-left {
 	flex-grow: 1;
+	margin-right: 15px;
 }
 
 #recipe-header-card-right {
@@ -41,4 +62,8 @@
 	color: rgb(125, 125, 125);
 	font-style: italic;
 	font-size: .75em;
+}
+
+#recipe-header-name {
+	margin-bottom: 0px;
 }

@@ -29,15 +29,6 @@
 
 #profile-header-left-container {
 	flex-grow: 1;
-	text-align: center;
-}
-
-#profile-header-left-container > * {
-	margin-bottom: 15px;
-}
-
-#profile-header-left-container div:last-child {
-	margin-bottom: 0px;
 }
 
 #profile-header-right-container {
@@ -48,19 +39,6 @@
 	flex-direction: column;
 	justify-content: space-between;
 	align-content: center;
-}
-
-#profile-header-picture {
-	width: 250px;
-	height: 250px;
-}
-
-#profile-header-name {
-	font-size: 30px;
-}
-
-#profile-header-picture {
-	border-radius: 50%;
 }
 
 @media only screen

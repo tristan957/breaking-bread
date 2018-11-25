@@ -1,15 +1,18 @@
-#article {
+#recipe-page {
 	display: flex;
+	justify-content: center;
 }
 
-#article-left {
-	flex-grow: 50%;
+#recipe-page-left {
+	max-width: 800px;
+	margin-right: 1.2em;
 }
 
-#article-right {
-	width: 50%;
+#recipe-page-right {
+	width: 300px;
+	flex-shrink: 0;
 }
 
-#recipe-description > p {
+#recipe-page-description > p {
 	margin: 0px;
 }

@@ -1,10 +1,8 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
-import Rating from "react-rating";
-import { Button } from "reactstrap";
+import LargeProfileSummary from "../components/LargeProfileSummary";
 import Topic from "../entities/Topic";
 import "./resources/css/ProfileHeaderContainer.css";
-import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
 
 interface IProfileHeaderProps {
 	name: string;
@@ -22,23 +20,12 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 		return (
 			<div id="profile-header-container" className="card">
 				<div id="profile-header-left-container">
-					{
-						this.props.imagePath === null ?
-							(
-								<img src={defaultUserPic} alt="Profile Picture" id="profile-header-picture" />
-							) : (
-								<img src={this.props.imagePath || defaultUserPic} alt="Profile Picture" id="profile-header-picture" />
-							)
-					}
-					<div id="profile-header-name">{this.props.name}</div>
-					<Rating
-						fractions={2}
-						readonly
-						initialRating={this.props.reviewAverage}
+					<LargeProfileSummary
+						name={this.props.name}
+						imagePath={this.props.imagePath}
+						reviewAverage={this.props.reviewAverage}
+						numberOfFollowers={this.props.numberOfFollowers}
 					/>
-					<div>
-						<Button>Follow</Button>
-					</div>
 				</div>
 				<div id="profile-header-right-container">
 					<div id="profile-header-about-container">
