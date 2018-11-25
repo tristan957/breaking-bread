@@ -18,7 +18,7 @@
 }
 
 @media only screen
-	and (max-width: 949px) {
+	and (max-width: 900px) { /* check this. Weird stuff happens between 949 and 900 */
 		#recipe-page {
 			flex-flow: column-reverse;
 		}
