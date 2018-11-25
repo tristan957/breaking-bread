@@ -5,6 +5,7 @@ import ProfileSummaryContainer from "../containers/ProfileSummaryContainer";
 import TagsContainer from "../containers/TagsContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
+import Meal from "../entities/Meal";
 import User from "../entities/User";
 import "./resources/css/MobileSidebar.css";
 
@@ -14,6 +15,7 @@ interface IAppState {
 
 interface IDashboardProps {
 	user?: Partial<User>;
+	mealsAttending: Partial<Meal>[];
 }
 
 export default class MobileSidebar extends React.Component<IDashboardProps, IAppState> {
@@ -52,7 +54,7 @@ export default class MobileSidebar extends React.Component<IDashboardProps, IApp
 					<Menu burgerButtonClassName={"rightPane"} right>
 						<div>
 							{this.props.user === undefined ? undefined : (
-								<UpcomingMealsContainer mealsAttending={this.props.user.mealsAttending || []} />
+								<UpcomingMealsContainer mealsAttending={this.props.mealsAttending || []} />
 							)}
 						</div>
 					</Menu>
