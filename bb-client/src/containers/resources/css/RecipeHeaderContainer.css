@@ -47,8 +47,14 @@
 	display: flex;
 	text-align: left;
     flex-direction: column;
-    justify-content: space-between;
-    align-content: center;
+}
+
+#recipe-header-card-right > * {
+	margin-bottom: 10px;
+}
+
+#recipe-header-card-right > *:last-child {
+	margin-bottom: 0px;
 }
 
 #recipe-header-tags,
