@@ -321,5 +321,9 @@ export async function getUpcomingMeals(ctx: Context<IAppContext>, mealIDs: numbe
 		}
 	}
 
+	retVal.sort((a: Meal, b: Meal): number => {
+		return a.startTime.valueOf() - b.startTime.valueOf();
+	});
+
 	return Promise.resolve(retVal);
 }

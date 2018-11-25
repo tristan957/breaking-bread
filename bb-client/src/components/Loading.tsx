@@ -5,8 +5,8 @@ import { default as anim } from "./resources/images/loading-bread.svg";
 export default class Loading extends React.Component {
 	public render(): JSX.Element {
 		return (
-			<div className="wrap">
-				<p className="text">NOW LOADING</p>
+			<div id="loading-container">
+				<p id="loading-text">NOW LOADING</p>
 				<img src={anim} />
 			</div>
 		);

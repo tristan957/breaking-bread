@@ -34,8 +34,8 @@ export default function generatePagination<T extends IEntityGeneric>(nodes: T[],
 
 	let index = 0;
 	if (after !== undefined) {
-		index = cursors.indexOf(after);
-		if (index < 0) {
+		index = cursors.indexOf(after) + 1;
+		if (index < 0 || index >= edges.length) {
 			return undefined;
 		}
 	}

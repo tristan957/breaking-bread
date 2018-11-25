@@ -34,6 +34,7 @@ export const typeDef: DocumentNode = gql`
 
 	input GetMealFeedOptions {
 		location: LocationFilter
+		dateSpan: DateSpanFilter
 		maxGuests: Int
 		tags: [GetTagInput]
 		topics: [GetTopicInput]
@@ -42,6 +43,11 @@ export const typeDef: DocumentNode = gql`
 	input LocationFilter {
 		distanceMI: Int!
 		fromLocation: String!	# Either an address or a lat and lon
+	}
+
+	input DateSpanFilter {
+		from: DateTime!
+		to: DateTime!
 	}
 `;
 
@@ -72,8 +78,14 @@ interface ILocationOptions {
 	locationFrom: string;
 }
 
+interface IDateSpan {
+	from: Date;
+	to: Date;
+}
+
 interface IGetMealFeedOptions {
 	location?: ILocationOptions;
+	dateSpan?: IDateSpan;
 	maxGuests?: number;
 	tags?: DeepPartial<Tag>[];
 	topics?: DeepPartial<Topic>[];

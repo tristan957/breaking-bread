@@ -4,11 +4,11 @@ import RecipeReview from "../entities/RecipeReview";
 import "./resources/css/ProfileActivityContainer.css";
 import "./resources/css/RecipeDetailsContainer.css";
 
-interface IRecipeDetailsContainerProps {
+interface IRecipeReviewsContainerProps {
 	reviews: Partial<RecipeReview>[];
 }
 
-export default class RecipeDetailsContainer extends React.Component<IRecipeDetailsContainerProps> {
+export default class RecipeReviewsContainer extends React.Component<IRecipeReviewsContainerProps> {
 	public render(): JSX.Element {
 		return (
 			<div id="recipe-details-container" className="card">

@@ -62,7 +62,7 @@ const loadedMeals: any = {
 		price: 40,
 		maxGuests: 3,
 	},
-	3: {
+	2: {
 		id: 3,
 		host: {
 			id: 5,
@@ -83,7 +83,7 @@ interface IMealPageParams {
 }
 
 interface IMealPageState {
-	meal: Partial<Meal>;
+	meal?: Partial<Meal>;
 	isGuest: boolean;
 }
 
@@ -91,18 +91,19 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 	constructor(props: RouteComponentProps<IMealPageParams>) {
 		super(props);
 
-		this.fetchMealFromParams = this.fetchMealFromParams.bind(this);
 		this.setMeal = this.setMeal.bind(this);
 
 		this.state = {
-			meal: this.fetchMealFromParams(),
+			meal: undefined,
 			isGuest: false,
 		};
 	}
 
-	private fetchMealFromParams(): Partial<Meal> {
+	public componentWillMount(): void {
 		const mealID: number = parseInt(this.props.match.params.mealID, 10);
-		return loadedMeals[mealID];
+		this.setState({
+			meal: loadedMeals[mealID],
+		});
 	}
 
 	public setMeal(
@@ -126,20 +127,20 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 								<div>
 									<div id="mobileArticle">
 										<HostSummaryContainer
-											id={this.state.meal.host!.id as number}
-											name={`${this.state.meal.host!.firstName} ${this.state.meal.host!.lastName}`}
-											about={this.state.meal.host!.about as string}
-											imagePath={this.state.meal.host!.imagePath}
-											topics={this.state.meal.host!.whitelist || []}
+											id={this.state.meal!.host!.id as number}
+											name={`${this.state.meal!.host!.firstName} ${this.state.meal!.host!.lastName}`}
+											about={this.state.meal!.host!.about as string}
+											imagePath={this.state.meal!.host!.imagePath}
+											topics={this.state.meal!.host!.whitelist || []}
 										/>
 										<MealDescription
-											meal={this.state.meal}
+											meal={this.state.meal!}
 											isGuest={this.state.isGuest}
 											setMeal={this.setMeal}
 										/>
 										<GuestsContainer
-											guests={this.state.meal.guests as Partial<User>[]}
-											maxGuests={this.state.meal.maxGuests as number}
+											guests={this.state.meal!.guests as Partial<User>[]}
+											maxGuests={this.state.meal!.maxGuests as number}
 											isGuest={this.state.isGuest}
 										/>
 										{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}
@@ -151,22 +152,22 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 								<div>
 									<div id="Article">
 										<MealDescription
-											meal={this.state.meal}
+											meal={this.state.meal!}
 											isGuest={this.state.isGuest}
 											setMeal={this.setMeal}
 										/>
 									</div>
 									<div id="ArticleRight">
 										<HostSummaryContainer
-											id={this.state.meal.host!.id as number}
-											name={`${this.state.meal.host!.firstName} ${this.state.meal.host!.lastName}`}
-											about={this.state.meal.host!.about as string}
-											imagePath={this.state.meal.host!.imagePath}
-											topics={this.state.meal.host!.whitelist || []}
+											id={this.state.meal!.host!.id as number}
+											name={`${this.state.meal!.host!.firstName} ${this.state.meal!.host!.lastName}`}
+											about={this.state.meal!.host!.about as string}
+											imagePath={this.state.meal!.host!.imagePath}
+											topics={this.state.meal!.host!.whitelist || []}
 										/>
 										<GuestsContainer
-											guests={this.state.meal.guests as Partial<User>[]}
-											maxGuests={this.state.meal.maxGuests as number}
+											guests={this.state.meal!.guests as Partial<User>[]}
+											maxGuests={this.state.meal!.maxGuests as number}
 											isGuest={this.state.isGuest}
 										/>
 										{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}

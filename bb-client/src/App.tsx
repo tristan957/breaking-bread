@@ -60,7 +60,7 @@ interface IGetLoggedInUserResult {
 // tslint:disable-next-line: variable-name
 export const UserContext = React.createContext<IAppContext>({ user: undefined });
 
-export default class App extends React.Component<{}> {
+export default class App extends React.Component {
 	public render(): JSX.Element {
 		return (
 			<Query query={GET_LOGGED_IN_USER}>

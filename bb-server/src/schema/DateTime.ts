@@ -14,7 +14,7 @@ export const resolvers: IResolvers = {
 			return new Date(value);
 		},
 		serialize(value: Date): number {
-			return value.getTime();
+			return value.valueOf();
 		},
 		parseLiteral(ast: ValueNode): Date | undefined {
 			if (ast.kind === Kind.INT) {
