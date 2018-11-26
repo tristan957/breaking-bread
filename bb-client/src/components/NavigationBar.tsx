@@ -179,7 +179,6 @@ export default class NavigationBar extends React.Component<any, iNavigationBarSt
 									<input type="text" value={this.state.mealLocation} onChange={e => this.handleLocationChange(e)} />
 								</Col>
 							</FormGroup>}
-						{/* TODO: add markdown viewer */}
 						<FormGroup row>
 							<Label sm={3}>Description: </Label>
 							<Col sm={10}>
@@ -197,7 +196,6 @@ export default class NavigationBar extends React.Component<any, iNavigationBarSt
 									additionalButtons={[
 										{
 											iconElement: (<i className="fa fa-search"></i>),
-											// tslint:disable-next-line
 											handleButtonPress(params: any) {
 												params.insertAtCursorPosition('#Product.old');
 											},
@@ -226,6 +224,9 @@ export default class NavigationBar extends React.Component<any, iNavigationBarSt
 							<Col sm={10}>
 								<input type="file" onChange={this.handlePic.bind(this)} />
 							</Col>
+						</FormGroup>
+						<FormGroup row>
+							<button>invite</button>
 						</FormGroup>
 						<button onClick={this.addNew.bind(this)}>submit</button>
 					</div>

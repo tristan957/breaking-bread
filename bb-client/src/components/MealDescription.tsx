@@ -1,5 +1,6 @@
 // Meal article is like the dashboard feed. Consists of image, title, tags, desc., recipes.
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import RecipeSummariesContainer from "../containers/RecipeSummariesContainer";
 import Meal from "../entities/Meal";
 import MealModification from "./MealModification";
@@ -42,7 +43,11 @@ export default class MealDescription extends React.Component<IMealDescriptionPro
 								)
 							}
 							<hr className="seperator" />
-							<h6>{this.props.meal.description}</h6>
+							<ReactMarkdown
+								source={`<h6>${this.props.meal.description}</h6>`}
+								escapeHtml={false}
+							/>
+
 							{(this.props.isGuest !== undefined && this.props.isGuest === false && this.props.setMeal !== undefined) &&
 								<MealModification meal={this.props.meal} setMeal={this.props.setMeal} />}
 						</div>

@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 import Tag from "../entities/Tag";
 import User from "../entities/User";
@@ -45,7 +46,10 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps> 
 									)
 								}
 							</div>
-							<div id="recipe-summary-description">PLACE HOLDER DESCRIPTION {this.props.description}</div>
+							<ReactMarkdown
+								source={`<div id="recipe-summary-description">PLACE HOLDER DESCRIPTION ${this.props.description}</div>`}
+								escapeHtml={false}
+							/>
 							<RecipeInfoFooter timesSaved={this.props.timesSaved} />
 						</div>
 					</div>
