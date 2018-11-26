@@ -2,6 +2,10 @@
 	width: 100%;
 }
 
+.bm-menu-wrap {
+	width: auto !important;
+}
+
 /* Position and sizing of burger button */
 .bm-burger-button {
 	position: relative;
