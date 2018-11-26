@@ -33,7 +33,7 @@ export default class RecipeSummaryContainer extends React.Component<IRecipeSumma
 					return (
 						<div className="card">
 							<RecipeSummary
-								authorID={this.props.recipe.author!.id!}
+								authorID={this.props.recipe.id!}
 								viewerID={userContext.user!.id}
 								name={this.props.recipe.name!}
 								tags={this.props.recipe.tags || []}

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Badge, Button, Input, InputGroup, InputGroupAddon, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
@@ -45,9 +46,11 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 				<img src={this.props.imagePath || defaultMealPic} id="recipe-summary-img" alt="Recipe Picture" />
 				<div id="recipe-summary-information">
 					<div id="recipe-summary-left">
-						<h1 id="recipe-summary-name">
-							{this.props.name}
-						</h1>
+						<Link to={`/r/${this.props.authorID}`} className="black-link-with-underline">
+							<h1 id="recipe-summary-name">
+								{this.props.name}
+							</h1>
+						</Link>
 						<span className="recipe-summary-updated">Last updated on
 							{` ${new Date(this.props.updatedAt).toLocaleDateString()}`}
 							{console.log(this.props.updatedAt)}
