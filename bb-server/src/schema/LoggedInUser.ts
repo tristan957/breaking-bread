@@ -25,43 +25,13 @@ async function _getLoggedInUser(parent: any, args: any, ctx: Context<IAppContext
 		return undefined;
 	}
 
-	const upcomingMealsPromise: Promise<Meal[] | undefined> = getUpcomingMeals(ctx, user.mealsAttending.map(meal => meal.id));
-	const upcomingMeals: Meal[] | undefined = await upcomingMealsPromise;
-
+	const upcomingMeals: Meal[] | undefined = await getUpcomingMeals(ctx, user.mealsAttending.map(meal => meal.id));
 	if (upcomingMeals === undefined) {
 		return undefined;
 	}
+
 	return Promise.resolve({
 		...user,
 		upcomingMeals,
 	});
-}
-
-async function getMealsFromIDs(ctx: Context<IAppContext>, mealIDs: number[]): Promise<Meal[] | undefined> {
-	const retVal: Meal[] = [];
-	const neededRelations: string[] = [
-		"host", "guests", "recipes",
-	];
-
-	for (const mealID of mealIDs) {
-		const tempMeal: Meal | undefined = await ctx.connection
-			.getRepository(Meal)
-			.findOne({
-				where: {
-					id: mealID,
-				},
-				relations: neededRelations,
-			});
-
-		if (tempMeal === undefined) {
-			return Promise.resolve(undefined);
-		}
-
-	}
-
-	retVal.sort((a: Meal, b: Meal): number => {
-		return a.startTime.valueOf() - b.startTime.valueOf();
-	});
-
-	return Promise.resolve(retVal);
 }
