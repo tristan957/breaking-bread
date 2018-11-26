@@ -14,7 +14,7 @@ import * as serviceWorker from "./serviceWorker";
 
 dotenv.config();
 
-const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/" : "future url";
+const uri = process.env.NODE_ENV === "development" ? "http://10.231.120.62:10262/" : "future url";
 console.log(`URI: ${uri}`);
 
 export const client = new DefaultClient({

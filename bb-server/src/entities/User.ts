@@ -79,4 +79,6 @@ export default class User {
 
 	@OneToMany(type => Recipe, recipe => recipe.author)
 	public recipesAuthored: Recipe[];
+
+	public upcomingMeals?: Meal[];
 }

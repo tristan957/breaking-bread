@@ -25,7 +25,7 @@ export default class Recipe {
 	@UpdateDateColumn()
 	public updatedAt: Date;
 
-	@ManyToOne(type => User, user => user.recipesAuthored)
+	@ManyToOne(type => User, user => user.recipesAuthored, { eager: true })
 	public author: User;
 
 	@Column({ default: 0 })

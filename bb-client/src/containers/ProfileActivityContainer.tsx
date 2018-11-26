@@ -41,7 +41,9 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			case RenderedComponent.HostedMeals: {
 				return this.props.hostedMeals.length === 0
 					? nada
-					: <MealSummariesContainer meals={this.props.hostedMeals} />;
+					: (
+						<MealSummariesContainer meals={this.props.hostedMeals} />
+					);
 			}
 			case RenderedComponent.AuthoredRecipes: {
 				return this.props.authoredRecipes.length === 0

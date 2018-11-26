@@ -8,9 +8,7 @@ import ProfileActivityContainer from "../containers/ProfileActivityContainer";
 import ProfileHeader from "../containers/ProfileHeaderContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
-import Meal from "../entities/Meal";
 import User from "../entities/User";
-import { GET_UPCOMING_MEALS } from "./DashboardPage";
 import "./resources/css/ProfilePage.css";
 
 const GET_USER_PROFILE = gql`
@@ -19,6 +17,7 @@ const GET_USER_PROFILE = gql`
 			id
 			firstName
 			lastName
+			createdAt
 			imagePath
 			whitelist {
 				id
@@ -34,6 +33,47 @@ const GET_USER_PROFILE = gql`
 			}
 			hostedMeals {
 				id
+				title
+				startTime
+				endTime
+				location
+				price
+				recipes {
+					tags {
+						id
+						name
+					}
+				}
+				host {
+					id
+					firstName
+					lastName
+					about
+					imagePath
+				}
+				guests {
+					id
+					firstName
+					lastName
+				}
+				maxGuests
+			}
+			upcomingMeals {
+				id
+				title
+				price
+				startTime
+				endTime
+				guests {
+					id
+				}
+				maxGuests
+				location
+			}
+			followedUsers {
+				id
+				firstName
+				lastName
 			}
 			recipesAuthored {
 				id
@@ -56,11 +96,6 @@ const GET_USER_PROFILE = gql`
 
 interface IGetUserProfileResult {
 	getUser: Partial<User> | null;
-}
-
-interface IGetAttHostBatchResult {
-	getUpcomingMeals: Partial<Meal>[];
-	getUpcomingMeals: Partial<Meal>[];
 }
 
 interface IProfilePageParams {
@@ -92,7 +127,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 					return (
 						<Query
 							query={GET_USER_PROFILE}
-							variables={{ id: this.props.match.params.userID }}
+							variables={{ id: parseInt(this.props.match.params.userID!, 10) }}
 						>
 							{(result: QueryResult<IGetUserProfileResult>) => {
 								if (result.loading) {
@@ -114,59 +149,39 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 								}
 
 								return (
-									<Query
-										query={GET_UPCOMING_MEALS}
-										variables={{ ids: result.data!.getUser!.hostedMeals!.map(meal => meal.id!) }}
-									>
-										{(hostedMealsResult: QueryResult<IGetAttHostBatchResult>) => {
-											if (result.loading) {
-												return <div></div>;
-											}
-											if (result.error) {
-												return (
-													<div>
-														{`Error! Something terrible has happened! ${result.error.message}`}
-													</div>
-												);
-											}
-
-											return (
-												<div>
-													<div id="profile-info">
-														<div id="profile-info-top">
-															<ProfileHeader
-																name={`${result.data!.getUser!.firstName} ${result.data!.getUser!.lastName}`}
-																about={result.data!.getUser!.about as string}
-																whiteList={result.data!.getUser!.whitelist || []}
-																blackList={result.data!.getUser!.blacklist || []}
-																imagePath={result.data!.getUser!.imagePath}
-																joinedAt={result.data!.getUser!.createdAt as number}
-																reviewAverage={this.getUserReviewAverage(result.data!.getUser!)}
-																numberOfFollowers={result.data!.getUser!.followedUsers!.length || 0}
-															/>
-														</div>
-														<div id="profile-info-bottom">
-															<div id="profile-info-topics">
-																<TopicsContainer topics={result.data!.getUser!.whitelist || []} />
-																<TopicsContainer topics={result.data!.getUser!.blacklist || []} />
-															</div>
-															<div id="profile-info-upcoming">
-																<UpcomingMealsContainer mealsAttending={result.data!.getUser!.mealsAttending || []} />
-															</div>
-														</div>
-													</div>
-													<div id="profile-details">  {/* Essentially a mini feed for a specific user */}
-														<ProfileActivityContainer
-															hostedMeals={result.data!.getUser!.hostedMeals || []}
-															authoredRecipes={result.data!.getUser!.recipesAuthored || []}
-															savedRecipes={result.data!.getUser!.savedRecipes || []}
-															followedUsers={result.data!.getUser!.followedUsers || []}
-														/>
-													</div>
+									<div>
+										<div id="profile-info">
+											<div id="profile-info-top">
+												<ProfileHeader
+													name={`${result.data!.getUser!.firstName} ${result.data!.getUser!.lastName}`}
+													about={result.data!.getUser!.about as string}
+													whiteList={result.data!.getUser!.whitelist || []}
+													blackList={result.data!.getUser!.blacklist || []}
+													imagePath={result.data!.getUser!.imagePath}
+													joinedAt={result.data!.getUser!.createdAt as number}
+													reviewAverage={this.getUserReviewAverage(result.data!.getUser!)}
+													numberOfFollowers={result.data!.getUser!.followedUsers!.length || 0}
+												/>
+											</div>
+											<div id="profile-info-bottom">
+												<div id="profile-info-topics">
+													<TopicsContainer topics={result.data!.getUser!.whitelist || []} />
+													<TopicsContainer topics={result.data!.getUser!.blacklist || []} />
 												</div>
-											);
-										}}
-									</Query>
+												<div id="profile-info-upcoming">
+													<UpcomingMealsContainer mealsAttending={result.data!.getUser!.upcomingMeals || []} />
+												</div>
+											</div>
+										</div>
+										<div id="profile-details">  {/* Essentially a mini feed for a specific user */}
+											<ProfileActivityContainer
+												hostedMeals={result.data!.getUser!.hostedMeals || []}
+												authoredRecipes={result.data!.getUser!.recipesAuthored || []}
+												savedRecipes={result.data!.getUser!.savedRecipes || []}
+												followedUsers={result.data!.getUser!.followedUsers || []}
+											/>
+										</div>
+									</div>
 								);
 							}}
 						</Query>
