@@ -1,15 +1,15 @@
-// tslint:disable: no-unsafe-any
 import { gql } from "apollo-boost";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
-import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router-dom";
+import { Button } from "reactstrap";
 import { UserContext } from "../App";
-import MealDescription from "../components/MealDescription";
-import GuestsContainer from "../containers/GuestsContainer";
-import HostSummaryContainer from "../containers/HostSummaryContainer";
+import CreatorSummary from "../components/CreatorSummary";
+import ProfileSummaries from "../components/ProfileSummaries";
+import RecipeSummary from "../components/RecipeSummary";
+import MealSummaryContainer from "../containers/MealSummaryContainer";
 import Meal from "../entities/Meal";
-import User from "../entities/User";
+import Recipe from "../entities/Recipe";
 import "./resources/css/MealPage.css";
 
 const GET_MEAL = gql`
@@ -17,6 +17,7 @@ const GET_MEAL = gql`
 		getMeal(id: $id) {
 			id
 			title
+			description
 			price
 			startTime
 			endTime
@@ -42,6 +43,16 @@ const GET_MEAL = gql`
 				name
 				description
 				timesSaved
+				updatedAt
+				createdAt
+				tags {
+					id
+					name
+				}
+				allergies {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -56,6 +67,23 @@ interface IMealPageParams {
 }
 
 export default class MealPage extends React.Component<RouteComponentProps<IMealPageParams>> {
+	private getRecipeReviewAverage = (recipe: Partial<Recipe>): number => { // TODO: deduplicate
+		if (recipe.reviews === undefined || recipe.reviews.length === 0) {
+			return 0;
+		}
+
+		let sum = 0;
+		let effectiveLength = 0;
+		recipe.reviews.forEach(review => {
+			if (review.rating !== undefined) {
+				sum += review.rating;
+				effectiveLength += 1;
+			}
+		});
+
+		return sum / effectiveLength;
+	}
+
 	public setMeal = (
 		startTime?: number,
 		endTime?: number,
@@ -100,59 +128,57 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 								console.log(result);
 								const loggedInUserIsGuest = result.data!.getMeal!.host!.id! === userContext.user!.id!;
 								return (
-									<div>
-										<MediaQuery query="(max-width: 949px)">
-											<div>
-												<div id="mobileArticle">
-													<HostSummaryContainer
-														id={result.data!.getMeal!.host!.id as number}
-														name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
-														about={result.data!.getMeal!.host!.about as string}
-														imagePath={result.data!.getMeal!.host!.imagePath}
-														topics={result.data!.getMeal!.host!.whitelist || []}
-													/>
-													<MealDescription
-														meal={result.data!.getMeal!}
-														isGuest={loggedInUserIsGuest}
-														setMeal={this.setMeal}
-													/>
-													<GuestsContainer
-														guests={result.data!.getMeal!.guests as Partial<User>[]}
-														maxGuests={result.data!.getMeal!.maxGuests as number}
-														isGuest={loggedInUserIsGuest}
-													/>
-													{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}
-												</div>
+									<div id="meal-page">
+										<div id="meal-page-left">
+											<MealSummaryContainer meal={result.data!.getMeal!} />
+											<div id="meal-page-description-container" className="card">
+												<h3 className="meal-page-header">Description</h3>
+												<hr />
+												<p id="meal-page-description">{result.data!.getMeal!.description}</p>
 											</div>
-										</MediaQuery>
-
-										<MediaQuery query="(min-width: 950px)">
-											<div>
-												<div id="Article">
-													<MealDescription
-														meal={result.data!.getMeal!}
-														isGuest={loggedInUserIsGuest}
-														setMeal={this.setMeal}
-													/>
-												</div>
-												<div id="ArticleRight">
-													<HostSummaryContainer
-														id={result.data!.getMeal!.host!.id as number}
-														name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
-														about={result.data!.getMeal!.host!.about as string}
-														imagePath={result.data!.getMeal!.host!.imagePath}
-														topics={result.data!.getMeal!.host!.whitelist || []}
-													/>
-													<GuestsContainer
-														guests={result.data!.getMeal!.guests as Partial<User>[]}
-														maxGuests={result.data!.getMeal!.maxGuests as number}
-														isGuest={loggedInUserIsGuest}
-													/>
-													{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}
-												</div>
-												{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
+											<div id="meal-page-recipes-container" className="card">
+												<h3 className="meal-page-header">Recipes</h3>
+												<ul className="no-style-list">
+													{result.data!.getMeal!.recipes!.map((recipe, i) => {
+														return (
+															<li key={i}>
+																<hr />
+																<RecipeSummary
+																	name={recipe.name!}
+																	tags={recipe.tags || []}
+																	imagePath={recipe.imagePath}
+																	createdAt={recipe.createdAt!}
+																	updatedAt={recipe.updatedAt!}
+																	reviewAverage={this.getRecipeReviewAverage(recipe)}
+																	timesSaved={recipe.timesSaved || 0}
+																	allergies={recipe.allergies || []}
+																	showAuthor
+																/>
+															</li>
+														);
+													})}
+												</ul>
 											</div>
-										</MediaQuery>
+										</div>
+										<div id="meal-page-right">
+											<div className="card">
+												<CreatorSummary
+													id={result.data!.getMeal!.host!.id as number}
+													name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
+													imagePath={result.data!.getMeal!.host!.imagePath}
+													topics={result.data!.getMeal!.host!.whitelist || []}
+												/>
+											</div>
+											<div id="meal-page-guests-container" className="card">
+												<div id="meal-page-guests-container-header">
+													<h3 className="meal-page-header">Guests ({result.data!.getMeal!.guests!.length}/{result.data!.getMeal!.maxGuests})</h3>
+													<Button color="success">RSVP</Button> {/* Button should change depending on if host, guest, or potential guest */}
+												</div>
+												<hr />
+												<ProfileSummaries users={result.data!.getMeal!.guests!} />
+											</div>
+										</div>
+										{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
 									</div>
 								);
 							}}

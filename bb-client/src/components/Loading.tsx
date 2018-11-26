@@ -7,7 +7,7 @@ export default class Loading extends React.Component {
 		return (
 			<div id="loading-container">
 				<p id="loading-text">NOW LOADING</p>
-				<img src={anim} />
+				<img id="loading-image" src={anim} />
 			</div>
 		);
 	}

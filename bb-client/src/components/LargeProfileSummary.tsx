@@ -1,10 +1,12 @@
 import React from "react";
 import Rating from "react-rating";
+import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
 import "./resources/css/LargeProfileSummary.css";
 import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
 
 interface ILargeProfileSummaryProps {
+	id: number;
 	imagePath?: string | null;
 	name: string;
 	reviewAverage?: number;
@@ -23,7 +25,11 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 							<img src={this.props.imagePath || defaultUserPic} alt="Profile Picture" id="large-profile-summary-picture" />
 						)
 				}
-				<div id="large-profile-summary-name">{this.props.name}</div>
+				<div id="large-profile-summary-name">
+					<Link to={`/p/${this.props.id}`} className="black-link-with-underline">
+						{this.props.name}
+					</Link>
+				</div>
 				{!this.props.reviewAverage
 					? undefined
 					: (

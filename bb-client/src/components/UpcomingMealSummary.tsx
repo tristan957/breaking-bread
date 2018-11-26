@@ -18,21 +18,23 @@ interface IUpcomingMealSummaryProps {
 export default class UpcomingMealSummary extends React.Component<IUpcomingMealSummaryProps> {
 	public render(): JSX.Element {
 		return (
-			<Link to={`/m/${this.props.id}`} className="no-link">
-				<div id="upcoming-meal-summary" className="no-link">
-					<div id="upcoming-meal-summary-header">{this.props.title}</div>
-					<div id="upcoming-meal-summary-body">
-						<MealInfoFooter
-							price={this.props.price}
-							numOfGuests={this.props.guests.length}
-							maxGuests={this.props.maxGuests}
-							startTime={this.props.startTime}
-							endTime={this.props.endTime}
-							location={this.props.location}
-						/>
-					</div>
+			<div id="upcoming-meal-summary">
+				<div id="upcoming-meal-summary-header">
+					<Link to={`/m/${this.props.id}`} className="no-link">
+						{this.props.title}
+					</Link>
 				</div>
-			</Link>
+				<div id="upcoming-meal-summary-body">
+					<MealInfoFooter
+						price={this.props.price}
+						numOfGuests={this.props.guests.length}
+						maxGuests={this.props.maxGuests}
+						startTime={this.props.startTime}
+						endTime={this.props.endTime}
+						location={this.props.location}
+					/>
+				</div>
+			</div>
 		);
 	}
 }

@@ -1,60 +1,82 @@
-#recipe-summary-container {
-	margin: 1em 0em 1em 0em;
+#recipe-summary {
+	display: flex;
+    flex-direction: column;
 }
 
-.recipe-summary-seperator {
-	margin-top: 1em;
-    margin-bottom: 1.5em;
-    border: 0;
-    border-top: 1.5px solid rgba(0,0,0,.1);
-}
-
-#recipe-summary-info {
-	padding: 10px 15px 10px;
-	margin-bottom: 15px;
-}
-
-#recipe-summary-description {
-	margin-bottom: 1em;
-}
-
-#recipe-summary > * {
-	margin-bottom: .5em;
-}
-
-#recipe-summary div:last-child {
-	margin-bottom: 0em;
-}
-
-#recipe-summary-name {
-	font-size: 1.75rem;
-	flex-grow: 1;
-	font-weight: bold;
-}
-
-#recipe-summary-header {
+#recipe-summary-badges-buttons {
 	display: flex;
 	justify-content: space-between;
 }
 
-#recipe-summary-tags-title-container {
+#recipe-summary-img {
+	margin-bottom: 1em;
+}
+
+#recipe-summary-badges {
+	margin-right: 15px;
+}
+
+#recipe-summary-buttons {
+	margin-top: 10px;
+	display: flex;
+	justify-content: left;
+}
+
+#recipe-summary-buttons > .recipe-summary-action {
+	margin-right: 10px;
+	margin-bottom: 0px;
+}
+
+#recipe-summary-buttons > .recipe-summary-action:last-child {
+	margin-right: 0px;
+}
+
+#recipe-summary-information {
+	display: flex;
+	justify-content: space-between;
+}
+
+#recipe-summary-card-left {
 	flex-grow: 1;
-	margin-right: 1em;
+	margin-right: 15px;
 }
 
-#recipe-summary-author-name {
-	text-align: center;
+#recipe-summary-card-right {
+	flex-grow: 1;
+    max-width: 50%;
+	display: flex;
+	text-align: left;
+    flex-direction: column;
 }
 
-#recipe-summary-author {
-	flex-grow: 0;
-	align-content: center;
+#recipe-summary-card-right > * {
+	margin-bottom: 10px;
 }
 
-#recipe-summary-author-img {
-	display: block;
-	width: 50px;
-	height: 50px;
-	border-radius: 25px;
-	margin: auto;
+#recipe-summary-card-right > *:last-child {
+	margin-bottom: 0px;
+}
+
+#recipe-summary-tags,
+#recipe-summary-allergies {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+#recipe-summary-description {
+	font-size: 1em;
+}
+
+.recipe-summary-badge-item {
+	margin-right: .5em;
+}
+
+.recipe-summary-updated {
+	color: rgb(125, 125, 125);
+	font-style: italic;
+	font-size: .75em;
+}
+
+#recipe-summary-name {
+	margin-bottom: 0px;
 }

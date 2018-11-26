@@ -1,36 +1,56 @@
-#Article {
-	width: 71%;
-    height: 100%;
-    float: left;
-	border-collapse: collapse;
-	margin-bottom: 2em;
-	margin-right: 1.8em;
+#meal-page {
+	display: flex;
+	justify-content: center;
 }
 
-#ArticleRight {
-	width: 26%;
-	height: 100%;
-	position: relative;
-	float: left;
-	border-collapse: collapse;
+#meal-page-left {
+	max-width: 800px;
+	margin-right: 1.2em;
 }
 
-#GuestListHeader h3,
-#GuestListHeader h5 {
-	display: inline;
+#meal-page-right {
+	width: 300px;
+	flex-shrink: 0;
 }
 
-#mobileArticle {
-    margin: 0 auto;
-    padding: 1em;
-    width: 100%;
+#meal-page-description {
+	margin: 0px;
 }
 
-.articleMain {
-	padding: 15px;
+.meal-page-header {
+	margin-bottom: 0px;
 }
 
-.bg {
-  width: 100%;
-  z-index: 0;
+#meal-page-guests-container-header {
+	display: flex;
+	justify-content: space-between;
 }
+
+#meal-page-guests-container-header > * {
+	margin-right: 15px;
+}
+
+#meal-page-guests-container-header > *:last-child {
+	margin-right: 0px;
+}
+
+#meal-page-guests-container-header button {
+	margin: 0px;
+}
+
+@media only screen
+	and (max-width: 900px) { /* check this. Weird stuff happens between 949 and 900 */
+		#meal-page {
+			flex-flow: column-reverse;
+		}
+
+		#meal-page-left {
+			margin-right: 0em;
+			max-width: 100%;
+		}
+
+		#meal-page-right {
+			flex-shrink: 1;
+			width: 100%;
+		}
+	}

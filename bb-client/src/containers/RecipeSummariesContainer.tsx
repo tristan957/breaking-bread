@@ -4,7 +4,7 @@ import RecipeSummaryContainer from "./RecipeSummaryContainer";
 
 interface IRecipeSummariesContainerProps {
 	recipes: Partial<Recipe>[];
-	showHost?: boolean;
+	showAuthor?: boolean;
 }
 
 export default class RecipeSummariesContainer extends React.Component<IRecipeSummariesContainerProps> {
@@ -16,7 +16,7 @@ export default class RecipeSummariesContainer extends React.Component<IRecipeSum
 						return (
 							<li key={i}>
 								<hr className="recipe-summary-seperator" />
-								<RecipeSummaryContainer recipe={recipe} showHost={this.props.showHost || false} />
+								<RecipeSummaryContainer recipe={recipe} showAuthor={this.props.showAuthor} />
 							</li>
 						);
 					})}

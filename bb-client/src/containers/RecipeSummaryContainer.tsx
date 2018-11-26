@@ -1,26 +1,41 @@
 import React from "react";
 import RecipeSummary from "../components/RecipeSummary";
 import Recipe from "../entities/Recipe";
-import User from "../entities/User";
 
 interface IRecipeSummaryContainerProps {
-	showHost?: boolean;
+	showAuthor?: boolean;
 	recipe: Partial<Recipe>;
 }
 
 export default class RecipeSummaryContainer extends React.Component<IRecipeSummaryContainerProps> {
+	private getRecipeReviewAverage = (): number => { // TODO: deduplicate
+		if (this.props.recipe.reviews === undefined || this.props.recipe.reviews.length === 0) {
+			return 0;
+		}
+
+		let sum = 0;
+		let effectiveLength = 0;
+		this.props.recipe.reviews.forEach(element => {
+			if (element.rating !== undefined) {
+				sum += element.rating;
+				effectiveLength += 1;
+			}
+		});
+
+		return sum / effectiveLength;
+	}
+
 	public render(): JSX.Element {
 		return (
 			<div className="card">
 				<RecipeSummary
-					id={this.props.recipe.id as number}
-					author={this.props.recipe.author as Partial<User>}
-					name={this.props.recipe.name as string}
-					description={this.props.recipe.description as string}
-					imagePath={this.props.recipe.imagePath}
+					name={this.props.recipe.name!}
 					tags={this.props.recipe.tags || []}
+					createdAt={this.props.recipe.createdAt!}
+					updatedAt={this.props.recipe.updatedAt!}
+					reviewAverage={this.getRecipeReviewAverage()}
 					timesSaved={this.props.recipe.timesSaved || 0}
-					showAuthor={this.props.showHost || false}
+					allergies={this.props.recipe.allergies || []}
 				/>
 			</div>
 		);
