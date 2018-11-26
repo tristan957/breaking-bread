@@ -9,54 +9,8 @@
 	max-height: 100%;
 }
 
-.bb-navbar-brand {
-	margin-left: 0px !important;
-	margin-bottom: 7px !important;
-}
-
-.btn {
-	padding: .1rem 1.25rem;
-	margin: 0rem 0rem .6rem 0rem;
-}
-
-.btn-secondary {
-    background-color: #ce8650;
-    border-color: #ce8650;
-}
-
-#guest {
-	border: 1px solid #ce8650;
-}
-
-.SingleDatePickerInput {
-	margin-top: .15rem;
-	border-radius: 5px;
-	border: 1px solid #ce8650;
-	overflow: hidden;
-}
-
-.CalendarDay__selected,
-.CalendarDay__selected:active,
-.CalendarDay__selected:hover {
-	background: #ce8650;
-	border: 1px double black
-}
-
-.DayPickerKeyboardShortcuts_show__bottomRight {
-	border-right: 33px solid #ce8650;
-}
-
-.DateInput_input__focused {
-	border-bottom: 2px solid #ce8650;
-}
-
 .navbar {
 	padding: 0 1rem;
-}
-
-.navbar-brand {
-	margin: 5px auto;
-	padding: 0px;
 }
 
 .nav-item{
@@ -72,63 +26,4 @@
 
 .body {
     padding-top: 15px;
-}
-
-.rodal-close {
-	top: 22px;
-}
-
-.rodal,
-.rodal-mask {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: row;
-	flex-direction: row;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	position: fixed !important;
-	padding: 10px;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	overflow-y: auto;
-	overflow-x: hidden;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-}
-.rodal-dialog {
-	display: flex;
-	margin: auto;
-	height: auto !important;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: column;
-	flex-direction: column;
-	background-color: #fff;
-	font-family: inherit;
-	font-size: 1rem;
-	padding: 1.25em;
-	border-radius: 0.3125em;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	position: relative !important;
-	width: 45em;
-	max-width: 100%;
-}
-
-img:not(.brand) {
-    max-width: 100%;
-    height: auto;
 }
