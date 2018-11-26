@@ -1,4 +1,5 @@
 import React from "react";
+import MediaQuery from "react-responsive";
 import { Button, ButtonGroup } from "reactstrap";
 import Meal from "../entities/Meal";
 import Recipe from "../entities/Recipe";
@@ -7,6 +8,7 @@ import MealSummariesContainer from "./MealSummariesContainer";
 import ProfileSummariesContainers from "./ProfileSummariesContainers";
 import RecipeSummariesContainer from "./RecipeSummariesContainer";
 import "./resources/css/ProfileActivityContainer.css";
+// https://reactstrap.github.io/components/tabs/
 
 enum RenderedComponent {
 	HostedMeals,
@@ -68,36 +70,71 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 		return (
 			<div id="profile-activity-container" className="profile-activity-container-class">
 				<div id="profile-activity-selector">
-					<ButtonGroup>
-						<Button
-							className="show-filter-modal"
-							active={this.state.renderedComponent === 0}
-							onClick={() => this.setState({ renderedComponent: RenderedComponent.HostedMeals })}
-						>
-							Hosted Meals
-						</Button>
-						<Button
-							className="show-filter-modal"
-							active={this.state.renderedComponent === 1}
-							onClick={() => this.setState({ renderedComponent: RenderedComponent.AuthoredRecipes })}
-						>
-							Authored Recipes
-						</Button>
-						<Button
-							className="show-filter-modal"
-							active={this.state.renderedComponent === 2}
-							onClick={() => this.setState({ renderedComponent: RenderedComponent.SavedRecipes })}
-						>
-							Saved Recipes
-						</Button>
-						<Button
-							className="show-filter-modal"
-							active={this.state.renderedComponent === 3}
-							onClick={() => this.setState({ renderedComponent: RenderedComponent.FollowedUsers })}
-						>
-							Followed Users
-						</Button>
-					</ButtonGroup>
+					<MediaQuery query="(min-width: 675px)">
+						<ButtonGroup>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 0}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.HostedMeals })}
+							>
+								Hosted Meals
+							</Button>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 1}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.AuthoredRecipes })}
+							>
+								Authored Recipes
+							</Button>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 2}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.SavedRecipes })}
+							>
+								Saved Recipes
+							</Button>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 3}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FollowedUsers })}
+							>
+								Followed Users
+							</Button>
+						</ButtonGroup>
+					</MediaQuery>
+
+					<MediaQuery query="(max-width: 674px)">
+						<ButtonGroup vertical>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 0}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.HostedMeals })}
+							>
+								Hosted Meals
+							</Button>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 1}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.AuthoredRecipes })}
+							>
+								Authored Recipes
+							</Button>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 2}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.SavedRecipes })}
+							>
+								Saved Recipes
+							</Button>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 3}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FollowedUsers })}
+							>
+								Followed Users
+							</Button>
+						</ButtonGroup>
+					</MediaQuery>
 				</div>
 				<div>
 					{this.renderActivity()}
