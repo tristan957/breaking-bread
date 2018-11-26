@@ -21,7 +21,7 @@ export const typeDef: DocumentNode = gql`
         updateWhitelist(userID: Int!, topics: [GetTopicInput]!): User
         updateBlacklist(userID: Int!, topics: [GetTopicInput]!): User
 		updateFollowedTags(userID: Int!, tags: [GetTagInput]!): User
-        toggleFollowedUser(subjectID: Int!, actorID: Int!): User
+        toggleFollowedUser(userID: Int!): User
 		toggleSavedRecipe(recipeID: Int!, userID: Int!): User
     }
 
@@ -293,31 +293,31 @@ async function newTagList(ctx: Context<IAppContext>, toggleTags: (string | undef
 }
 
 interface IToggleFollowedUser {
-	subjectID: number;
-	actorID: number;  // TODO: Get this from context when auth works
+	userID: number;
 }
 
 // tslint:disable-next-line: no-any
 function _toggleFollowedUser(parent: any, args: IToggleFollowedUser, ctx: Context<IAppContext>, info: GraphQLResolveInfo): Promise<User | undefined> {
-	return toggleFollowedUser(ctx, args.subjectID, args.actorID);
+	return toggleFollowedUser(ctx, args.userID);
 }
 
-export async function toggleFollowedUser(ctx: Context<IAppContext>, subjectID: number, actorID: number): Promise<User | undefined> {
-	const user: User | undefined = await getUser(ctx, actorID);
-	const subject: User | undefined = await getUser(ctx, subjectID);
+export async function toggleFollowedUser(ctx: Context<IAppContext>, userID: number): Promise<User | undefined> {
+	const subject: User | undefined = await getUserSpecifiedRelations(ctx, userID);
+	const user: User | undefined = await ctx.user;
 	if (user === undefined || subject === undefined) {
 		return Promise.resolve(undefined);
 	}
 
 	const followedUserIDs: number[] = user.followedUsers.map(a => a.id);
-	if (followedUserIDs.includes(subjectID)) {
-		const index: number = followedUserIDs.indexOf(subjectID);
+	if (followedUserIDs.includes(userID)) {
+		const index: number = followedUserIDs.indexOf(userID);
 		user.followedUsers.splice(index, 1);
 	} else {
 		user.followedUsers.push(subject);
 	}
 
-	return updateUser(ctx, user);    // User verification from ctx done here
+	updateUser(ctx, user);
+	return Promise.resolve(subject);
 }
 
 interface IToggleSavedRecipe {

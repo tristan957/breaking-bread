@@ -7,6 +7,39 @@ import RecipeSummaryContainer from "../containers/RecipeSummaryContainer";
 import Recipe from "../entities/Recipe";
 import "./resources/css/RecipePage.css";
 
+const GET_RECIPE = `
+	query GetRecipe($id: Int!) {
+		getRecipe(input: {id: $id}) {
+			id
+			name
+			description
+			tags {
+				id
+				name
+			}
+			createdAt
+			timesSaved
+			reviews {
+				id
+				description
+				rating
+				author {
+					id
+					firstName
+					lastName
+				}
+			}
+			allergies {
+				id
+				name
+			}
+			author {
+				id
+			}
+		}
+	}
+`;
+
 interface IRecipePageParams {
 	recipeID: string;
 }
@@ -73,6 +106,24 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 
 		return tempRecipe;
 	}
+
+	// public UNSAFE_componentWillMount(): void {
+	// 	const data = `{ "query": "${GET_RECIPE}", "variables": ${JSON.stringify({ id: this.props.match.params.recipeID })} }}`;
+	// 	console.log(data);
+	// 	axios.request({
+	// 		method: "POST",
+	// 		url: uri,
+	// 		data,
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 			"oAuthSub": "adjijdfaa",
+	// 		},
+	// 	}).then(res => {
+	// 		console.log(res);
+	// 	}).catch(err => {
+	// 		console.log(err);
+	// 	});
+	// }
 
 	public render(): JSX.Element {
 		/**

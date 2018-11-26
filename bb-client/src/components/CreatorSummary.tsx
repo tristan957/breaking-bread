@@ -1,11 +1,13 @@
 import React from "react";
 import Topic from "../entities/Topic";
+import User from "../entities/User";
 import Items from "./Items";
 import LargeProfileSummary from "./LargeProfileSummary";
 import "./resources/css/CreatorSummary.css";
 
 interface ICreatorSummaryProps {
-	id: number;
+	userID: number;
+	viewer?: Partial<User>;
 	name: string;
 	imagePath?: string | null;
 	topics: Partial<Topic>[];
@@ -16,7 +18,8 @@ export default class CreatorSummary extends React.Component<ICreatorSummaryProps
 		return (
 			<div id="creator-summary">
 				<LargeProfileSummary
-					id={this.props.id}
+					viewer={this.props.viewer}
+					userID={this.props.userID}
 					imagePath={this.props.imagePath}
 					name={this.props.name}
 				/>

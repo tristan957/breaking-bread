@@ -153,7 +153,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 										<div id="profile-info">
 											<div id="profile-info-top">
 												<ProfileHeader
-													id={result.data!.getUser!.id!}
+													userID={result.data!.getUser!.id!}
+													viewer={userContext.user}
 													name={`${result.data!.getUser!.firstName} ${result.data!.getUser!.lastName}`}
 													about={result.data!.getUser!.about as string}
 													whiteList={result.data!.getUser!.whitelist || []}

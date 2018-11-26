@@ -137,6 +137,6 @@ async function getRecipeReview(ctx: Context<IAppContext>, reviewID: number): Pro
 			where: {
 				id: reviewID,
 			},
-			relations: ["subject", "author"],
+			relations: ["subject"],
 		});
 }
