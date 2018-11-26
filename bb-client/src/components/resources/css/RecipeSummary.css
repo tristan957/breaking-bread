@@ -3,6 +3,10 @@
     flex-direction: column;
 }
 
+#recipe-summary-left {
+	padding-right: 2em;
+}
+
 #recipe-summary-badges-buttons {
 	display: flex;
 	justify-content: space-between;

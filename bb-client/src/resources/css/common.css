@@ -8,6 +8,11 @@
     src: url("../fonts/SF-Mono/SFMono-Regular.otf");
 }
 
+.mobile-page-fix {
+    width: 98%;
+    padding: auto;
+}
+
 .black-link-with-underline {
 	color: black;
 }

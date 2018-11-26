@@ -5,6 +5,7 @@ import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { DateRangePicker } from "react-dates";
 import "react-dates/initialize";
+import Geosuggest from "react-geosuggest";
 import { Button, Col, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import AutoCompletionSearchBar from "../components/AutoCompletionSearchBar";
 import Meal from "../entities/Meal";
@@ -95,6 +96,7 @@ interface IFeedContainerState {
 }
 
 export default class FeedContainer extends React.Component<{}, IFeedContainerState> {
+	// tslint:disable-next-line:variable-name
 	constructor(props: Readonly<{}>) {
 		super(props);
 		this.onDateChange = this.onDateChange.bind(this);
@@ -179,7 +181,16 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 												</InputGroup>
 											</Col>
 										</FormGroup>
-
+										<FormGroup row>
+											<Label for="location" sm={2}>Location</Label>
+											<Col sm={10}>
+												<Geosuggest
+													placeholder={"Start typing!"}
+													initialValue="Texas A&M"
+													location={new google.maps.LatLng(40.741895, -73.989308)}
+													radius={20} />
+											</Col>
+										</FormGroup>
 										<FormGroup row>
 											<Label for="date" sm={2}>Date</Label>
 											<Col sm={10}>
