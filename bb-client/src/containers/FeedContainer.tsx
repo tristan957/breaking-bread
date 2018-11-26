@@ -177,7 +177,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 											<Label for="guest" sm={2}>Guest</Label>
 											<Col sm={10}>
 												<InputGroup className={"guest"}>
-													<Input placeholder="# of Guests" type="number" step="1" />
+													<Input placeholder="# of Guests" type="number" step="1" max={10} min={1} />
 												</InputGroup>
 											</Col>
 										</FormGroup>

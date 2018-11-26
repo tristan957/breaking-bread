@@ -8,6 +8,18 @@
     src: url("../fonts/SF-Mono/SFMono-Regular.otf");
 }
 
+.form-control {
+	border: 1px solid #ce8650;
+}
+
+.custom-control-label::before, .custom-file-label, .custom-select {
+	border: 1px solid #ce8650;
+}
+
+.react-mde{
+	border: 1px solid #ce8650;
+}
+
 .mobile-page-fix {
     width: 98%;
     padding: auto;

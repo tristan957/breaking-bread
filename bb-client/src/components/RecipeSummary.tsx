@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Badge, Button, Input, InputGroup, InputGroupAddon, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Badge, Button, Col, Form, FormGroup, Input, InputGroup, InputGroupAddon, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
 import ItemTags from "./ItemTags";
@@ -71,12 +71,25 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 							<Modal isOpen={this.state.modalOpen} toggle={this.toggle}>
 								<ModalHeader toggle={this.toggle}>Review Editor</ModalHeader>
 								<ModalBody>
-									<InputGroup>
-										<Input type="number" step="1" max={5} min={0} />
-										<br />
-										<InputGroupAddon addonType="append">/ 5</InputGroupAddon>
-									</InputGroup>
-									<Input type="textarea" />
+									<Form>
+										<FormGroup row>
+											<Label for="search" sm={2}>Rating</Label>
+											<Col sm={10}>
+												<InputGroup>
+													<Input type="number" step="1" max={5} min={0} />
+													<InputGroupAddon addonType="append">/ 5</InputGroupAddon>
+												</InputGroup>
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="search" sm={2}>Review</Label>
+											<Col sm={10}>
+												<InputGroup>
+													<Input type="textarea" />
+												</InputGroup>
+											</Col>
+										</FormGroup>
+									</Form>
 								</ModalBody>
 								<ModalFooter>
 									<Button color="success" onClick={this.toggle}>Submit</Button>{" "}

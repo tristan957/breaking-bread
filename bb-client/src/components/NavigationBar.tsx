@@ -158,7 +158,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 								<Label for="guests" sm={firstColumnWidth}>Number of Guests</Label>
 								<Col sm={secondColumnWidth}>
 									<InputGroup>
-										<Input type="number" step="1" />
+										<Input type="number" max={10} min={1} step="1" />
 									</InputGroup>
 								</Col>
 							</FormGroup>
