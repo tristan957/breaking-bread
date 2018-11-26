@@ -1,18 +1,14 @@
 /* tslint:disable: strict-boolean-expressions */
-import { makeExecutableSchema } from "apollo-server";
-import { ApolloServer } from "apollo-server-express";
 import { Context } from "apollo-server-core";
+import { ApolloServer } from "apollo-server-express";
+import cors from "cors";
 import dotenv from "dotenv";
-import { Request, Response } from "express";
-// tslint:disable-next-line: match-default-export-name
-import { GraphQLSchema } from "graphql";
+import express, { Request, Response } from "express";
 import { AdvancedConsoleLogger, Connection, createConnection, getConnection } from "typeorm";
 import { getUserFromAuthSub } from "./auth";
 import { entities } from "./entities";
 import User from "./entities/User";
 import { resolvers, typeDefs } from "./schema";
-import express = require("express");
-import cors = require("cors");
 
 export interface IAppContext {
 	connection: Connection;
@@ -54,7 +50,7 @@ export default class App {
 		this.setupTypeORM();
 		this.app = express();
 		this.app.use(cors());
-		this.server = new ApolloServer({ typeDefs, resolvers });
+		this.server = new ApolloServer({ typeDefs, resolvers, context });
 		this.server.applyMiddleware({ app: this.app });
 	}
 
