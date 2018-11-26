@@ -2,13 +2,15 @@ import React from "react";
 import { Badge, Button, Input, InputGroup, InputGroupAddon, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
+import User from "../entities/User";
 import ItemTags from "./ItemTags";
 import "./resources/css/RecipeSummary.css";
 import { default as defaultMealPic } from "./resources/images/default_meal_pic.jpg";
 
 interface IRecipeSummaryProps {
+	recipeID: number;
 	authorID: number;
-	viewerID?: number;
+	viewer?: Partial<User>;
 	name: string;
 	tags: Partial<Tag>[];
 	imagePath?: string | null;
@@ -22,6 +24,8 @@ interface IRecipeSummaryProps {
 
 interface IRecipeSummaryState {
 	modalOpen: boolean;
+	reviewButtonText: "Edit Review" | "Review";
+	recipeAlreadySaved: boolean;
 }
 
 export default class RecipeSummary extends React.Component<IRecipeSummaryProps, IRecipeSummaryState> {
@@ -29,8 +33,30 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 		super(props);
 
 		this.state = {
+			reviewButtonText: this.getUserAlreadyWroteReview(),
 			modalOpen: false,
+			recipeAlreadySaved: this.getRecipeAlreadySaved(),
 		};
+	}
+
+	private getRecipeAlreadySaved = (): boolean => {
+		// this.props.viewer!.savedRecipes!.forEach(recipe => {
+		// 	if (this.props.recipeID === recipe.id) {
+		// 		return true;
+		// 	}
+		// });
+
+		return false;
+	}
+
+	private getUserAlreadyWroteReview = (): "Edit Review" | "Review" => {
+		// this.props.viewer!.recipeReviewsAuthored!.forEach(review => {
+		// 	if (review.subject!.id === this.props.recipeID) {
+		// 		return "Edit Review";
+		// 	}
+		// });
+
+		return "Review";
 	}
 
 	private toggle = () => {
@@ -50,7 +76,6 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 						</h1>
 						<span className="recipe-summary-updated">Last updated on
 							{` ${new Date(this.props.updatedAt).toLocaleDateString()}`}
-							{console.log(this.props.updatedAt)}
 						</span>
 						<div id="recipe-summary-badges">
 							<Badge className="recipe-summary-badge-item" color="primary">
@@ -61,9 +86,9 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 							</Badge>
 						</div>
 						<div id="recipe-summary-buttons">
-							{this.props.authorID === this.props.viewerID
-								? <Button disabled outline color="secondary" className="recipe-summary-action">Review</Button>
-								: <Button outline color="secondary" className="recipe-summary-action" onClick={this.toggle}>Review</Button>
+							{this.props.authorID === this.props.viewer!.id && this.props.viewer !== undefined
+								? undefined
+								: <Button outline color="secondary" className="recipe-summary-action" onClick={this.toggle}>{this.state.reviewButtonText}</Button>
 							}
 							<Modal isOpen={this.state.modalOpen} toggle={this.toggle}>
 								<ModalHeader toggle={this.toggle}>Review Editor</ModalHeader>

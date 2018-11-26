@@ -29,7 +29,40 @@ interface ILargeProfileSummaryProps {
 	numberOfFollowers?: number;
 }
 
-export default class LargeProfileSummary extends React.Component<ILargeProfileSummaryProps> {
+interface ILargeProfileSummaryState {
+	followLabel: "Follow" | "Unfollow";
+}
+
+export default class LargeProfileSummary extends React.Component<ILargeProfileSummaryProps, ILargeProfileSummaryState> {
+	constructor(props: ILargeProfileSummaryProps) {
+		super(props);
+
+		this.state = {
+			followLabel: this.hostIsFollowedOnPageLoad() ? "Unfollow" : "Follow",
+		};
+	}
+
+	private toggleFollowing = () => {
+		const method = this.state.followLabel === "Unfollow" ? "delete" : "post";
+		console.log(`${this.props.userID} ${this.props.viewer!.id}`);
+		console.log(`${URI}/users/${this.props.userID}/followers`);
+		fetch(`${URI}/users/${this.props.userID}/followers`, {
+			method,
+			body: JSON.stringify({ id: this.props.viewer!.id }),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		}).then(value => {
+			if (this.state.followLabel === "Unfollow") {
+				this.setState({ followLabel: "Follow" });
+			} else {
+				this.setState({ followLabel: "Unfollow" });
+			}
+		}).catch(err => {
+			console.log(err);
+		});
+	}
+
 	private hostIsFollowedOnPageLoad = (): boolean => {
 		for (const followedUser of this.props.viewer!.followedUsers!) {
 			if (followedUser.id === this.props.userID) {
@@ -45,24 +78,21 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 			return <div></div>;
 		}
 
-		console.log(this.hostIsFollowedOnPageLoad());
-		if (this.hostIsFollowedOnPageLoad()) {
-			return (
-				<Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-					if (result.data !== undefined) {
-						this.props.viewer!.followedUsers = this.props.viewer!.followedUsers!.filter(user => user.id !== this.props.viewer!.id);
-					}
-					return mutateFn({ variables: { userID: this.props.userID } });
-				}}>Unfollow</Button>
-			);
-		}
+		return <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.toggleFollowing()}>{this.state.followLabel}</Button>;
+	}
 
-		return <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-			if (result.data !== undefined) {
-				this.props.viewer!.followedUsers!.push(result.data!);
-			}
-			return mutateFn({ variables: { userID: this.props.userID } });
-		}}>Follow</Button>;
+	// public shouldComponentUpdate(nextProps: ILargeProfileSummaryProps, nextState: ILargeProfileSummaryState): boolean {
+	// 	console.log("we here");
+	// 	return this.state.following !== nextState.following;
+	// }
+
+	public UNSAFE_componentWillMount(): void {
+		// fetch(`${uri}/users/${this.props.userID}`, {
+		// 	method: "post",
+		// 	headers: {
+
+		// 	}
+		// });
 	}
 
 	public render(): JSX.Element {

@@ -1,5 +1,7 @@
 import { default as express } from "express";
-import { addFollower, removeFollower } from "./controllers/user";
+import { addGuestRSVP, deleteGuestRSVP } from "./controllers/meal";
+import { createRecipeReview, deleteRecipeReview } from "./controllers/recipe";
+import { addFollower, addSavedRecipe, removeFollower, removeSavedRecipe } from "./controllers/user";
 
 type Route = {
 	method: "GET" | "POST" | "DELETE";
@@ -26,12 +28,48 @@ const routers: Router[] = [
 				route: "/:userID/followers",
 				handler: removeFollower,
 			},
+			{
+				method: "POST",
+				route: "/:userID/savedRecipes",
+				handler: addSavedRecipe,
+			},
+			{
+				method: "DELETE",
+				route: "/:userID/savedRecipes",
+				handler: removeSavedRecipe,
+			},
 		],
 	},
-	// {
-	// 	route: "/recipes",
-	// 	subRoutes: [],
-	// },
+	{
+		route: "/recipes",
+		subRoutes: [
+			{
+				method: "POST",
+				route: "/:recipeID/reviews",
+				handler: createRecipeReview,
+			},
+			{
+				method: "DELETE",
+				route: "/:recipeID/reviews",
+				handler: deleteRecipeReview,
+			},
+		],
+	},
+	{
+		route: "/meals",
+		subRoutes: [
+			{
+				method: "POST",
+				route: "/:mealID/guests",
+				handler: addGuestRSVP,
+			},
+			{
+				method: "DELETE",
+				route: "/:mealID/guests",
+				handler: deleteGuestRSVP,
+			},
+		],
+	},
 ];
 
 export function addRoutes(app: express.Application): void {

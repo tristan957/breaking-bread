@@ -146,8 +146,9 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 															<li key={i}>
 																<hr />
 																<RecipeSummary
+																	recipeID={recipe.id!}
 																	authorID={recipe.author!.id!}
-																	viewerID={userContext.user!.id}
+																	viewer={userContext.user!}
 																	name={recipe.name!}
 																	tags={recipe.tags || []}
 																	imagePath={recipe.imagePath}
