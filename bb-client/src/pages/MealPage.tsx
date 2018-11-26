@@ -53,6 +53,9 @@ const GET_MEAL = gql`
 					id
 					name
 				}
+				author {
+					id
+				}
 			}
 		}
 	}
@@ -144,6 +147,8 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 															<li key={i}>
 																<hr />
 																<RecipeSummary
+																	authorID={recipe.author!.id!}
+																	viewerID={userContext.user!.id}
 																	name={recipe.name!}
 																	tags={recipe.tags || []}
 																	imagePath={recipe.imagePath}

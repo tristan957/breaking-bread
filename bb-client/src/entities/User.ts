@@ -18,6 +18,7 @@ type User = {
 	timesSaved: number;
 	hostedMeals: Partial<Meal>[];
 	mealsAttending: Partial<Meal>[];
+	upcomingMeals?: Partial<Meal>[];
 	whitelist: Partial<Topic>[];
 	blacklist: Partial<Topic>[];
 	savedRecipes: Partial<Recipe>[];

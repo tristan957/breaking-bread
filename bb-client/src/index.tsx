@@ -17,7 +17,7 @@ dotenv.config();
 const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/" : "future url";
 console.log(`URI: ${uri}`);
 
-const client = new DefaultClient({
+export const client = new DefaultClient({
 	headers: {
 		oAuthSub: "adjijdfaa",
 	},

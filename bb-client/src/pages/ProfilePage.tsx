@@ -1,5 +1,7 @@
 // tslint:disable: no-unsafe-any
+import { gql } from "apollo-boost";
 import React from "react";
+import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
 import ProfileActivityContainer from "../containers/ProfileActivityContainer";
@@ -9,212 +11,111 @@ import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import User from "../entities/User";
 import "./resources/css/ProfilePage.css";
 
+const GET_USER_PROFILE = gql`
+	query GetUser($id: Int!) {
+		getUser(id: $id) {
+			id
+			firstName
+			lastName
+			createdAt
+			imagePath
+			whitelist {
+				id
+				name
+			}
+			blacklist {
+				id
+				name
+			}
+			followedTags {
+				id
+				name
+			}
+			hostedMeals {
+				id
+				title
+				startTime
+				endTime
+				location
+				price
+				recipes {
+					tags {
+						id
+						name
+					}
+				}
+				host {
+					id
+					firstName
+					lastName
+					about
+					imagePath
+				}
+				guests {
+					id
+					firstName
+					lastName
+				}
+				maxGuests
+			}
+			upcomingMeals {
+				id
+				title
+				price
+				startTime
+				endTime
+				guests {
+					id
+				}
+				maxGuests
+				location
+			}
+			followedUsers {
+				id
+				firstName
+				lastName
+			}
+			recipesAuthored {
+				id
+				name
+				imagePath
+				description
+				timesSaved
+				tags {
+					id
+					name
+				}
+			}
+			reviews {
+				id
+				rating
+			}
+		}
+	}
+`;
+
+interface IGetUserProfileResult {
+	getUser: Partial<User> | null;
+}
+
 interface IProfilePageParams {
 	userID?: string;
 }
 
-interface IProfilePageState {
-	userBeingViewed: Partial<User>;
-}
-
-export default class ProfilePage extends React.Component<RouteComponentProps<IProfilePageParams>, IProfilePageState> {
-	constructor(props: RouteComponentProps<IProfilePageParams>) {
-		super(props);
-
-		this.fetchUserFromParams = this.fetchUserFromParams.bind(this);
-		this.getUserReviewAverage = this.getUserReviewAverage.bind(this);
-
-		this.state = {
-			userBeingViewed: this.fetchUserFromParams(),
-		};
-	}
-
-	private fetchUserFromParams(): Partial<User> {
-		const date = new Date("November 15, 2008 18:30:00").valueOf();
-		return {
-			id: 3,
-			firstName: "Fank",
-			lastName: "Food",
-			about: "I like to cook Cuban",
-			createdAt: date,
-			whitelist: [
-				{ id: 1, name: "Food" },
-				{ id: 2, name: "Nuts" },
-			],
-			blacklist: [
-				{ id: 3, name: "Fun" },
-				{ id: 4, name: "Music" },
-			],
-			followedTags: [
-				{ id: 1, name: "Vegan" },
-				{ id: 2, name: "Veget" },
-			],
-			mealsAttending: [ // TODO: Sort and sansity on the backend (remove past meals, sort by next coming)
-				{
-					id: 1,
-					startTime: new Date("December 21, 2018 18:30:00").valueOf(),
-					endTime: new Date("December 22, 2018 18:30:00").valueOf(),
-					location: "College Station, TX",
-					title: "Cuban Delight",
-					guests: [
-						{
-							id: 4,
-							firstName: "Micky",
-							lastName: "Li",
-						},
-						{
-							id: 5,
-							firstName: "Greg",
-							lastName: "Noonan",
-						},
-						{
-							id: 6,
-							firstName: "Jon",
-							lastName: "Wang",
-						},
-					],
-					price: 40,
-					maxGuests: 3,
-				},
-				{
-					id: 2,
-					host: {
-						id: 5,
-						firstName: "Jonathan",
-						lastName: "Wang",
-					},
-					startTime: new Date("December 21, 2018 18:30:00").valueOf(),
-					endTime: new Date("December 22, 2018 18:30:00").valueOf(),
-					location: "College Station, TX",
-					title: "Mexican Night Out",
-					guests: [],
-					maxGuests: 4,
-				},
-			],
-			recipesAuthored: [
-				{
-					id: 1,
-					name: "Arroz con pollo",
-					author: {
-						id: 5,
-						firstName: "Jonathan",
-						lastName: "Wang",
-					},
-					tags: [
-						{
-							id: 5,
-							name: "veget",
-						},
-					],
-					description: "Traditional chicken and rice",
-				},
-				{
-					id: 2,
-					name: "Ropa vieja",
-					author: {
-						id: 5,
-						firstName: "Jonathan",
-						lastName: "Wang",
-					},
-					tags: [
-						{
-							id: 5,
-							name: "veget",
-						},
-					],
-					description: "A classic and a national dish of Cuba",
-					timesSaved: 10,
-				},
-			],
-			reviews: [
-				{
-					id: 1,
-					rating: 5,
-				},
-				{
-					id: 2,
-					rating: 4,
-				},
-				{
-					id: 3,
-					rating: 2,
-				},
-			],
-			hostedMeals: [
-				{
-					id: 1,
-					startTime: new Date("December 21, 2018 18:30:00").valueOf(),
-					endTime: new Date("December 21, 2018 20:30:00").valueOf(),
-					location: "College Station, TX",
-					title: "Cuban Delight",
-					guests: [
-						{
-							id: 4,
-							firstName: "Micky",
-							lastName: "Li",
-						},
-						{
-							id: 5,
-							firstName: "Greg",
-							lastName: "Noonan",
-						},
-						{
-							id: 6,
-							firstName: "Jon",
-							lastName: "Wang",
-						},
-					],
-					price: 40,
-					maxGuests: 3,
-				},
-				{
-					id: 2,
-					host: {
-						id: 5,
-						firstName: "Jonathan",
-						lastName: "Wang",
-					},
-					startTime: new Date("December 21, 2018 18:30:00").valueOf(),
-					endTime: new Date("December 22, 2018 18:30:00").valueOf(),
-					location: "College Station, TX",
-					title: "Mexican Night Out",
-					guests: [],
-					maxGuests: 4,
-				},
-			],
-			followedUsers: [
-				{
-					id: 4,
-					firstName: "Micky",
-					lastName: "Li",
-				},
-				{
-					id: 5,
-					firstName: "Greg",
-					lastName: "Noonan",
-				},
-				{
-					id: 6,
-					firstName: "Jon",
-					lastName: "Wang",
-				},
-			],
-		};
-	}
-
-	private getUserReviewAverage(): number {
-		if (this.state.userBeingViewed.reviews === undefined || this.state.userBeingViewed.reviews.length === 0) {
+export default class ProfilePage extends React.Component<RouteComponentProps<IProfilePageParams>> {
+	private getUserReviewAverage(userBeingViewed: Partial<User>): number {
+		if (userBeingViewed.reviews === undefined || userBeingViewed.reviews.length === 0) {
 			return 0;
 		}
 
 		let sum = 0;
 		let effectiveLength = 0;
-		this.state.userBeingViewed.reviews.forEach(review => {
+		for (const review of userBeingViewed.reviews) {
 			if (review.rating !== undefined) {
 				sum += review.rating;
 				effectiveLength += 1;
 			}
-		});
+		}
 
 		return sum / effectiveLength;
 	}
@@ -224,40 +125,67 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 			<UserContext.Consumer>
 				{userContext => {
 					return (
-						<div id="profile-page">
-							<div id="profile-info">
-								<div id="profile-info-top">
-									<ProfileHeader
-										id={this.state.userBeingViewed.id!}
-										name={`${this.state.userBeingViewed.firstName} ${this.state.userBeingViewed.lastName}`}
-										about={this.state.userBeingViewed.about as string}
-										whiteList={this.state.userBeingViewed.whitelist || []}
-										blackList={this.state.userBeingViewed.blacklist || []}
-										imagePath={this.state.userBeingViewed.imagePath}
-										joinedAt={this.state.userBeingViewed.createdAt as number}
-										reviewAverage={this.getUserReviewAverage()}
-										numberOfFollowers={this.state.userBeingViewed.followedUsers!.length || 0}
-									/>
-								</div>
-								<div id="profile-info-bottom">
-									<div id="profile-info-topics">
-										<TopicsContainer topics={this.state.userBeingViewed.whitelist || []} />
-										<TopicsContainer topics={this.state.userBeingViewed.blacklist || []} />
+						<Query
+							query={GET_USER_PROFILE}
+							variables={{ id: parseInt(this.props.match.params.userID!, 10) }}
+						>
+							{(result: QueryResult<IGetUserProfileResult>) => {
+								if (result.loading) {
+									return <div></div>;
+								}
+								if (result.error) {
+									return (
+										<div>
+											{`Error! Something terrible has happened! ${result.error.message}`}
+										</div>
+									);
+								}
+								if (result.data!.getUser === null) {
+									return (
+										<div>
+											{`Error! Doesn't look like that user exists.`}
+										</div>
+									);
+								}
+
+								return (
+									<div>
+										<div id="profile-info">
+											<div id="profile-info-top">
+												<ProfileHeader
+													id={result.data!.getUser!.id!}
+													name={`${result.data!.getUser!.firstName} ${result.data!.getUser!.lastName}`}
+													about={result.data!.getUser!.about as string}
+													whiteList={result.data!.getUser!.whitelist || []}
+													blackList={result.data!.getUser!.blacklist || []}
+													imagePath={result.data!.getUser!.imagePath}
+													joinedAt={result.data!.getUser!.createdAt as number}
+													reviewAverage={this.getUserReviewAverage(result.data!.getUser!)}
+													numberOfFollowers={result.data!.getUser!.followedUsers!.length || 0}
+												/>
+											</div>
+											<div id="profile-info-bottom">
+												<div id="profile-info-topics">
+													<TopicsContainer topics={result.data!.getUser!.whitelist || []} />
+													<TopicsContainer topics={result.data!.getUser!.blacklist || []} />
+												</div>
+												<div id="profile-info-upcoming">
+													<UpcomingMealsContainer mealsAttending={result.data!.getUser!.upcomingMeals || []} />
+												</div>
+											</div>
+										</div>
+										<div id="profile-details">  {/* Essentially a mini feed for a specific user */}
+											<ProfileActivityContainer
+												hostedMeals={result.data!.getUser!.hostedMeals || []}
+												authoredRecipes={result.data!.getUser!.recipesAuthored || []}
+												savedRecipes={result.data!.getUser!.savedRecipes || []}
+												followedUsers={result.data!.getUser!.followedUsers || []}
+											/>
+										</div>
 									</div>
-									<div id="profile-info-upcoming">
-										<UpcomingMealsContainer mealsAttending={this.state.userBeingViewed.mealsAttending || []} />
-									</div>
-								</div>
-							</div>
-							<div id="profile-activity-info-container">
-								<ProfileActivityContainer
-									hostedMeals={this.state.userBeingViewed.hostedMeals || []}
-									authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}
-									savedRecipes={this.state.userBeingViewed.savedRecipes || []}
-									followedUsers={this.state.userBeingViewed.followedUsers || []}
-								/>
-							</div>
-						</div>
+								);
+							}}
+						</Query>
 					);
 				}}
 			</UserContext.Consumer>

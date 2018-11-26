@@ -34,6 +34,18 @@ const GET_LOGGED_IN_USER = gql`
 			mealsAttending {
 				id
 			}
+			upcomingMeals {
+				id
+				title
+				price
+				startTime
+				endTime
+				guests {
+					id
+				}
+				maxGuests
+				location
+			}
 			reviews {
 				id
 				rating

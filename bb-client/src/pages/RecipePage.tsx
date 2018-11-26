@@ -1,6 +1,5 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { UserContext } from "../App";
 import CreatorSummary from "../components/CreatorSummary";
 import RecipeReviewsContainer from "../containers/RecipeReviewsContainer";
 import RecipeSummaryContainer from "../containers/RecipeSummaryContainer";
@@ -85,37 +84,31 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 		 */
 
 		return (
-			<UserContext.Consumer>
-				{userContext => {
-					return (
-						<div id="recipe-page">
-							<div id="recipe-page-left">
-								<RecipeSummaryContainer recipe={this.state.recipe} />
-								<div id="recipe-page-description" className="card">
-									<h3>Description</h3>
-									<hr />
-									<p>{this.state.recipe.description}</p>
-								</div>
-								<div id="recipe-page-reviews">
-									<RecipeReviewsContainer
-										reviews={this.state.recipe.reviews || []}
-									/>
-								</div>
-							</div>
-							<div id="recipe-page-right">
-								<div className="card">
-									<CreatorSummary
-										id={1}
-										name={`${"Jonathan"} ${"Wang"}`}
-										imagePath={undefined}
-										topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
-									/>
-								</div>
-							</div>
-						</div>
-					);
-				}}
-			</UserContext.Consumer>
+			<div id="recipe-page">
+				<div id="recipe-page-left">
+					<RecipeSummaryContainer recipe={this.state.recipe} />
+					<div id="recipe-page-description" className="card">
+						<h3>Description</h3>
+						<hr />
+						<p>{this.state.recipe.description}</p>
+					</div>
+					<div id="recipe-page-reviews">
+						<RecipeReviewsContainer
+							reviews={this.state.recipe.reviews || []}
+						/>
+					</div>
+				</div>
+				<div id="recipe-page-right">
+					<div className="card">
+						<CreatorSummary
+							id={1}
+							name={`${"Jonathan"} ${"Wang"}`}
+							imagePath={undefined}
+							topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
+						/>
+					</div>
+				</div>
+			</div>
 		);
 	}
 }

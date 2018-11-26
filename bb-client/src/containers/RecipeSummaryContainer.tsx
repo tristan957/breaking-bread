@@ -1,4 +1,5 @@
 import React from "react";
+import { UserContext } from "../App";
 import RecipeSummary from "../components/RecipeSummary";
 import Recipe from "../entities/Recipe";
 
@@ -27,17 +28,25 @@ export default class RecipeSummaryContainer extends React.Component<IRecipeSumma
 
 	public render(): JSX.Element {
 		return (
-			<div className="card">
-				<RecipeSummary
-					name={this.props.recipe.name!}
-					tags={this.props.recipe.tags || []}
-					createdAt={this.props.recipe.createdAt!}
-					updatedAt={this.props.recipe.updatedAt!}
-					reviewAverage={this.getRecipeReviewAverage()}
-					timesSaved={this.props.recipe.timesSaved || 0}
-					allergies={this.props.recipe.allergies || []}
-				/>
-			</div>
+			<UserContext.Consumer>
+				{userContext => {
+					return (
+						<div className="card">
+							<RecipeSummary
+								authorID={this.props.recipe.author!.id!}
+								viewerID={userContext.user!.id}
+								name={this.props.recipe.name!}
+								tags={this.props.recipe.tags || []}
+								createdAt={this.props.recipe.createdAt!}
+								updatedAt={this.props.recipe.updatedAt!}
+								reviewAverage={this.getRecipeReviewAverage()}
+								timesSaved={this.props.recipe.timesSaved || 0}
+								allergies={this.props.recipe.allergies || []}
+							/>
+						</div>
+					);
+				}}
+			</UserContext.Consumer>
 		);
 	}
 }

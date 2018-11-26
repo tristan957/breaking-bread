@@ -4,10 +4,12 @@ import { Context } from "apollo-server-core";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { DeepPartial } from "typeorm";
 import { IAppContext } from "../App";
+import Meal from "../entities/Meal";
 import Recipe from "../entities/Recipe";
 import Tag from "../entities/Tag";
 import Topic from "../entities/Topic";
 import User from "../entities/User";
+import { getUpcomingMeals } from "./Meal";
 import { getRecipe, updateRecipe } from "./Recipe";
 import { createTag, getTag } from "./Tag";
 import { createTopic, getTopic } from "./Topic";
@@ -38,7 +40,8 @@ export const typeDef: DocumentNode = gql`
         createdAt: DateTime!
 		hostedMeals: [Meal]
 		mealsAttending: [Meal]	# NOTE: Anything that could be cyclical should not be required (this limits depth to 1)
-        whitelist: [Topic]!
+		upcomingMeals: [Meal]
+		whitelist: [Topic]!
         blacklist: [Topic]!
 		savedRecipes: [Recipe]!  # NOTE: Should not be able to save if you are author of the recipe
 		followedUsers: [User]  # NOTE: Should not be able to follow yourself
@@ -369,12 +372,40 @@ export async function getUser(ctx: Context<IAppContext>, userID: number): Promis
 		"hostedMeals", "mealsAttending", "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
 		"savedRecipes", "followedUsers", "followers", "recipesAuthored", "followedTags",
 	];
-	return ctx.connection
+
+	const user: User | undefined = await ctx.connection
 		.getRepository(User)
 		.findOne({
 			where: {
 				id: userID,
 			},
 			relations: neededRelations,
+		});
+	if (user === undefined) {
+		return Promise.resolve(undefined);
+	}
+
+	const upcomingMealsPromise: Promise<Meal[] | undefined> = getUpcomingMeals(ctx, user.mealsAttending.map(meal => meal.id));
+	const upcomingMeals: Meal[] | undefined = await upcomingMealsPromise;
+
+	if (upcomingMeals === undefined) {
+		return Promise.resolve(undefined);
+	}
+	return Promise.resolve({
+		...user,
+		upcomingMeals,
+	});
+}
+
+export async function getUserSpecifiedRelations(
+	ctx: Context<IAppContext>, userID: number, relations: string[] = []
+): Promise<User | undefined> {
+	return ctx.connection
+		.getRepository(User)
+		.findOne({
+			where: {
+				id: userID,
+			},
+			relations,
 		});
 }

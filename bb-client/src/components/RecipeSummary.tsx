@@ -1,15 +1,14 @@
 import React from "react";
-import { Badge, Button } from "reactstrap";
+import { Badge, Button, Input, InputGroup, InputGroupAddon, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
 import ItemTags from "./ItemTags";
 import "./resources/css/RecipeSummary.css";
 import { default as defaultMealPic } from "./resources/images/default_meal_pic.jpg";
 
-const months: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
 interface IRecipeSummaryProps {
+	authorID: number;
+	viewerID?: number;
 	name: string;
 	tags: Partial<Tag>[];
 	imagePath?: string | null;
@@ -21,7 +20,25 @@ interface IRecipeSummaryProps {
 	showAuthor?: boolean;
 }
 
-export default class RecipeSummary extends React.Component<IRecipeSummaryProps> {
+interface IRecipeSummaryState {
+	modalOpen: boolean;
+}
+
+export default class RecipeSummary extends React.Component<IRecipeSummaryProps, IRecipeSummaryState> {
+	constructor(props: IRecipeSummaryProps) {
+		super(props);
+
+		this.state = {
+			modalOpen: false,
+		};
+	}
+
+	private toggle = () => {
+		this.setState({
+			modalOpen: !this.state.modalOpen,
+		});
+	}
+
 	public render(): JSX.Element {
 		return (
 			<div id="recipe-summary">
@@ -44,7 +61,25 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps> 
 							</Badge>
 						</div>
 						<div id="recipe-summary-buttons">
-							<Button outline color="secondary" className="recipe-summary-action">Review</Button>
+							{this.props.authorID === this.props.viewerID
+								? <Button disabled outline color="secondary" className="recipe-summary-action">Review</Button>
+								: <Button outline color="secondary" className="recipe-summary-action" onClick={this.toggle}>Review</Button>
+							}
+							<Modal isOpen={this.state.modalOpen} toggle={this.toggle}>
+								<ModalHeader toggle={this.toggle}>Review Editor</ModalHeader>
+								<ModalBody>
+									<InputGroup>
+										<Input type="number" step="1" max={5} min={0} />
+										<br />
+										<InputGroupAddon addonType="append">/ 5</InputGroupAddon>
+									</InputGroup>
+									<Input type="textarea" />
+								</ModalBody>
+								<ModalFooter>
+									<Button color="success" onClick={this.toggle}>Submit</Button>{" "}
+									<Button color="danger" onClick={this.toggle}>Cancel</Button>
+								</ModalFooter>
+							</Modal>
 							<Button outline color="secondary" className="recipe-summary-action">Save</Button>
 						</div>
 					</div>
