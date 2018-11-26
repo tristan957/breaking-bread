@@ -2,14 +2,14 @@ import { gql } from "apollo-boost";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router-dom";
+import { Button } from "reactstrap";
 import { UserContext } from "../App";
+import AuthorHostSummary from "../components/AuthorHostSummary";
+import ProfileSummaries from "../components/ProfileSummaries";
 import RecipeSummary from "../components/RecipeSummary";
-import GuestsContainer from "../containers/GuestsContainer";
-import HostSummaryContainer from "../containers/HostSummaryContainer";
 import MealSummaryContainer from "../containers/MealSummaryContainer";
 import Meal from "../entities/Meal";
 import Recipe from "../entities/Recipe";
-import User from "../entities/User";
 import "./resources/css/MealPage.css";
 
 const GET_MEAL = gql`
@@ -161,19 +161,22 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 											</div>
 										</div>
 										<div id="meal-page-right">
-											<HostSummaryContainer
-												id={result.data!.getMeal!.host!.id as number}
-												name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
-												about={result.data!.getMeal!.host!.about as string}
-												imagePath={result.data!.getMeal!.host!.imagePath}
-												topics={result.data!.getMeal!.host!.whitelist || []}
-											/>
-											<GuestsContainer
-												guests={result.data!.getMeal!.guests as Partial<User>[]}
-												maxGuests={result.data!.getMeal!.maxGuests as number}
-												isGuest={loggedInUserIsGuest}
-											/>
-											{/* <MealActionsContainer meal={this.state.meal} setMeal={this.setMeal} /> */}
+											<div className="card">
+												<AuthorHostSummary
+													id={result.data!.getMeal!.host!.id as number}
+													name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
+													imagePath={result.data!.getMeal!.host!.imagePath}
+													topics={result.data!.getMeal!.host!.whitelist || []}
+												/>
+											</div>
+											<div id="meal-page-guests-container" className="card">
+												<div id="meal-page-guests-container-header">
+													<h3 className="meal-page-header">Guests ({result.data!.getMeal!.guests!.length}/{result.data!.getMeal!.maxGuests})</h3>
+													<Button color="success">RSVP</Button> {/* Button should change depending on if host, guest, or potential guest */}
+												</div>
+												<hr />
+												<ProfileSummaries users={result.data!.getMeal!.guests!} />
+											</div>
 										</div>
 										{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
 									</div>

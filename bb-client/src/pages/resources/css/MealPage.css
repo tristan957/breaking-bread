@@ -21,9 +21,21 @@
 	margin-bottom: 0px;
 }
 
-#GuestListHeader h3,
-#GuestListHeader h5 {
-	display: inline;
+#meal-page-guests-container-header {
+	display: flex;
+	justify-content: space-between;
+}
+
+#meal-page-guests-container-header > * {
+	margin-right: 15px;
+}
+
+#meal-page-guests-container-header > *:last-child {
+	margin-right: 0px;
+}
+
+#meal-page-guests-container-header button {
+	margin: 0px;
 }
 
 @media only screen

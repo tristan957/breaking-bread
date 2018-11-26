@@ -1,7 +1,7 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
-import HostSummaryContainer from "../containers/HostSummaryContainer";
+import AuthorHostSummary from "../components/AuthorHostSummary";
 import RecipeReviewsContainer from "../containers/RecipeReviewsContainer";
 import RecipeSummaryContainer from "../containers/RecipeSummaryContainer";
 import Recipe from "../entities/Recipe";
@@ -103,13 +103,14 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 								</div>
 							</div>
 							<div id="recipe-page-right">
-								<HostSummaryContainer
-									id={1}
-									name={`${"Jonathan"} ${"Wang"}`}
-									about={"Yeet"}
-									imagePath={undefined}
-									topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
-								/>
+								<div className="card">
+									<AuthorHostSummary
+										id={1}
+										name={`${"Jonathan"} ${"Wang"}`}
+										imagePath={undefined}
+										topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
+									/>
+								</div>
 							</div>
 						</div>
 					);
