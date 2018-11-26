@@ -41,7 +41,7 @@ export default class Recipe {
 	@JoinTable()
 	public tags: Tag[];
 
-	@ManyToMany(type => Allergy)
+	@ManyToMany(type => Allergy, { eager: true })
 	@JoinTable()
 	public allergies: Allergy[];
 }

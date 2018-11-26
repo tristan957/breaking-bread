@@ -1,68 +1,75 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Badge, Button } from "reactstrap";
+import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
-import User from "../entities/User";
 import ItemTags from "./ItemTags";
-import RecipeInfoFooter from "./RecipeInfoFooter";
 import "./resources/css/RecipeSummary.css";
 import { default as defaultMealPic } from "./resources/images/default_meal_pic.jpg";
-import { default as defaultUserPic } from "./resources/images/default_user_pic.png";
+
+const months: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 interface IRecipeSummaryProps {
-	id: number;
-	author: Partial<User>;
 	name: string;
-	description: string;
 	tags: Partial<Tag>[];
 	imagePath?: string | null;
+	createdAt: number;
+	updatedAt: number;
+	reviewAverage: number;
 	timesSaved: number;
-	showAuthor: boolean;
+	allergies: Partial<Allergy>[];
+	showAuthor?: boolean;
 }
 
 export default class RecipeSummary extends React.Component<IRecipeSummaryProps> {
+	private getDate(joinedAt: number): Date {
+		return new Date(joinedAt);
+	}
+
 	public render(): JSX.Element {
 		return (
-			<div id="recipe-summary-container">
-				<Link to={`/r/${this.props.id}`} className="no-link">
-					<div id="recipe-summary" className="no-link">
-						{
-							this.props.imagePath === null ?
-								(
-									<img src={defaultMealPic} alt="Recipe Picture" className="bg" />
-								) : (
-									<img src={this.props.imagePath || defaultMealPic} alt="Recipe Picture" className="bg" />
-								)
-						}
-						<div id="recipe-summary-info">
-							<div id="recipe-summary-header">
-								<div id="tags-title-container">
-									<div id="recipe-summary-name">{this.props.name}</div>
-									<ItemTags color="info" names={this.props.tags.map(tag => tag.name)} />
-								</div>
-								{!this.props.showAuthor
-									? undefined
-									: (
-										<Link to={`/p/${this.props.author.id}`}>
-											<div id="recipe-summary-author" className="no-link">
-												{
-													this.props.author.imagePath === null ?
-														(
-															<img src={defaultUserPic} alt="Author Picture" id="recipe-summary-author-img" />
-														) : (
-															<img src={this.props.author.imagePath || defaultUserPic} alt="Author Picture" id="recipe-summary-author-img" />
-														)
-												}
-												<div id="recipe-summary-author-name">{`${this.props.author.firstName} ${this.props.author.lastName}`}</div>
-											</div>
-										</Link>
+			<div id="recipe-summary">
+				<img src={this.props.imagePath || defaultMealPic} id="recipe-summary-img" alt="Recipe Picture" />
+				<div id="recipe-summary-information">
+					<div id="recipe-summary-left">
+						<h1 id="recipe-summary-name">
+							{this.props.name}
+						</h1>
+						<span className="recipe-summary-updated">Last updated on
+							{
+								this.props.updatedAt === undefined
+									? (
+										months[this.getDate(this.props.createdAt).getMonth()], this.getDate(this.props.createdAt).toLocaleDateString(undefined, { year: "2-digit" })
 									)
-								}
-							</div>
-							<div id="recipe-summary-description">PLACE HOLDER DESCRIPTION {this.props.description}</div>
-							<RecipeInfoFooter timesSaved={this.props.timesSaved} />
+									: (
+										months[this.getDate(this.props.updatedAt).getMonth()], this.getDate(this.props.updatedAt).toLocaleDateString(undefined, { year: "2-digit" })
+									)
+							}
+						</span>
+						<div id="recipe-summary-badges">
+							<Badge className="recipe-summary-badge-item" color="primary">
+								⭐ {parseFloat(this.props.reviewAverage.toFixed(2))}/5
+							</Badge>
+							<Badge className="recipe-summary-badge-item" color="primary">
+								❤️ {this.props.timesSaved}
+							</Badge>
+						</div>
+						<div id="recipe-summary-buttons">
+							<Button outline color="secondary" className="recipe-summary-action">Review</Button>
+							<Button outline color="secondary" className="recipe-summary-action">Save</Button>
 						</div>
 					</div>
-				</Link>
+					<div id="recipe-summary-card-right">
+						<div id="recipe-summary-tags">
+							Tags
+							<ItemTags color="info" names={this.props.tags.map(tag => tag.name)} />
+						</div>
+						<div id="recipe-summary-allergies">
+							Allergies
+							<ItemTags color="warning" names={this.props.allergies.map(allergy => allergy.name)} />
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}

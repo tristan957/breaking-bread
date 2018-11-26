@@ -68,3 +68,8 @@ hr.separator {
 button.btn.btn-secondary {
     margin-bottom: 0px;
 }
+
+.bg {
+    width: 100%;
+    z-index: 0;
+}

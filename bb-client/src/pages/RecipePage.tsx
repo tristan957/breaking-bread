@@ -1,10 +1,9 @@
-// tslint:disable: no-unsafe-any
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
 import HostSummaryContainer from "../containers/HostSummaryContainer";
-import RecipeHeaderContainer from "../containers/RecipeHeaderContainer";
 import RecipeReviewsContainer from "../containers/RecipeReviewsContainer";
+import RecipeSummaryContainer from "../containers/RecipeSummaryContainer";
 import Recipe from "../entities/Recipe";
 import "./resources/css/RecipePage.css";
 
@@ -20,15 +19,12 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 	constructor(props: RouteComponentProps<IRecipePageParams>) {
 		super(props);
 
-		this.fetchRecipeFromParams = this.fetchRecipeFromParams.bind(this);
-		this.getRecipeReviewAverage = this.getRecipeReviewAverage.bind(this);
-
 		this.state = {
 			recipe: this.fetchRecipeFromParams(),
 		};
 	}
 
-	private fetchRecipeFromParams(): Partial<Recipe> {
+	private fetchRecipeFromParams = (): Partial<Recipe> => {
 		const tempRecipe: Partial<Recipe> = {
 			id: 2,
 			name: "Ropa vieja",
@@ -78,23 +74,6 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 		return tempRecipe;
 	}
 
-	private getRecipeReviewAverage(): number {
-		if (this.state.recipe.reviews === undefined || this.state.recipe.reviews.length === 0) {
-			return 0;
-		}
-
-		let sum = 0;
-		let effectiveLength = 0;
-		this.state.recipe.reviews.forEach(element => {
-			if (element.rating !== undefined) {
-				sum += element.rating;
-				effectiveLength += 1;
-			}
-		});
-
-		return sum / effectiveLength;
-	}
-
 	public render(): JSX.Element {
 		/**
 		 *  NOTE: If the current user isn't the recipe creator,
@@ -111,16 +90,7 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 					return (
 						<div id="recipe-page">
 							<div id="recipe-page-left">
-								<div className="card">
-									<RecipeHeaderContainer
-										name={this.state.recipe.name!}
-										tagList={this.state.recipe.tags || []}
-										createdAt={this.state.recipe.createdAt!}
-										reviewAverage={this.getRecipeReviewAverage()}
-										timesFavorited={this.state.recipe.timesSaved!}
-										allergies={this.state.recipe.allergies || []}
-									/>
-								</div>
+								<RecipeSummaryContainer recipe={this.state.recipe} />
 								<div id="recipe-page-description" className="card">
 									<h3>Description</h3>
 									<hr />
