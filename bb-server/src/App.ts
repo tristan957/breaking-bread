@@ -1,6 +1,7 @@
 /* tslint:disable: strict-boolean-expressions */
 import { Context } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-express";
+import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
@@ -8,6 +9,7 @@ import { AdvancedConsoleLogger, Connection, createConnection, getConnection } fr
 import { getUserFromAuthSub } from "./auth";
 import { entities } from "./entities";
 import User from "./entities/User";
+import { addRoutes } from "./routes";
 import { resolvers, typeDefs } from "./schema";
 
 export interface IAppContext {
@@ -48,10 +50,17 @@ export default class App {
 		dotenv.config();
 
 		this.setupTypeORM();
-		this.app = express();
-		this.app.use(cors());
-		this.server = new ApolloServer({ typeDefs, resolvers, context });
+		this.setupExpress();
+		this.server = new ApolloServer({ typeDefs, resolvers });
 		this.server.applyMiddleware({ app: this.app });
+	}
+
+	private setupExpress(): void {
+		this.app = express();
+		this.app.use(bodyParser.urlencoded({ extended: true }));
+		this.app.use(bodyParser.json());
+		this.app.use(cors());
+		addRoutes(this.app);
 	}
 
 	/**
