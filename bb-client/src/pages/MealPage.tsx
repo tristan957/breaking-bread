@@ -128,8 +128,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 									);
 								}
 
-								console.log(result);
-								const loggedInUserIsGuest = result.data!.getMeal!.host!.id! === userContext.user!.id!;
+								const loggedInUserIsHost = result.data!.getMeal!.host!.id! === userContext.user!.id!;
 								return (
 									<div id="meal-page">
 										<div id="meal-page-left">
@@ -168,7 +167,8 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										<div id="meal-page-right">
 											<div className="card">
 												<CreatorSummary
-													id={result.data!.getMeal!.host!.id as number}
+													viewer={userContext.user!}
+													userID={result.data!.getMeal!.host!.id!}
 													name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
 													imagePath={result.data!.getMeal!.host!.imagePath}
 													topics={result.data!.getMeal!.host!.whitelist || []}

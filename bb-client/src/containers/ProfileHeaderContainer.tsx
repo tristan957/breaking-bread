@@ -2,10 +2,12 @@
 import React from "react";
 import LargeProfileSummary from "../components/LargeProfileSummary";
 import Topic from "../entities/Topic";
+import User from "../entities/User";
 import "./resources/css/ProfileHeaderContainer.css";
 
 interface IProfileHeaderProps {
-	id: number;
+	userID: number;
+	viewer?: Partial<User>;
 	name: string;
 	about?: string;
 	whiteList: Partial<Topic>[];
@@ -22,7 +24,8 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 			<div id="profile-header-container" className="card">
 				<div id="profile-header-left-container">
 					<LargeProfileSummary
-						id={this.props.id}
+						userID={this.props.userID}
+						viewer={this.props.viewer}
 						name={this.props.name}
 						imagePath={this.props.imagePath}
 						reviewAverage={this.props.reviewAverage}

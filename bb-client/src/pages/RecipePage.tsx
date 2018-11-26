@@ -1,10 +1,44 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
+import { UserContext } from "../App";
 import CreatorSummary from "../components/CreatorSummary";
 import RecipeReviewsContainer from "../containers/RecipeReviewsContainer";
 import RecipeSummaryContainer from "../containers/RecipeSummaryContainer";
 import Recipe from "../entities/Recipe";
 import "./resources/css/RecipePage.css";
+
+const GET_RECIPE = `
+	query GetRecipe($id: Int!) {
+		getRecipe(input: {id: $id}) {
+			id
+			name
+			description
+			tags {
+				id
+				name
+			}
+			createdAt
+			timesSaved
+			reviews {
+				id
+				description
+				rating
+				author {
+					id
+					firstName
+					lastName
+				}
+			}
+			allergies {
+				id
+				name
+			}
+			author {
+				id
+			}
+		}
+	}
+`;
 
 interface IRecipePageParams {
 	recipeID: string;
@@ -73,6 +107,24 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 		return tempRecipe;
 	}
 
+	// public UNSAFE_componentWillMount(): void {
+	// 	const data = `{ "query": "${GET_RECIPE}", "variables": ${JSON.stringify({ id: this.props.match.params.recipeID })} }}`;
+	// 	console.log(data);
+	// 	axios.request({
+	// 		method: "POST",
+	// 		url: uri,
+	// 		data,
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 			"oAuthSub": "adjijdfaa",
+	// 		},
+	// 	}).then(res => {
+	// 		console.log(res);
+	// 	}).catch(err => {
+	// 		console.log(err);
+	// 	});
+	// }
+
 	public render(): JSX.Element {
 		/**
 		 *  NOTE: If the current user isn't the recipe creator,
@@ -84,31 +136,40 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 		 */
 
 		return (
-			<div id="recipe-page">
-				<div id="recipe-page-left">
-					<RecipeSummaryContainer recipe={this.state.recipe} />
-					<div id="recipe-page-description" className="card">
-						<h3>Description</h3>
-						<hr />
-						<p>{this.state.recipe.description}</p>
-					</div>
-					<div id="recipe-page-reviews">
-						<RecipeReviewsContainer
-							reviews={this.state.recipe.reviews || []}
-						/>
-					</div>
-				</div>
-				<div id="recipe-page-right">
-					<div className="card">
-						<CreatorSummary
-							id={1}
-							name={`${"Jonathan"} ${"Wang"}`}
-							imagePath={undefined}
-							topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
-						/>
-					</div>
-				</div>
-			</div>
+			<UserContext.Consumer >
+				{
+					userContext => {
+						return (
+							<div id="recipe-page">
+								<div id="recipe-page-left">
+									<RecipeSummaryContainer recipe={this.state.recipe} />
+									<div id="recipe-page-description" className="card">
+										<h3>Description</h3>
+										<hr />
+										<p>{this.state.recipe.description}</p>
+									</div>
+									<div id="recipe-page-reviews">
+										<RecipeReviewsContainer
+											reviews={this.state.recipe.reviews || []}
+										/>
+									</div>
+								</div>
+								<div id="recipe-page-right">
+									<div className="card">
+										<CreatorSummary
+											userID={this.state.recipe!.author!.id!}
+											viewer={userContext.user}
+											name={`${"Jonathan"} ${"Wang"}`}
+											imagePath={undefined}
+											topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
+										/>
+									</div>
+								</div>
+							</div>
+						);
+					}
+				}
+			</UserContext.Consumer>
 		);
 	}
 }

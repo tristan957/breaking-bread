@@ -267,7 +267,7 @@ function _getRecipe(parent: any, args: IGetRecipe, ctx: Context<IAppContext>, in
 
 export async function getRecipe(ctx: Context<IAppContext>, recipe: DeepPartial<Recipe>): Promise<Recipe | undefined> {
 	const neededRelations: string[] = [
-		"reviews", "allergies", "mealsServedAt",
+		"reviews", "mealsServedAt",
 	];
 
 	if (recipe.id !== undefined) {
