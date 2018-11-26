@@ -5,6 +5,7 @@ import Topic from "../entities/Topic";
 import "./resources/css/ProfileHeaderContainer.css";
 
 interface IProfileHeaderProps {
+	id: number;
 	name: string;
 	about?: string;
 	whiteList: Partial<Topic>[];
@@ -21,6 +22,7 @@ export default class ProfileHeader extends React.Component<IProfileHeaderProps> 
 			<div id="profile-header-container" className="card">
 				<div id="profile-header-left-container">
 					<LargeProfileSummary
+						id={this.props.id}
 						name={this.props.name}
 						imagePath={this.props.imagePath}
 						reviewAverage={this.props.reviewAverage}

@@ -4,7 +4,7 @@ import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router-dom";
 import { Button } from "reactstrap";
 import { UserContext } from "../App";
-import AuthorHostSummary from "../components/AuthorHostSummary";
+import CreatorSummary from "../components/CreatorSummary";
 import ProfileSummaries from "../components/ProfileSummaries";
 import RecipeSummary from "../components/RecipeSummary";
 import MealSummaryContainer from "../containers/MealSummaryContainer";
@@ -162,7 +162,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										</div>
 										<div id="meal-page-right">
 											<div className="card">
-												<AuthorHostSummary
+												<CreatorSummary
 													id={result.data!.getMeal!.host!.id as number}
 													name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
 													imagePath={result.data!.getMeal!.host!.imagePath}

@@ -1,7 +1,7 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { UserContext } from "../App";
-import AuthorHostSummary from "../components/AuthorHostSummary";
+import CreatorSummary from "../components/CreatorSummary";
 import RecipeReviewsContainer from "../containers/RecipeReviewsContainer";
 import RecipeSummaryContainer from "../containers/RecipeSummaryContainer";
 import Recipe from "../entities/Recipe";
@@ -104,7 +104,7 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 							</div>
 							<div id="recipe-page-right">
 								<div className="card">
-									<AuthorHostSummary
+									<CreatorSummary
 										id={1}
 										name={`${"Jonathan"} ${"Wang"}`}
 										imagePath={undefined}

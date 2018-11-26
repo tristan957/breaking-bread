@@ -22,10 +22,6 @@ interface IRecipeSummaryProps {
 }
 
 export default class RecipeSummary extends React.Component<IRecipeSummaryProps> {
-	private getDate(joinedAt: number): Date {
-		return new Date(joinedAt);
-	}
-
 	public render(): JSX.Element {
 		return (
 			<div id="recipe-summary">
@@ -36,15 +32,8 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps> 
 							{this.props.name}
 						</h1>
 						<span className="recipe-summary-updated">Last updated on
-							{
-								this.props.updatedAt === undefined
-									? (
-										months[this.getDate(this.props.createdAt).getMonth()], this.getDate(this.props.createdAt).toLocaleDateString(undefined, { year: "2-digit" })
-									)
-									: (
-										months[this.getDate(this.props.updatedAt).getMonth()], this.getDate(this.props.updatedAt).toLocaleDateString(undefined, { year: "2-digit" })
-									)
-							}
+							{` ${new Date(this.props.updatedAt).toLocaleDateString()}`}
+							{console.log(this.props.updatedAt)}
 						</span>
 						<div id="recipe-summary-badges">
 							<Badge className="recipe-summary-badge-item" color="primary">

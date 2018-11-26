@@ -36,51 +36,53 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 
 	public render(): JSX.Element {
 		return (
-			<Link to={`/m/${this.props.id}`} className="no-link">
-				<div id="meal-summary" className="no-link">
-					{
-						this.props.imagePath === null ?
-							(
-								<img src={defaultMealPic} className="bg" />
-							) : (
-								<img src={this.props.imagePath || defaultMealPic} className="bg" />
-							)
-					}
-					<div id="meal-summary-header">
-						<div id="meal-summary-tags-title-container">
+			<div id="meal-summary">
+				{
+					this.props.imagePath === null ?
+						(
+							<img src={defaultMealPic} className="bg" />
+						) : (
+							<img src={this.props.imagePath || defaultMealPic} className="bg" />
+						)
+				}
+				<div id="meal-summary-header">
+					<div id="meal-summary-tags-title-container">
+						<Link to={`/m/${this.props.id}`} className="black-link-with-underline">
 							<div id="meal-summary-title">{this.props.title}</div>
-							<ItemTags color="info" names={this.getTagNames()} />
-						</div>
-						{this.props.showHost !== true
-							? undefined
-							: (
-								<Link to={`/p/${this.props.host.id}`}>
-									<div id="meal-summary-host" className="no-link">
-										{
-											this.props.host.imagePath === null ?
-												(
-													<img src={defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
-												) : (
-													<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
-												)
-										}
-										<div id="meal-summary-host-name">{`${this.props.host.firstName} ${this.props.host.lastName}`}</div>
-									</div>
-								</Link>
-							)
-						}
+						</Link>
+						<ItemTags color="info" names={this.getTagNames()} />
 					</div>
-					<div id="meal-summary-description">TODO PLACE HOLDER DESCRIPTION</div>
-					<MealInfoFooter
-						price={this.props.price}
-						numOfGuests={this.props.guests.length}
-						maxGuests={this.props.maxGuests}
-						startTime={this.props.startTime}
-						endTime={this.props.endTime}
-						location={this.props.location}
-					/>
+					{this.props.showHost !== true
+						? undefined
+						: (
+							<div id="meal-summary-host" className="black-link-with-underline">
+								{
+									this.props.host.imagePath === null ?
+										(
+											<img src={defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
+										) : (
+											<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
+										)
+								}
+								<div id="meal-summary-host-name">
+									<Link to={`/p/${this.props.host.id}`} className="black-link-with-underline">
+										{`${this.props.host.firstName} ${this.props.host.lastName}`}
+									</Link>
+								</div>
+							</div>
+						)
+					}
 				</div>
-			</Link>
+				<div id="meal-summary-description">TODO PLACE HOLDER DESCRIPTION</div>
+				<MealInfoFooter
+					price={this.props.price}
+					numOfGuests={this.props.guests.length}
+					maxGuests={this.props.maxGuests}
+					startTime={this.props.startTime}
+					endTime={this.props.endTime}
+					location={this.props.location}
+				/>
+			</div>
 		);
 	}
 }

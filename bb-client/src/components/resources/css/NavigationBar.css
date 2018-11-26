@@ -9,6 +9,11 @@
 	max-height: 100%;
 }
 
+.bb-navbar-brand {
+	margin-left: 0px !important;
+	margin-bottom: 7px !important;
+}
+
 .btn {
 	padding: .1rem 1.25rem;
 	margin: 0rem 0rem .6rem 0rem;

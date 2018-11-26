@@ -224,10 +224,11 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 			<UserContext.Consumer>
 				{userContext => {
 					return (
-						<div>
+						<div id="profile-page">
 							<div id="profile-info">
 								<div id="profile-info-top">
 									<ProfileHeader
+										id={this.state.userBeingViewed.id!}
 										name={`${this.state.userBeingViewed.firstName} ${this.state.userBeingViewed.lastName}`}
 										about={this.state.userBeingViewed.about as string}
 										whiteList={this.state.userBeingViewed.whitelist || []}
@@ -248,7 +249,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 									</div>
 								</div>
 							</div>
-							<div id="profile-details">  {/* Essentially a mini feed for a specific user */}
+							<div id="profile-activity-info-container">
 								<ProfileActivityContainer
 									hostedMeals={this.state.userBeingViewed.hostedMeals || []}
 									authoredRecipes={this.state.userBeingViewed.recipesAuthored || []}

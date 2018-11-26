@@ -8,25 +8,49 @@
     src: url("../fonts/SF-Mono/SFMono-Regular.otf");
 }
 
-.no-link {
-	text-decoration: none;
+.black-link-with-underline {
 	color: black;
 }
 
-.no-link a:hover {
-	text-decoration: none;
+.black-link-with-underline:hover {
+	color: black;
+}
+
+.black-link-with-underline:focus {
+    color: black;
+}
+
+.black-link-with-underline:active {
+	color: black;
+}
+
+.black-link-with-underline:link {
+	color: black;
+}
+
+.no-link {
+    color: black;
+    text-decoration: none;
+}
+
+.no-link:hover {
+    color: black;
+    text-decoration: none;
 }
 
 .no-link:focus {
-	text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
 
 .no-link:active {
-	text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
 
 .no-link:link {
-	text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
 
 .card {
