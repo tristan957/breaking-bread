@@ -1,5 +1,6 @@
 /* tslint:disable: strict-boolean-expressions */
-import { ApolloServer, makeExecutableSchema } from "apollo-server";
+import { makeExecutableSchema } from "apollo-server";
+import { ApolloServer } from "apollo-server-express";
 import { Context } from "apollo-server-core";
 import dotenv from "dotenv";
 import { Request, Response } from "express";
@@ -10,6 +11,8 @@ import { getUserFromAuthSub } from "./auth";
 import { entities } from "./entities";
 import User from "./entities/User";
 import { resolvers, typeDefs } from "./schema";
+import express = require("express");
+import cors = require("cors");
 
 export interface IAppContext {
 	connection: Connection;
@@ -39,6 +42,7 @@ function context(params: IContextParams): Context<IAppContext> {
 
 export default class App {
 	public connection: Connection;
+	public app: express.Application;
 	public server: ApolloServer;
 
 	/**
@@ -48,8 +52,10 @@ export default class App {
 		dotenv.config();
 
 		this.setupTypeORM();
-		const schema: GraphQLSchema = makeExecutableSchema({ typeDefs, resolvers });
-		this.server = new ApolloServer({ schema, context });
+		this.app = express();
+		this.app.use(cors());
+		this.server = new ApolloServer({ typeDefs, resolvers });
+		this.server.applyMiddleware({ app: this.app });
 	}
 
 	/**
@@ -87,8 +93,8 @@ export default class App {
 	public run(): void {
 		let port: number | string = process.env.APP_PORT || "10262";
 		port = parseInt(port, 10);
-		this.server.listen(port, () => {
-			console.log(`Server ready at http://localhost:${port}`);
+		this.app.listen(port, () => {
+			console.log(`http://localhost:${port}${this.server.graphqlPath}`);
 		});
 	}
 }
