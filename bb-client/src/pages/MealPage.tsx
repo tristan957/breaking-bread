@@ -2,6 +2,7 @@ import { gql } from "apollo-boost";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router-dom";
+import { Markdown } from "react-showdown";
 import { Button } from "reactstrap";
 import { UserContext } from "../App";
 import CreatorSummary from "../components/CreatorSummary";
@@ -137,7 +138,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 											<div id="meal-page-description-container" className="card">
 												<h3 className="meal-page-header">Description</h3>
 												<hr />
-												<p id="meal-page-description">{result.data!.getMeal!.description}</p>
+												<p id="meal-page-description">{<Markdown markup={result.data!.getMeal!.description} />}</p>
 											</div>
 											<div id="meal-page-recipes-container" className="card">
 												<h3 className="meal-page-header">Recipes</h3>

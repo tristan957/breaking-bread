@@ -1,5 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
+import { Markdown } from "react-showdown";
 import CreatorSummary from "../components/CreatorSummary";
 import RecipeReviewsContainer from "../containers/RecipeReviewsContainer";
 import RecipeSummaryContainer from "../containers/RecipeSummaryContainer";
@@ -90,7 +91,7 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 					<div id="recipe-page-description" className="card">
 						<h3>Description</h3>
 						<hr />
-						<p>{this.state.recipe.description}</p>
+						<p>{<Markdown markup={this.state.recipe.description} />}</p>
 					</div>
 					<div id="recipe-page-reviews">
 						<RecipeReviewsContainer

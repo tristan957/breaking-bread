@@ -73,7 +73,7 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 						)
 					}
 				</div>
-				<div id="meal-summary-description">TODO PLACE HOLDER DESCRIPTION</div>
+				<div id="meal-summary-description">{/* TODO PLACE HOLDER DESCRIPTION */}</div>
 				<MealInfoFooter
 					price={this.props.price}
 					numOfGuests={this.props.guests.length}
