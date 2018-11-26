@@ -107,7 +107,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 				</Navbar>
 
 				{/* MEAL MODAL */}
-				<Modal centered={true} isOpen={this.state.mealModal} toggle={this.toggleMealModal}>
+				<Modal size={"lg"} centered={true} isOpen={this.state.mealModal} toggle={this.toggleMealModal}>
 					<ModalHeader toggle={this.toggleMealModal}>New Meal</ModalHeader>
 					<ModalBody>
 						<Form>
@@ -177,7 +177,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 				</Modal>
 
 				{/* RECIPE MODAL */}
-				<Modal centered={true} isOpen={this.state.recipeModal} toggle={this.toggleRecipeModal}>
+				<Modal size={"lg"} centered={true} isOpen={this.state.recipeModal} toggle={this.toggleRecipeModal}>
 					<ModalHeader toggle={this.toggleRecipeModal}>New Recipe</ModalHeader>
 					<ModalBody>
 						<Form>

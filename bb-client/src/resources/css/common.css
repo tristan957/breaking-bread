@@ -9,7 +9,7 @@
 }
 
 .form-control {
-	border: 1px solid #ce8650;
+    border: 1px solid #ce8650;
 }
 
 .custom-control-label::before, .custom-file-label, .custom-select {

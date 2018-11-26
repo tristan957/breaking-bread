@@ -73,8 +73,8 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 								<ModalBody>
 									<Form>
 										<FormGroup row>
-											<Label for="search" sm={2}>Rating</Label>
-											<Col sm={10}>
+											<Label for="search" sm={3}>Rating</Label>
+											<Col sm={9}>
 												<InputGroup>
 													<Input type="number" step="1" max={5} min={0} />
 													<InputGroupAddon addonType="append">/ 5</InputGroupAddon>
@@ -82,8 +82,8 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 											</Col>
 										</FormGroup>
 										<FormGroup row>
-											<Label for="search" sm={2}>Review</Label>
-											<Col sm={10}>
+											<Label for="search" sm={3}>Review</Label>
+											<Col sm={9}>
 												<InputGroup>
 													<Input type="textarea" />
 												</InputGroup>
