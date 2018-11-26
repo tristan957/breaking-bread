@@ -175,7 +175,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 												</div>
 											</div>
 										</div>
-										<div id="profile-details">  {/* Essentially a mini feed for a specific user */}
+										<div id="profile-activity-info-container">  {/* Essentially a mini feed for a specific user */}
 											<ProfileActivityContainer
 												hostedMeals={result.data!.getUser!.hostedMeals || []}
 												authoredRecipes={result.data!.getUser!.recipesAuthored || []}
