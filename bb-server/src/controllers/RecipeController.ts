@@ -1,30 +1,31 @@
-import { EntityManager } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
 import Recipe from "../entities/Recipe";
 import RecipeReview from "../entities/RecipeReview";
+import Tag from "../entities/Tag";
+import User from "../entities/User";
+import { RecipeRepository, RecipeReviewRepository } from "../repositories";
 
 @Controller()
 export default class RecipeController {
-	private entityManager: EntityManager;
+	private recipeRepository: RecipeRepository;
+	private recipeReviewRepository: RecipeReviewRepository;
+	private currentUser: User;
 
-	constructor(entityManager: EntityManager) {
-		this.entityManager = entityManager;
+	constructor(recipeRepository: RecipeRepository, recipeReviewRepository: RecipeReviewRepository, user: User) {
+		this.recipeRepository = recipeRepository;
+		this.recipeReviewRepository = recipeReviewRepository;
+		this.currentUser = user;
 	}
 
 	@Query()
 	public recipe(args: IRecipeArgs): Promise<Recipe | undefined> {
-		return this.entityManager.findOne(Recipe, args.id);
-	}
-
-	@Query()
-	public recipeReview(): Promise<RecipeReview | undefined> {
-
+		return this.recipeRepository.findOne(args.id);
 	}
 
 	@Mutation()
-	public recipeSave(args: IRecipeSaveArgs): Promise<Recipe> {
-		const recipe = this.entityManager.create(Recipe, args);
-		return this.entityManager.save(Recipe, recipe);
+	public async recipeSave(args: IRecipeSaveArgs): Promise<Recipe> {
+		const recipe: Recipe | undefined = await this.recipeRepository.findOne({ ...args });
+		return recipe === undefined ? this.recipeRepository.save(this.recipeRepository.create(args)) : recipe;
 	}
 
 	@Mutation()
@@ -33,7 +34,8 @@ export default class RecipeController {
 	}
 
 	@Mutation()
-	public recipeToggleTags(): Promise<Tag[] | undefined> {
+	public recipeToggleTags(args: IRecipeToggleTagsArgs): Promise<Tag[] | undefined> {
+		const recipe: Recipe | undefined
 
 	}
 
@@ -43,13 +45,39 @@ export default class RecipeController {
 	}
 
 	@Mutation()
-	public recipeReviewSave(): Promise<RecipeReview> {
+	public async recipeReviewSave(args: IRecipeReviewSaveArgs): Promise<RecipeReview> {
+		const review: RecipeReview | undefined = await this.recipeReviewRepository.findOne({
+			subject: {
+				id: args.subjectID,
+			},
+			author: {
+				id: this.currentUser.id,
+			},
+		});
 
+		return review === undefined ? this.recipeReviewRepository.save(this.recipeReviewRepository.create({
+			...args,
+			author: {
+				id: this.currentUser.id,
+			},
+			subject: {
+				id: args.subjectID,
+			},
+		})) : review;
+		// const recipeReview: RecipeReview | undefined = await this.recipeReviewRepository.createQueryBuilder()
+		// 	.innerJoinAndSelect()
+		// 	.findOne();
 	}
 
 	@Mutation()
-	public recipeReviewEdit(): Promise<RecipeReview | undefined> {
-
+	public async recipeReviewEdit(args: IRecipeReviewEditArgs): Promise<RecipeReview | undefined> {
+		const review: RecipeReview | undefined = await this.recipeReviewRepository.findOne(args.id);
+		return review === undefined ? undefined : this.recipeReviewRepository.save(
+			{
+				...review,
+				...args,
+			}
+		);
 	}
 }
 
@@ -59,4 +87,23 @@ interface IRecipeArgs {
 
 interface IRecipeSaveArgs {
 	name: string;
+	description?: string;
+	imagePath?: string;
+}
+
+interface IRecipeReviewSaveArgs {
+	rating: number;
+	description?: string;
+	subjectID: number;
+}
+
+interface IRecipeReviewEditArgs {
+	id: number;
+	rating?: number;
+	description?: string;
+}
+
+interface IRecipeToggleTagsArgs {
+	id: number;
+	tags: DeepPartial<Tag>[];
 }

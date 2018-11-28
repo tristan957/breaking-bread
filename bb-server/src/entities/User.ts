@@ -53,7 +53,7 @@ export default class User {
 	@JoinTable()
 	public blacklist: Topic[];
 
-	@ManyToMany(type => Recipe)
+	@ManyToMany(type => Recipe, recipe => recipe.savedBy)
 	@JoinTable()
 	public savedRecipes: Recipe[];
 

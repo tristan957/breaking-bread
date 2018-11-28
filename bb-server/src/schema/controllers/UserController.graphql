@@ -5,15 +5,15 @@ enum MealType {
 }
 
 extend type Mutation {
-	userSave(input: CreateUserInput!): User!
-	userEdit(input: UpdateUserInput!): User
+	userSave(input: UserSaveInput!): User!
+	userEdit(input: UserEditInput!): User
 	userDelete(id: Int!): Boolean!
-	userUpdateWhitelist(userID: Int!, topics: [GetTopicInput]!): User
-	userUpdateBlacklist(userID: Int!, topics: [GetTopicInput]!): User
-	userUpdateFollowedTags(userID: Int!, tags: [GetTagInput]!): User
-	userUpdateFollowing(userID: Int!): User
-	userToggleSavedRecipe(recipeID: Int!, userID: Int!): User
-	userMeals(userID: Int!, first: Int!, after: String, ): MealFeed
+	userUpdateWhitelist(userID: Int!, topics: [TopicInput!]!): [Topic!]
+	userUpdateBlacklist(userID: Int!, topics: [TopicInput!]!): [Topic!]
+	userUpdateFollowedTags(userID: Int!, tags: [TagInput!]!): [Tag!]
+	userToggleFollowing(userID: Int!): [User!]
+	userToggleSavedRecipe(recipeID: Int!, userID: Int!): [Recipe!]
+	# userMealFeed(userID: Int!, first: Int!, after: String, ): MealFeed 
 	userReviewSave(description: String, rating: Float!): UserReview!
 	userReviewEdit(id: Int!, description: String, rating: Float): UserReview
 }

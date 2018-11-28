@@ -25,11 +25,11 @@ export default class Recipe {
 	@UpdateDateColumn()
 	public updatedAt: Date;
 
-	@ManyToOne(type => User, user => user.recipesAuthored, { eager: true })
+	@ManyToOne(type => User, user => user.recipesAuthored)
 	public author: User;
 
-	@Column({ default: 0 })
-	public timesSaved: number;
+	@ManyToOne(type => User, user => user.savedRecipes)
+	public savedBy: User;
 
 	@OneToMany(type => RecipeReview, review => review.subject)
 	public reviews: RecipeReview[];

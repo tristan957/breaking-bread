@@ -1,4 +1,4 @@
-input GetMealFeedOptions {
+input MealFeedOptions {
 	location: LocationFilter
 	dateSpan: DateSpanFilter
 	maxGuests: Int

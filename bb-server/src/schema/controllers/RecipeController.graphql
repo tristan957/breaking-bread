@@ -1,13 +1,12 @@
 extend type Mutation {
-	recipeSave(input: CreateRecipeInput!): Recipe!
-	recipeEdit(input: UpdateRecipeInput!): Recipe
-	recipeToggleTags(recipeID: Int!, tags: [GetTagInput]!): [Tag!]
-	recipeToggleAllergies(recipeID: Int!, allergies: [GetAllergyInput]!): [Allergy!]
-	recipeReviewSave(input: CreateRecipeReviewInput!): RecipeReview!
-	recipeReviewEdit(input: UpdateRecipeReviewInput!): RecipeReview
+	recipeSave(input: RecipeSaveInput!): Recipe!
+	recipeEdit(input: RecipeEditInput!): Recipe
+	recipeToggleTags(recipeID: Int!, tags: [GetTagInput!]!): [Tag!]
+	recipeToggleAllergies(recipeID: Int!, allergies: [AllergyInput!]!): [Allergy!]
+	recipeReviewSave(input: RecipeReviewSaveInput!): RecipeReview!
+	recipeReviewEdit(input: RecipeReviewEditInput!): RecipeReview
 }
 
 extend type Query {
 	recipe(id: Int!): Recipe
-	recipeReview(id: Int!): RecipeReview
 }

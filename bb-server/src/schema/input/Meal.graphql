@@ -1,4 +1,4 @@
-input CreateMealInput {
+input MealSaveInput {
 	location: String!  # Address or lat and lon
 	startTime: DateTime!
 	endTime: DateTime!
@@ -9,7 +9,7 @@ input CreateMealInput {
 	maxGuests: Int!
 }
 
-input UpdateMealInput {
+input MealEditInput {
 	id: Int!
 	location: String
 	startTime: DateTime  # TODO: Email on time, price changes
@@ -18,5 +18,4 @@ input UpdateMealInput {
 	title: String
 	description: String
 	imagePath: String
-	maxGuests: Int
 }

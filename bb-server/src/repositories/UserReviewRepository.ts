@@ -1,9 +1,9 @@
 import { Service } from "typedi";
 import { EntityManager, Repository } from "typeorm";
-import Recipe from "../entities/Recipe";
+import UserReview from "../entities/UserReview";
 
 @Service()
-export default class RecipeRepository extends Repository<Recipe> {
+export default class UserReviewRepository extends Repository<UserReview> {
 	private entityManager: EntityManager;
 
 	constructor(entityManager: EntityManager) {

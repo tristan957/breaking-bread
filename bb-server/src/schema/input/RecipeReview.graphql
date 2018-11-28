@@ -1,11 +1,10 @@
-input CreateRecipeReviewInput {
+input RecipeReviewSaveInput {
 	rating: Int!
 	description: String
 	subjectID: Int!
-	authorID: Int!
 }
 
-input UpdateRecipeReviewInput {
+input RecipeReviewEditInput {
 	id: Int!
 	rating: Int
 	description: String

@@ -1,18 +1,18 @@
-input CreateRecipeInput {
+input RecipeSaveInput {
 	name: String!
 	description: String
 	imagePath: String
 	author: UpdateUserInput!
 }
 
-input UpdateRecipeInput {
+input RecipeEditInput {
 	id: Int!
 	name: String
 	imagePath: String
 	description: String
 }
 
-input GetRecipeInput {
+input RecipeInput {
 	id: Int
 	name: String
 }

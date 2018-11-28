@@ -1,24 +1,24 @@
-import { EntityManager } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
 import Tag from "../entities/Tag";
+import { TagRepository } from "../repositories";
 
 @Controller()
 export default class TagController {
-	private entityManager: EntityManager;
+	private tagRepository: TagRepository;
 
-	constructor(entityManager: EntityManager) {
-		this.entityManager = entityManager;
+	constructor(tagRepository: TagRepository) {
+		this.tagRepository = tagRepository;
 	}
 
 	@Query()
 	public tag(args: ITagArgs): Promise<Tag | undefined> {
-		return this.entityManager.findOne(Tag, args.id);
+		return this.tagRepository.findOne(args.id);
 	}
 
 	@Mutation()
-	public tagSave(args: ITagSaveArgs): Promise<Tag> {
-		const tag = this.entityManager.create(Tag, args);
-		return this.entityManager.save(Tag, tag);
+	public async tagSave(args: ITagSaveArgs): Promise<Tag> {
+		const tag: Tag | undefined = await this.tagRepository.findOne({ name: args.name });
+		return tag === undefined ? this.tagRepository.save(this.tagRepository.create(args)) : tag;
 	}
 }
 
