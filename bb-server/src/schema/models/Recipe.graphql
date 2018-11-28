@@ -1,0 +1,14 @@
+type Recipe {
+	id: Int!
+	name: String!
+	description: String!
+	imagePath: String
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	author: User!
+	reviews: [RecipeReview]
+	mealsServedAt: [Meal]
+	timesSaved: Int!
+	tags: [Tag]!
+	allergies: [Allergy]!
+}

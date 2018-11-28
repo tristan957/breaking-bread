@@ -1,8 +1,8 @@
-import _ from "lodash";
+import isEqual from "lodash.isequal";
 
 export default function includesEntity<T>(entityArr: T[], entity: T): boolean {
 	for (const entityElem of entityArr) {
-		if (_.isEqual(entityElem, entity)) {
+		if (isEqual(entityElem, entity)) {
 			return true;
 		}
 	}

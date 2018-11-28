@@ -7,7 +7,6 @@ import Topic from "./Topic";
 import User from "./User";
 import UserReview from "./UserReview";
 
-// tslint:disable-next-line: no-any
-export const entities: any[] = [
+export const entities: Function[] = [
 	Meal, Recipe, Allergy, UserReview, RecipeReview, Tag, Topic, User,
 ];

@@ -1,0 +1,8 @@
+input GetTopicInput {
+	id: Int
+	name: String
+}
+
+input CreateTopicInput {
+	name: String!
+}

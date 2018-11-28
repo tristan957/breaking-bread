@@ -1,0 +1,18 @@
+input CreateRecipeInput {
+	name: String!
+	description: String
+	imagePath: String
+	author: UpdateUserInput!
+}
+
+input UpdateRecipeInput {
+	id: Int!
+	name: String
+	imagePath: String
+	description: String
+}
+
+input GetRecipeInput {
+	id: Int
+	name: String
+}

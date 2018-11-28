@@ -1,0 +1,22 @@
+input CreateMealInput {
+	location: String!  # Address or lat and lon
+	startTime: DateTime!
+	endTime: DateTime!
+	price: Float!
+	title: String!
+	description: String
+	imagePath: String
+	maxGuests: Int!
+}
+
+input UpdateMealInput {
+	id: Int!
+	location: String
+	startTime: DateTime  # TODO: Email on time, price changes
+	endTime: DateTime
+	price: Float
+	title: String
+	description: String
+	imagePath: String
+	maxGuests: Int
+}

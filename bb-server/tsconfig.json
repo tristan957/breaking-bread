@@ -5,6 +5,8 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "lib": [
+      "es6",
+      "es7",
       "esnext"
     ],
     "module": "commonjs",
@@ -13,7 +15,11 @@
     "noImplicitAny": true,
     "outDir": "dist",
     "strictNullChecks": true,
-    "target": "es6"
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
   },
   "include": [
     "src/**/*"

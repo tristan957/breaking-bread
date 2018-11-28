@@ -1,0 +1,25 @@
+enum MealType {
+	GUEST
+	HOST
+	BOTH
+}
+
+extend type Mutation {
+	userSave(input: CreateUserInput!): User!
+	userEdit(input: UpdateUserInput!): User
+	userDelete(id: Int!): Boolean!
+	userUpdateWhitelist(userID: Int!, topics: [GetTopicInput]!): User
+	userUpdateBlacklist(userID: Int!, topics: [GetTopicInput]!): User
+	userUpdateFollowedTags(userID: Int!, tags: [GetTagInput]!): User
+	userUpdateFollowing(userID: Int!): User
+	userToggleSavedRecipe(recipeID: Int!, userID: Int!): User
+	userMeals(userID: Int!, first: Int!, after: String, ): MealFeed
+	userReviewSave(description: String, rating: Float!): UserReview!
+	userReviewEdit(id: Int!, description: String, rating: Float): UserReview
+}
+
+extend type Query {
+	user(id: Int!): User
+	userAuthenticated(): User
+	userReview(id: Int!): UserReview
+}

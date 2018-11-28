@@ -1,0 +1,12 @@
+input CreateRecipeReviewInput {
+	rating: Int!
+	description: String
+	subjectID: Int!
+	authorID: Int!
+}
+
+input UpdateRecipeReviewInput {
+	id: Int!
+	rating: Int
+	description: String
+}

@@ -1,0 +1,16 @@
+type Meal {
+	id: Int!
+	location: String!
+	startTime: DateTime!
+	endTime: DateTime!
+	price: Float!
+	title: String!
+	description: String!
+	imagePath: String!
+	maxGuests: Int!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	host: User
+	guests: [User!]
+	recipes: [Recipe!]
+}

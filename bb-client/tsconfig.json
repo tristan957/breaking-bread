@@ -15,9 +15,14 @@
     "jsx": "preserve",
     "lib": [
       "dom",
-      "esnext.asynciterable",
-      "es2015",
-      "es6"
+      "es6",
+      "es7",
+      "esnext"
+    ],
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
     ]
   },
   "include": [

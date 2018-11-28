@@ -1,0 +1,16 @@
+input CreateUserInput {
+	firstName: String!
+	lastName: String!
+	imagePath: String!
+	about: String
+	email: String!
+	phoneNumber: String!
+}
+
+input UpdateUserInput {
+	id: Int!
+	imagePath: String
+	about: String
+	email: String
+	phoneNumber: String
+}

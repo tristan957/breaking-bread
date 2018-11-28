@@ -1,0 +1,17 @@
+input GetMealFeedOptions {
+	location: LocationFilter
+	dateSpan: DateSpanFilter
+	maxGuests: Int
+	tags: [GetTagInput]
+	topics: [GetTopicInput]
+}
+
+input LocationFilter {
+	distanceMI: Int!
+	fromLocation: String!	# Either an address or a lat and lon
+}
+
+input DateSpanFilter {
+	from: DateTime!
+	to: DateTime!
+}

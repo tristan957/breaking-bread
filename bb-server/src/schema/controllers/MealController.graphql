@@ -1,0 +1,12 @@
+extend type Mutation {
+	mealSave(input: CreateMealInput!): Meal!
+	mealDelete(mealID: Int!): Boolean!
+	mealGuestToggle(mealID: Int!, guestID: Int!): [Meal!]
+	mealUpdate(input: UpdateMealInput!): Meal
+	mealRecipesUpdate(mealID: Int!, recipes: [RecipeInput]!): Meal
+}
+
+extend type Query {
+	meal(id: Int!): Meal
+	feed(filterOptions: MealFeedOptions, first: Int!, after: String): MealFeed  # first: Amount to return, after: return this cursor and up to amount
+}
