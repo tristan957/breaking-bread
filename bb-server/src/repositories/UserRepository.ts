@@ -1,28 +1,50 @@
 import { Service } from "typedi";
 import { EntityManager, Repository } from "typeorm";
+import { TagRepository, TopicRepository } from ".";
+import { Tag, Topic } from "../entities";
 import User from "../entities/User";
-
-interface IGenericItem {
-	id: number;
-}
 
 @Service()
 export default class UserRepository extends Repository<User> {
 	private entityManager: EntityManager;
+	private tagRepository: TagRepository;
+	private topicRepository: TopicRepository;
 
-	constructor(entityManager: EntityManager) {
+	constructor(entityManager: EntityManager, tagRepository: TagRepository, topicRepository: TopicRepository) {
 		super();
 
 		this.entityManager = entityManager;
+		this.tagRepository = tagRepository;
+		this.topicRepository = topicRepository;
 	}
 
-	public toggleItem<T extends IGenericItem>(followedList: T[], toToggle: T): void {
-		const followedIDs: number[] = followedList.map(item => item.id);
-		const index: number = followedIDs.indexOf(toToggle.id);
-		if (index < 0) {
-			followedList.push(toToggle);
-		} else {
-			followedList.splice(index, 1);
-		}
+	public async toggleFollowedTags(currentUser: User, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
+		const user: User | undefined = await this.findOne(currentUser.id, { relations: ["tags"] });
+		// TODO: please check the above to make sure it works
+		if (user === undefined) { return undefined; }
+
+		this.tagRepository.toggleTagsList(user.followedTags, tags);
+		this.save(user);
+		return user.followedTags;
+	}
+
+	public async toggleBlacklist(currentUser: User, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+		const user: User | undefined = await this.findOne(currentUser.id, { relations: ["blacklist"] });
+		// TODO: please check the above to make sure it works
+		if (user === undefined) { return undefined; }
+
+		this.topicRepository.toggleTopicsList(user.blacklist, topics);
+		this.save(user);
+		return user.blacklist;
+	}
+
+	public async toggleWhitelist(currentUser: User, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+		const user: User | undefined = await this.findOne(currentUser.id, { relations: ["whitelist"] });
+		// TODO: please check the above to make sure it works
+		if (user === undefined) { return undefined; }
+
+		this.topicRepository.toggleTopicsList(user.whitelist, topics);
+		this.save(user);
+		return user.whitelist;
 	}
 }

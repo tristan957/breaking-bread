@@ -70,7 +70,7 @@ export default class MealController {
 
 	@Mutation()
 	public mealToggleRecipes(args: IMealRecipesUpdateArgs): Promise<Meal | undefined> {
-
+		// TODO: Just by id. Front end you should either see a list of your saved recipes or the option to search/create a new one which would get an id
 	}
 }
 

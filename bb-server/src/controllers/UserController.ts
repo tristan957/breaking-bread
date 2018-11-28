@@ -1,8 +1,11 @@
 import { Controller, Mutation, Query } from "vesper";
+import { Topic } from "../entities";
 import Recipe from "../entities/Recipe";
+import Tag from "../entities/Tag";
 import User from "../entities/User";
 import UserReview from "../entities/UserReview";
 import { RecipeRepository, UserRepository, UserReviewRepository } from "../repositories";
+import { toggleItemByID } from "../repositories/utilities/toggleByID";
 
 @Controller()
 export default class UserController {
@@ -55,18 +58,18 @@ export default class UserController {
 	}
 
 	@Mutation()
-	public userToggleWhitelist(args: IUserUpdateTopiclistArgs) {
+	public userToggleWhitelist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
+		return this.userRepository.toggleFollowedTags(this.currentUser, args.topics);
+	}
+
+	@Mutation()
+	public userToggleBlacklist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
 
 	}
 
 	@Mutation()
-	public userToggleBlacklist(args: IUserUpdateTopiclistArgs) {
-
-	}
-
-	@Mutation()
-	public userToggleFollowedTags(args: IUserUpdateTagsArgs) {
-
+	public userToggleFollowedTags(args: IUserToggleTagsArgs): Promise<Tag[] | undefined> {
+		return this.userRepository.toggleFollowedTags(this.currentUser, args.tags);
 	}
 
 	@Mutation()
@@ -75,15 +78,7 @@ export default class UserController {
 		const toFollow: User | undefined = await this.userRepository.findOne(args.id);
 		if (toFollow === undefined) { return undefined; }
 
-		// const followedIDs: number[] = followedUsers.map(user => user.id);
-		// const index: number = followedIDs.indexOf(toFollow.id);
-		// if (index < 0) {
-		// 	followedUsers.push(toFollow);
-		// } else {
-		// 	followedUsers.splice(index, 1);
-		// }
-
-		this.userRepository.toggleItem(followedUsers, toFollow);
+		toggleItemByID(followedUsers, toFollow);
 		this.userRepository.save({ ...this.currentUser, followedUsers });
 		return followedUsers;
 	}
@@ -94,15 +89,7 @@ export default class UserController {
 		const toSave: Recipe | undefined = await this.recipeRepository.findOne(args.id);
 		if (toSave === undefined) { return undefined; }
 
-		// const followedIDs: number[] = savedRecipes.map(recipe => recipe.id);
-		// const index: number = followedIDs.indexOf(toSave.id);
-		// if (index < 0) {
-		// 	savedRecipes.push(toSave);
-		// } else {
-		// 	savedRecipes.splice(index, 1);
-		// }
-
-		this.userRepository.toggleItem(savedRecipes, toSave);
+		toggleItemByID(savedRecipes, toSave);
 		this.userRepository.save({ ...this.currentUser, savedRecipes });
 		return savedRecipes;
 	}
@@ -182,4 +169,12 @@ interface IUserReviewEditArgs {
 	id: number;
 	rating?: number;
 	description?: string;
+}
+
+interface IUserToggleTagsArgs {
+	tags: DeepPartial<Tag>[];
+}
+
+interface IUserToggleTopiclistArgs {
+	topics: DeepPartial<Topic>[];
 }
