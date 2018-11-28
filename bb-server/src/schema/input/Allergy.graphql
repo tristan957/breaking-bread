@@ -1,4 +1,4 @@
-input TopicInput {
+input AllergyInput {
 	id: Int
 	name: String
 }

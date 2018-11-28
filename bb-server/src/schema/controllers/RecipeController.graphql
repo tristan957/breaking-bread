@@ -1,7 +1,7 @@
 extend type Mutation {
 	recipeSave(input: RecipeSaveInput!): Recipe!
 	recipeEdit(input: RecipeEditInput!): Recipe
-	recipeToggleTags(recipeID: Int!, tags: [GetTagInput!]!): [Tag!]
+	recipeToggleTags(recipeID: Int!, tags: [TagInput!]!): [Tag!]
 	recipeToggleAllergies(recipeID: Int!, allergies: [AllergyInput!]!): [Allergy!]
 	recipeReviewSave(input: RecipeReviewSaveInput!): RecipeReview!
 	recipeReviewEdit(input: RecipeReviewEditInput!): RecipeReview

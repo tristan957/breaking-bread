@@ -1,5 +1,5 @@
 import { Controller, Mutation, Query } from "vesper";
-import Tag from "../entities/Tag";
+import { Tag } from "../entities";
 import { TagRepository } from "../repositories";
 
 @Controller()

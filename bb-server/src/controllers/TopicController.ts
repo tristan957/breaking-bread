@@ -1,5 +1,5 @@
 import { Controller, Mutation, Query } from "vesper";
-import Topic from "../entities/Topic";
+import { Topic } from "../entities";
 import { TopicRepository } from "../repositories";
 
 @Controller()

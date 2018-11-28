@@ -1,9 +1,6 @@
+import { DeepPartial } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
-import { Topic } from "../entities";
-import Recipe from "../entities/Recipe";
-import Tag from "../entities/Tag";
-import User from "../entities/User";
-import UserReview from "../entities/UserReview";
+import { Recipe, Tag, Topic, User, UserReview } from "../entities";
 import { RecipeRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
 
@@ -59,12 +56,12 @@ export default class UserController {
 
 	@Mutation()
 	public userToggleWhitelist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
-		return this.userRepository.toggleFollowedTags(this.currentUser, args.topics);
+		return this.userRepository.toggleWhitelist(this.currentUser, args.topics);
 	}
 
 	@Mutation()
 	public userToggleBlacklist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
-
+		return this.userRepository.toggleBlacklist(this.currentUser, args.topics);
 	}
 
 	@Mutation()

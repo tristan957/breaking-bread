@@ -1,6 +1,6 @@
 import { Service } from "typedi";
-import { EntityManager, Repository } from "typeorm";
-import Topic from "../entities/Topic";
+import { DeepPartial, EntityManager, Repository } from "typeorm";
+import { Topic } from "../entities";
 import { toggleItemByID } from "./utilities/toggleByID";
 
 @Service()

@@ -1,8 +1,7 @@
 import { Service } from "typedi";
-import { EntityManager, Repository } from "typeorm";
+import { DeepPartial, EntityManager, Repository } from "typeorm";
 import { TagRepository, TopicRepository } from ".";
-import { Tag, Topic } from "../entities";
-import User from "../entities/User";
+import { Tag, Topic, User } from "../entities";
 
 @Service()
 export default class UserRepository extends Repository<User> {

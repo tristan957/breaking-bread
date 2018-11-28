@@ -1,4 +1,4 @@
-input CreateUserInput {
+input UserSaveInput {
 	firstName: String!
 	lastName: String!
 	imagePath: String!
@@ -7,7 +7,7 @@ input CreateUserInput {
 	phoneNumber: String!
 }
 
-input UpdateUserInput {
+input UserEditInput {
 	id: Int!
 	imagePath: String
 	about: String

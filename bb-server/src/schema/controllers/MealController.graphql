@@ -3,7 +3,7 @@ extend type Mutation {
 	mealDelete(mealID: Int!): Boolean!
 	mealToggleGuest(mealID: Int!, guestID: Int!): [User!]
 	mealEdit(input: MealEditInput!): Meal
-	mealToggleRecipes(mealID: Int!, recipes: [RecipeInput!]!): Meal
+	mealToggleRecipes(mealID: Int!, recipes: [RecipeInput!]!): [Recipe!]
 }
 
 extend type Query {

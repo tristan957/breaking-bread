@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 import { EntityManager, Repository } from "typeorm";
-import UserReview from "../entities/UserReview";
+import { UserReview } from "../entities";
 
 @Service()
 export default class UserReviewRepository extends Repository<UserReview> {

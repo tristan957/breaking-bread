@@ -1,12 +1,7 @@
 import { Service } from "typedi";
-import { EntityManager, Repository } from "typeorm";
-import Tag from "../entities/Tag";
+import { DeepPartial, EntityManager, Repository } from "typeorm";
+import { Tag } from "../entities";
 import { toggleItemByID } from "./utilities/toggleByID";
-
-interface IGenericEntity {
-	tags?: Tag[];
-	followedTags?: Tag[];
-}
 
 @Service()
 export default class TagRepository extends Repository<Tag> {

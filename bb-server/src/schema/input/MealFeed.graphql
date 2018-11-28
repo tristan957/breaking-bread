@@ -2,8 +2,8 @@ input MealFeedOptions {
 	location: LocationFilter
 	dateSpan: DateSpanFilter
 	maxGuests: Int
-	tags: [GetTagInput]
-	topics: [GetTopicInput]
+	tags: [TagInput!]
+	topics: [TopicInput!]
 }
 
 input LocationFilter {

@@ -1,26 +1,70 @@
+
 import { GraphQLDateTime } from "graphql-iso-date";
-import { ContainerInstance } from "typedi";
-import { getManager } from "typeorm";
-import { Action, bootstrap } from "vesper";
-import { controllers } from "./controllers";
-import { entities } from "./entities";
-import User from "./entities/User";
+import { bootstrap } from "vesper";
+import { AllergyController } from "./controllers";
+import { Allergy } from "./entities";
+import { AllergyRepository } from "./repositories";
 
 bootstrap({
 	port: 10262,
-	controllers,
-	entities,
+	controllers: [
+		AllergyController,
+	],
+	entities: [
+		Allergy,
+	],
+	entityRepositories: [
+		{
+			repository: AllergyRepository,
+			entity: Allergy,
+		},
+		// {
+		// 	repository: MealRepository,
+		// 	entity: Meal,
+		// },
+		// {
+		// 	repository: RecipeRepository,
+		// 	entity: Recipe,
+		// },
+		// {
+		// 	repository: RecipeReviewRepository,
+		// 	entity: RecipeReview,
+		// },
+		// {
+		// 	repository: TagRepository,
+		// 	entity: Tag,
+		// },
+		// {
+		// 	repository: TopicRepository,
+		// 	entity: Topic,
+		// },
+		// {
+		// 	repository: UserRepository,
+		// 	entity: User,
+		// },
+		// {
+		// 	repository: UserReviewRepository,
+		// 	entity: UserReview,
+		// },
+	],
+	// resolvers: [
+	// 	{
+	// 		resolver: UserResolver,
+	// 		model:
+	// 	}
+	// ],
 	schemas: [
 		`${__dirname}/schema/**/*.graphql`,
 	],
 	customResolvers: {
 		DateTime: GraphQLDateTime,
 	},
-	setupContainer: async (container: ContainerInstance, action: Action) => {
-		const request = action.request; // user request, you can get http headers from it
-		const user = getManager().findOneOrFail(User, { oAuthSub: request!.headers.oauthsub as string });
-		container.set(User, user);
-	},
+	// setupContainer: async (container: ContainerInstance, action: Action) => {
+	// 	console.log("'hello'");
+	// 	const request = action.request; // user request, you can get http headers from it
+	// 	const user = getManager().findOneOrFail(User, { oAuthSub: request!.headers.oauthsub as string });
+	// 	container.set(User, user);
+	// },
 	cors: true,
 }).then(() => {
 	console.log(`Server is up and running on http://localhost:10262

@@ -20,6 +20,6 @@ extend type Mutation {
 
 extend type Query {
 	user(id: Int!): User
-	userAuthenticated(): User
+	userAuthenticated: User
 	userReview(id: Int!): UserReview
 }

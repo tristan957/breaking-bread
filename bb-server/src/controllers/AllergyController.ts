@@ -1,5 +1,5 @@
 import { Controller, Mutation, Query } from "vesper";
-import Allergy from "../entities/Allergy";
+import { Allergy } from "../entities";
 import { AllergyRepository } from "../repositories";
 
 @Controller()
@@ -12,13 +12,13 @@ export default class AllergyController {
 
 	@Query()
 	public allergy(args: IAllergyArgs): Promise<Allergy | undefined> {
-		return this.allergyRepository.findOne(args.id);
+		return this.allergyRepository.entityManager.findOne(Allergy, args.id);
 	}
 
 	@Mutation()
 	public async allergySave(args: IAllergySaveArgs): Promise<Allergy> {
-		const allergy: Allergy | undefined = await this.allergyRepository.findOne({ name: args.name });
-		return allergy === undefined ? this.allergyRepository.save(this.allergyRepository.create(args)) : allergy;
+		const allergy: Allergy | undefined = await this.allergyRepository.entityManager.findOne(Allergy, { name: args.name });
+		return allergy === undefined ? this.allergyRepository.entityManager.save(Allergy, this.allergyRepository.entityManager.create(Allergy, args)) : allergy;
 	}
 }
 

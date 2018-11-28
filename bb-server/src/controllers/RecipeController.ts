@@ -1,8 +1,6 @@
+import { DeepPartial } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
-import Recipe from "../entities/Recipe";
-import RecipeReview from "../entities/RecipeReview";
-import Tag from "../entities/Tag";
-import User from "../entities/User";
+import { Allergy, Recipe, RecipeReview, Tag, User } from "../entities";
 import { RecipeRepository, RecipeReviewRepository } from "../repositories";
 
 @Controller()
@@ -41,8 +39,8 @@ export default class RecipeController {
 	}
 
 	@Mutation()
-	public recipeToggleAllergies(): Promise<Allergy[] | undefined> {
-
+	public recipeToggleAllergies(args: IRecipeToggleAllergiesArgs): Promise<Allergy[] | undefined> {
+		return this.recipeRepository.toggleAllergies(args.id, args.allergies);
 	}
 
 	@Mutation()
@@ -111,4 +109,9 @@ interface IRecipeReviewEditArgs {
 interface IRecipeToggleTagsArgs {
 	id: number;
 	tags: DeepPartial<Tag>[];
+}
+
+interface IRecipeToggleAllergiesArgs {
+	id: number;
+	allergies: DeepPartial<Allergy>[];
 }
