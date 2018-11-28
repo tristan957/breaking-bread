@@ -38,14 +38,14 @@ export default class MealController {
 
 	@Mutation()
 	public async mealToggleGuest(args: IMealToggleGuestArgs): Promise<User[] | undefined> {
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID);
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, {
+			relations: ["host"],
+		});
 		const guest: User | undefined = await this.userRepository.findOne(args.guestID);
 		if (meal === undefined || guest === undefined) {
 			return undefined;
 		}
-
-		const mealHost: User = await meal.host;
-		if (mealHost.id !== this.currentUser.id) {
+		if (meal.host.id !== this.currentUser.id) {
 			return undefined;
 		}
 
@@ -69,7 +69,7 @@ export default class MealController {
 	}
 
 	@Mutation()
-	public mealRecipesUpdate(args: IMealRecipesUpdateArgs): Promise<Meal | undefined> {
+	public mealToggleRecipes(args: IMealRecipesUpdateArgs): Promise<Meal | undefined> {
 
 	}
 }

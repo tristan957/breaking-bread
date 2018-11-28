@@ -1,11 +1,10 @@
-input CreateUserReviewInput {
+input UserReviewSaveInput {
 	rating: Int!
 	description: String
 	subjectID: Int!
-	authorID: Int!
 }
 
-input UpdateUserReviewInput {
+input UserReviewEditInput {
 	id: Int!
 	rating: Int
 	description: String

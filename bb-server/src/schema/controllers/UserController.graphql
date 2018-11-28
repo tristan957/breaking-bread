@@ -8,9 +8,9 @@ extend type Mutation {
 	userSave(input: UserSaveInput!): User!
 	userEdit(input: UserEditInput!): User
 	userDelete(id: Int!): Boolean!
-	userUpdateWhitelist(userID: Int!, topics: [TopicInput!]!): [Topic!]
-	userUpdateBlacklist(userID: Int!, topics: [TopicInput!]!): [Topic!]
-	userUpdateFollowedTags(userID: Int!, tags: [TagInput!]!): [Tag!]
+	userToggleWhitelist(userID: Int!, topics: [TopicInput!]!): [Topic!]
+	userToggleBlacklist(userID: Int!, topics: [TopicInput!]!): [Topic!]
+	userToggleFollowedTags(userID: Int!, tags: [TagInput!]!): [Tag!]
 	userToggleFollowing(userID: Int!): [User!]
 	userToggleSavedRecipe(recipeID: Int!, userID: Int!): [Recipe!]
 	# userMealFeed(userID: Int!, first: Int!, after: String, ): MealFeed 

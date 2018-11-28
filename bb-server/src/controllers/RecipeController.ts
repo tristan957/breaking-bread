@@ -29,14 +29,15 @@ export default class RecipeController {
 	}
 
 	@Mutation()
-	public recipeEdit(): Promise<Recipe | undefined> {
-
+	public async recipeEdit(args: IRecipeEditArgs): Promise<Recipe | undefined> {
+		const recipe: Recipe | undefined = await this.recipeRepository.findOne(args.id);
+		if (recipe === undefined) { return undefined; }
+		return this.recipeRepository.save({ ...recipe, ...args });
 	}
 
 	@Mutation()
-	public recipeToggleTags(args: IRecipeToggleTagsArgs): Promise<Tag[] | undefined> {
-		const recipe: Recipe | undefined
-
+	public async recipeToggleTags(args: IRecipeToggleTagsArgs): Promise<Tag[] | undefined> {
+		return this.recipeRepository.toggleTags(args.id, args.tags);
 	}
 
 	@Mutation()
@@ -64,9 +65,6 @@ export default class RecipeController {
 				id: args.subjectID,
 			},
 		})) : review;
-		// const recipeReview: RecipeReview | undefined = await this.recipeReviewRepository.createQueryBuilder()
-		// 	.innerJoinAndSelect()
-		// 	.findOne();
 	}
 
 	@Mutation()
@@ -83,6 +81,13 @@ export default class RecipeController {
 
 interface IRecipeArgs {
 	id: number;
+}
+
+interface IRecipeEditArgs {
+	id: number;
+	name?: string;
+	description?: string;
+	imagePath?: string;
 }
 
 interface IRecipeSaveArgs {
