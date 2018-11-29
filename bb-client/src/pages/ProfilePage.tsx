@@ -5,7 +5,6 @@ import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
 import ProfileActivityContainer from "../containers/ProfileActivityContainer";
-import ProfileHeader from "../containers/ProfileHeaderContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import User from "../entities/User";
@@ -152,7 +151,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 									<div>
 										<div id="profile-info">
 											<div id="profile-info-top">
-												<ProfileHeader
+												{/* <ProfileHeader
 													userID={result.data!.getUser!.id!}
 													viewer={userContext.user}
 													name={`${result.data!.getUser!.firstName} ${result.data!.getUser!.lastName}`}
@@ -163,7 +162,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 													joinedAt={result.data!.getUser!.createdAt as number}
 													reviewAverage={this.getUserReviewAverage(result.data!.getUser!)}
 													numberOfFollowers={result.data!.getUser!.followedUsers!.length || 0}
-												/>
+												/> */}
 											</div>
 											<div id="profile-info-bottom">
 												<div id="profile-info-topics">
@@ -171,7 +170,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 													<TopicsContainer topics={result.data!.getUser!.blacklist || []} />
 												</div>
 												<div id="profile-info-upcoming">
-													<UpcomingMealsContainer mealsAttending={result.data!.getUser!.upcomingMeals || []} />
+													<UpcomingMealsContainer userID={result.data!.getUser!.id!} />
 												</div>
 											</div>
 										</div>

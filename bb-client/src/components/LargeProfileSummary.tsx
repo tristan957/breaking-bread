@@ -59,7 +59,7 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 
 		return <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
 			if (result.data !== undefined) {
-				this.props.viewer!.followedUsers!.push(result.data!);
+				this.props.viewer!.followedUsers!.push(result.data);
 			}
 			return mutateFn({ variables: { userID: this.props.userID } });
 		}}>Follow</Button>;

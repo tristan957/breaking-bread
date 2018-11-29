@@ -34,7 +34,7 @@ export default class RecipeSummaryContainer extends React.Component<IRecipeSumma
 						<div className="card">
 							<RecipeSummary
 								authorID={this.props.recipe.id!}
-								viewerID={userContext.user!.id}
+								viewerID={userContext.userID}
 								name={this.props.recipe.name!}
 								tags={this.props.recipe.tags || []}
 								createdAt={this.props.recipe.createdAt!}

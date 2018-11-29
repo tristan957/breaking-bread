@@ -6,8 +6,6 @@ import { UserContext } from "../App";
 import MobileSidebar from "../components/MobileSidebar";
 import FeedContainer from "../containers/FeedContainer";
 import ProfileSummaryContainer from "../containers/ProfileSummaryContainer";
-import TagsContainer from "../containers/TagsContainer";
-import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import "./resources/css/DashboardPage.css";
 
@@ -20,10 +18,7 @@ export default class DashboardPage extends React.Component<RouteComponentProps> 
 						<div>
 							<MediaQuery query="(max-width: 949px)">
 								<div id="mobileSidebar">
-									<MobileSidebar
-										user={userContext.user}
-										mealsAttending={userContext.user!.upcomingMeals || []}
-									/>
+									<MobileSidebar userID={userContext.userID} />
 								</div>
 								<div id="top-buffer"></div>
 								<div id="mobile-center">
@@ -35,11 +30,11 @@ export default class DashboardPage extends React.Component<RouteComponentProps> 
 								<div id="dashboard">
 									<div id="left-container">
 										{
-											userContext.user === undefined ? undefined : (
+											userContext.userID === undefined ? undefined : (
 												<div>
-													<ProfileSummaryContainer user={userContext.user} />
-													<TagsContainer tags={userContext.user.followedTags || []} />
-													<TopicsContainer topics={userContext.user.whitelist || []} />
+													<ProfileSummaryContainer userID={userContext.userID} />
+													{/* <TagsContainer userID={userContext.userID} />
+													<TopicsContainer userID={userContext.userID} /> */}
 												</div>
 											)
 										}
@@ -49,8 +44,8 @@ export default class DashboardPage extends React.Component<RouteComponentProps> 
 									</div>
 									<div id="right-container">
 										{
-											userContext.user === undefined ? undefined : (
-												<UpcomingMealsContainer mealsAttending={userContext.user.upcomingMeals || []} />
+											userContext.userID === undefined ? undefined : (
+												<UpcomingMealsContainer userID={userContext.userID} />
 											)
 										}
 									</div>

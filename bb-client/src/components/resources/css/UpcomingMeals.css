@@ -4,10 +4,10 @@
 	border-left: solid gray 3px;
 }
 
-#upcoming-meals-list > li:hover {
+#upcoming-meals > li:hover {
 	border-left-color: #2eb1dc;
 }
 
-#upcoming-meals-list:last-child {
+#upcoming-meals-list > li:last-child {
 	margin-bottom: 0px;
 }

@@ -1,4 +1,3 @@
-// tslint:disable: no-unsafe-any no-any
 import { gql } from "apollo-boost";
 import moment from "moment";
 import React from "react";
@@ -14,9 +13,9 @@ import Topic from "../entities/Topic";
 import MealSummariesContainer from "./MealSummariesContainer";
 import "./resources/css/FeedContainer.css";
 
-const GET_MEAL_FEED = gql`
-	query GetMealFeed($options: GetMealFeedOptions, $first: Int!, $after: String) {
-		getMealFeed(filterOptions: $options, first: $first, after: $after) {
+const MEAL_FEED = gql`
+	query MealFeed($options: MealFeedOptions, $first: Int!, $after: String) {
+		feed(filterOptions: $options, first: $first, after: $after) {
 			edges {
 				cursor
 				node {
@@ -56,7 +55,7 @@ const GET_MEAL_FEED = gql`
 	}
 `;
 
-interface IGetMealFeedOptions {
+interface IMealFeedOptions {
 	location?: {
 		distanceMI: number;
 		fromLocation: string; // Either an address or a lat and lon
@@ -66,8 +65,8 @@ interface IGetMealFeedOptions {
 		to: number;
 	};
 	maxGuests?: number;
-	tags?: Partial<Tag>;
-	topics?: Partial<Topic>;
+	tags?: Partial<Tag>[];
+	topics?: Partial<Topic>[];
 }
 
 interface IEdge {
@@ -80,8 +79,8 @@ interface IPageInfo {
 	hasNextPage: boolean;
 }
 
-interface IGetMealFeedResult {
-	getMealFeed: {
+interface IMealFeedResult {
+	feed: {
 		edges: IEdge[];
 		pageInfo: IPageInfo;
 		totalCount: number;
@@ -95,13 +94,11 @@ interface IFeedContainerState {
 	modal: boolean;
 }
 
+type MealFeedResult = QueryResult<IMealFeedResult>;
+
 export default class FeedContainer extends React.Component<{}, IFeedContainerState> {
-	// tslint:disable-next-line:variable-name
 	constructor(props: Readonly<{}>) {
 		super(props);
-		this.onDateChange = this.onDateChange.bind(this);
-		this.onFocusChange = this.onFocusChange.bind(this);
-		this.toggleModal = this.toggleModal.bind(this);
 		this.state = {
 			startDate: moment(),
 			endDate: moment(),
@@ -110,38 +107,38 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 		};
 	}
 
-	public toggleModal(): void {
+	public toggleModal = (): void => {
 		this.setState({
 			modal: !this.state.modal,
 		});
 	}
 
-	public onDateChange(arg: { startDate: moment.Moment | null; endDate: moment.Moment | null }): void {
+	public onDateChange = (arg: { startDate: moment.Moment | null; endDate: moment.Moment | null }): void => {
 		this.setState({
 			startDate: arg.startDate,
 			endDate: arg.endDate,
 		});
 	}
 
-	public onFocusChange(focusedInput: "startDate" | "endDate" | null): void {
+	public onFocusChange = (focusedInput: "startDate" | "endDate" | null): void => {
 		this.setState({
 			focusedInput,
 		});
 	}
 
 	public render(): JSX.Element {
-		const options: IGetMealFeedOptions = {}; // TODO: Load options some other way
+		const options: IMealFeedOptions = {}; // TODO: Load options some other way
 		const first = 2;
 
 		return (
 			<Query
-				query={GET_MEAL_FEED}
+				query={MEAL_FEED}
 				variables={{
 					options,
 					first,
 				}}
 			>
-				{(result: QueryResult<IGetMealFeedResult>) => {
+				{(result: MealFeedResult) => {
 					if (result.loading) {
 						return <div></div>;
 					}
@@ -154,7 +151,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 					}
 
 					let consumedCursor = false;
-					const feedMeals: Partial<Meal>[] = result.data!.getMealFeed.edges.map(edge => edge.node);
+					const feedMeals: Partial<Meal>[] = result.data!.feed.edges.map(edge => edge.node);
 					return (
 						<div id="feed-container">
 							<div id="feed-header">
@@ -217,25 +214,25 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 							</Modal>
 							<MealSummariesContainer
 								onLoadMore={() => {
-									if (result.data!.getMealFeed.pageInfo.hasNextPage && !consumedCursor) {
+									if (result.data!.feed.pageInfo.hasNextPage && !consumedCursor) {
 										consumedCursor = true;
 
 										result.fetchMore({
 											variables: {
 												options,
 												first,
-												after: result.data!.getMealFeed.pageInfo.endCursor,
+												after: result.data!.feed.pageInfo.endCursor,
 											},
-											updateQuery: (prev: IGetMealFeedResult, { fetchMoreResult }): IGetMealFeedResult => {
+											updateQuery: (prev: IMealFeedResult, { fetchMoreResult }): IMealFeedResult => {
 												if (!fetchMoreResult) { return prev; }
 
 												consumedCursor = false;
 												return {
 													...prev,
-													getMealFeed: {
-														...prev.getMealFeed,
-														...fetchMoreResult.getMealFeed,
-														edges: [...prev.getMealFeed.edges, ...fetchMoreResult.getMealFeed.edges],
+													feed: {
+														...prev.feed,
+														...fetchMoreResult.feed,
+														edges: [...prev.feed.edges, ...fetchMoreResult.feed.edges],
 													},
 												};
 											},

@@ -12,7 +12,7 @@ export default class ProfileSummariesContainers extends React.Component<IProfile
 		return (
 			<div id="profile-summaries-containers">
 				{this.props.users.map((user, i) => {
-					return <ProfileSummaryContainer key={i} user={user} />;
+					return <ProfileSummaryContainer key={i} userID={user.id!} />;
 				})}
 			</div>
 		);

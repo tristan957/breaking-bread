@@ -1,33 +1,26 @@
-// tslint:disable: no-unsafe-any
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
-import ProfileSummaryContainer from "../containers/ProfileSummaryContainer";
-import TagsContainer from "../containers/TagsContainer";
-import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
-import Meal from "../entities/Meal";
-import User from "../entities/User";
 import "./resources/css/MobileSidebar.css";
 
-interface IAppState {
+interface IMobileSidebarState {
 	sidebarOpen: boolean;
 }
 
-interface IDashboardProps {
-	user?: Partial<User>;
-	mealsAttending: Partial<Meal>[];
+interface IMobileDashboardProps {
+	userID?: number;
 }
 
-export default class MobileSidebar extends React.Component<IDashboardProps, IAppState> {
-	constructor(props: Readonly<IDashboardProps>) {
+export default class MobileSidebar extends React.Component<IMobileDashboardProps, IMobileSidebarState> {
+	constructor(props: Readonly<IMobileDashboardProps>) {
 		super(props);
-		this.setSidebarOpen = this.setSidebarOpen.bind(this);
+
 		this.state = {
 			sidebarOpen: true,
 		};
 	}
 
-	public setSidebarOpen(): void {
+	public setSidebarOpen = (): void => {
 		this.setState({
 			sidebarOpen: !this.state.sidebarOpen,
 		});
@@ -39,13 +32,13 @@ export default class MobileSidebar extends React.Component<IDashboardProps, IApp
 				<div id="left">
 					<Menu burgerButtonClassName={"leftPane"}>
 						<div>
-							{this.props.user === undefined ? undefined : (
+							{/* {this.props.userID === undefined ? undefined : (
 								<div>
 									<ProfileSummaryContainer user={this.props.user} />
 									<TagsContainer tags={this.props.user.followedTags || []} />
 									<TopicsContainer topics={this.props.user.whitelist || []} />
 								</div>
-							)}
+							)} */}
 						</div>
 					</Menu>
 				</div>
@@ -53,8 +46,8 @@ export default class MobileSidebar extends React.Component<IDashboardProps, IApp
 				<div id="right">
 					<Menu burgerButtonClassName={"rightPane"} right>
 						<div>
-							{this.props.user === undefined ? undefined : (
-								<UpcomingMealsContainer mealsAttending={this.props.mealsAttending || []} />
+							{this.props.userID === undefined ? undefined : (
+								<UpcomingMealsContainer userID={this.props.userID} />
 							)}
 						</div>
 					</Menu>
