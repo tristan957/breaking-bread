@@ -18,7 +18,6 @@ services:
     restart: "no"
     volumes:
       - ./docker/var/lib/postgresql/data/pgdata:/var/lib/postgresql/data/pgdata
-      # - ./BreakingBread.sql:/docker-entrypoint-initdb.d/BreakingBread.sql
     environment:
       POSTGRES_USER: jesus
       POSTGRES_PASSWORD: christ
@@ -32,6 +31,6 @@ services:
     container_name: bb-adminer
     links:
       - db
-    restart: always
+    restart: "no"
     ports:
       - 10261:8080
