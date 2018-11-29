@@ -4,82 +4,37 @@ import { Query, QueryResult } from "react-apollo";
 import { Route, Switch } from "react-router";
 import Loading from "./components/Loading";
 import NavigationBar from "./components/NavigationBar";
-import User from "./entities/User";
 import DashboardPage from "./pages/DashboardPage";
-import MealPage from "./pages/MealPage";
-import ProfilePage from "./pages/ProfilePage";
-import RecipePage from "./pages/RecipePage";
 import "./resources/css/App.css";
 import "./resources/css/common.css";
 
-const GET_LOGGED_IN_USER = gql`
-	{
-		getLoggedInUser {
+const USER_AUTHENTICATED = gql`
+	query UserAuthenticated {
+		userAuthenticated {
 			id
-			firstName
-			lastName
-			imagePath
-			whitelist {
-				id
-				name
-			}
-			blacklist {
-				id
-				name
-			}
-			followedTags {
-				id
-				name
-			}
-			followedUsers {
-				id
-			}
-			mealsAttending {
-				id
-			}
-			upcomingMeals {
-				id
-				title
-				price
-				startTime
-				endTime
-				guests {
-					id
-				}
-				maxGuests
-				location
-			}
-			reviews {
-				id
-				rating
-			}
-			recipesAuthored {
-				id
-				name
-				imagePath
-				description
-				timesSaved
-			}
 		}
 	}
 `;
 
 export interface IAppContext {
-	user?: Partial<User>;
+	userID?: number;
+	reloadUser?(): void;
 }
 
-interface IGetLoggedInUserResult {
-	getLoggedInUser: Partial<User>;
+interface IUserAuthenticatedResult {
+	userAuthenticated: {
+		id: number;
+	};
 }
 
 // tslint:disable-next-line: variable-name
-export const UserContext = React.createContext<IAppContext>({ user: undefined });
+export const UserContext = React.createContext<IAppContext>({ userID: undefined, reloadUser: undefined });
 
 export default class App extends React.Component {
 	public render(): JSX.Element {
 		return (
-			<Query query={GET_LOGGED_IN_USER}>
-				{(result: QueryResult<IGetLoggedInUserResult>) => {
+			<Query query={USER_AUTHENTICATED}>
+				{(result: QueryResult<IUserAuthenticatedResult>) => {
 					if (result.loading) {
 						return <Loading />;
 					}
@@ -93,17 +48,17 @@ export default class App extends React.Component {
 
 					return (
 						<div>
-							<div id="Top">
+							<div id="top">
 								<NavigationBar />
 							</div>
 							<div id="page-content">
 								<div id="content-container">
-									<UserContext.Provider value={{ user: result.data!.getLoggedInUser }}>
+									<UserContext.Provider value={{ userID: result.data!.userAuthenticated.id, reloadUser: () => result.refetch() }}>
 										<Switch>
 											<Route exact path="/" component={DashboardPage} />
-											<Route exact path="/m/:mealID" component={MealPage} />
+											{/* <Route exact path="/m/:mealID" component={MealPage} />
 											<Route exact path="/p/:userID" component={ProfilePage} />
-											<Route exact path="/r/:recipeID" component={RecipePage} />
+											<Route exact path="/r/:recipeID" component={RecipePage} /> */}
 										</Switch>
 									</UserContext.Provider>
 								</div>

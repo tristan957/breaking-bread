@@ -5,7 +5,6 @@ import { RouteComponentProps } from "react-router-dom";
 import { Markdown } from "react-showdown";
 import { Button } from "reactstrap";
 import { UserContext } from "../App";
-import CreatorSummary from "../components/CreatorSummary";
 import ProfileSummaries from "../components/ProfileSummaries";
 import RecipeSummary from "../components/RecipeSummary";
 import MealSummaryContainer from "../containers/MealSummaryContainer";
@@ -129,7 +128,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 									);
 								}
 
-								const loggedInUserIsHost = result.data!.getMeal!.host!.id! === userContext.user!.id!;
+								const loggedInUserIsHost = result.data!.getMeal!.host!.id === userContext.userID;
 								return (
 									<div id="meal-page">
 										<div id="meal-page-left">
@@ -148,7 +147,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 																<hr />
 																<RecipeSummary
 																	authorID={recipe.author!.id!}
-																	viewerID={userContext.user!.id}
+																	viewerID={userContext.userID}
 																	name={recipe.name!}
 																	tags={recipe.tags || []}
 																	imagePath={recipe.imagePath}
@@ -167,13 +166,13 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										</div>
 										<div id="meal-page-right">
 											<div className="card">
-												<CreatorSummary
+												{/* <CreatorSummary
 													viewer={userContext.user!}
 													userID={result.data!.getMeal!.host!.id!}
 													name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
 													imagePath={result.data!.getMeal!.host!.imagePath}
 													topics={result.data!.getMeal!.host!.whitelist || []}
-												/>
+												/> */}
 											</div>
 											<div id="meal-page-guests-container" className="card">
 												<div id="meal-page-guests-container-header">

@@ -4,17 +4,17 @@ import "./resources/css/UpcomingMeals.css";
 import UpcomingMealSummary from "./UpcomingMealSummary";
 
 interface IUpcomingMealsProps {
-	mealsAttending: Partial<Meal>[];
+	upcomingMeals: Partial<Meal>[];
 }
 
 export default class UpcomingMeals extends React.Component<IUpcomingMealsProps> {
 	public render(): JSX.Element {
 		return (
 			<div>
-				<ul id="upcoming-meals-list" className="no-style-list">
-					{this.props.mealsAttending.map((meal, i) => {
+				<ul id="upcoming-meals" className="no-style-list">
+					{this.props.upcomingMeals.map((meal, i) => {
 						return (
-							<li key={i}>
+							<li key={i} id="upcoming-meal">
 								<UpcomingMealSummary
 									id={meal.id!}
 									title={meal.title!}

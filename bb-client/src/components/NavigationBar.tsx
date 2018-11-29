@@ -7,7 +7,7 @@ import Geosuggest from "react-geosuggest";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import { Button, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
-import * as Showdown from "showdown";
+import Showdown from "showdown";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/logo_icon.png";
 
@@ -24,12 +24,6 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 	public converter: Showdown.Converter;
 	constructor(props: Readonly<{}>) {
 		super(props);
-		this.toggleDropDown = this.toggleDropDown.bind(this);
-		this.toggleMealModal = this.toggleMealModal.bind(this);
-		this.toggleRecipeModal = this.toggleRecipeModal.bind(this);
-		this.onDateChange = this.onDateChange.bind(this);
-		this.onFocusChange = this.onFocusChange.bind(this);
-		this.handleValueChange = this.handleValueChange.bind(this);
 
 		this.state = {
 			createdAt: moment(),
@@ -46,31 +40,31 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 		});
 	}
 
-	public toggleDropDown(): void {
+	public toggleDropDown = (): void => {
 		this.setState({
 			dropDown: !this.state.dropDown,
 		});
 	}
 
-	public toggleMealModal(): void {
+	public toggleMealModal = (): void => {
 		this.setState({
 			mealModal: !this.state.mealModal,
 		});
 	}
 
-	public toggleRecipeModal(): void {
+	public toggleRecipeModal = (): void => {
 		this.setState({
 			recipeModal: !this.state.recipeModal,
 		});
 	}
 
-	public onDateChange(date: moment.Moment | null): void {
+	public onDateChange = (date: moment.Moment | null): void => {
 		this.setState({
 			createdAt: date,
 		});
 	}
 
-	public onFocusChange(): void {
+	public onFocusChange = (): void => {
 		this.setState({
 			calendarFocused: !this.state.calendarFocused,
 		});
@@ -92,7 +86,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
 					<NavbarBrand href="/" className="bb-navbar-brand">
-						<div><img className="brand" src={logo} height="30" /></div>
+						<div id="bb-brand-container"><img id="bb-brand" src={logo} height="30" /></div>
 					</NavbarBrand>
 					<Nav className="ml-auto" navbar>
 						<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
