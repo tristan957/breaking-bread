@@ -16,7 +16,6 @@ export interface IUserSaveArgs {
 }
 
 export interface IUserEditArgs {
-	id: number;
 	imagePath?: string;
 	about?: string;
 	email?: string;

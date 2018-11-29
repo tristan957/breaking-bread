@@ -42,16 +42,12 @@ export default class UserController {
 
 	@Mutation()
 	public async userEdit(args: IInput<IUserEditArgs>): Promise<User | undefined> {
-		const user: User | undefined = await this.userRepository.findOne(args.input.id);
-		if (user === undefined) { return undefined; }
-		return this.userRepository.save({ ...user, ...args.input });
+		return this.userRepository.save({ ...this.currentUser, ...args.input });
 	}
 
 	@Mutation()
-	public async userDelete(args: IUserArgs): Promise<boolean> {
-		const user: User | undefined = await this.userRepository.findOne(args.id);
-		if (user === undefined) { return false; }
-		this.userRepository.remove(user);
+	public async userDelete(): Promise<boolean> { // Maybe prompt on front-end first
+		this.userRepository.remove(this.currentUser);
 		return true;
 	}
 
