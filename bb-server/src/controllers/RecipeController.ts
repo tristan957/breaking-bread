@@ -1,6 +1,6 @@
 import { Controller, Mutation, Query } from "vesper";
 import { IInput } from "../args";
-import { IRecipeArgs, IRecipeEditArgs, IRecipeReviewEditArgs, IRecipeReviewSaveArgs, IRecipeSaveArgs, IRecipeToggleAllergiesArgs, IRecipeToggleTagsArgs } from "../args/RecipeControllerArgs";
+import { IRecipeArgs, IRecipeEditArgs, IRecipeReviewArgs, IRecipeReviewEditArgs, IRecipeReviewSaveArgs, IRecipeSaveArgs, IRecipeToggleAllergiesArgs, IRecipeToggleTagsArgs } from "../args/RecipeControllerArgs";
 import { Allergy, Recipe, RecipeReview, Tag, User } from "../entities";
 import { RecipeRepository, RecipeReviewRepository } from "../repositories";
 
@@ -19,6 +19,11 @@ export default class RecipeController {
 	@Query()
 	public recipe(args: IRecipeArgs): Promise<Recipe | undefined> {
 		return this.recipeRepository.findOne(args.id);
+	}
+
+	@Query()
+	public recipeReview(args: IRecipeReviewArgs): Promise<RecipeReview | undefined> {
+		return this.recipeReviewRepository.findOne(args.id);
 	}
 
 	@Mutation()

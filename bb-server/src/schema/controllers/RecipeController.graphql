@@ -9,4 +9,5 @@ extend type Mutation {
 
 extend type Query {
 	recipe(id: Int!): Recipe
+	recipeReview(id: Int!): RecipeReview
 }
