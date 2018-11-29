@@ -99,23 +99,24 @@ export default class UserController {
 	@Mutation()
 	public async userReviewSave(args: IInput<IUserReviewSaveArgs>): Promise<UserReview | undefined> {
 		if (this.currentUser === undefined) { return undefined; }	// Need to check if user was in a past attended meal
+		const subject: User | undefined = await this.userRepository.findOne(args.input.subjectID);
+		if (subject === undefined) { return undefined; }
+
 		const review: UserReview | undefined = await this.userReviewRepository.findOne({
-			subject: {
-				id: args.input.subjectID,
-			},
-			author: {
-				id: this.currentUser.id,
+			where: {
+				subject: {
+					id: args.input.subjectID,
+				},
+				author: {
+					id: this.currentUser.id,
+				},
 			},
 		});
 
 		return review === undefined ? this.userReviewRepository.save(this.userReviewRepository.create({
-			...args,
-			author: {
-				id: this.currentUser.id,
-			},
-			subject: {
-				id: args.input.subjectID,
-			},
+			...args.input,
+			author: this.currentUser,
+			subject,
 		})) : review;
 	}
 

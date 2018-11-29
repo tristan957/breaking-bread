@@ -30,7 +30,6 @@ export interface IUserReviewSaveArgs {
 	rating: number;
 	description?: string;
 	subjectID: number;
-	authorID: number;
 }
 
 export interface IUserReviewEditArgs {

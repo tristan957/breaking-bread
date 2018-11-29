@@ -46,23 +46,25 @@ export default class RecipeController {
 
 	@Mutation()
 	public async recipeReviewSave(args: IInput<IRecipeReviewSaveArgs>): Promise<RecipeReview> {
+		if (this.currentUser === undefined) { return undefined; }	// Need to check if user has been to a meal with this recipe in the past?
+		const subject: Recipe | undefined = await this.recipeRepository.findOne(args.input.subjectID);
+		if (subject === undefined) { return undefined; }
+
 		const review: RecipeReview | undefined = await this.recipeReviewRepository.findOne({
-			subject: {
-				id: args.input.subjectID,
-			},
-			author: {
-				id: this.currentUser.id,
+			where: {
+				subject: {
+					id: args.input.subjectID,
+				},
+				author: {
+					id: this.currentUser.id,
+				},
 			},
 		});
 
 		return review === undefined ? this.recipeReviewRepository.save(this.recipeReviewRepository.create({
-			...args,
-			author: {
-				id: this.currentUser.id,
-			},
-			subject: {
-				id: args.input.subjectID,
-			},
+			...args.input,
+			author: this.currentUser,
+			subject,
 		})) : review;
 	}
 

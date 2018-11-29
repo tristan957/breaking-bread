@@ -5,7 +5,7 @@ input UserReviewSaveInput {
 }
 
 input UserReviewEditInput {
-	subjectID: Int!
+	id: Int!
 	description: String
 	rating: Int
 }
