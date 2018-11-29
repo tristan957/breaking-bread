@@ -3,7 +3,7 @@ import { Meal, User } from "../entities";
 import { UserRepository } from "../repositories";
 
 @Resolver(User)
-export class UserResolver implements ResolverInterface<User> {
+export default class UserResolver implements ResolverInterface<User> {
 	private userRepository: UserRepository;
 
 	constructor(userRepository: UserRepository) {
