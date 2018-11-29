@@ -11,6 +11,24 @@ export class UserResolver implements ResolverInterface<User> {
 	}
 
 	@Resolve()
+	public async hostedMeals(user: User): Promise<Meal[] | undefined> {
+		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
+			relations: ["hostedMeals"],
+		});
+		if (fullUser === undefined) { return undefined; }
+		return fullUser.hostedMeals;
+	}
+
+	@Resolve()
+	public async followers(user: User): Promise<User[] | undefined> {
+		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
+			relations: ["followers"],
+		});
+		if (fullUser === undefined) { return undefined; }
+		return fullUser.followers;
+	}
+
+	@Resolve()
 	public async upcomingMeals(user: User): Promise<Meal[] | undefined> {
 		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
 			relations: ["mealsAttending"],
