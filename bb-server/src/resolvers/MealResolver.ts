@@ -1,13 +1,15 @@
 import { Resolve, Resolver, ResolverInterface } from "vesper";
-import { Meal } from "../entities";
+import { Meal, User } from "../entities";
 import { MealRepository } from "../repositories";
 
 @Resolver(Meal)
 export default class MealResolver implements ResolverInterface<Meal> {
 	private mealRepository: MealRepository;
+	private currentUser: User;
 
-	constructor(mealRepository: MealRepository) {
+	constructor(mealRepository: MealRepository, user: User) {
 		this.mealRepository = mealRepository;
+		this.currentUser = user;  // TODO: on distance check for logged in users, make general location a resolver and only show city
 	}
 
 	@Resolve()
