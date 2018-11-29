@@ -3,5 +3,5 @@ extend type Mutation {
 }
 
 extend type Query {
-	topic(name: String!): Topic
+	topic(id: Int!): Topic
 }

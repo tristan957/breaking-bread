@@ -45,11 +45,11 @@ export default class User {
 	@ManyToMany(type => Meal, meal => meal.guests)
 	public mealsAttending: Meal[];
 
-	@ManyToMany(type => Topic)
+	@ManyToMany(type => Topic, topic => topic.whiteListedBy)
 	@JoinTable()
 	public whitelist: Topic[];
 
-	@ManyToMany(type => Topic)
+	@ManyToMany(type => Topic, topic => topic.blackListedBy)
 	@JoinTable()
 	public blacklist: Topic[];
 

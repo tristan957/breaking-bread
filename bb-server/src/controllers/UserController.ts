@@ -54,7 +54,7 @@ export default class UserController {
 		return true;
 	}
 
-	@Mutation()
+	@Mutation()		// TODO: Remove from opposite list if it exists, before inserting into requested list
 	public userToggleWhitelist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
 		return this.userRepository.toggleWhitelist(this.currentUser, args.topics);
