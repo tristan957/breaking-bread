@@ -1,0 +1,7 @@
+extend type Mutation {
+	tagSave(name: String!): Tag!
+}
+
+extend type Query {
+	tag(id: Int!): Tag
+}

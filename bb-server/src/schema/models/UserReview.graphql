@@ -1,0 +1,9 @@
+type UserReview {
+	id: Int!
+	rating: Int!
+	description: String
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	subject: User
+	author: User
+}

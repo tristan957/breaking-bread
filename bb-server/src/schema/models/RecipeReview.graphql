@@ -1,0 +1,10 @@
+type RecipeReview {
+	id: Int!
+	rating: Int!
+	description: String
+	name: String!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	subject: Recipe
+	author: User
+}

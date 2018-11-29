@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "es7", "esnext"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "outDir": "build",
+    "plugins": [
+      {
+        "name": "@divyenduz/ts-graphql-plugin"
+      },
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

@@ -1,0 +1,4 @@
+type Allergy {
+	id: Int!
+	name: String!
+}

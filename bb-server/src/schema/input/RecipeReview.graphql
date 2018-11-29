@@ -1,0 +1,11 @@
+input RecipeReviewSaveInput {
+	rating: Int!
+	description: String
+	subjectID: Int!
+}
+
+input RecipeReviewEditInput {
+	id: Int!
+	rating: Int
+	description: String
+}

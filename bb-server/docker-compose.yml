@@ -1,0 +1,37 @@
+version: '3.6'
+
+services:
+  # web:
+  #   image: nginx:alpine
+  #   container_name: bb-nginx
+  #   restart: always
+  #   volumes:
+  #     - ../bb-client/build:/home/build
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+
+  db:
+    image: postgres:11-alpine
+    container_name: bb-postgres
+    restart: "no"
+    volumes:
+      - ./docker/var/lib/postgresql/data/pgdata:/var/lib/postgresql/data/pgdata
+      # - ./BreakingBread.sql:/docker-entrypoint-initdb.d/BreakingBread.sql
+    environment:
+      POSTGRES_USER: jesus
+      POSTGRES_PASSWORD: christ
+      POSTGRES_DB: BreakingBread
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 10260:5432
+
+  adminer:
+    image: adminer:latest
+    container_name: bb-adminer
+    links:
+      - db
+    restart: always
+    ports:
+      - 10261:8080

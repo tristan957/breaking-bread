@@ -1,0 +1,11 @@
+input UserReviewSaveInput {
+	subjectID: Int!
+	description: String
+	rating: Int!
+}
+
+input UserReviewEditInput {
+	subjectID: Int!
+	description: String
+	rating: Int
+}

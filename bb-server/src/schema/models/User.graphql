@@ -1,0 +1,22 @@
+type User {
+	id: Int!
+	firstName: String!
+	lastName: String!
+	imagePath: String
+	about: String!
+	email: String!
+	phoneNumber: String!
+	createdAt: DateTime!
+	hostedMeals: [Meal!]
+	upcomingMeals: [Meal!] # TODO: resolver
+	whitelist: [Topic!]
+	blacklist: [Topic!]
+	savedRecipes: [Recipe!]!
+	followedUsers: [User!]
+	followers: [User!]
+	followedTags: [Tag!]
+	reviews: [UserReview!]
+	userReviewsAuthored: [UserReview!]
+	recipesAuthored: [Recipe!]
+	recipeReviewsAuthored: [RecipeReview!]
+}

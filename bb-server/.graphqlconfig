@@ -1,0 +1,10 @@
+{
+	"includes": ["src/**/*.graphql"],
+	"extensions": {
+		"endpoints": {
+			"dev": {
+				"url": "http://localhost:10262/graphql"
+			}
+		}
+	}
+}

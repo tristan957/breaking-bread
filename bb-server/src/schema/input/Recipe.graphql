@@ -1,0 +1,18 @@
+input RecipeSaveInput {
+	name: String!
+	description: String
+	imagePath: String
+	author: UserEditInput!
+}
+
+input RecipeEditInput {
+	id: Int!
+	name: String
+	imagePath: String
+	description: String
+}
+
+input RecipeInput {
+	id: Int
+	name: String
+}

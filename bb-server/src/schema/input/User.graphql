@@ -1,0 +1,17 @@
+input UserSaveInput {
+	firstName: String!
+	lastName: String!
+	imagePath: String
+	about: String
+	email: String!
+	phoneNumber: String!
+	oAuthSub: String!
+}
+
+input UserEditInput {
+	id: Int!
+	imagePath: String
+	about: String
+	email: String
+	phoneNumber: String
+}

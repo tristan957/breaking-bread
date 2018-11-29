@@ -1,0 +1,7 @@
+extend type Mutation {
+	topicSave(name: String!): Topic!
+}
+
+extend type Query {
+	topic(name: String!): Topic
+}
