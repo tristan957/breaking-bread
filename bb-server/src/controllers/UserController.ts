@@ -36,7 +36,7 @@ export default class UserController {
 	}
 
 	@Mutation()
-	public userSave(args: IInput<IUserSaveArgs>): Promise<User> {
+	public userSave(args: IInput<IUserSaveArgs>): Promise<User> { // Some sort of verification, maybe email
 		const user: User = this.userRepository.create(args.input);
 		return this.userRepository.save(user);
 	}
@@ -123,11 +123,9 @@ export default class UserController {
 	@Mutation()
 	public async userReviewEdit(args: IInput<IUserReviewEditArgs>): Promise<UserReview | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
-		const review: UserReview | undefined = await this.userReviewRepository.findOne(args.input.id);
+		const review: UserReview | undefined = await this.userReviewRepository.findOne(args.input.id, { relations: ["author"] });
 
-		if (this.currentUser.id !== review.author.id) {
-			return undefined;
-		}
+		if (this.currentUser.id !== review.author.id) { return undefined; }
 
 		return review === undefined ? undefined : this.userReviewRepository.save(
 			{

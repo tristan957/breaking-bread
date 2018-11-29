@@ -1,14 +1,16 @@
 import { Controller, Mutation, Query } from "vesper";
 import { IAllergyArgs, IAllergySaveArgs } from "../args/AllergyControllerArgs";
-import { Allergy } from "../entities";
+import { Allergy, User } from "../entities";
 import { AllergyRepository } from "../repositories";
 
 @Controller()
 export default class AllergyController {
 	private allergyRepository: AllergyRepository;
+	private currentUser: User;
 
-	constructor(allergyRepository: AllergyRepository) {
+	constructor(allergyRepository: AllergyRepository, user: User) {
 		this.allergyRepository = allergyRepository;
+		this.currentUser = user;
 	}
 
 	@Query()
@@ -17,7 +19,8 @@ export default class AllergyController {
 	}
 
 	@Mutation()
-	public async allergySave(args: IAllergySaveArgs): Promise<Allergy> {
+	public async allergySave(args: IAllergySaveArgs): Promise<Allergy | undefined> {
+		if (this.currentUser === undefined) { return undefined; }
 		const allergy: Allergy | undefined = await this.allergyRepository.findOne({ name: args.name });
 		return allergy === undefined ? this.allergyRepository.save(this.allergyRepository.create(args)) : allergy;
 	}

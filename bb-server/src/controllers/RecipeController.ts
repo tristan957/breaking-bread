@@ -27,30 +27,41 @@ export default class RecipeController {
 	}
 
 	@Mutation()
-	public async recipeSave(args: IInput<IRecipeSaveArgs>): Promise<Recipe> {
+	public async recipeSave(args: IInput<IRecipeSaveArgs>): Promise<Recipe | undefined> {
+		if (this.currentUser === undefined) { return undefined; }
 		const recipe: Recipe | undefined = await this.recipeRepository.findOne({ ...args.input });
 		return recipe === undefined ? this.recipeRepository.save(this.recipeRepository.create(args.input)) : recipe;
 	}
 
 	@Mutation()
 	public async recipeEdit(args: IInput<IRecipeEditArgs>): Promise<Recipe | undefined> {
-		const recipe: Recipe | undefined = await this.recipeRepository.findOne(args.input.id);
+		if (this.currentUser === undefined) { return undefined; }
+		const recipe: Recipe | undefined = await this.recipeRepository.findOne(args.input.id, {
+			relations: ["author"],
+		});
 		if (recipe === undefined) { return undefined; }
+
+		if (this.currentUser.id !== recipe.author.id) { return undefined; }
+
 		return this.recipeRepository.save({ ...recipe, ...args.input });
 	}
 
 	@Mutation()
 	public async recipeToggleTags(args: IRecipeToggleTagsArgs): Promise<Tag[] | undefined> {
-		return this.recipeRepository.toggleTags(args.id, args.tags);
+		if (this.currentUser === undefined) { return undefined; }
+
+		return this.recipeRepository.toggleTags(args.id, args.tags, this.currentUser);
 	}
 
 	@Mutation()
 	public recipeToggleAllergies(args: IRecipeToggleAllergiesArgs): Promise<Allergy[] | undefined> {
-		return this.recipeRepository.toggleAllergies(args.id, args.allergies);
+		if (this.currentUser === undefined) { return undefined; }
+
+		return this.recipeRepository.toggleAllergies(args.id, args.allergies, this.currentUser);
 	}
 
 	@Mutation()
-	public async recipeReviewSave(args: IInput<IRecipeReviewSaveArgs>): Promise<RecipeReview> {
+	public async recipeReviewSave(args: IInput<IRecipeReviewSaveArgs>): Promise<RecipeReview | undefined> {
 		if (this.currentUser === undefined) { return undefined; }	// Need to check if user has been to a meal with this recipe in the past?
 		const subject: Recipe | undefined = await this.recipeRepository.findOne(args.input.subjectID);
 		if (subject === undefined) { return undefined; }
@@ -75,7 +86,12 @@ export default class RecipeController {
 
 	@Mutation()
 	public async recipeReviewEdit(args: IInput<IRecipeReviewEditArgs>): Promise<RecipeReview | undefined> {
-		const review: RecipeReview | undefined = await this.recipeReviewRepository.findOne(args.input.id);
+		if (this.currentUser === undefined) { return undefined; }
+		const review: RecipeReview | undefined = await this.recipeReviewRepository.findOne(args.input.id, {
+			relations: ["author"],
+		});
+		if (this.currentUser.id !== review.author.id) { return undefined; }
+
 		return review === undefined ? undefined : this.recipeReviewRepository.save(
 			{
 				...review,

@@ -1,7 +1,7 @@
 import { Service } from "typedi";
 import { DeepPartial, EntityManager, Repository } from "typeorm";
 import { AllergyRepository, TagRepository } from ".";
-import { Allergy, Recipe, Tag } from "../entities";
+import { Allergy, Recipe, Tag, User } from "../entities";
 
 @Service()
 export default class RecipeRepository extends Repository<Recipe> {
@@ -17,20 +17,20 @@ export default class RecipeRepository extends Repository<Recipe> {
 		this.allergyRepository = allergyRepository;
 	}
 
-	public async toggleTags(recipeID: number, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
-		const recipe: Recipe | undefined = await this.findOne(recipeID, { relations: ["tags"] });
+	public async toggleTags(recipeID: number, tags: DeepPartial<Tag>[], currentUser: User): Promise<Tag[] | undefined> {
+		const recipe: Recipe | undefined = await this.findOne(recipeID, { relations: ["tags", "author"] });
 		// TODO: please check the above to make sure it works
-		if (recipe === undefined) { return undefined; }
+		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.tagRepository.toggleTagsList(recipe.tags, tags);
 		this.save(recipe);
 		return recipe.tags;
 	}
 
-	public async toggleAllergies(recipeID: number, allergies: DeepPartial<Allergy>[]): Promise<Allergy[] | undefined> {
-		const recipe: Recipe | undefined = await this.findOne(recipeID, { relations: ["allergies"] });
+	public async toggleAllergies(recipeID: number, allergies: DeepPartial<Allergy>[], currentUser: User): Promise<Allergy[] | undefined> {
+		const recipe: Recipe | undefined = await this.findOne(recipeID, { relations: ["allergies", "author"] });
 		// TODO: please check the above to make sure it works
-		if (recipe === undefined) { return undefined; }
+		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.allergyRepository.toggleAllergies(recipe.allergies, allergies);
 		this.save(recipe);
