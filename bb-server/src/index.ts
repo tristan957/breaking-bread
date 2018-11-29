@@ -5,7 +5,7 @@ import { Action, bootstrap } from "vesper";
 import controllers from "./controllers";
 import { Allergy, entities, Meal, Recipe, RecipeReview, Tag, Topic, User, UserReview } from "./entities";
 import { AllergyRepository, MealRepository, RecipeRepository, RecipeReviewRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "./repositories";
-import { UserResolver } from "./resolvers";
+import { TagResolver, UserResolver } from "./resolvers";
 
 bootstrap({
 	port: 10262,
@@ -46,6 +46,7 @@ bootstrap({
 	],
 	resolvers: [
 		UserResolver,
+		TagResolver,
 	],
 	entities,
 	schemas: [
