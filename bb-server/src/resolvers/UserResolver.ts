@@ -41,12 +41,13 @@ export default class UserResolver implements ResolverInterface<User> {
 	@Resolve()
 	public async upcomingMeals(user: User): Promise<Meal[] | undefined> {
 		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
-			relations: ["mealsAttending"],
+			relations: ["mealsAttending", "hostedMeals"],
 		});
 		if (fullUser === undefined) { return undefined; }
 
+		const bothMealLists: Meal[] = fullUser.mealsAttending.concat(fullUser.hostedMeals);
 		const retVal: Meal[] = [];
-		for (const meal of fullUser.mealsAttending) {
+		for (const meal of bothMealLists) {
 			if (meal.startTime > new Date()) {  // If the meal is in the future
 				retVal.push(meal);
 			}
