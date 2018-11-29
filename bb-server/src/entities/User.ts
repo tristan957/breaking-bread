@@ -81,4 +81,6 @@ export default class User {
 	public recipesAuthored: Recipe[];
 
 	public upcomingMeals: Meal[];
+
+	public numberOfFollowers: number;
 }

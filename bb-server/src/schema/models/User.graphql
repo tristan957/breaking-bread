@@ -14,6 +14,7 @@ type User {
 	savedRecipes: [Recipe!]!
 	followedUsers: [User!]
 	followers: [User!]
+	numberOfFollowers: Int!
 	followedTags: [Tag!]
 	reviews: [UserReview!]
 	userReviewsAuthored: [UserReview!]

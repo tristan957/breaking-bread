@@ -6,9 +6,10 @@ type Recipe {
 	createdAt: DateTime!
 	updatedAt: DateTime!
 	author: User!
+	savedBy: [User!]
+	timesSaved: Int!
 	reviews: [RecipeReview]
 	mealsServedAt: [Meal]
-	timesSaved: Int!
 	tags: [Tag]!
 	allergies: [Allergy]!
 }
