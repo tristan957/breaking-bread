@@ -5,6 +5,10 @@ export interface IRecipeArgs {
 	id: number;
 }
 
+export interface IRecipeReviewArgs {
+	id: number;
+}
+
 export interface IRecipeEditArgs {
 	id: number;
 	name?: string;

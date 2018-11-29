@@ -35,31 +35,29 @@ export default class MealController {
 	}
 
 	@Mutation()
-	public mealSave(args: IInput<IMealSaveArgs>): Promise<Meal> {
+	public mealSave(args: IInput<IMealSaveArgs>): Promise<Meal | undefined> {
 		const meal = this.mealRepository.create(args.input);
 		return this.mealRepository.save(meal);
 	}
 
 	@Mutation()
-	public async mealDelete(args: IMealDeleteArgs): Promise<Boolean> {
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.id);
-		if (meal === undefined) { return false; }
+	public async mealDelete(args: IMealDeleteArgs): Promise<Boolean | undefined> {
+		if (this.currentUser === undefined) { return undefined; }
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.id, { relations: ["host"] });
+		if (meal === undefined || this.currentUser.id !== meal.host.id) { return false; }
+
 		this.mealRepository.remove(meal);
 		return true;
 	}
 
 	@Mutation()
 	public async mealToggleGuest(args: IMealToggleGuestArgs): Promise<User[] | undefined> {
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, {
-			relations: ["host"],
-		});
+		if (this.currentUser === undefined) { return undefined; }
+
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host"] });
 		const guest: User | undefined = await this.userRepository.findOne(args.guestID);
-		if (meal === undefined || guest === undefined) {
-			return undefined;
-		}
-		if (meal.host.id !== this.currentUser.id) {
-			return undefined;
-		}
+		if (meal === undefined || guest === undefined) { return undefined; }
+		if (meal.host.id !== this.currentUser.id) { return undefined; }
 
 		toggleItemByID(meal.guests, guest);
 
@@ -69,22 +67,21 @@ export default class MealController {
 
 	@Mutation()
 	public async mealEdit(args: IInput<IMealEditArgs>): Promise<Meal | undefined> {
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.input.id);
+		if (this.currentUser === undefined) { return undefined; }
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.input.id, { relations: ["host"] });
+		if (meal.host.id !== this.currentUser.id) { return undefined; }
+
 		return meal === undefined ? undefined : this.mealRepository.save({ ...meal, ...args.input });
 	}
 
 	@Mutation()
 	public async mealToggleRecipes(args: IMealToggleRecipesArgs): Promise<Recipe[] | undefined> {
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, {
-			relations: ["host"],
-		});
+		if (this.currentUser === undefined) { return undefined; }
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host"] });
 		const recipe: Recipe | undefined = await this.recipeRepository.findOne(args.recipeID);
-		if (meal === undefined || recipe === undefined) {
-			return undefined;
-		}
-		if (meal.host.id !== this.currentUser.id) {
-			return undefined;
-		}
+
+		if (meal === undefined || recipe === undefined) { return undefined; }
+		if (meal.host.id !== this.currentUser.id) { return undefined; }
 
 		toggleItemByID(meal.recipes, recipe);
 

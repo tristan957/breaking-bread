@@ -1,5 +1,5 @@
 extend type Mutation {
-	tagSave(name: String!): Tag!
+	tagSave(name: String!): Tag
 }
 
 extend type Query {

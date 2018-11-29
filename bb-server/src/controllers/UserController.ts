@@ -25,7 +25,8 @@ export default class UserController {
 	}
 
 	@Query()
-	public userAuthenticated(): User {
+	public userAuthenticated(): User | undefined {
+		if (this.currentUser === undefined) { return undefined; }
 		return this.currentUser;	// Will return undefined if auth fails
 	}
 
@@ -35,88 +36,97 @@ export default class UserController {
 	}
 
 	@Mutation()
-	public userSave(args: IInput<IUserSaveArgs>): Promise<User> {
+	public userSave(args: IInput<IUserSaveArgs>): Promise<User> { // Some sort of verification, maybe email
 		const user: User = this.userRepository.create(args.input);
 		return this.userRepository.save(user);
 	}
 
 	@Mutation()
 	public async userEdit(args: IInput<IUserEditArgs>): Promise<User | undefined> {
-		const user: User | undefined = await this.userRepository.findOne(args.input.id);
-		if (user === undefined) { return undefined; }
-		return this.userRepository.save({ ...user, ...args.input });
+		if (this.currentUser === undefined) { return undefined; }
+		return this.userRepository.save({ ...this.currentUser, ...args.input });
 	}
 
 	@Mutation()
-	public async userDelete(args: IUserArgs): Promise<boolean> {
-		const user: User | undefined = await this.userRepository.findOne(args.id);
-		if (user === undefined) { return false; }
-		this.userRepository.remove(user);
+	public async userDelete(): Promise<boolean | undefined> { // Maybe prompt on front-end first
+		if (this.currentUser === undefined) { return undefined; }
+		this.userRepository.remove(this.currentUser);
 		return true;
 	}
 
-	@Mutation()
+	@Mutation()		// TODO: Remove from opposite list if it exists, before inserting into requested list
 	public userToggleWhitelist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
+		if (this.currentUser === undefined) { return undefined; }
 		return this.userRepository.toggleWhitelist(this.currentUser, args.topics);
 	}
 
 	@Mutation()
 	public userToggleBlacklist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
+		if (this.currentUser === undefined) { return undefined; }
 		return this.userRepository.toggleBlacklist(this.currentUser, args.topics);
 	}
 
 	@Mutation()
 	public userToggleFollowedTags(args: IUserToggleTagsArgs): Promise<Tag[] | undefined> {
+		if (this.currentUser === undefined) { return undefined; }
 		return this.userRepository.toggleFollowedTags(this.currentUser, args.tags);
 	}
 
 	@Mutation()
 	public async userToggleFollowing(args: IUserArgs): Promise<User[] | undefined> {
-		const followedUsers: User[] = await this.currentUser.followedUsers;
+		if (this.currentUser === undefined) { return undefined; }
+		const fullUser: User = await this.userRepository.findOne(this.currentUser.id, { relations: ["followedUsers"] });
 		const toFollow: User | undefined = await this.userRepository.findOne(args.id);
 		if (toFollow === undefined) { return undefined; }
 
-		toggleItemByID(followedUsers, toFollow);
-		this.userRepository.save({ ...this.currentUser, followedUsers });
-		return followedUsers;
+		toggleItemByID(fullUser.followedUsers, toFollow);
+		this.userRepository.save(fullUser);
+		return fullUser.followedUsers;
 	}
 
 	@Mutation()
 	public async userToggleSavedRecipe(args: IUserArgs): Promise<Recipe[] | undefined> {
-		const savedRecipes: Recipe[] = await this.currentUser.savedRecipes;
+		if (this.currentUser === undefined) { return undefined; }
+		const fullUser: User = await this.userRepository.findOne(this.currentUser.id, { relations: ["savedRecipes"] });
 		const toSave: Recipe | undefined = await this.recipeRepository.findOne(args.id);
 		if (toSave === undefined) { return undefined; }
 
-		toggleItemByID(savedRecipes, toSave);
-		this.userRepository.save({ ...this.currentUser, savedRecipes });
-		return savedRecipes;
+		toggleItemByID(fullUser.savedRecipes, toSave);
+		this.userRepository.save(fullUser);
+		return fullUser.savedRecipes;
 	}
 
 	@Mutation()
-	public async userReviewSave(args: IInput<IUserReviewSaveArgs>): Promise<UserReview> {
+	public async userReviewSave(args: IInput<IUserReviewSaveArgs>): Promise<UserReview | undefined> {
+		if (this.currentUser === undefined) { return undefined; }	// Need to check if user was in a past attended meal
+		const subject: User | undefined = await this.userRepository.findOne(args.input.subjectID);
+		if (subject === undefined) { return undefined; }
+
 		const review: UserReview | undefined = await this.userReviewRepository.findOne({
-			subject: {
-				id: args.input.subjectID,
-			},
-			author: {
-				id: this.currentUser.id,
+			where: {
+				subject: {
+					id: args.input.subjectID,
+				},
+				author: {
+					id: this.currentUser.id,
+				},
 			},
 		});
 
 		return review === undefined ? this.userReviewRepository.save(this.userReviewRepository.create({
-			...args,
-			author: {
-				id: this.currentUser.id,
-			},
-			subject: {
-				id: args.input.subjectID,
-			},
+			...args.input,
+			author: this.currentUser,
+			subject,
 		})) : review;
 	}
 
 	@Mutation()
 	public async userReviewEdit(args: IInput<IUserReviewEditArgs>): Promise<UserReview | undefined> {
-		const review: UserReview | undefined = await this.userReviewRepository.findOne(args.input.id);
+		if (this.currentUser === undefined) { return undefined; }
+		const review: UserReview | undefined = await this.userReviewRepository.findOne(args.input.id, { relations: ["author"] });
+
+		if (this.currentUser.id !== review.author.id) { return undefined; }
+
 		return review === undefined ? undefined : this.userReviewRepository.save(
 			{
 				...review,

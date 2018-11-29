@@ -16,7 +16,6 @@ export interface IUserSaveArgs {
 }
 
 export interface IUserEditArgs {
-	id: number;
 	imagePath?: string;
 	about?: string;
 	email?: string;
@@ -31,7 +30,6 @@ export interface IUserReviewSaveArgs {
 	rating: number;
 	description?: string;
 	subjectID: number;
-	authorID: number;
 }
 
 export interface IUserReviewEditArgs {

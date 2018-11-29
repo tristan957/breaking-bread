@@ -1,5 +1,5 @@
 extend type Mutation {
-	allergySave(name: String!): Allergy!
+	allergySave(name: String!): Allergy
 }
 
 extend type Query {

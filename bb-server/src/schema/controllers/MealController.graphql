@@ -1,6 +1,6 @@
 extend type Mutation {
-	mealSave(input: MealSaveInput!): Meal!
-	mealDelete(mealID: Int!): Boolean!
+	mealSave(input: MealSaveInput!): Meal
+	mealDelete(mealID: Int!): Boolean
 	mealToggleGuest(mealID: Int!, guestID: Int!): [User!]
 	mealEdit(input: MealEditInput!): Meal
 	mealToggleRecipes(mealID: Int!, recipes: [RecipeInput!]!): [Recipe!]
