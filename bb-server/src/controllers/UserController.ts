@@ -68,24 +68,24 @@ export default class UserController {
 
 	@Mutation()
 	public async userToggleFollowing(args: IUserArgs): Promise<User[] | undefined> {
-		const followedUsers: User[] = await this.currentUser.followedUsers;
+		const fullUser: User = await this.userRepository.findOne(this.currentUser.id, { relations: ["followedUsers"] });
 		const toFollow: User | undefined = await this.userRepository.findOne(args.id);
 		if (toFollow === undefined) { return undefined; }
 
-		toggleItemByID(followedUsers, toFollow);
-		this.userRepository.save({ ...this.currentUser, followedUsers });
-		return followedUsers;
+		toggleItemByID(fullUser.followedUsers, toFollow);
+		this.userRepository.save(fullUser);
+		return fullUser.followedUsers;
 	}
 
 	@Mutation()
 	public async userToggleSavedRecipe(args: IUserArgs): Promise<Recipe[] | undefined> {
-		const savedRecipes: Recipe[] = await this.currentUser.savedRecipes;
+		const fullUser: User = await this.userRepository.findOne(this.currentUser.id, { relations: ["savedRecipes"] });
 		const toSave: Recipe | undefined = await this.recipeRepository.findOne(args.id);
 		if (toSave === undefined) { return undefined; }
 
-		toggleItemByID(savedRecipes, toSave);
-		this.userRepository.save({ ...this.currentUser, savedRecipes });
-		return savedRecipes;
+		toggleItemByID(fullUser.savedRecipes, toSave);
+		this.userRepository.save(fullUser);
+		return fullUser.savedRecipes;
 	}
 
 	@Mutation()
