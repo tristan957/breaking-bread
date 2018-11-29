@@ -2,6 +2,7 @@ type User {
 	id: Int!
 	firstName: String!
 	lastName: String!
+	name: String!
 	imagePath: String
 	about: String!
 	email: String!

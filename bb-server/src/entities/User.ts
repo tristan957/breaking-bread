@@ -80,6 +80,8 @@ export default class User {
 	@OneToMany(type => Recipe, recipe => recipe.author)
 	public recipesAuthored: Recipe[];
 
+	public name: string;
+
 	public upcomingMeals: Meal[];
 
 	public numberOfFollowers: number;

@@ -11,6 +11,11 @@ export default class UserResolver implements ResolverInterface<User> {
 	}
 
 	@Resolve()
+	public name(user: User): string {
+		return `${user.firstName} ${user.lastName}`;
+	}
+
+	@Resolve()
 	public async hostedMeals(user: User): Promise<Meal[] | undefined> {
 		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
 			relations: ["hostedMeals"],
