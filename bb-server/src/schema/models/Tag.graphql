@@ -1,6 +1,0 @@
-type Tag {
-	id: Int!
-	name: String!
-	associatedRecipes: [Recipe]
-	followers: [User]
-}

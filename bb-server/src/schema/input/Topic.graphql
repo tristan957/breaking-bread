@@ -1,4 +1,0 @@
-input TopicInput {
-	id: Int
-	name: String
-}

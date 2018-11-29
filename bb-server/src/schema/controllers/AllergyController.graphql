@@ -1,8 +1,0 @@
-extend type Mutation {
-	allergySave(name: String!): Allergy!
-}
-
-extend type Query {
-	allergy(id: Int!): Allergy
-	allergies(name: String!): [Allergy!] # Not high priority
-}

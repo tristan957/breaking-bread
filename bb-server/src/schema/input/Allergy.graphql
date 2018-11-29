@@ -1,4 +1,0 @@
-input AllergyInput {
-	id: Int
-	name: String
-}

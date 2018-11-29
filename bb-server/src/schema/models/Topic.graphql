@@ -1,6 +1,0 @@
-type Topic {
-	id: Int!
-	name: String!
-	whiteListedBy: [User]
-	blackListedBy: [User]
-}
