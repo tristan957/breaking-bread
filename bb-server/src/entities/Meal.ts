@@ -47,4 +47,8 @@ export default class Meal {
 	@ManyToMany(type => Recipe, recipe => recipe.mealsServedAt)
 	@JoinTable()
 	public recipes: Recipe[];
+
+	public guestCount: number;
+
+	public isFull: boolean;
 }

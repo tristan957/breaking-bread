@@ -13,4 +13,6 @@ type Meal {
 	host: User
 	guests: [User!]
 	recipes: [Recipe!]
+	guestCount: Int!
+	isFull: Boolean!
 }

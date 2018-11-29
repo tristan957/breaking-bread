@@ -1,3 +1,4 @@
+export { default as MealResolver } from "./MealResolver";
 export { default as RecipeResolver } from "./RecipeResolver";
 export { default as TagResolver } from "./TagResolver";
 export { default as TopicResolver } from "./TopicResolver";
