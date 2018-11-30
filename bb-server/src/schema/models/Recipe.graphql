@@ -8,9 +8,9 @@ type Recipe {
 	author: User!
 	savedBy: [User!]
 	timesSaved: Int!
-	reviews: [RecipeReview]
-	reviewAverage: Float
-	mealsServedAt: [Meal]
+	reviews: [RecipeReview!]!
+	reviewAverage: Float!
+	mealsServedAt: [Meal!]!
 	tags: [Tag]!
 	allergies: [Allergy]!
 }

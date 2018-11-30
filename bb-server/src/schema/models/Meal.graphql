@@ -11,9 +11,9 @@ type Meal {
 	maxGuests: Int!
 	createdAt: DateTime!
 	updatedAt: DateTime!
-	host: User
-	guests: [User!]
-	recipes: [Recipe!]
+	host: User!
+	guests: [User!]!
+	recipes: [Recipe!]!
 	guestCount: Int!
 	isFull: Boolean!
 }

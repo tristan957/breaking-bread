@@ -58,7 +58,6 @@ export default class RecipeController {
 
 	public async toggleTags(recipeID: number, tags: DeepPartial<Tag>[], currentUser: User): Promise<Tag[] | undefined> {
 		const recipe: Recipe | undefined = await this.recipeRepository.findOne(recipeID, { relations: ["tags", "author"] });
-		// TODO: please check the above to make sure it works
 		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.tagRepository.toggleTagsList(recipe.tags, tags);
@@ -75,7 +74,6 @@ export default class RecipeController {
 
 	public async toggleAllergies(recipeID: number, allergies: DeepPartial<Allergy>[], currentUser: User): Promise<Allergy[] | undefined> {
 		const recipe: Recipe | undefined = await this.recipeRepository.findOne(recipeID, { relations: ["allergies", "author"] });
-		// TODO: please check the above to make sure it works
 		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.allergyRepository.toggleAllergies(recipe.allergies, allergies);

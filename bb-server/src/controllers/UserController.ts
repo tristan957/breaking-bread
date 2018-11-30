@@ -95,7 +95,6 @@ export default class UserController {
 
 	public async toggleWhitelist(currentUser: User, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
 		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["whitelist"] });
-		// TODO: please check the above to make sure it works
 		if (user === undefined) { return undefined; }
 
 		this.topicRepository.toggleTopicsList(user.whitelist, topics);
@@ -111,7 +110,6 @@ export default class UserController {
 
 	public async toggleBlacklist(currentUser: User, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
 		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["blacklist"] });
-		// TODO: please check the above to make sure it works
 		if (user === undefined) { return undefined; }
 
 		this.topicRepository.toggleTopicsList(user.blacklist, topics);
@@ -127,7 +125,6 @@ export default class UserController {
 
 	public async toggleFollowedTags(currentUser: User, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
 		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["tags"] });
-		// TODO: please check the above to make sure it works
 		if (user === undefined) { return undefined; }
 
 		this.tagRepository.toggleTagsList(user.followedTags, tags);
