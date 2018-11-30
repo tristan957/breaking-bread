@@ -3,11 +3,11 @@
 import moment from "moment";
 import React from "react";
 import "react-dates/initialize";
-import Geosuggest from "react-geosuggest";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import { Button, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
 import Showdown from "showdown";
+import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/logo_icon.png";
 
@@ -38,6 +38,10 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 			tables: true,
 			simplifiedAutoLink: true,
 		});
+	}
+
+	public onSuggestSelect = (suggest: any): void => {
+		console.log(suggest);
 	}
 
 	public toggleDropDown = (): void => {
@@ -120,11 +124,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 							<FormGroup row>
 								<Label for="location" sm={firstColumnWidth}>Location</Label>
 								<Col sm={secondColumnWidth}>
-									<Geosuggest
-										placeholder={"Start typing!"}
-										initialValue="Texas A&M"
-										location={new google.maps.LatLng(40.741895, -73.989308)}
-										radius={20} />
+									<GeoSuggest />
 								</Col>
 							</FormGroup>
 							<FormGroup row>

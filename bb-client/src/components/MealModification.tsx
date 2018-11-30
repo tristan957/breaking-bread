@@ -2,8 +2,8 @@
 import moment from "moment";
 import React from "react";
 import { SingleDatePicker } from "react-dates";
-import { Button } from "reactstrap";
-import Rodal from "rodal";
+import { Button, Modal, ModalFooter, ModalHeader } from "reactstrap";
+import ModalBody from "reactstrap/lib/ModalBody";
 import Meal from "../entities/Meal";
 import "./resources/css/MealModification.css";
 
@@ -45,27 +45,15 @@ export default class MealModification extends React.Component<IMealModificationP
 		});
 	}
 
-	public showDeletionModal = (): void => {
+	public toggleDeletionModal = (): void => {
 		this.setState({
-			deletionModalVisible: true,
+			deletionModalVisible: !this.state.deletionModalVisible,
 		});
 	}
 
-	public hideDeletionModal = (): void => {
+	public toggleEditModal = (): void => {
 		this.setState({
-			deletionModalVisible: false,
-		});
-	}
-
-	public showEditModal = (): void => {
-		this.setState({
-			editModalVisible: true,
-		});
-	}
-
-	public hideEditModal = (): void => {
-		this.setState({
-			editModalVisible: false,
+			editModalVisible: !this.state.editModalVisible,
 		});
 	}
 
@@ -110,7 +98,7 @@ export default class MealModification extends React.Component<IMealModificationP
 			this.state.mealDescription
 		);
 
-		this.hideEditModal();
+		this.toggleEditModal();
 	}
 
 	public render(): JSX.Element {
@@ -118,55 +106,65 @@ export default class MealModification extends React.Component<IMealModificationP
 			/* Removed card cardSubstance MealModification from className */
 			<div>
 				<div id="meal-buttons">
-					<Button className="actionButton edit-meal" onClick={this.showEditModal}>Edit Meal</Button>
-					<Button className="actionButton delete-meal" onClick={this.showDeletionModal}>Delete Meal</Button>
+					<Button className="actionButton edit-meal" onClick={this.toggleEditModal}>Edit Meal</Button>
+					<Button className="actionButton delete-meal" onClick={this.toggleDeletionModal}>Delete Meal</Button>
 				</div>
 
 				{/* <span>{this.state.testText}</span> */}
 
-				<Rodal visible={this.state.deletionModalVisible} onClose={this.hideDeletionModal}>
-					<div>are you sure?</div>
-					<div>
+				<Modal centered={true} isOpen={this.state.deletionModalVisible} toggle={this.toggleDeletionModal}>
+					<ModalHeader>
+						Delete Meal
+					</ModalHeader>
+					<ModalBody>
+						<div>Are you sure you wish to delete this meal?</div>
+					</ModalBody>
+					<ModalFooter>
 						{/* TODO: delete functionaity */}
-						<button>yes</button>
-						<button type="submit" onClick={this.hideDeletionModal}>no</button>
-					</div>
-				</Rodal>
+						<button>Yes</button>
+						<button type="submit" onClick={this.toggleDeletionModal}>No</button>
+					</ModalFooter>
+				</Modal>
 
-				<Rodal visible={this.state.editModalVisible} onClose={this.hideEditModal}>
+				<Modal centered={true} isOpen={this.state.editModalVisible} toggle={this.toggleEditModal}>
 					{/* <form onSubmit={this.modifyMeal.bind(this)}> */}
-					<div>
-						<span>Date: </span>
-						<SingleDatePicker
-							date={moment(this.state.mealStartTime)}
-							focused={this.state.calendarFocused}
-							onDateChange={this.onDateChange.bind(this)}
-							onFocusChange={this.onFocusChange.bind(this)}
-							id={"datepicker"}
-							small={true}
-							numberOfMonths={1}
-						/>
-						<label>
-							Time:
+					<ModalHeader>
+						Edit Meal
+					</ModalHeader>
+					<ModalBody>
+						<div>
+							<span>Date</span>
+							<SingleDatePicker
+								date={moment(this.state.mealStartTime)}
+								focused={this.state.calendarFocused}
+								onDateChange={this.onDateChange.bind(this)}
+								onFocusChange={this.onFocusChange.bind(this)}
+								id={"datepicker"}
+								small={true}
+								numberOfMonths={1}
+							/>
+							<label>
+								Time
 							<input type="text" value={this.state.mealTime} onChange={e => this.handleTimeChange(e)} />
-						</label>
-					</div>
-					<label>
-						Title:
+							</label>
+						</div>
+						<label>
+							Title
 						<input type="text" value={this.state.mealTitle} onChange={e => this.handleTitleChange(e)} />
-					</label>
-					<label>
-						Location:
+						</label>
+						<label>
+							Location
 						<input type="text" value={this.state.mealLocation} onChange={e => this.handleLocationChange(e)} />
-					</label>
-					<label>
-						Description:
+						</label>
+						<label>
+							Description
 						<textarea value={this.state.mealDescription} onChange={e => this.handleDescriptionChange(e)} />
-					</label>
-					<button onClick={this.modifyMeal.bind(this)}>submit</button>
-					{/* <input type="submit" value="Submit" /> */}
-					{/* </form> */}
-				</Rodal>
+						</label>
+					</ModalBody>
+					<ModalFooter>
+						<button onClick={this.modifyMeal.bind(this)}>submit</button>
+					</ModalFooter>
+				</Modal>
 			</div>
 		);
 	}

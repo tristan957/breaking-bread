@@ -6,7 +6,6 @@ import { ApolloProvider } from "react-apollo";
 import "react-dates/lib/css/_datepicker.css";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import "rodal/lib/rodal.css";
 import App from "./App";
 import "./resources/css/index.css";
 import * as serviceWorker from "./serviceWorker";

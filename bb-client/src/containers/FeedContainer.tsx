@@ -4,9 +4,9 @@ import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { DateRangePicker } from "react-dates";
 import "react-dates/initialize";
-import Geosuggest from "react-geosuggest";
 import { Button, Col, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import AutoCompletionSearchBar from "../components/AutoCompletionSearchBar";
+import GeoSuggest from "../components/GeoSuggest";
 import Meal from "../entities/Meal";
 import Tag from "../entities/Tag";
 import Topic from "../entities/Topic";
@@ -181,11 +181,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 										<FormGroup row>
 											<Label for="location" sm={2}>Location</Label>
 											<Col sm={10}>
-												<Geosuggest
-													placeholder={"Start typing!"}
-													initialValue="Texas A&M"
-													location={new google.maps.LatLng(40.741895, -73.989308)}
-													radius={20} />
+												<GeoSuggest />
 											</Col>
 										</FormGroup>
 										<FormGroup row>
