@@ -22,7 +22,7 @@ export default class Meal {
 	@Column({ type: "text" })
 	public location: string;
 
-	public city: string;  // TODO: Resolver for graphql. Just display the city, state
+	public city: string;
 
 	public relativeDistance: number;
 

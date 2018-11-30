@@ -7,6 +7,7 @@ import { Recipe, Tag, Topic, User, UserReview } from "../entities";
 import { RecipeRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
 import { getLocationByCoords, LocationEntry } from "../utilities/locationInfo";
+import { invalidUser } from "../utilities/validateUser";
 
 @Controller()
 export default class UserController {
@@ -40,7 +41,7 @@ export default class UserController {
 
 	@Query()
 	public userAuthenticated(): User | undefined {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		return this.currentUser;	// Will return undefined if auth fails
 	}
 
@@ -65,7 +66,7 @@ export default class UserController {
 
 	@Mutation()
 	public async userEdit(args: IInput<IUserEditArgs>): Promise<User | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 
 		const { latLong, ...inputNoLatLong }: DropLatLong<IUserEditArgs> = args.input;
 		if (latLong !== undefined) {
@@ -88,7 +89,7 @@ export default class UserController {
 
 	@Mutation()
 	public async userDelete(): Promise<boolean | undefined> { // Maybe prompt on front-end first
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		await this.userRepository.remove(this.currentUser);
 		return true;
 	}
@@ -104,7 +105,7 @@ export default class UserController {
 
 	@Mutation()		// TODO: Remove from opposite list if it exists, before inserting into requested list
 	public userToggleWhitelist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		return this.toggleWhitelist(this.currentUser, args.topics);
 	}
 
@@ -119,7 +120,7 @@ export default class UserController {
 
 	@Mutation()
 	public userToggleBlacklist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		return this.toggleBlacklist(this.currentUser, args.topics);
 	}
 
@@ -134,13 +135,13 @@ export default class UserController {
 
 	@Mutation()
 	public userToggleFollowedTags(args: IUserToggleTagsArgs): Promise<Tag[] | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		return this.toggleFollowedTags(this.currentUser, args.tags);
 	}
 
 	@Mutation()
 	public async userToggleFollowing(args: IUserArgs): Promise<User[] | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const fullUser: User = await this.userRepository.findOne(this.currentUser.id, { relations: ["followedUsers"] });
 		const toFollow: User | undefined = await this.userRepository.findOne(args.id);
 		if (toFollow === undefined) { return undefined; }
@@ -152,7 +153,7 @@ export default class UserController {
 
 	@Mutation()
 	public async userToggleSavedRecipe(args: IUserArgs): Promise<Recipe[] | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const fullUser: User = await this.userRepository.findOne(this.currentUser.id, { relations: ["savedRecipes"] });
 		const toSave: Recipe | undefined = await this.recipeRepository.findOne(args.id);
 		if (toSave === undefined) { return undefined; }
@@ -164,7 +165,7 @@ export default class UserController {
 
 	@Mutation()
 	public async userReviewSave(args: IInput<IUserReviewSaveArgs>): Promise<UserReview | undefined> {
-		if (this.currentUser === undefined) { return undefined; }	// Need to check if user was in a past attended meal
+		if (invalidUser(this.currentUser)) { return undefined; }	// Need to check if user was in a past attended meal
 		const subject: User | undefined = await this.userRepository.findOne(args.input.subjectID);
 		if (subject === undefined) { return undefined; }
 
@@ -188,7 +189,7 @@ export default class UserController {
 
 	@Mutation()
 	public async userReviewEdit(args: IInput<IUserReviewEditArgs>): Promise<UserReview | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const review: UserReview | undefined = await this.userReviewRepository.findOne(args.input.id, { relations: ["author"] });
 
 		if (this.currentUser.id !== review.author.id) { return undefined; }

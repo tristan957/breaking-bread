@@ -35,7 +35,7 @@ export default class User {
 	@Column({ type: "text" })
 	public location: string;
 
-	public homeTown: string;  // TODO: Just city and state to be exposed on the schema
+	public homeTown: string;
 
 	@Column()
 	public email: string;

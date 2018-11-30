@@ -3,6 +3,7 @@ import { ITagArgs, ITagSaveArgs } from "../args/TagControllerArgs";
 import { User } from "../entities";
 import Tag from "../entities/Tag";
 import { TagRepository } from "../repositories";
+import { invalidUser } from "../utilities/validateUser";
 
 @Controller()
 export default class TagController {
@@ -21,7 +22,7 @@ export default class TagController {
 
 	@Mutation()
 	public async tagSave(args: ITagSaveArgs): Promise<Tag | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const tag: Tag | undefined = await this.tagRepository.findOne({ name: args.name });
 		return tag === undefined ? this.tagRepository.save(this.tagRepository.create({
 			name: args.name.toLowerCase(),

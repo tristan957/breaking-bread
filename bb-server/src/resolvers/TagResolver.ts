@@ -11,17 +11,17 @@ export default class TagResolver implements ResolverInterface<Tag> {
 	}
 
 	@Resolve()
-	public async associatedRecipes(tag: Tag): Promise<Recipe[] | undefined> {
+	public async associatedRecipes(tag: Tag): Promise<Recipe[] | []> {
 		const tagFull: Tag | undefined = await this.tagRepository.findOne(tag.id, { relations: ["associatedRecipes"] });
-		if (tagFull === undefined) { return undefined; }
+		if (tagFull === undefined) { return []; }
 
 		return tagFull.associatedRecipes;
 	}
 
 	@Resolve()
-	public async followers(tag: Tag): Promise<User[] | undefined> {
+	public async followers(tag: Tag): Promise<User[] | []> {
 		const tagFull: Tag | undefined = await this.tagRepository.findOne(tag.id, { relations: ["followers"] });
-		if (tagFull === undefined) { return undefined; }
+		if (tagFull === undefined) { return []; }
 
 		return tagFull.followers;
 	}
