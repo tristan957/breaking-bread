@@ -20,10 +20,10 @@ export default class TagRepository extends Repository<Tag> {
 				: await this.findOne({ name: toggleTag.name });
 
 			if (tag === undefined) {
-				tag = await this.save(this.create({ name: toggleTag.name }));
+				tag = await this.save(this.create({ name: toggleTag.name.toLowerCase() }));
 			}
 
-			toggleItemByID(tagList, tag);
+			await toggleItemByID(tagList, tag);
 		}
 	}
 }

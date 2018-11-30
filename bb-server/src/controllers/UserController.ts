@@ -148,7 +148,7 @@ export default class UserController {
 		const toFollow: User | undefined = await this.userRepository.findOne(args.id);
 		if (toFollow === undefined) { return undefined; }
 
-		toggleItemByID(fullUser.followedUsers, toFollow);
+		await toggleItemByID(fullUser.followedUsers, toFollow);
 		await this.userRepository.save(fullUser);
 		return fullUser.followedUsers;
 	}
@@ -160,7 +160,7 @@ export default class UserController {
 		const toSave: Recipe | undefined = await this.recipeRepository.findOne(args.id);
 		if (toSave === undefined) { return undefined; }
 
-		toggleItemByID(fullUser.savedRecipes, toSave);
+		await toggleItemByID(fullUser.savedRecipes, toSave);
 		await this.userRepository.save(fullUser);
 		return fullUser.savedRecipes;
 	}

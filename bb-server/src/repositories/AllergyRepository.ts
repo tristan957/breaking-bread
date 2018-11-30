@@ -19,10 +19,15 @@ export default class AllergyRepository extends Repository<Allergy> {
 				: await this.entityManager.findOne(Allergy, { name: toggleAllergy.name });
 
 			if (allergy === undefined) {
-				allergy = await this.entityManager.save(Allergy, this.entityManager.create(Allergy, { name: toggleAllergy.name }));
+				allergy = await this.entityManager.save(Allergy, this.entityManager.create(
+					Allergy,
+					{
+						name: toggleAllergy.name.toLowerCase(),
+					}
+				));
 			}
 
-			toggleItemByID(allergyList, allergy);
+			await toggleItemByID(allergyList, allergy);
 		}
 	}
 }

@@ -178,7 +178,7 @@ export default class MealController {
 		if (meal === undefined || guest === undefined) { return undefined; }
 		if (!(guest.id !== this.currentUser.id || meal.host.id !== this.currentUser.id)) { return undefined; }
 
-		toggleItemByID(meal.guests, guest);
+		await toggleItemByID(meal.guests, guest);
 
 		await this.mealRepository.save(meal);
 		return meal.guests;
@@ -193,7 +193,7 @@ export default class MealController {
 		if (meal === undefined || recipe === undefined) { return undefined; }
 		if (meal.host.id !== this.currentUser.id) { return undefined; }
 
-		toggleItemByID(meal.recipes, recipe);
+		await toggleItemByID(meal.recipes, recipe);
 
 		await this.mealRepository.save(meal);
 		return meal.recipes;
