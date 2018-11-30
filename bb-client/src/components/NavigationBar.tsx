@@ -5,11 +5,12 @@ import React from "react";
 import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
-import { Button, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
+import { Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
 import Showdown from "showdown";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/logo_icon.png";
+import S3ImageUploader from "./S3ImageUploader";
 
 interface INavigationBarState {
 	createdAt: moment.Moment | null;
@@ -159,7 +160,8 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 							<FormGroup row>
 								<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
 								<Col sm={secondColumnWidth}>
-									<CustomInput type="file" id="navbar-images" name="file" />
+									{/* <CustomInput type="file" id="navbar-images" name="file" /> */}
+									<S3ImageUploader folderName="mealImage" />
 								</Col>
 							</FormGroup>
 						</Form>
@@ -199,7 +201,8 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 							<FormGroup row>
 								<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
 								<Col sm={secondColumnWidth}>
-									<CustomInput type="file" id="navbar-images" name="file" />
+									{/* <CustomInput type="file" id="navbar-images" name="file" /> */}
+									<S3ImageUploader folderName="recipeImage" />
 								</Col>
 							</FormGroup>
 						</Form>
