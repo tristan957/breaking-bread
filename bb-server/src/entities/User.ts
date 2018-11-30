@@ -32,7 +32,7 @@ export default class User {
 	@Column()
 	public latLong: string;
 
-	@Column({ type: "text" })  // TODO: Expose and make with save and edit resolver address to city?
+	@Column({ type: "text" })
 	public location: string;
 
 	public homeTown: string;  // TODO: Just city and state to be exposed on the schema

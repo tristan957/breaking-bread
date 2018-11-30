@@ -59,7 +59,7 @@ export interface IMealDeleteArgs {
 
 export interface IMealToggleGuestArgs {
 	mealID: number;
-	guestID: number;
+	guestID?: number;
 }
 
 export interface IMealToggleRecipesArgs {

@@ -19,7 +19,7 @@ export default class Meal {
 	@Column()
 	public latLong: string;
 
-	@Column({ type: "text" }) // TODO: Populate on creation and update if being changed
+	@Column({ type: "text" })
 	public location: string;
 
 	public city: string;  // TODO: Resolver for graphql. Just display the city, state

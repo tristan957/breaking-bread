@@ -90,10 +90,10 @@ export default class MealController {
 	public async mealToggleGuest(args: IMealToggleGuestArgs): Promise<User[] | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
 
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host"] });
-		const guest: User | undefined = await this.userRepository.findOne(args.guestID);
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host", "guests"] });
+		const guest: User | undefined = await this.userRepository.findOne(args.guestID !== undefined ? args.guestID : this.currentUser.id);
 		if (meal === undefined || guest === undefined) { return undefined; }
-		if (meal.host.id !== this.currentUser.id) { return undefined; }
+		if (!(guest.id !== this.currentUser.id || meal.host.id !== this.currentUser.id)) { return undefined; }
 
 		toggleItemByID(meal.guests, guest);
 
@@ -104,7 +104,7 @@ export default class MealController {
 	@Mutation()
 	public async mealToggleRecipes(args: IMealToggleRecipesArgs): Promise<Recipe[] | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host"] });
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host", "recipes"] });
 		const recipe: Recipe | undefined = await this.recipeRepository.findOne(args.recipeID);
 
 		if (meal === undefined || recipe === undefined) { return undefined; }
