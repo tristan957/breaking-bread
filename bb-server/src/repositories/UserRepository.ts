@@ -23,7 +23,7 @@ export default class UserRepository extends Repository<User> {
 		if (user === undefined) { return undefined; }
 
 		this.tagRepository.toggleTagsList(user.followedTags, tags);
-		this.save(user);
+		await this.save(user);
 		return user.followedTags;
 	}
 
@@ -33,7 +33,7 @@ export default class UserRepository extends Repository<User> {
 		if (user === undefined) { return undefined; }
 
 		this.topicRepository.toggleTopicsList(user.blacklist, topics);
-		this.save(user);
+		await this.save(user);
 		return user.blacklist;
 	}
 
@@ -43,7 +43,7 @@ export default class UserRepository extends Repository<User> {
 		if (user === undefined) { return undefined; }
 
 		this.topicRepository.toggleTopicsList(user.whitelist, topics);
-		this.save(user);
+		await this.save(user);
 		return user.whitelist;
 	}
 }

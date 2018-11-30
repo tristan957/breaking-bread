@@ -77,7 +77,7 @@ export default class UserController {
 	@Mutation()
 	public async userDelete(): Promise<boolean | undefined> { // Maybe prompt on front-end first
 		if (this.currentUser === undefined) { return undefined; }
-		this.userRepository.remove(this.currentUser);
+		await this.userRepository.remove(this.currentUser);
 		return true;
 	}
 
@@ -107,7 +107,7 @@ export default class UserController {
 		if (toFollow === undefined) { return undefined; }
 
 		toggleItemByID(fullUser.followedUsers, toFollow);
-		this.userRepository.save(fullUser);
+		await this.userRepository.save(fullUser);
 		return fullUser.followedUsers;
 	}
 
@@ -119,7 +119,7 @@ export default class UserController {
 		if (toSave === undefined) { return undefined; }
 
 		toggleItemByID(fullUser.savedRecipes, toSave);
-		this.userRepository.save(fullUser);
+		await this.userRepository.save(fullUser);
 		return fullUser.savedRecipes;
 	}
 

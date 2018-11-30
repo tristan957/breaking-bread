@@ -23,7 +23,7 @@ export default class RecipeRepository extends Repository<Recipe> {
 		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.tagRepository.toggleTagsList(recipe.tags, tags);
-		this.save(recipe);
+		await this.save(recipe);
 		return recipe.tags;
 	}
 
@@ -33,7 +33,7 @@ export default class RecipeRepository extends Repository<Recipe> {
 		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.allergyRepository.toggleAllergies(recipe.allergies, allergies);
-		this.save(recipe);
+		await this.save(recipe);
 		return recipe.allergies;
 	}
 }

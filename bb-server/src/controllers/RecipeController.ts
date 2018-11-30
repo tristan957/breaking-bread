@@ -40,7 +40,6 @@ export default class RecipeController {
 			relations: ["author"],
 		});
 		if (recipe === undefined) { return undefined; }
-
 		if (this.currentUser.id !== recipe.author.id) { return undefined; }
 
 		return this.recipeRepository.save({ ...recipe, ...args.input });

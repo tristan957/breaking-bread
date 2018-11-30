@@ -54,7 +54,7 @@ export interface IMealSaveArgs {
 }
 
 export interface IMealDeleteArgs {
-	id: number;
+	mealID: number;
 }
 
 export interface IMealToggleGuestArgs {

@@ -79,10 +79,10 @@ export default class MealController {
 	@Mutation()
 	public async mealDelete(args: IMealDeleteArgs): Promise<Boolean | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.id, { relations: ["host"] });
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host"] });
 		if (meal === undefined || this.currentUser.id !== meal.host.id) { return false; }
 
-		this.mealRepository.remove(meal);
+		await this.mealRepository.remove(meal);
 		return true;
 	}
 
@@ -97,7 +97,7 @@ export default class MealController {
 
 		toggleItemByID(meal.guests, guest);
 
-		this.mealRepository.save(meal);
+		await this.mealRepository.save(meal);
 		return meal.guests;
 	}
 
@@ -112,7 +112,7 @@ export default class MealController {
 
 		toggleItemByID(meal.recipes, recipe);
 
-		this.mealRepository.save(meal);
+		await this.mealRepository.save(meal);
 		return meal.recipes;
 	}
 }
