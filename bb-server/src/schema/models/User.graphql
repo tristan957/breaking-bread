@@ -17,6 +17,7 @@ type User {
 	numberOfFollowers: Int!
 	followedTags: [Tag!]
 	reviews: [UserReview!]
+	reviewAverage: Float
 	userReviewsAuthored: [UserReview!]
 	recipesAuthored: [Recipe!]
 	recipeReviewsAuthored: [RecipeReview!]

@@ -31,6 +31,22 @@ export default class RecipeResolver implements ResolverInterface<Recipe> {
 	}
 
 	@Resolve()
+	public async reviewAverage(recipe: Recipe): Promise<number | undefined> {
+		const fullRecipe: Recipe | undefined = await this.recipeRepository.findOne(recipe.id, {
+			relations: ["reviews"],
+		});
+		if (fullRecipe === undefined) { return undefined; }
+		if (fullRecipe.reviews.length === 0) { return 0; }
+
+		let runningTotal = 0;
+		for (const review of fullRecipe.reviews) {
+			runningTotal += review.rating;
+		}
+
+		return runningTotal / fullRecipe.reviews.length;
+	}
+
+	@Resolve()
 	public async mealsServedAt(recipe: Recipe): Promise<Meal[] | undefined> {
 		const recipeFull: Recipe | undefined = await this.recipeRepository.findOne(recipe.id, {
 			relations: ["mealsServedAt"],

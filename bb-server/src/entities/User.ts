@@ -85,6 +85,8 @@ export default class User {
 	@OneToMany(type => UserReview, review => review.subject)
 	public reviews: UserReview[];
 
+	public reviewAverage: number;
+
 	@OneToMany(type => UserReview, review => review.author)
 	public userReviewsAuthored: UserReview[];
 

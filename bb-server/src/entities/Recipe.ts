@@ -36,6 +36,8 @@ export default class Recipe {
 	@OneToMany(type => RecipeReview, review => review.subject)
 	public reviews: RecipeReview[];
 
+	public reviewAverage: number;
+
 	@ManyToMany(type => Meal, meal => meal.recipes)
 	public mealsServedAt: Meal[];
 

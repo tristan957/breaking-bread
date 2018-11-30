@@ -64,4 +64,19 @@ export default class UserResolver implements ResolverInterface<User> {
 		return retVal;
 	}
 
+	@Resolve()
+	public async reviewAverage(user: User): Promise<number | undefined> {
+		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
+			relations: ["reviews"],
+		});
+		if (fullUser === undefined) { return undefined; }
+		if (fullUser.reviews.length === 0) { return 0; }
+
+		let runningTotal = 0;
+		for (const review of fullUser.reviews) {
+			runningTotal += review.rating;
+		}
+
+		return runningTotal / fullUser.reviews.length;
+	}
 }
