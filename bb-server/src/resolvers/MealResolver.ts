@@ -13,6 +13,13 @@ export default class MealResolver implements ResolverInterface<Meal> {
 	}
 
 	@Resolve()
+	public city(meal: Meal): string {
+		const broken: string[] = meal.location.split(",");
+
+		return meal.location;
+	}
+
+	@Resolve()
 	public async guestCount(meal: Meal): Promise<number | undefined> {
 		const mealFull: Meal | undefined = await this.mealRepository.findOne(meal.id, {
 			relations: ["guests"],

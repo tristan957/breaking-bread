@@ -12,7 +12,8 @@ export default class UserResolver implements ResolverInterface<User> {
 
 	@Resolve()
 	public name(user: User): string {
-		return `${user.firstName} ${user.lastName}`;
+		const name = `${user.firstName} ${user.lastName}`;
+		return name;
 	}
 
 	@Resolve()
