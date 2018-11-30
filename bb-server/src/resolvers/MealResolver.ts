@@ -17,14 +17,14 @@ export default class MealResolver implements ResolverInterface<Meal> {
 
 	@Resolve()
 	public async city(meal: Meal): Promise<string> {
-		const city: string = getCityFromAddress(meal.location);
+		const city: string = await getCityFromAddress(meal.location);
 		return city;
 	}
 
 	@Resolve()
 	public async relativeDistance(meal: Meal): Promise<number> {
 		if (invalidUser(this.currentUser)) { return -1; }
-		const distanceInMiles: number = userToMealMiles(this.currentUser, meal);
+		const distanceInMiles: number = await userToMealMiles(this.currentUser, meal);
 
 		return distanceInMiles;
 	}
