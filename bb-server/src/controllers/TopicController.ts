@@ -23,6 +23,8 @@ export default class TopicController {
 	public async topicSave(args: ITopicSaveArgs): Promise<Topic | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
 		const topic: Topic | undefined = await this.topicRepository.findOne({ name: args.name });
-		return topic === undefined ? this.topicRepository.save(this.topicRepository.create(args)) : topic;
+		return topic === undefined ? this.topicRepository.save(this.topicRepository.create({
+			name: args.name.toLowerCase(),
+		})) : topic;
 	}
 }

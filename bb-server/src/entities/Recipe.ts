@@ -31,8 +31,12 @@ export default class Recipe {
 	@ManyToMany(type => User, user => user.savedRecipes)
 	public savedBy: User[];
 
+	public timesSaved: number;
+
 	@OneToMany(type => RecipeReview, review => review.subject)
 	public reviews: RecipeReview[];
+
+	public reviewAverage: number;
 
 	@ManyToMany(type => Meal, meal => meal.recipes)
 	public mealsServedAt: Meal[];
@@ -44,6 +48,4 @@ export default class Recipe {
 	@ManyToMany(type => Allergy)
 	@JoinTable()
 	public allergies: Allergy[];
-
-	public timesSaved: number;
 }

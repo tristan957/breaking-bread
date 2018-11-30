@@ -1,101 +1,31 @@
-// tslint:disable: no-unsafe-any
 import { gql } from "apollo-boost";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
-import ProfileActivityContainer from "../containers/ProfileActivityContainer";
+import ProfileHeaderContainer from "../containers/ProfileHeaderContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import User from "../entities/User";
 import "./resources/css/ProfilePage.css";
 
-const GET_USER_PROFILE = gql`
-	query GetUser($id: Int!) {
-		getUser(id: $id) {
+const USER_VALIDATE = gql`
+	query User($id: Int!) {
+		user(id: $id) {
 			id
-			firstName
-			lastName
-			createdAt
-			imagePath
-			whitelist {
-				id
-				name
-			}
-			blacklist {
-				id
-				name
-			}
-			followedTags {
-				id
-				name
-			}
-			hostedMeals {
-				id
-				title
-				startTime
-				endTime
-				location
-				price
-				recipes {
-					tags {
-						id
-						name
-					}
-				}
-				host {
-					id
-					firstName
-					lastName
-					about
-					imagePath
-				}
-				guests {
-					id
-					firstName
-					lastName
-				}
-				maxGuests
-			}
-			upcomingMeals {
-				id
-				title
-				price
-				startTime
-				endTime
-				guests {
-					id
-				}
-				maxGuests
-				location
-			}
-			followedUsers {
-				id
-				firstName
-				lastName
-			}
-			recipesAuthored {
-				id
-				name
-				imagePath
-				description
-				timesSaved
-				tags {
-					id
-					name
-				}
-			}
-			reviews {
-				id
-				rating
-			}
 		}
 	}
 `;
 
-interface IGetUserProfileResult {
-	getUser: Partial<User> | null;
+interface IUserValidateData {
+	user: Partial<User> | null;
 }
+
+interface IUserValidateVariables {
+	id: number;
+}
+
+type UserValidateResult = QueryResult<IUserValidateData, IUserValidateVariables>;
 
 interface IProfilePageParams {
 	userID?: string;
@@ -123,64 +53,40 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 		return (
 			<UserContext.Consumer>
 				{userContext => {
+					const userID = parseInt(this.props.match.params.userID!, 10);
 					return (
-						<Query
-							query={GET_USER_PROFILE}
-							variables={{ id: parseInt(this.props.match.params.userID!, 10) }}
+						<Query query={USER_VALIDATE} variables={{ id: userID }}
 						>
-							{(result: QueryResult<IGetUserProfileResult>) => {
+							{(result: UserValidateResult) => {
 								if (result.loading) {
 									return <div></div>;
 								}
 								if (result.error) {
-									return (
-										<div>
-											{`Error! Something terrible has happened! ${result.error.message}`}
-										</div>
-									);
+									return <div>{result.error.message}</div>;
 								}
-								if (result.data!.getUser === null) {
-									return (
-										<div>
-											{`Error! Doesn't look like that user exists.`}
-										</div>
-									);
+
+								if (result.data!.user === null) {
+									return <div>TODO: this should be a user not found page</div>;
 								}
 
 								return (
 									<div>
 										<div id="profile-info">
 											<div id="profile-info-top">
-												{/* <ProfileHeader
-													userID={result.data!.getUser!.id!}
-													viewer={userContext.user}
-													name={`${result.data!.getUser!.firstName} ${result.data!.getUser!.lastName}`}
-													about={result.data!.getUser!.about as string}
-													whiteList={result.data!.getUser!.whitelist || []}
-													blackList={result.data!.getUser!.blacklist || []}
-													imagePath={result.data!.getUser!.imagePath}
-													joinedAt={result.data!.getUser!.createdAt as number}
-													reviewAverage={this.getUserReviewAverage(result.data!.getUser!)}
-													numberOfFollowers={result.data!.getUser!.followedUsers!.length || 0}
-												/> */}
+												<ProfileHeaderContainer userID={result.data!.user!.id!} />
 											</div>
 											<div id="profile-info-bottom">
 												<div id="profile-info-topics">
-													<TopicsContainer topics={result.data!.getUser!.whitelist || []} />
-													<TopicsContainer topics={result.data!.getUser!.blacklist || []} />
+													<TopicsContainer userID={result.data!.user!.id!} />
+													<TopicsContainer userID={result.data!.user!.id!} />
 												</div>
 												<div id="profile-info-upcoming">
-													<UpcomingMealsContainer userID={result.data!.getUser!.id!} />
+													<UpcomingMealsContainer userID={userID} />
 												</div>
 											</div>
 										</div>
-										<div id="profile-details">  {/* Essentially a mini feed for a specific user */}
-											<ProfileActivityContainer
-												hostedMeals={result.data!.getUser!.hostedMeals || []}
-												authoredRecipes={result.data!.getUser!.recipesAuthored || []}
-												savedRecipes={result.data!.getUser!.savedRecipes || []}
-												followedUsers={result.data!.getUser!.followedUsers || []}
-											/>
+										<div id="profile-details">
+											{/* <ProfileActivityContainer userID={result.data!.user!.id!} /> */}
 										</div>
 									</div>
 								);

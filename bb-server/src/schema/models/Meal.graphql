@@ -1,6 +1,7 @@
 type Meal {
 	id: Int!
-	location: String!
+	city: String! # TODO: Resolver to show just city, state
+	relativeDistance: Int # TODO: Resolver for if user is logged in
 	startTime: DateTime!
 	endTime: DateTime!
 	price: Float!
@@ -10,9 +11,9 @@ type Meal {
 	maxGuests: Int!
 	createdAt: DateTime!
 	updatedAt: DateTime!
-	host: User
-	guests: [User!]
-	recipes: [Recipe!]
+	host: User!
+	guests: [User!]!
+	recipes: [Recipe!]!
 	guestCount: Int!
 	isFull: Boolean!
 }

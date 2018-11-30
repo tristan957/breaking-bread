@@ -22,6 +22,8 @@ export default class AllergyController {
 	public async allergySave(args: IAllergySaveArgs): Promise<Allergy | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
 		const allergy: Allergy | undefined = await this.allergyRepository.findOne({ name: args.name });
-		return allergy === undefined ? this.allergyRepository.save(this.allergyRepository.create(args)) : allergy;
+		return allergy === undefined ? this.allergyRepository.save(this.allergyRepository.create({
+			name: args.name.toLowerCase(),
+		})) : allergy;
 	}
 }

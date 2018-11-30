@@ -1,4 +1,4 @@
-#upcoming-meals-list > li {
+#upcoming-meals > li {
 	margin-bottom: 10px;
 	padding-left: 5px;
 	border-left: solid gray 3px;
@@ -8,6 +8,6 @@
 	border-left-color: #2eb1dc;
 }
 
-#upcoming-meals-list > li:last-child {
+#upcoming-meals > li:last-child {
 	margin-bottom: 0px;
 }

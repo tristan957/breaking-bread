@@ -4,6 +4,6 @@ type UserReview {
 	description: String
 	createdAt: DateTime!
 	updatedAt: DateTime!
-	subject: User
-	author: User
+	subject: User!
+	author: User!
 }

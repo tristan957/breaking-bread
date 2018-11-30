@@ -23,6 +23,8 @@ export default class TagController {
 	public async tagSave(args: ITagSaveArgs): Promise<Tag | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
 		const tag: Tag | undefined = await this.tagRepository.findOne({ name: args.name });
-		return tag === undefined ? this.tagRepository.save(this.tagRepository.create(args)) : tag;
+		return tag === undefined ? this.tagRepository.save(this.tagRepository.create({
+			name: args.name.toLowerCase(),
+		})) : tag;
 	}
 }

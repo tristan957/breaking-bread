@@ -20,10 +20,10 @@ export default class TopicRepository extends Repository<Topic> {
 				: await this.findOne({ name: toggleTopic.name });
 
 			if (topic === undefined) {
-				topic = await this.save(this.create({ name: toggleTopic.name }));
+				topic = await this.save(this.create({ name: toggleTopic.name.toLowerCase() }));
 			}
 
-			toggleItemByID(topicList, topic);
+			await toggleItemByID(topicList, topic);
 		}
 	}
 }

@@ -5,6 +5,6 @@ type RecipeReview {
 	name: String!
 	createdAt: DateTime!
 	updatedAt: DateTime!
-	subject: Recipe
-	author: User
+	subject: Recipe!
+	author: User!
 }
