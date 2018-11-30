@@ -1,23 +1,28 @@
 {
   "compilerOptions": {
+    "noEmitOnError": true,
     "strictNullChecks": false,
-    "lib": ["es6", "es7", "esnext"],
+    "lib": [
+      "es6",
+      "es7",
+      "esnext"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "outDir": "build",
+    "outDir": "build/src",
     "plugins": [
-      {
-        "name": "@divyenduz/ts-graphql-plugin"
-      },
       {
         "name": "typescript-tslint-plugin"
       }
     ]
   },
+  "exclude": [
+    "src/migrations"
+  ],
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ]
 }

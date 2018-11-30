@@ -5,9 +5,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp {ormconfig.json,package.json,yarn.lock} build && cp -r src/schema build/src",
     "ts-node": "ts-node src/index.ts",
-    "tslint": "tslint -c tslint.json -p tsconfig.json"
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "migration:run": "ts-node ./node_modules/.bin/typeorm migration:run",
+    "migration:revert": "ts-node ./node_modules/.bin/typeorm migration:revert"
   },
   "dependencies": {
     "crc-32": "^1.2.0",
@@ -22,7 +24,6 @@
     "vesper": "^0.1.9"
   },
   "devDependencies": {
-    "@divyenduz/ts-graphql-plugin": "^0.1.0",
     "@types/dotenv": "^6.1.0",
     "@types/geojson": "^7946.0.4",
     "@types/graphql-iso-date": "^3.3.1",

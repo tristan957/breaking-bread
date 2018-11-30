@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "noEmitOnError": true,
     "allowJs": true,
     "skipLibCheck": false,
     "esModuleInterop": true,
@@ -11,6 +12,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": true,
+    "isolatedModules": true,
     "jsx": "preserve",
     "lib": [
       "dom",
@@ -23,9 +25,8 @@
         "name": "typescript-tslint-plugin"
       }
     ],
-    "isolatedModules": true
   },
   "include": [
-    "src"
+    "src/**/*", "../bb-server/src/migrations/2147483648-LoadTestData.ts"
   ]
 }

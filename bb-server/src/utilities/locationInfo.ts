@@ -1,6 +1,6 @@
 export { Entry as LocationEntry } from "node-geocoder";
-import * as dotenv from "dotenv";
-import * as node_geocoder from "node-geocoder";
+import dotenv from "dotenv";
+import node_geocoder from "node-geocoder";
 
 dotenv.config({ path: `${__dirname}/../../api_keys.env` });
 
