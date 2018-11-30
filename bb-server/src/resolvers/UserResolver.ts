@@ -19,7 +19,7 @@ export default class UserResolver implements ResolverInterface<User> {
 
 	@Resolve()
 	public async homeTown(user: User): Promise<string> {
-		const city: string = getCityFromAddress(user.location);
+		const city: string = await getCityFromAddress(user.location);
 		return city;
 	}
 

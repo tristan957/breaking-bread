@@ -12,7 +12,9 @@
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "outDir": "build/src",
+    "sourceMap": true,
+    "target": "esnext",
+    "outDir": "build",
     "plugins": [
       {
         "name": "typescript-tslint-plugin"

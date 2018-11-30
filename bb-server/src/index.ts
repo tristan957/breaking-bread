@@ -69,5 +69,5 @@ bootstrap({
 	console.log(`Server is up and running on http://localhost:10262
 Playground is up at http://localhost:10262/playground`);
 }).catch(err => {
-	console.log(`Unable to bootstap server: ${err}`);
+	console.log(`Unable to bootstap server: $`);
 });
