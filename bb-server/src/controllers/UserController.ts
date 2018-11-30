@@ -1,9 +1,10 @@
+import { DeepPartial } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
 import { IInput } from "../args";
 import { DropLatLong } from "../args/CommonArgs";
 import { IUserArgs, IUserEditArgs, IUserReviewArgs, IUserReviewEditArgs, IUserReviewSaveArgs, IUserSaveArgs, IUserToggleTagsArgs, IUserToggleTopiclistArgs } from "../args/UserControllerArgs";
 import { Recipe, Tag, Topic, User, UserReview } from "../entities";
-import { RecipeRepository, UserRepository, UserReviewRepository } from "../repositories";
+import { RecipeRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
 import { getLocationByCoords, LocationEntry } from "../utilities/locationInformation";
 
@@ -12,12 +13,23 @@ export default class UserController {
 	private userRepository: UserRepository;
 	private userReviewRepository: UserReviewRepository;
 	private recipeRepository: RecipeRepository;
+	private topicRepository: TopicRepository;
+	private tagRepository: TagRepository;
 	private currentUser: User;
 
-	constructor(userRepository: UserRepository, userReviewRepository: UserReviewRepository, recipeRepository: RecipeRepository, user: User) {
+	constructor(
+		userRepository: UserRepository,
+		userReviewRepository: UserReviewRepository,
+		recipeRepository: RecipeRepository,
+		topicRepository: TopicRepository,
+		tagRepository: TagRepository,
+		user: User
+	) {
 		this.userRepository = userRepository;
 		this.userReviewRepository = userReviewRepository;
 		this.recipeRepository = recipeRepository;
+		this.topicRepository = topicRepository;
+		this.tagRepository = tagRepository;
 		this.currentUser = user;
 	}
 
@@ -81,22 +93,52 @@ export default class UserController {
 		return true;
 	}
 
+	public async toggleWhitelist(currentUser: User, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["whitelist"] });
+		// TODO: please check the above to make sure it works
+		if (user === undefined) { return undefined; }
+
+		this.topicRepository.toggleTopicsList(user.whitelist, topics);
+		await this.userRepository.save(user);
+		return user.whitelist;
+	}
+
 	@Mutation()		// TODO: Remove from opposite list if it exists, before inserting into requested list
 	public userToggleWhitelist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
-		return this.userRepository.toggleWhitelist(this.currentUser, args.topics);
+		return this.toggleWhitelist(this.currentUser, args.topics);
+	}
+
+	public async toggleBlacklist(currentUser: User, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
+		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["blacklist"] });
+		// TODO: please check the above to make sure it works
+		if (user === undefined) { return undefined; }
+
+		this.topicRepository.toggleTopicsList(user.blacklist, topics);
+		await this.userRepository.save(user);
+		return user.blacklist;
 	}
 
 	@Mutation()
 	public userToggleBlacklist(args: IUserToggleTopiclistArgs): Promise<Topic[] | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
-		return this.userRepository.toggleBlacklist(this.currentUser, args.topics);
+		return this.toggleBlacklist(this.currentUser, args.topics);
+	}
+
+	public async toggleFollowedTags(currentUser: User, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
+		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["tags"] });
+		// TODO: please check the above to make sure it works
+		if (user === undefined) { return undefined; }
+
+		this.tagRepository.toggleTagsList(user.followedTags, tags);
+		await this.userRepository.save(user);
+		return user.followedTags;
 	}
 
 	@Mutation()
 	public userToggleFollowedTags(args: IUserToggleTagsArgs): Promise<Tag[] | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
-		return this.userRepository.toggleFollowedTags(this.currentUser, args.tags);
+		return this.toggleFollowedTags(this.currentUser, args.tags);
 	}
 
 	@Mutation()

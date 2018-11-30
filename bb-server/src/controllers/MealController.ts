@@ -1,24 +1,37 @@
+import { DeepPartial, MoreThan, Not } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
 import { IInput } from "../args";
 import { DropLatLong } from "../args/CommonArgs";
-import { IFeedArgs, IMealArgs, IMealDeleteArgs, IMealEditArgs, IMealSaveArgs, IMealToggleGuestArgs, IMealToggleRecipesArgs } from "../args/MealControllerArgs";
-import { Meal, Recipe, User } from "../entities";
-import { MealRepository, RecipeRepository, UserRepository } from "../repositories";
+import { IFeedArgs, IMealArgs, IMealDeleteArgs, IMealEditArgs, IMealFeedOptions, IMealSaveArgs, IMealToggleGuestArgs, IMealToggleRecipesArgs } from "../args/MealControllerArgs";
+import { Meal, Recipe, Tag, Topic, User } from "../entities";
+import { MealRepository, RecipeRepository, TagRepository, TopicRepository, UserRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
 import { getLocationByCoords, LocationEntry } from "../utilities/locationInformation";
-import { IPageFeed } from "./utilities/paginatedFeed";
+import filterByChildren from "./utilities/filterByChildren";
+import generatePagination, { IPageFeed } from "./utilities/paginatedFeed";
 
 @Controller()
 export default class MealController {
 	private mealRepository: MealRepository;
 	private recipeRepository: RecipeRepository;
 	private userRepository: UserRepository;
+	private tagRepository: TagRepository;
+	private topicRepository: TopicRepository;
 	private currentUser: User;
 
-	constructor(mealRepository: MealRepository, recipeRepository: RecipeRepository, userRepository: UserRepository, user: User) {
+	constructor(
+		mealRepository: MealRepository,
+		recipeRepository: RecipeRepository,
+		userRepository: UserRepository,
+		tagRepository: TagRepository,
+		topicRepository: TopicRepository,
+		user: User
+	) {
 		this.mealRepository = mealRepository;
 		this.recipeRepository = recipeRepository;
 		this.userRepository = userRepository;
+		this.tagRepository = tagRepository;
+		this.topicRepository = topicRepository;
 		this.currentUser = user;
 	}
 
@@ -27,9 +40,79 @@ export default class MealController {
 		return this.mealRepository.findOne(args.id);
 	}
 
+	public getTag(tag: DeepPartial<Tag>): Promise<Tag | undefined> {
+		return this.tagRepository.findOne({ where: { ...tag } });
+	}
+
+	public getTopic(topic: DeepPartial<Topic>): Promise<Topic | undefined> {
+		return this.topicRepository.findOne({ where: { ...topic } });
+	}
+
+	public filterFilledMeals(meals: Meal[]): Meal[] {
+		const filteredMeals: Meal[] = [];
+
+		for (const meal of meals) {
+			const open: boolean = this.mealHasSeatsOpen(meal);
+			if (open) {
+				filteredMeals.push(meal);
+			}
+		}
+
+		return filteredMeals;
+	}
+
+	public mealHasSeatsOpen(meal: Meal): boolean {
+		return meal.guests.length < meal.maxGuests;
+	}
+
+	public getMealRecipeTags(meal: Meal): Tag[] {
+		return meal.recipes.flatMap(recipe => recipe.tags);
+	}
+
+	public getMealHostTopics(meal: Meal): Topic[] {
+		return meal.host.whitelist;
+	}
+
+	public async getMealFeed(first: number, filterOptions?: IMealFeedOptions, after?: string): Promise<IPageFeed<Meal> | undefined> {
+		if (first < 1) {
+			return undefined;
+		}
+
+		// Max Guest filtering
+		let where: {} = {};
+		if (filterOptions !== undefined && filterOptions.maxGuests !== undefined) {
+			where = {
+				maxGuests: Not(MoreThan(filterOptions.maxGuests)),
+			};
+		}
+
+		// Getting all meals
+		let meals: Meal[] = await this.mealRepository.find({
+			where: {
+				...where,
+				startTime: MoreThan(new Date(new Date().getTime() + 60 * 60000)),  // Now +60 minutes  TODO: Date filtering
+			},
+			relations: ["host", "guests", "recipes"],
+		});
+		if (meals.length === 0) {
+			return Promise.resolve(undefined);
+		}
+
+		// Filtering
+		meals = this.filterFilledMeals(meals);
+		if (filterOptions !== undefined && filterOptions.tags !== undefined) {
+			meals = await filterByChildren(meals, filterOptions.tags, this.getTag, this.getMealRecipeTags);
+		}
+		if (filterOptions !== undefined && filterOptions.topics !== undefined) {
+			meals = await filterByChildren(meals, filterOptions.topics, this.getTopic, this.getMealHostTopics);
+		}
+
+		return generatePagination(meals, JSON.stringify([{}, filterOptions]), first, after);
+	}
+
 	@Query()
 	public feed(args: IFeedArgs): Promise<IPageFeed<Meal> | undefined> { // feed options should be optional
-		return this.mealRepository.getMealFeed(
+		return this.getMealFeed(
 			args.first,
 			args.filterOptions === undefined ? undefined : args.filterOptions.feedOptions,
 			args.after

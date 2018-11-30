@@ -1,18 +1,29 @@
+import { DeepPartial } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
 import { IInput } from "../args";
 import { IRecipeArgs, IRecipeEditArgs, IRecipeReviewArgs, IRecipeReviewEditArgs, IRecipeReviewSaveArgs, IRecipeSaveArgs, IRecipeToggleAllergiesArgs, IRecipeToggleTagsArgs } from "../args/RecipeControllerArgs";
 import { Allergy, Recipe, RecipeReview, Tag, User } from "../entities";
-import { RecipeRepository, RecipeReviewRepository } from "../repositories";
+import { AllergyRepository, RecipeRepository, RecipeReviewRepository, TagRepository } from "../repositories";
 
 @Controller()
 export default class RecipeController {
 	private recipeRepository: RecipeRepository;
 	private recipeReviewRepository: RecipeReviewRepository;
+	private tagRepository: TagRepository;
+	private allergyRepository: AllergyRepository;
 	private currentUser: User;
 
-	constructor(recipeRepository: RecipeRepository, recipeReviewRepository: RecipeReviewRepository, user: User) {
+	constructor(
+		recipeRepository: RecipeRepository,
+		recipeReviewRepository: RecipeReviewRepository,
+		tagRepository: TagRepository,
+		allergyRepository: AllergyRepository,
+		user: User
+	) {
 		this.recipeRepository = recipeRepository;
 		this.recipeReviewRepository = recipeReviewRepository;
+		this.tagRepository = tagRepository;
+		this.allergyRepository = allergyRepository;
 		this.currentUser = user;
 	}
 
@@ -45,18 +56,38 @@ export default class RecipeController {
 		return this.recipeRepository.save({ ...recipe, ...args.input });
 	}
 
+	public async toggleTags(recipeID: number, tags: DeepPartial<Tag>[], currentUser: User): Promise<Tag[] | undefined> {
+		const recipe: Recipe | undefined = await this.recipeRepository.findOne(recipeID, { relations: ["tags", "author"] });
+		// TODO: please check the above to make sure it works
+		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
+
+		this.tagRepository.toggleTagsList(recipe.tags, tags);
+		await this.recipeRepository.save(recipe);
+		return recipe.tags;
+	}
+
 	@Mutation()
 	public async recipeToggleTags(args: IRecipeToggleTagsArgs): Promise<Tag[] | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
 
-		return this.recipeRepository.toggleTags(args.id, args.tags, this.currentUser);
+		return this.toggleTags(args.id, args.tags, this.currentUser);
+	}
+
+	public async toggleAllergies(recipeID: number, allergies: DeepPartial<Allergy>[], currentUser: User): Promise<Allergy[] | undefined> {
+		const recipe: Recipe | undefined = await this.recipeRepository.findOne(recipeID, { relations: ["allergies", "author"] });
+		// TODO: please check the above to make sure it works
+		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
+
+		this.allergyRepository.toggleAllergies(recipe.allergies, allergies);
+		await this.recipeRepository.save(recipe);
+		return recipe.allergies;
 	}
 
 	@Mutation()
 	public recipeToggleAllergies(args: IRecipeToggleAllergiesArgs): Promise<Allergy[] | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
 
-		return this.recipeRepository.toggleAllergies(args.id, args.allergies, this.currentUser);
+		return this.toggleAllergies(args.id, args.allergies, this.currentUser);
 	}
 
 	@Mutation()
