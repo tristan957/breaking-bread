@@ -1,46 +1,65 @@
 import * as aws from "aws-sdk";
+import * as EmailTemplate from "email-templates";
 import * as nodemailer from "nodemailer";
-const Email = require('email-templates');
 
 // setup/config stuff
-aws.config.loadFromPath("./config.json");
-var transporter = nodemailer.createTransport({
+aws.config.loadFromPath(`${__dirname}/../ses.config.json`);
+const transporter = nodemailer.createTransport({
 	SES: new aws.SES({
-		apiVersion: '2010-12-01'
-	})
+		apiVersion: "2010-12-01",
+	}),
 });
-var email = new Email({
-	send: true,				// Set false to test in dev
-	preview: false,			// Set true to preview emails
-	transport: transporter
-});
+
+interface IEmailOptions {
+	/**
+	 * The template name
+	 */
+	template: string;
+	/**
+	 * Nodemailer Message <Nodemailer.com/message/>
+	 */
+	message: any;
+	/**
+	 * The Template Variables
+	 */
+	locals: any;
+}
 
 // templates
-var greeting = {
-	template: 'greeting',	// template is based off folder name in emails
+const greeting = {
+	template: `${__dirname}/emails/greeting`,	// template is based off folder name in emails
 	message: {
-		from: 'no-reply@bbread.org',
-		to: 'jonathan.wang1996@gmail.com'
+		from: "no-reply@bbread.org",
+		to: "gregnoonan@tamu.edu",
 	},
 	locals: {
-		name: 'Jon'			// variables used for pug files
-	}
-}
-var testing = {
-	template: 'testing',	// template is based off folder name in emails
+		name: "Jon",		// variables used for pug files
+	},
+};
+
+const testing = {
+	template: `${__dirname}/emails/testing`,	// template is based off folder name in emails
 	message: {
-		from: 'no-reply@bbread.org',
-		to: 'jonathan.wang1996@gmail.com'
+		from: "no-reply@bbread.org",
+		to: "gregnoonan@tamu.edu",
 	},
 	locals: {
-		var1: 'Test variable 1',	// variables used for pug files
-		var2: 'Test variable 2'
-	}
-}
+		var1: "Test variable 1",	// variables used for pug files
+		var2: "Test variable 2",
+	},
+};
 
 // send email
-function sendEmail(opt: any) {
-	email.send(opt).then(console.log).catch(console.error);
+function sendEmail(message: IEmailOptions): void {
+	const mailer: EmailTemplate = new EmailTemplate.default({
+		message: "",
+		send: true,				// Set false to test in dev
+		preview: false,			// Set true to preview emails
+		transport: transporter,
+	});
+
+	mailer.send(message).then(console.log).catch(console.error);
 }
+
 sendEmail(greeting);
 sendEmail(testing);
