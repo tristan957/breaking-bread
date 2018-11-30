@@ -6,7 +6,7 @@ import { IUserArgs, IUserEditArgs, IUserReviewArgs, IUserReviewEditArgs, IUserRe
 import { Recipe, Tag, Topic, User, UserReview } from "../entities";
 import { RecipeRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
-import { getLocationByCoords, LocationEntry } from "../utilities/locationInformation";
+import { getLocationByCoords, LocationEntry } from "../utilities/locationInfo";
 
 @Controller()
 export default class UserController {

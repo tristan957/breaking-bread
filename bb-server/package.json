@@ -12,6 +12,7 @@
   "dependencies": {
     "crc-32": "^1.2.0",
     "dotenv": "^6.1.0",
+    "geolib": "^2.0.24",
     "graphql-iso-date": "^3.6.1",
     "lodash.isequal": "^4.5.0",
     "node-geocoder": "^3.22.0",

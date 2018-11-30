@@ -6,7 +6,7 @@ import { IFeedArgs, IMealArgs, IMealDeleteArgs, IMealEditArgs, IMealFeedOptions,
 import { Meal, Recipe, Tag, Topic, User } from "../entities";
 import { MealRepository, RecipeRepository, TagRepository, TopicRepository, UserRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
-import { getLocationByCoords, LocationEntry } from "../utilities/locationInformation";
+import { getLocationByCoords, LocationEntry } from "../utilities/locationInfo";
 import filterByChildren from "./utilities/filterByChildren";
 import generatePagination, { IPageFeed } from "./utilities/paginatedFeed";
 
