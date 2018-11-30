@@ -51,7 +51,7 @@ export default class UpcomingMealsContainer extends React.Component<IUpcomingMea
 					if (result.loading) { return <div></div>; }
 					if (result.error) {
 						console.error(result.error);
-						return <div>{result.error}</div>;
+						return <div>{result.error.message}</div>;
 					}
 
 					return (

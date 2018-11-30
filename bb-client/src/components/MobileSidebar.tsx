@@ -1,5 +1,8 @@
 import React from "react";
 import { slide as Menu } from "react-burger-menu";
+import ProfileSummaryContainer from "../containers/ProfileSummaryContainer";
+import TagsContainer from "../containers/TagsContainer";
+import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import "./resources/css/MobileSidebar.css";
 
@@ -32,13 +35,13 @@ export default class MobileSidebar extends React.Component<IMobileDashboardProps
 				<div id="left">
 					<Menu burgerButtonClassName={"leftPane"}>
 						<div>
-							{/* {this.props.userID === undefined ? undefined : (
+							{this.props.userID === undefined ? undefined : (
 								<div>
-									<ProfileSummaryContainer user={this.props.user} />
-									<TagsContainer tags={this.props.user.followedTags || []} />
-									<TopicsContainer topics={this.props.user.whitelist || []} />
+									<ProfileSummaryContainer userID={this.props.userID} />
+									<TagsContainer userID={this.props.userID} />
+									<TopicsContainer userID={this.props.userID} />
 								</div>
-							)} */}
+							)}
 						</div>
 					</Menu>
 				</div>

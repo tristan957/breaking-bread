@@ -6,6 +6,8 @@ import { UserContext } from "../App";
 import MobileSidebar from "../components/MobileSidebar";
 import FeedContainer from "../containers/FeedContainer";
 import ProfileSummaryContainer from "../containers/ProfileSummaryContainer";
+import TagsContainer from "../containers/TagsContainer";
+import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import "./resources/css/DashboardPage.css";
 
@@ -33,8 +35,8 @@ export default class DashboardPage extends React.Component<RouteComponentProps> 
 											userContext.userID === undefined ? undefined : (
 												<div>
 													<ProfileSummaryContainer userID={userContext.userID} />
-													{/* <TagsContainer userID={userContext.userID} />
-													<TopicsContainer userID={userContext.userID} /> */}
+													<TagsContainer userID={userContext.userID} />
+													<TopicsContainer userID={userContext.userID} />
 												</div>
 											)
 										}

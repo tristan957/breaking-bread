@@ -5,7 +5,7 @@ import ProfileSummary from "../components/ProfileSummary";
 import User from "../entities/User";
 
 const USER_PROFILE = gql`
-	query user($id: Int!) {
+	query UserProfile($id: Int!) {
 		user(id: $id) {
 			imagePath
 			firstName
@@ -37,7 +37,7 @@ export default class ProfileSummaryContainer extends React.Component<IProfileSum
 						if (result.loading) { return <div></div>; }
 						if (result.error) {
 							console.error(result.error);
-							return <div>{result.error}</div>;
+							return <div>{result.error.message}</div>;
 						}
 
 						return (

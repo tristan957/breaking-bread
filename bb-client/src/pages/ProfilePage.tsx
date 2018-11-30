@@ -123,10 +123,11 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 		return (
 			<UserContext.Consumer>
 				{userContext => {
+					const userID = parseInt(this.props.match.params.userID!, 10);
 					return (
 						<Query
 							query={GET_USER_PROFILE}
-							variables={{ id: parseInt(this.props.match.params.userID!, 10) }}
+							variables={{ id: userID }}
 						>
 							{(result: QueryResult<IGetUserProfileResult>) => {
 								if (result.loading) {
@@ -166,11 +167,11 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 											</div>
 											<div id="profile-info-bottom">
 												<div id="profile-info-topics">
-													<TopicsContainer topics={result.data!.getUser!.whitelist || []} />
-													<TopicsContainer topics={result.data!.getUser!.blacklist || []} />
+													<TopicsContainer userID={userID} />
+													<TopicsContainer userID={userID} />
 												</div>
 												<div id="profile-info-upcoming">
-													<UpcomingMealsContainer userID={result.data!.getUser!.id!} />
+													<UpcomingMealsContainer userID={userID} />
 												</div>
 											</div>
 										</div>
