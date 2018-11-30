@@ -34,29 +34,27 @@ interface ITagsContainerProps {
 export default class TagsContainer extends React.Component<ITagsContainerProps> {
 	public render(): JSX.Element {
 		return (
-			<div id="followed-tags-card">
-				<div className="card">
-					<div id="tags-topics-list-header" className="container-header">Tags</div>
-					<hr className="separator" />
-					<Query query={USER_FOLLOWED_TAGS} variables={{ id: this.props.userID }}>
-						{(result: UserFollowedTagsResult) => {
-							if (result.loading) { return <div></div>; }
-							if (result.error) {
-								console.error(result.error);
-								<div>{result.error.message}</div>;
-							}
+			<Query query={USER_FOLLOWED_TAGS} variables={{ id: this.props.userID }}>
+				{(result: UserFollowedTagsResult) => {
+					if (result.loading) { return <div></div>; }
+					if (result.error) {
+						console.error(result.error);
+						<div>{result.error.message}</div>;
+					}
 
-							return (
-								<Items
-									items={result.data!.user.followedTags || []}
-									leadingChar="#"
-									monospace
-								/>
-							);
-						}}
-					</Query>
-				</div>
-			</div >
+					return (
+						<div id="followed-tags-card" className="card">
+							<div id="tags-topics-list-header" className="container-header">Tags</div>
+							<hr className="separator" />
+							<Items
+								items={result.data!.user.followedTags || []}
+								leadingChar="#"
+								monospace
+							/>
+						</div>
+					);
+				}}
+			</Query>
 		);
 	}
 }

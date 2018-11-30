@@ -34,30 +34,30 @@ interface ITopicsContainerProps {
 export default class TopicsContainer extends React.Component<ITopicsContainerProps> {
 	public render(): JSX.Element {
 		return (
-			<div id="topics-container" className="card">
-				<div className="tags-topics-list-header container-header">Topics</div>
-				<hr className="seperator" />
-				<Query query={USER_WHITELIST} variables={{ id: this.props.userID }}>
-					{(result: UserWhitelistResult) => {
-						if (result.loading) { return <div></div>; }
-						if (result.error) {
-							console.error(result.error);
-							<div>{result.error.message}</div>;
-						}
+			<Query query={USER_WHITELIST} variables={{ id: this.props.userID }}>
+				{(result: UserWhitelistResult) => {
+					if (result.loading) { return <div></div>; }
+					if (result.error) {
+						console.error(result.error);
+						<div>{result.error.message}</div>;
+					}
 
-						// console.log(this.props.userID);
-						// console.log(result);
+					// console.log(this.props.userID);
+					// console.log(result);
 
-						return (
+					return (
+						<div id="topics-container" className="card">
+							<div className="tags-topics-list-header container-header">Topics</div>
+							<hr className="seperator" />
 							<Items
 								items={result.data!.user.whitelist || []}
 								leadingChar="#"
 								monospace
 							/>
-						);
-					}}
-				</Query>
-			</div>
+						</div>
+					);
+				}}
+			</Query>
 		);
 	}
 }

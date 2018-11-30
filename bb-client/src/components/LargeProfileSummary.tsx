@@ -109,11 +109,11 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 												if (mResult.loading) {
 													return <div></div>;
 												}
-
 												if (mResult.error) {
 													console.error(mResult.error);
 													return <div>{mResult.error.message}</div>;
 												}
+
 												return (
 													<Button
 														onClick={(e: React.MouseEvent<HTMLButtonElement>) => userToggleFollowing({ variables: { userID: this.props.userID } })}
