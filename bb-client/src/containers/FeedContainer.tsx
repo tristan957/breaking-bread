@@ -23,7 +23,7 @@ const MEAL_FEED = gql`
 					title
 					startTime
 					endTime
-					location
+					city
 					price
 					recipes {
 						tags {

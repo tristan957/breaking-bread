@@ -23,7 +23,7 @@ export default class UpcomingMeals extends React.Component<IUpcomingMealsProps> 
 									endTime={meal.endTime!}
 									guests={meal.guests || []}
 									maxGuests={meal.maxGuests || 0}
-									location={meal.location!}
+									city={meal.city!}
 								/>
 							</li>
 						);

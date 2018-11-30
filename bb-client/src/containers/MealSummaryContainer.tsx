@@ -13,7 +13,7 @@ export default class MealSummaryContainer extends React.Component<IMealSummaryCo
 			<div className="card">
 				<MealSummary
 					id={this.props.meal.id!}
-					location={this.props.meal.location!}
+					city={this.props.meal.city!}
 					imagePath={this.props.meal.imagePath}
 					title={this.props.meal.title!}
 					description={this.props.meal.description!}

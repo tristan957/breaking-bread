@@ -13,7 +13,7 @@ interface IMealModificationProps {
 		startTime?: number,
 		endTime?: number,
 		title?: string,
-		location?: string,
+		city?: string,
 		description?: string
 	) => void);
 }
@@ -24,7 +24,7 @@ interface IMealModificationState {
 	mealTitle?: string;
 	mealStartTime?: number;
 	mealEndTime?: number;
-	mealLocation?: string;
+	mealCity?: string;
 	mealDescription?: string;
 	createdAt?: moment.Moment;
 	calendarFocused: boolean;
@@ -39,7 +39,7 @@ export default class MealModification extends React.Component<IMealModificationP
 			editModalVisible: false,
 			mealTitle: this.props.meal.title,
 			mealStartTime: this.props.meal.startTime,
-			mealLocation: this.props.meal.location,
+			mealCity: this.props.meal.city,
 			mealDescription: this.props.meal.description,
 			testText: "xxy",
 		});
@@ -62,7 +62,7 @@ export default class MealModification extends React.Component<IMealModificationP
 	}
 
 	public handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-		this.setState({ mealLocation: event.target.value });
+		this.setState({ mealCity: event.target.value });
 	}
 
 	public handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -94,7 +94,7 @@ export default class MealModification extends React.Component<IMealModificationP
 			this.state.mealStartTime,
 			this.state.mealEndTime,
 			this.state.mealTitle,
-			this.state.mealLocation,
+			this.state.mealCity,
 			this.state.mealDescription
 		);
 
@@ -154,7 +154,7 @@ export default class MealModification extends React.Component<IMealModificationP
 						</label>
 						<label>
 							Location
-						<input type="text" value={this.state.mealLocation} onChange={e => this.handleLocationChange(e)} />
+						<input type="text" value={this.state.mealCity} onChange={e => this.handleLocationChange(e)} />
 						</label>
 						<label>
 							Description

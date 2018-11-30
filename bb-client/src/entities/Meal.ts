@@ -6,7 +6,7 @@ type Meal = {
 	title: string;
 	price: number;
 	description: string;
-	location: string;
+	city: string;
 	startTime: number;
 	endTime: number;
 	maxGuests: number;

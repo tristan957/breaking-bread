@@ -11,7 +11,7 @@ import { default as defaultUserPic } from "./resources/images/default_user_pic.p
 
 export interface IMealSummaryProps {
 	id: number;
-	location: string;
+	city: string;
 	imagePath?: string | null;
 	title: string;
 	description: string;
@@ -80,7 +80,7 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 					maxGuests={this.props.maxGuests}
 					startTime={this.props.startTime}
 					endTime={this.props.endTime}
-					location={this.props.location}
+					city={this.props.city}
 				/>
 			</div>
 		);

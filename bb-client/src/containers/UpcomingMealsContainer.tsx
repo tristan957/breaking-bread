@@ -26,7 +26,7 @@ const USER_UPCOMING_MEALS = gql`
 					imagePath
 				}
 				maxGuests
-				location
+				city
 			}
 		}
 	}
