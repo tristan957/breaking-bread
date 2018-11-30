@@ -1,6 +1,8 @@
 import { Resolve, Resolver, ResolverInterface } from "vesper";
+import { invalidUser } from "../controllers/utilities/validateUser";
 import { Meal, User } from "../entities";
 import { MealRepository } from "../repositories";
+import { userToMealMiles } from "../utilities/distanceCalc";
 
 @Resolver(Meal)
 export default class MealResolver implements ResolverInterface<Meal> {
@@ -9,7 +11,7 @@ export default class MealResolver implements ResolverInterface<Meal> {
 
 	constructor(mealRepository: MealRepository, user: User) {
 		this.mealRepository = mealRepository;
-		this.currentUser = user;  // TODO: on distance check for logged in users, make general location a resolver and only show city
+		this.currentUser = user;
 	}
 
 	@Resolve()
@@ -22,21 +24,28 @@ export default class MealResolver implements ResolverInterface<Meal> {
 	}
 
 	@Resolve()
-	public async guestCount(meal: Meal): Promise<number | undefined> {
+	public async relativeDistance(meal: Meal): Promise<number> {
+		if (invalidUser(this.currentUser)) { return -1; }
+		const distanceInMiles: number = userToMealMiles(this.currentUser, meal);
+
+		return distanceInMiles;
+	}
+
+	@Resolve()
+	public async guestCount(meal: Meal): Promise<number> {
 		const mealFull: Meal | undefined = await this.mealRepository.findOne(meal.id, {
 			relations: ["guests"],
 		});
-		if (mealFull === undefined) { return undefined; }
 
 		return mealFull.guests.length;
 	}
 
 	@Resolve()
-	public async isFull(meal: Meal): Promise<boolean | undefined> {
+	public async isFull(meal: Meal): Promise<boolean> {
 		const mealFull: Meal | undefined = await this.mealRepository.findOne(meal.id, {
 			relations: ["guests"],
 		});
-		if (mealFull === undefined) { return undefined; }
+		if (mealFull === undefined) { return false; }
 
 		return mealFull.guests.length >= mealFull.maxGuests;
 	}

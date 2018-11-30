@@ -1,7 +1,7 @@
 type Meal {
 	id: Int!
-	city: String! # TODO: Resolver to show just city, state
-	relativeDistance: Int # TODO: Resolver for if user is logged in
+	city: String!
+	relativeDistance: Float
 	startTime: DateTime!
 	endTime: DateTime!
 	price: Float!

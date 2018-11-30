@@ -2,6 +2,7 @@ import { Controller, Mutation, Query } from "vesper";
 import { IAllergyArgs, IAllergySaveArgs } from "../args/AllergyControllerArgs";
 import { Allergy, User } from "../entities";
 import { AllergyRepository } from "../repositories";
+import { invalidUser } from "./utilities/validateUser";
 
 @Controller()
 export default class AllergyController {
@@ -20,7 +21,7 @@ export default class AllergyController {
 
 	@Mutation()
 	public async allergySave(args: IAllergySaveArgs): Promise<Allergy | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const allergy: Allergy | undefined = await this.allergyRepository.findOne({ name: args.name });
 		return allergy === undefined ? this.allergyRepository.save(this.allergyRepository.create({
 			name: args.name.toLowerCase(),

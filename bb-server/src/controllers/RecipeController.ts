@@ -4,6 +4,7 @@ import { IInput } from "../args";
 import { IRecipeArgs, IRecipeEditArgs, IRecipeReviewArgs, IRecipeReviewEditArgs, IRecipeReviewSaveArgs, IRecipeSaveArgs, IRecipeToggleAllergiesArgs, IRecipeToggleTagsArgs } from "../args/RecipeControllerArgs";
 import { Allergy, Recipe, RecipeReview, Tag, User } from "../entities";
 import { AllergyRepository, RecipeRepository, RecipeReviewRepository, TagRepository } from "../repositories";
+import { invalidUser } from "./utilities/validateUser";
 
 @Controller()
 export default class RecipeController {
@@ -39,14 +40,14 @@ export default class RecipeController {
 
 	@Mutation()
 	public async recipeSave(args: IInput<IRecipeSaveArgs>): Promise<Recipe | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const recipe: Recipe | undefined = await this.recipeRepository.findOne({ ...args.input });
 		return recipe === undefined ? this.recipeRepository.save(this.recipeRepository.create(args.input)) : recipe;
 	}
 
 	@Mutation()
 	public async recipeEdit(args: IInput<IRecipeEditArgs>): Promise<Recipe | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const recipe: Recipe | undefined = await this.recipeRepository.findOne(args.input.id, {
 			relations: ["author"],
 		});
@@ -67,7 +68,7 @@ export default class RecipeController {
 
 	@Mutation()
 	public async recipeToggleTags(args: IRecipeToggleTagsArgs): Promise<Tag[] | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 
 		return this.toggleTags(args.id, args.tags, this.currentUser);
 	}
@@ -83,14 +84,14 @@ export default class RecipeController {
 
 	@Mutation()
 	public recipeToggleAllergies(args: IRecipeToggleAllergiesArgs): Promise<Allergy[] | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 
 		return this.toggleAllergies(args.id, args.allergies, this.currentUser);
 	}
 
 	@Mutation()
 	public async recipeReviewSave(args: IInput<IRecipeReviewSaveArgs>): Promise<RecipeReview | undefined> {
-		if (this.currentUser === undefined) { return undefined; }	// Need to check if user has been to a meal with this recipe in the past?
+		if (invalidUser(this.currentUser)) { return undefined; }	// Need to check if user has been to a meal with this recipe in the past?
 		const subject: Recipe | undefined = await this.recipeRepository.findOne(args.input.subjectID);
 		if (subject === undefined) { return undefined; }
 
@@ -114,7 +115,7 @@ export default class RecipeController {
 
 	@Mutation()
 	public async recipeReviewEdit(args: IInput<IRecipeReviewEditArgs>): Promise<RecipeReview | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const review: RecipeReview | undefined = await this.recipeReviewRepository.findOne(args.input.id, {
 			relations: ["author"],
 		});

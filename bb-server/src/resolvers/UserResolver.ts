@@ -17,39 +17,39 @@ export default class UserResolver implements ResolverInterface<User> {
 	}
 
 	@Resolve()
-	public async hostedMeals(user: User): Promise<Meal[] | undefined> {
+	public async hostedMeals(user: User): Promise<Meal[] | []> {
 		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
 			relations: ["hostedMeals"],
 		});
-		if (fullUser === undefined) { return undefined; }
+		if (fullUser === undefined) { return []; }
 		return fullUser.hostedMeals;
 	}
 
 	@Resolve()
-	public async followers(user: User): Promise<User[] | undefined> {
+	public async followers(user: User): Promise<User[] | []> {
 		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
 			relations: ["followers"],
 		});
-		if (fullUser === undefined) { return undefined; }
+		if (fullUser === undefined) { return []; }
 		return fullUser.followers;
 	}
 
 	@Resolve()
-	public async numberOfFollowers(user: User): Promise<number | undefined> {
+	public async numberOfFollowers(user: User): Promise<number> {
 		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
 			relations: ["followers"],
 		});
-		if (fullUser === undefined) { return undefined; }
+		if (fullUser === undefined) { return -1; }
 
 		return fullUser.followers.length;
 	}
 
 	@Resolve()
-	public async upcomingMeals(user: User): Promise<Meal[] | undefined> {
+	public async upcomingMeals(user: User): Promise<Meal[] | []> {
 		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
 			relations: ["mealsAttending", "hostedMeals"],
 		});
-		if (fullUser === undefined) { return undefined; }
+		if (fullUser === undefined) { return []; }
 
 		const bothMealLists: Meal[] = fullUser.mealsAttending.concat(fullUser.hostedMeals);
 		const retVal: Meal[] = [];
@@ -66,11 +66,11 @@ export default class UserResolver implements ResolverInterface<User> {
 	}
 
 	@Resolve()
-	public async reviewAverage(user: User): Promise<number | undefined> {
+	public async reviewAverage(user: User): Promise<number> {
 		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
 			relations: ["reviews"],
 		});
-		if (fullUser === undefined) { return undefined; }
+		if (fullUser === undefined) { return -1; }
 		if (fullUser.reviews.length === 0) { return 0; }
 
 		let runningTotal = 0;

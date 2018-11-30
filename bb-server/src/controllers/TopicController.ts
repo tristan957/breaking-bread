@@ -3,6 +3,7 @@ import { ITopicArgs, ITopicSaveArgs } from "../args/TopicControllerArgs";
 import { User } from "../entities";
 import Topic from "../entities/Topic";
 import { TopicRepository } from "../repositories";
+import { invalidUser } from "./utilities/validateUser";
 
 @Controller()
 export default class TopicController {
@@ -21,7 +22,7 @@ export default class TopicController {
 
 	@Mutation()
 	public async topicSave(args: ITopicSaveArgs): Promise<Topic | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
+		if (invalidUser(this.currentUser)) { return undefined; }
 		const topic: Topic | undefined = await this.topicRepository.findOne({ name: args.name });
 		return topic === undefined ? this.topicRepository.save(this.topicRepository.create({
 			name: args.name.toLowerCase(),
