@@ -18,6 +18,8 @@ export default class User {
 	@Column()
 	public lastName: string;
 
+	public name: string;
+
 	@Column({ type: "text", nullable: true })
 	public imagePath: string;
 
@@ -26,6 +28,14 @@ export default class User {
 
 	@Column({ type: "text", nullable: true })
 	public about: string;
+
+	@Column()
+	public latLong: string;
+
+	@Column({ type: "text" })  // TODO: Expose and make with save and edit resolver address to city?
+	public location: string;
+
+	public homeTown: string;  // TODO: Just city and state to be exposed on the schema
 
 	@Column()
 	public email: string;
@@ -44,6 +54,8 @@ export default class User {
 
 	@ManyToMany(type => Meal, meal => meal.guests)
 	public mealsAttending: Meal[];
+
+	public upcomingMeals: Meal[];
 
 	@ManyToMany(type => Topic, topic => topic.whiteListedBy)
 	@JoinTable()
@@ -64,6 +76,8 @@ export default class User {
 	@ManyToMany(type => User, user => user.followedUsers)
 	public followers: User[];
 
+	public numberOfFollowers: number;
+
 	@ManyToMany(type => Tag, tag => tag.followers)
 	@JoinTable()
 	public followedTags: Tag[];
@@ -79,10 +93,4 @@ export default class User {
 
 	@OneToMany(type => Recipe, recipe => recipe.author)
 	public recipesAuthored: Recipe[];
-
-	public name: string;
-
-	public upcomingMeals: Meal[];
-
-	public numberOfFollowers: number;
 }

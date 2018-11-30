@@ -1,9 +1,11 @@
 import { Controller, Mutation, Query } from "vesper";
 import { IInput } from "../args";
+import { DropLatLong } from "../args/CommonArgs";
 import { IFeedArgs, IMealArgs, IMealDeleteArgs, IMealEditArgs, IMealSaveArgs, IMealToggleGuestArgs, IMealToggleRecipesArgs } from "../args/MealControllerArgs";
 import { Meal, Recipe, User } from "../entities";
 import { MealRepository, RecipeRepository, UserRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
+import { getLocationByCoords, LocationEntry } from "../utilities/locationInformation";
 import { IPageFeed } from "./utilities/paginatedFeed";
 
 @Controller()
@@ -35,9 +37,43 @@ export default class MealController {
 	}
 
 	@Mutation()
-	public mealSave(args: IInput<IMealSaveArgs>): Promise<Meal | undefined> {
-		const meal = this.mealRepository.create(args.input);
+	public async mealSave(args: IInput<IMealSaveArgs>): Promise<Meal | undefined> {
+		const { latLong, ...inputNoLatLong }: DropLatLong<IMealSaveArgs> = args.input;
+		const locationInfo: LocationEntry = await getLocationByCoords(latLong.lat, latLong.long);
+		if (locationInfo.formattedAddress === undefined) { return undefined; }
+
+		const meal = this.mealRepository.create({
+			...inputNoLatLong,
+			latLong: `${latLong.lat}|${latLong.long}`,
+			location: locationInfo.formattedAddress,
+		});
 		return this.mealRepository.save(meal);
+	}
+
+	@Mutation()
+	public async mealEdit(args: IInput<IMealEditArgs>): Promise<Meal | undefined> {
+		const { latLong, ...inputNoLatLong }: DropLatLong<IMealEditArgs> = args.input;
+
+		if (this.currentUser === undefined) { return undefined; }
+		const meal: Meal | undefined = await this.mealRepository.findOne(args.input.id, { relations: ["host"] });
+		if (meal === undefined || meal.host.id !== this.currentUser.id) { return undefined; }
+
+		if (latLong !== undefined) {
+			const locationInfo: LocationEntry = await getLocationByCoords(latLong.lat, latLong.long);
+			if (locationInfo.formattedAddress === undefined) { return undefined; }
+
+			return this.mealRepository.save({
+				...meal,
+				...inputNoLatLong,
+				latLong: `${latLong.lat}|${latLong.long}`,
+				location: locationInfo.formattedAddress,
+			});
+		}
+
+		return this.mealRepository.save({
+			...meal,
+			...inputNoLatLong,
+		});
 	}
 
 	@Mutation()
@@ -63,15 +99,6 @@ export default class MealController {
 
 		this.mealRepository.save(meal);
 		return meal.guests;
-	}
-
-	@Mutation()
-	public async mealEdit(args: IInput<IMealEditArgs>): Promise<Meal | undefined> {
-		if (this.currentUser === undefined) { return undefined; }
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.input.id, { relations: ["host"] });
-		if (meal.host.id !== this.currentUser.id) { return undefined; }
-
-		return meal === undefined ? undefined : this.mealRepository.save({ ...meal, ...args.input });
 	}
 
 	@Mutation()

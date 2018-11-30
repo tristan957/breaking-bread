@@ -23,6 +23,7 @@
   "devDependencies": {
     "@divyenduz/ts-graphql-plugin": "^0.1.0",
     "@types/dotenv": "^6.1.0",
+    "@types/geojson": "^7946.0.4",
     "@types/graphql-iso-date": "^3.3.1",
     "@types/lodash.isequal": "^4.5.3",
     "@types/node-geocoder": "^3.19.0",

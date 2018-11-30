@@ -1,5 +1,5 @@
 input MealSaveInput {
-	location: String!  # Address or lat and lon
+	latLong: LatLongInput!
 	startTime: DateTime!
 	endTime: DateTime!
 	price: Float!
@@ -11,7 +11,7 @@ input MealSaveInput {
 
 input MealEditInput {
 	id: Int!
-	location: String
+	latLong: LatLongInput
 	startTime: DateTime  # TODO: Email on time, price changes
 	endTime: DateTime
 	price: Float

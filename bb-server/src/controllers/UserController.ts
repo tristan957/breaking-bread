@@ -1,9 +1,11 @@
 import { Controller, Mutation, Query } from "vesper";
 import { IInput } from "../args";
+import { DropLatLong } from "../args/CommonArgs";
 import { IUserArgs, IUserEditArgs, IUserReviewArgs, IUserReviewEditArgs, IUserReviewSaveArgs, IUserSaveArgs, IUserToggleTagsArgs, IUserToggleTopiclistArgs } from "../args/UserControllerArgs";
 import { Recipe, Tag, Topic, User, UserReview } from "../entities";
 import { RecipeRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
+import { getLocationByCoords, LocationEntry } from "../utilities/locationInformation";
 
 @Controller()
 export default class UserController {
@@ -36,15 +38,40 @@ export default class UserController {
 	}
 
 	@Mutation()
-	public userSave(args: IInput<IUserSaveArgs>): Promise<User> { // Some sort of verification, maybe email
-		const user: User = this.userRepository.create(args.input);
+	public async userSave(args: IInput<IUserSaveArgs>): Promise<User | undefined> { // Some sort of verification, maybe email
+		const { latLong, ...inputNoLatLong }: DropLatLong<IUserSaveArgs> = args.input;
+		const locationInfo: LocationEntry = await getLocationByCoords(latLong.lat, latLong.long);
+		if (locationInfo.formattedAddress === undefined) { return undefined; }
+
+		const user: User = this.userRepository.create({
+			...inputNoLatLong,
+			latLong: `${latLong.lat}|${latLong.long}`,
+			location: locationInfo.formattedAddress,
+		});
 		return this.userRepository.save(user);
 	}
 
 	@Mutation()
 	public async userEdit(args: IInput<IUserEditArgs>): Promise<User | undefined> {
 		if (this.currentUser === undefined) { return undefined; }
-		return this.userRepository.save({ ...this.currentUser, ...args.input });
+
+		const { latLong, ...inputNoLatLong }: DropLatLong<IUserEditArgs> = args.input;
+		if (latLong !== undefined) {
+			const locationInfo: LocationEntry = await getLocationByCoords(latLong.lat, latLong.long);
+			if (locationInfo.formattedAddress === undefined) { return undefined; }
+
+			return this.userRepository.save({
+				...this.currentUser,
+				...inputNoLatLong,
+				latLong: `${latLong.lat}|${latLong.long}`,
+				location: locationInfo.formattedAddress,
+			});
+		}
+
+		return this.userRepository.save({
+			...this.currentUser,
+			...inputNoLatLong,
+		});
 	}
 
 	@Mutation()

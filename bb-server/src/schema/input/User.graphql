@@ -3,6 +3,7 @@ input UserSaveInput {
 	lastName: String!
 	imagePath: String
 	about: String
+	latLong: LatLongInput!
 	email: String!
 	phoneNumber: String!
 	oAuthSub: String!
@@ -12,6 +13,7 @@ input UserEditInput {
 	id: Int!
 	imagePath: String
 	about: String
+	latLong: LatLongInput
 	email: String
 	phoneNumber: String
 }

@@ -5,11 +5,10 @@ type User {
 	name: String!
 	imagePath: String
 	about: String!
-	email: String!
-	phoneNumber: String!
+	homeTown: String! # TODO: resolver
 	createdAt: DateTime!
 	hostedMeals: [Meal!]
-	upcomingMeals: [Meal!] # TODO: resolver
+	upcomingMeals: [Meal!]
 	whitelist: [Topic!]
 	blacklist: [Topic!]
 	savedRecipes: [Recipe!]!
