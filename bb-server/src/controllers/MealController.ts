@@ -7,9 +7,9 @@ import { Meal, Recipe, Tag, Topic, User } from "../entities";
 import { MealRepository, RecipeRepository, TagRepository, TopicRepository, UserRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
 import { getLocationByCoords, LocationEntry } from "../utilities/locationInfo";
+import { invalidUser } from "../utilities/validateUser";
 import filterByChildren from "./utilities/filterByChildren";
 import generatePagination, { IPageFeed } from "./utilities/paginatedFeed";
-import { invalidUser } from "./utilities/validateUser";
 
 @Controller()
 export default class MealController {

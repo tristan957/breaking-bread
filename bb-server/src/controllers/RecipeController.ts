@@ -4,7 +4,7 @@ import { IInput } from "../args";
 import { IRecipeArgs, IRecipeEditArgs, IRecipeReviewArgs, IRecipeReviewEditArgs, IRecipeReviewSaveArgs, IRecipeSaveArgs, IRecipeToggleAllergiesArgs, IRecipeToggleTagsArgs } from "../args/RecipeControllerArgs";
 import { Allergy, Recipe, RecipeReview, Tag, User } from "../entities";
 import { AllergyRepository, RecipeRepository, RecipeReviewRepository, TagRepository } from "../repositories";
-import { invalidUser } from "./utilities/validateUser";
+import { invalidUser } from "../utilities/validateUser";
 
 @Controller()
 export default class RecipeController {

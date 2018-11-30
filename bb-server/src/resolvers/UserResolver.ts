@@ -1,6 +1,7 @@
 import { Resolve, Resolver, ResolverInterface } from "vesper";
 import { Meal, User } from "../entities";
 import { UserRepository } from "../repositories";
+import { getCityFromAddress } from "../utilities/locationInfo";
 
 @Resolver(User)
 export default class UserResolver implements ResolverInterface<User> {
@@ -14,6 +15,12 @@ export default class UserResolver implements ResolverInterface<User> {
 	public async name(user: User): Promise<string> {
 		const name = `${user.firstName} ${user.lastName}`;
 		return name;
+	}
+
+	@Resolve()
+	public async homeTown(user: User): Promise<string> {
+		const city: string = getCityFromAddress(user.location);
+		return city;
 	}
 
 	@Resolve()

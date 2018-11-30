@@ -3,7 +3,7 @@ import { ITagArgs, ITagSaveArgs } from "../args/TagControllerArgs";
 import { User } from "../entities";
 import Tag from "../entities/Tag";
 import { TagRepository } from "../repositories";
-import { invalidUser } from "./utilities/validateUser";
+import { invalidUser } from "../utilities/validateUser";
 
 @Controller()
 export default class TagController {

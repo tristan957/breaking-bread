@@ -2,7 +2,7 @@ import { Controller, Mutation, Query } from "vesper";
 import { IAllergyArgs, IAllergySaveArgs } from "../args/AllergyControllerArgs";
 import { Allergy, User } from "../entities";
 import { AllergyRepository } from "../repositories";
-import { invalidUser } from "./utilities/validateUser";
+import { invalidUser } from "../utilities/validateUser";
 
 @Controller()
 export default class AllergyController {

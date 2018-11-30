@@ -3,7 +3,7 @@ import { ITopicArgs, ITopicSaveArgs } from "../args/TopicControllerArgs";
 import { User } from "../entities";
 import Topic from "../entities/Topic";
 import { TopicRepository } from "../repositories";
-import { invalidUser } from "./utilities/validateUser";
+import { invalidUser } from "../utilities/validateUser";
 
 @Controller()
 export default class TopicController {

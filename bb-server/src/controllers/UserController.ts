@@ -7,7 +7,7 @@ import { Recipe, Tag, Topic, User, UserReview } from "../entities";
 import { RecipeRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
 import { getLocationByCoords, LocationEntry } from "../utilities/locationInfo";
-import { invalidUser } from "./utilities/validateUser";
+import { invalidUser } from "../utilities/validateUser";
 
 @Controller()
 export default class UserController {

@@ -1,8 +1,9 @@
 import { Resolve, Resolver, ResolverInterface } from "vesper";
-import { invalidUser } from "../controllers/utilities/validateUser";
 import { Meal, User } from "../entities";
 import { MealRepository } from "../repositories";
 import { userToMealMiles } from "../utilities/distanceCalc";
+import { getCityFromAddress } from "../utilities/locationInfo";
+import { invalidUser } from "../utilities/validateUser";
 
 @Resolver(Meal)
 export default class MealResolver implements ResolverInterface<Meal> {
@@ -16,10 +17,7 @@ export default class MealResolver implements ResolverInterface<Meal> {
 
 	@Resolve()
 	public async city(meal: Meal): Promise<string> {
-		const broken: string[] = meal.location.split(", ");
-		let city: string = broken.slice(broken.length - 3, broken.length - 1).join(", ");
-		city = city.replace(/\s\d+/g, "");
-
+		const city: string = getCityFromAddress(meal.location);
 		return city;
 	}
 

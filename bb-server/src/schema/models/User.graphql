@@ -5,7 +5,7 @@ type User {
 	name: String!
 	imagePath: String
 	about: String!
-	homeTown: String! # TODO: resolver
+	homeTown: String!
 	createdAt: DateTime!
 	hostedMeals: [Meal!]
 	upcomingMeals: [Meal!]

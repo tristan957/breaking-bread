@@ -25,3 +25,11 @@ export async function getLocationByCoords(lat: number, lon: number): Promise<nod
 
 	return locations[0];
 }
+
+export function getCityFromAddress(address: string): string {
+	const broken: string[] = address.split(", ");
+	let city: string = broken.slice(broken.length - 3, broken.length - 1).join(", ");
+	city = city.replace(/\s\d+/g, "");
+
+	return city;
+}
