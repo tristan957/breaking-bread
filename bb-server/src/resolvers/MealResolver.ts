@@ -13,10 +13,12 @@ export default class MealResolver implements ResolverInterface<Meal> {
 	}
 
 	@Resolve()
-	public city(meal: Meal): string {
-		const broken: string[] = meal.location.split(",");
+	public async city(meal: Meal): Promise<string> {
+		const broken: string[] = meal.location.split(", ");
+		let city: string = broken.slice(broken.length - 3, broken.length - 1).join(", ");
+		city = city.replace(/\s\d+/g, "");
 
-		return meal.location;
+		return city;
 	}
 
 	@Resolve()
