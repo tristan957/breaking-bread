@@ -2,12 +2,13 @@ import gql from "graphql-tag";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import Items from "../components/Items";
-import Tag from "../entities/Tag";
+import User from "../entities/User";
 import "./resources/css/TagsContainer.css";
 
 const USER_FOLLOWED_TAGS = gql`
 	query UserFollowedTags($id: Int!) {
 		user(id: $id) {
+			id
 			followedTags {
 				id
 				name
@@ -17,9 +18,7 @@ const USER_FOLLOWED_TAGS = gql`
 `;
 
 interface IUserFollowedTagsData {
-	user: {
-		followedTags: Partial<Tag>[];
-	};
+	user: Partial<User>;
 }
 
 interface IUserFollowedTagsVariables {
@@ -49,7 +48,7 @@ export default class TagsContainer extends React.Component<ITagsContainerProps> 
 
 							return (
 								<Items
-									items={result.data!.user.followedTags}
+									items={result.data!.user.followedTags || []}
 									leadingChar="#"
 									monospace
 								/>

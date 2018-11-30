@@ -2,12 +2,13 @@ import gql from "graphql-tag";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import Items from "../components/Items";
-import Topic from "../entities/Topic";
+import User from "../entities/User";
 import "./resources/css/TopicsContainer.css";
 
 const USER_WHITELIST = gql`
 	query UserWhitelist($id: Int!) {
 		user(id: $id) {
+			id
 			whitelist {
 				id
 				name
@@ -17,9 +18,7 @@ const USER_WHITELIST = gql`
 `;
 
 interface IUserWhitelistData {
-	user: {
-		whitelist: Partial<Topic>[];
-	};
+	user: Partial<User>;
 }
 
 interface IUserWhitelistVariables {
@@ -46,9 +45,12 @@ export default class TopicsContainer extends React.Component<ITopicsContainerPro
 							<div>{result.error.message}</div>;
 						}
 
+						// console.log(this.props.userID);
+						// console.log(result);
+
 						return (
 							<Items
-								items={result.data!.user.whitelist}
+								items={result.data!.user.whitelist || []}
 								leadingChar="#"
 								monospace
 							/>
