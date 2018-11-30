@@ -11,7 +11,7 @@ export default class UserResolver implements ResolverInterface<User> {
 	}
 
 	@Resolve()
-	public name(user: User): string {
+	public async name(user: User): Promise<string> {
 		const name = `${user.firstName} ${user.lastName}`;
 		return name;
 	}
