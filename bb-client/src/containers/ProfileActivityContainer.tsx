@@ -1,27 +1,20 @@
 import React from "react";
 import MediaQuery from "react-responsive";
 import { Button, ButtonGroup } from "reactstrap";
-import Meal from "../entities/Meal";
-import Recipe from "../entities/Recipe";
-import User from "../entities/User";
-import MealSummariesContainer from "./MealSummariesContainer";
-import ProfileSummariesContainers from "./ProfileSummariesContainers";
-import RecipeSummariesContainer from "./RecipeSummariesContainer";
-import "./resources/css/ProfileActivityContainer.css";
-// https://reactstrap.github.io/components/tabs/
+import HostedMealsContainer from "./HostedMealsContainer";
+import RecipeSummariesContainer, { RecipeType } from "./RecipeSummariesContainer";
+import UsersContainers, { UserType } from "./UsersContainers";
 
 enum RenderedComponent {
-	HostedMeals,
-	AuthoredRecipes,
-	SavedRecipes,
-	FollowedUsers,
+	HOSTED_MEALS,
+	AUTHORED_RECIPES,
+	SAVED_RECIPES,
+	FOLLOWED_USERS,
+	FOLLOWING_USERS,
 }
 
 interface IProfileActivityContainerProps {
-	hostedMeals: Partial<Meal>[];
-	authoredRecipes: Partial<Recipe>[];
-	savedRecipes: Partial<Recipe>[];
-	followedUsers: Partial<User>[];
+	userID: number;
 }
 
 interface IProfileActivityContainerState {
@@ -33,37 +26,30 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 		super(props);
 
 		this.state = {
-			renderedComponent: RenderedComponent.HostedMeals,
+			renderedComponent: RenderedComponent.HOSTED_MEALS,
 		};
 	}
 
 	private renderActivity = (): JSX.Element | undefined => {
 		const nada = <div id="nada" className="card">None</div>;
 		switch (this.state.renderedComponent) {
-			case RenderedComponent.HostedMeals: {
-				return this.props.hostedMeals.length === 0
-					? nada
-					: (
-						<MealSummariesContainer meals={this.props.hostedMeals} />
-					);
+			case RenderedComponent.HOSTED_MEALS: {
+				return <HostedMealsContainer userID={this.props.userID} />;
 			}
-			case RenderedComponent.AuthoredRecipes: {
-				return this.props.authoredRecipes.length === 0
-					? nada
-					: <RecipeSummariesContainer recipes={this.props.authoredRecipes} />;
+			case RenderedComponent.AUTHORED_RECIPES: {
+				return <RecipeSummariesContainer userID={this.props.userID} type={RecipeType.AUTHORED} />;
 			}
-			case RenderedComponent.SavedRecipes: {
-				return this.props.savedRecipes.length === 0
-					? nada
-					: <RecipeSummariesContainer recipes={this.props.savedRecipes} />;
+			case RenderedComponent.SAVED_RECIPES: {
+				return <RecipeSummariesContainer userID={this.props.userID} type={RecipeType.SAVED} />;
 			}
-			case RenderedComponent.FollowedUsers: {
-				return this.props.followedUsers.length === 0
-					? nada
-					: <ProfileSummariesContainers users={this.props.followedUsers} />;
+			case RenderedComponent.FOLLOWED_USERS: {
+				return <UsersContainers userID={this.props.userID} type={UserType.FOLLOWED} />;
+			}
+			case RenderedComponent.FOLLOWING_USERS: {
+				return <UsersContainers userID={this.props.userID} type={UserType.FOLLOWING} />;
 			}
 			default: {
-				return undefined;
+				return nada;
 			}
 		}
 	}
@@ -77,30 +63,37 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 0}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.HostedMeals })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.HOSTED_MEALS })}
 							>
 								Hosted Meals
 							</Button>
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 1}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.AuthoredRecipes })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.AUTHORED_RECIPES })}
 							>
 								Authored Recipes
 							</Button>
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 2}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.SavedRecipes })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.SAVED_RECIPES })}
 							>
 								Saved Recipes
 							</Button>
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 3}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FollowedUsers })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FOLLOWED_USERS })}
 							>
 								Followed Users
+							</Button>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 4}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FOLLOWING_USERS })}
+							>
+								Users Following
 							</Button>
 						</ButtonGroup>
 					</MediaQuery>
@@ -110,28 +103,35 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 0}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.HostedMeals })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.HOSTED_MEALS })}
 							>
 								Hosted Meals
 							</Button>
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 1}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.AuthoredRecipes })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.AUTHORED_RECIPES })}
 							>
 								Authored Recipes
 							</Button>
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 2}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.SavedRecipes })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.SAVED_RECIPES })}
 							>
 								Saved Recipes
 							</Button>
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 3}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FollowedUsers })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FOLLOWED_USERS })}
+							>
+								Followed Users
+							</Button>
+							<Button
+								className="show-filter-modal"
+								active={this.state.renderedComponent === 4}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FOLLOWING_USERS })}
 							>
 								Followed Users
 							</Button>

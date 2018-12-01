@@ -14,6 +14,7 @@ type Recipe = {
 	author: Partial<User>;
 	timesSaved: number;
 	reviews: Partial<RecipeReview>[];
+	reviewAverage: number;
 	tags: Partial<Tag>[];
 	allergies: Partial<Allergy>[];
 	mealsServedAt: Partial<Meal>[];

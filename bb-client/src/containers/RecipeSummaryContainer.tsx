@@ -1,52 +1,76 @@
+import gql from "graphql-tag";
 import React from "react";
-import { UserContext } from "../App";
+import { Query, QueryResult } from "react-apollo";
 import RecipeSummary from "../components/RecipeSummary";
 import Recipe from "../entities/Recipe";
 
-interface IRecipeSummaryContainerProps {
-	showAuthor?: boolean;
+const RECIPE = gql`
+	query Recipe($recipeID: Int!) {
+		recipe($id: $recipeID) {
+			id
+			author {
+				id
+			}
+			name
+			tags {
+				id
+				name
+			}
+			createdAt
+			updatedAt
+			reviewAverage
+			timesSaved
+			allergies {
+				id
+				name
+			}
+		}
+	}
+`;
+
+interface IRecipeData {
 	recipe: Partial<Recipe>;
 }
 
+interface IRecipeVariables {
+	recipeID: number;
+}
+
+type RecipeResult = QueryResult<IRecipeData, IRecipeVariables>;
+
+interface IRecipeSummaryContainerProps {
+	showAuthor?: boolean;
+	recipeID: number;
+}
+
 export default class RecipeSummaryContainer extends React.Component<IRecipeSummaryContainerProps> {
-	private getRecipeReviewAverage = (): number => { // TODO: deduplicate
-		if (this.props.recipe.reviews === undefined || this.props.recipe.reviews.length === 0) {
-			return 0;
-		}
-
-		let sum = 0;
-		let effectiveLength = 0;
-		this.props.recipe.reviews.forEach(element => {
-			if (element.rating !== undefined) {
-				sum += element.rating;
-				effectiveLength += 1;
-			}
-		});
-
-		return sum / effectiveLength;
-	}
-
 	public render(): JSX.Element {
 		return (
-			<UserContext.Consumer>
-				{userContext => {
+			<Query query={RECIPE} variables={{ recipeID: this.props.recipeID }}>
+				{(result: RecipeResult) => {
+					if (result.loading) { return <div></div>; }
+					if (result.error) {
+						console.error(result.error);
+						return <div>{result.error.message}</div>;
+					}
+
 					return (
 						<div className="card">
 							<RecipeSummary
-								authorID={this.props.recipe.id!}
-								viewerID={userContext.userID}
-								name={this.props.recipe.name!}
-								tags={this.props.recipe.tags || []}
-								createdAt={this.props.recipe.createdAt!}
-								updatedAt={this.props.recipe.updatedAt!}
-								reviewAverage={this.getRecipeReviewAverage()}
-								timesSaved={this.props.recipe.timesSaved || 0}
-								allergies={this.props.recipe.allergies || []}
+								authorID={result.data!.recipe.id!}
+								viewerID={1 /*TODO*/}
+								name={result.data!.recipe.name!}
+								tags={result.data!.recipe.tags || []}
+								createdAt={result.data!.recipe.createdAt!}
+								updatedAt={result.data!.recipe.updatedAt!}
+								reviewAverage={result.data!.recipe.reviewAverage || 0}
+								timesSaved={result.data!.recipe.timesSaved || 0}
+								allergies={result.data!.recipe.allergies || []}
 							/>
 						</div>
 					);
 				}}
-			</UserContext.Consumer>
+			</Query>
 		);
 	}
 }

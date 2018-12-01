@@ -29,9 +29,9 @@ type User = {
 	followedTags: Partial<Tag>[];
 	reviews: Partial<UserReview>[];
 	reviewAverage: number;
-	userReviewsAuthored: Partial<UserReview>[];
-	recipeReviewsAuthored: Partial<RecipeReview>[];
-	recipesAuthored: Partial<Recipe>[];
+	authoredUserReviews: Partial<UserReview>[];
+	authoredRecipeReviews: Partial<RecipeReview>[];
+	authoredRecipes: Partial<Recipe>[];
 };
 
 export default User;
