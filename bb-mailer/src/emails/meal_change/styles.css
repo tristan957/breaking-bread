@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+.logo {
+  display: block;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: url(https://i.ibb.co/7SWPgHT/logo-icon.png) no-repeat;
+  width: 100px; /* Width of new image */
+  height: 98px; /* Height of new image */
+  margin: 0 auto;
+}
+
+.outer {
+  margin: 0 auto;
+  width: 500px; 
+}
+
+.inner {
+  padding-left: 4em;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: black;
+
+}
+
+hr {
+  margin: 2em 0 2em 0;
+}
