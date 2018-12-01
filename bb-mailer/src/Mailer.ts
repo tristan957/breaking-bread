@@ -4,62 +4,66 @@ import * as nodemailer from "nodemailer";
 
 // setup/config stuff
 aws.config.loadFromPath(`${__dirname}/../ses.config.json`);
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
 	SES: new aws.SES({
 		apiVersion: "2010-12-01",
 	}),
 });
 
-interface IEmailOptions {
-	/**
-	 * The template name
-	 */
-	template: string;
-	/**
-	 * Nodemailer Message <Nodemailer.com/message/>
-	 */
-	message: any;
-	/**
-	 * The Template Variables
-	 */
-	locals: any;
+export const sender = "no-reply@bbread.org";
+
+export enum templates {
+	MEAL_CHANGE = "meal_change",
+	SIGN_UP = "sign_up",
+	USER_KICKED = "user_kicked",
 }
 
-// templates
-const greeting = {
-	template: `${__dirname}/emails/greeting`,	// template is based off folder name in emails
-	message: {
-		from: "no-reply@bbread.org",
-		to: "gregnoonan@tamu.edu",
-	},
-	locals: {
-		name: "Jon",		// variables used for pug files
-	},
-};
+export function sendNotification(json: any, template: string): void {
+	const msg = {
+		template: `${__dirname}/emails/` + template,
+		message: {
+			from: sender,
+			to: json.receiver,
+		},
+		locals: {
+			info: json,
+		},
+	};
 
-const testing = {
-	template: `${__dirname}/emails/testing`,	// template is based off folder name in emails
-	message: {
-		from: "no-reply@bbread.org",
-		to: "gregnoonan@tamu.edu",
-	},
-	locals: {
-		var1: "Test variable 1",	// variables used for pug files
-		var2: "Test variable 2",
-	},
-};
-
-// send email
-function sendEmail(message: IEmailOptions): void {
 	const mailer: EmailTemplate = new EmailTemplate.default({
 		message: "",
-		send: true,				// Set false to test in dev
-		preview: false,			// Set true to preview emails
+		send: false,				// Set false to test in dev
+		preview: true,			// Set true to preview emails
 		transport: transporter,
 	});
 
-	mailer.send(message).then(console.log).catch(console.error);
+	mailer.send(msg).then(console.log).catch(console.error);
 }
 
-sendEmail(greeting);
-sendEmail(testing);
+/* Example Usage */
+const sign_up_json = {
+	receiver: "jonathan.wang1996@gmail.com",
+	receiver_name: "Jon",
+}
+const meal_change_json = {
+	receiver: "jonathan.wang1996@gmail.com",
+	receiver_name: "Jon",
+	host_name: "Grog",
+	meal_link: "https://www.google.com",
+	old_date: new Date("Sat Dec 01 2018 15:06:25 GMT-0600 (Central Standard Time)").toLocaleDateString(),
+	new_date: new Date("Sat Dec 02 2018 15:06:25 GMT-0600 (Central Standard Time)").toLocaleDateString(),
+	old_time: new Date("Sat Dec 01 2018 15:06:20 GMT-0600 (Central Standard Time)").toLocaleTimeString(),
+	new_time: new Date("Sat Dec 01 2018 15:06:25 GMT-0600 (Central Standard Time)").toLocaleTimeString(),
+	old_addr: "8===========D Drive",
+	new_addr: "( . ) Y ( . ) Street",
+	old_price: 999,
+	new_price: 1000,
+}
+const user_kicked_json = {
+	receiver: "jonathan.wang1996@gmail.com",
+	receiver_name: "Jon",
+	host_name: "Grog",
+}
+sendNotification(sign_up_json, templates.SIGN_UP);
+sendNotification(meal_change_json, templates.MEAL_CHANGE);
+sendNotification(user_kicked_json, templates.USER_KICKED);

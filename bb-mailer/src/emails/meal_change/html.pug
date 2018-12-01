@@ -1,0 +1,30 @@
+- var date_change = info.old_date === info.new_date ? false : true;
+- var time_change = info.old_time === info.new_time ? false : true;
+- var addr_change = info.old_addr === info.new_addr ? false : true;
+- var price_change = info.old_price === info.new_price ? false : true;
+
+doctype html
+html(lang='en')
+ style
+  include styles.css
+ body
+  div.outer
+   div.logo
+   hr
+   div.inner
+    h4 Hi #{info.receiver_name}!
+    p
+     | Your host, #{info.host_name}, has changed their meal!
+    if date_change
+     | The date has changed from !{info.old_date} to !{info.new_date}. <br/>
+    if time_change
+     | The time has changed from !{info.old_time} to !{info.new_time}. <br/>
+    if addr_change
+     | The address has changed from !{info.old_addr} to !{info.new_addr}. <br/>
+    if price_change
+     | The price has changed from $!{info.old_price} to $!{info.new_price}. <br/>
+    p Click #[a(href=info.meal_link) here] to review the changes.
+    p
+     | Tasty regards, <br/>
+     | Breaking Bread Team
+   hr
