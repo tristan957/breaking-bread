@@ -23,6 +23,6 @@ export default class RecipeReview {
 	@ManyToOne(type => Recipe, recipe => recipe.reviews)
 	public subject: Recipe;
 
-	@ManyToOne(type => User, user => user.recipeReviewsAuthored)
+	@ManyToOne(type => User, user => user.authoredRecipeReviews)
 	public author: User;
 }

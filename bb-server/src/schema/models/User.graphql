@@ -18,7 +18,7 @@ type User {
 	followedTags: [Tag!]!
 	reviews: [UserReview!]!
 	reviewAverage: Float!
-	userReviewsAuthored: [UserReview!]!
-	recipesAuthored: [Recipe!]!
-	recipeReviewsAuthored: [RecipeReview!]!
+	authoredUserReviews: [UserReview!]!
+	authoredRecipes: [Recipe!]!
+	authoredRecipeReviews: [RecipeReview!]!
 }
