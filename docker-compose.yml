@@ -8,12 +8,9 @@ services:
     build:
       context: ./bb-client
       dockerfile: Dockerfile
-    links:
-      - server
     restart: "no"
     ports:
-      - 80:80
-      - 443:443
+      - 10263:10263
 
   db:
     image: postgres:11-alpine
@@ -52,6 +49,6 @@ services:
     restart: "no"
     ports:
       - 10262:10262
-    command: ["wait-for-it.sh", "db:5432", "--", "node", "./src/index.js"]
+    command: ["wait-for-it.sh", "-t", "30", "db:5432", "--", "node", "./src/index.js"]
     volumes: 
       - ./wait-for-it.sh:/bin/wait-for-it.sh
