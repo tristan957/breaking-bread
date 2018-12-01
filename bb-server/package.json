@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc && cp {ormconfig.json,package.json,yarn.lock} build && cp -r src/schema build/src",
+    "build": "tsc && cp ormconfig.json build && cp -r src/schema build/src",
     "ts-node": "ts-node src/index.ts",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "migration:run": "ts-node ./node_modules/.bin/typeorm migration:run",

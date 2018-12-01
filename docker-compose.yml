@@ -1,0 +1,48 @@
+version: '3.6'
+
+services:
+  web:
+    container_name: bb-web
+    build:
+      context: ./bb-client
+      dockerfile: Dockerfile
+    links:
+      - server
+    restart: "no"
+    ports:
+      - 80:80
+      - 443:443
+
+  db:
+    image: postgres:11-alpine
+    container_name: bb-postgres
+    restart: "no"
+    volumes:
+      - ./bb-server/docker/var/lib/postgresql/data/pgdata:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_USER: jesus
+      POSTGRES_PASSWORD: christ
+      POSTGRES_DB: BreakingBread
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 10260:5432
+
+  adminer:
+    image: adminer:latest
+    container_name: bb-adminer
+    links:
+      - db
+    restart: "no"
+    ports:
+      - 10261:8080
+
+  server:
+    container_name: bb-server
+    build:
+      context: ./bb-server
+      dockerfile: Dockerfile
+    links:
+      - db
+    restart: "no"
+    ports:
+      - 10262:10262
