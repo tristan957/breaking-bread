@@ -1,9 +1,11 @@
 import gql from "graphql-tag";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
-import { Route, Switch } from "react-router";
+import { Route, RouteComponentProps, Switch } from "react-router";
 import NotFound from "../src/components/NotFound";
+import { WebAuthentication } from "./auth/WebAuthentication";
 import NavigationBar from "./components/NavigationBar";
+import AuthCallback from "./pages/AuthCallbackPage";
 import DashboardPage from "./pages/DashboardPage";
 import MealPage from "./pages/MealPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -17,6 +19,14 @@ const USER_AUTHENTICATED = gql`
 		}
 	}
 `;
+
+const auth = new WebAuthentication();
+
+const handleAuthentication = (props: RouteComponentProps) => {
+	if (/access_token|id_token|error/.test(location.hash)) {
+		auth.handleAuthentication();
+	}
+};
 
 export interface IAppContext {
 	userID?: number;
@@ -48,7 +58,7 @@ export default class App extends React.Component {
 					return (
 						<div>
 							<div id="top">
-								<NavigationBar />
+								<NavigationBar auth={auth} />
 							</div>
 							<div id="page-content">
 								<div id="content-container">
@@ -59,6 +69,13 @@ export default class App extends React.Component {
 											<Route exact path="/p/:userID" component={ProfilePage} />
 											{/* <Route exact path="/r/:recipeID" component={RecipePage} /> */}
 											<Route component={NotFound} />
+											<Route
+												path="/callback"
+												render={props => {
+													handleAuthentication(props);
+													return <AuthCallback {...props} />;
+												}}
+											/>
 										</Switch>
 									</UserContext.Provider>
 								</div>

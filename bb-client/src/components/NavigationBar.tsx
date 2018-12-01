@@ -7,10 +7,12 @@ import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import { Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
 import Showdown from "showdown";
+import { Auth0Authentication } from '../auth/Auth0Authentication';
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/icon.png";
 import S3ImageUploader from "./S3ImageUploader";
+
 
 interface INavigationBarState {
 	createdAt: moment.Moment | null;
@@ -21,9 +23,13 @@ interface INavigationBarState {
 	mdeState: string | undefined;
 }
 
-export default class NavigationBar extends React.Component<{}, INavigationBarState> {
+interface INavigationBarProps {
+	auth: Auth0Authentication,
+}
+
+export default class NavigationBar extends React.Component<INavigationBarProps, INavigationBarState> {
 	public converter: Showdown.Converter;
-	constructor(props: Readonly<{}>) {
+	constructor(props: INavigationBarProps) {
 		super(props);
 
 		this.state = {
@@ -39,6 +45,14 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 			tables: true,
 			simplifiedAutoLink: true,
 		});
+	}
+
+	login = () => {
+		this.props.auth.login();
+	}
+
+	logout = () => {
+		this.props.auth.logout();
 	}
 
 	public onSuggestSelect = (suggest: any): void => {
@@ -87,12 +101,22 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 		const firstColumnWidth = 3;
 		const secondColumnWidth = 12 - firstColumnWidth;
 
+		const { authenticated } = this.props.auth;
+
 		return (
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
 					<NavbarBrand href="/" className="bb-navbar-brand">
 						<div id="bb-brand-container"><img id="bb-brand" src={logo} height={30} /></div>
 					</NavbarBrand>
+					<Nav navbar>
+						{!authenticated && (
+							<Button onClick={this.login}>Login</Button>
+						)}
+						{authenticated && (
+							<Button onClick={this.logout}>Logout</Button>
+						)}
+					</Nav>
 					<Nav className="ml-auto" navbar>
 						<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
 							<DropdownToggle>+</DropdownToggle>
