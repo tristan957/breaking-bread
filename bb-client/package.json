@@ -11,8 +11,10 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
+    "@types/auth0-js": "^8.11.7",
     "@types/node-uuid": "^0.0.28",
     "apollo-boost": "^0.1.22",
+    "auth0-js": "^9.8.2",
     "aws-sdk": "^2.368.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
