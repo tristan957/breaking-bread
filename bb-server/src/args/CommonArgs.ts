@@ -1,6 +1,7 @@
-export interface ILatLong {
+export interface ILocation {
+	streetAddress: string;
 	lat: number;
 	long: number;
 }
 
-export type DropLatLong<T> = Pick<T, Exclude<keyof T, keyof ILatLong>>;
+export type DropLatLong<T> = Pick<T, Exclude<keyof T, keyof ILocation>>;

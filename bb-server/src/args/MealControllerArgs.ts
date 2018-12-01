@@ -1,6 +1,6 @@
 import { DeepPartial } from "typeorm";
 import { Meal, Tag, Topic } from "../entities";
-import { ILatLong } from "./CommonArgs";
+import { ILocation } from "./CommonArgs";
 
 export interface IMealArgs {
 	id: number;
@@ -43,7 +43,7 @@ export interface IDateSpanFilter {
 }
 
 export interface IMealSaveArgs {
-	latLong: ILatLong;
+	location: ILocation;
 	startTime: Date;
 	endTime: Date;
 	price: number;
@@ -69,7 +69,7 @@ export interface IMealToggleRecipesArgs {
 
 export interface IMealEditArgs {
 	id: number;
-	latLong?: ILatLong;
+	location?: ILocation;
 	startTime?: Date;  // TODO: Email on time, price changes
 	endTime?: Date;
 	price?: number;

@@ -1,0 +1,5 @@
+input LocationInput {
+	streetAddress: String!
+	lat: Float!
+	long: Float!
+}

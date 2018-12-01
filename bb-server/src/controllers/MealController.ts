@@ -6,7 +6,6 @@ import { IFeedArgs, IMealArgs, IMealDeleteArgs, IMealEditArgs, IMealFeedOptions,
 import { Meal, Recipe, Tag, Topic, User } from "../entities";
 import { MealRepository, RecipeRepository, TagRepository, TopicRepository, UserRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
-import { getLocationByCoords, LocationEntry } from "../utilities/locationInfo";
 import { invalidUser } from "../utilities/validateUser";
 import filterByChildren from "./utilities/filterByChildren";
 import generatePagination, { IPageFeed } from "./utilities/paginatedFeed";
@@ -122,35 +121,30 @@ export default class MealController {
 
 	@Mutation()
 	public async mealSave(args: IInput<IMealSaveArgs>): Promise<Meal | undefined> {
-		const { latLong, ...inputNoLatLong }: DropLatLong<IMealSaveArgs> = args.input;
-		const locationInfo: LocationEntry = await getLocationByCoords(latLong.lat, latLong.long);
-		if (locationInfo.formattedAddress === undefined) { return undefined; }
+		const { location, ...inputNoLatLong }: DropLatLong<IMealSaveArgs> = args.input;
 
 		const meal = this.mealRepository.create({
 			...inputNoLatLong,
-			latLong: `${latLong.lat}|${latLong.long}`,
-			location: locationInfo.formattedAddress,
+			latLong: `${location.lat}|${location.long}`,
+			location: location.streetAddress,
 		});
 		return this.mealRepository.save(meal);
 	}
 
 	@Mutation()
 	public async mealEdit(args: IInput<IMealEditArgs>): Promise<Meal | undefined> {
-		const { latLong, ...inputNoLatLong }: DropLatLong<IMealEditArgs> = args.input;
+		const { location, ...inputNoLatLong }: DropLatLong<IMealEditArgs> = args.input;
 
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const meal: Meal | undefined = await this.mealRepository.findOne(args.input.id, { relations: ["host"] });
 		if (meal === undefined || meal.host.id !== this.currentUser.id) { return undefined; }
 
-		if (latLong !== undefined) {
-			const locationInfo: LocationEntry = await getLocationByCoords(latLong.lat, latLong.long);
-			if (locationInfo.formattedAddress === undefined) { return undefined; }
-
+		if (location !== undefined) {
 			return this.mealRepository.save({
 				...meal,
 				...inputNoLatLong,
-				latLong: `${latLong.lat}|${latLong.long}`,
-				location: locationInfo.formattedAddress,
+				latLong: `${location.lat}|${location.long}`,
+				location: location.streetAddress,
 			});
 		}
 

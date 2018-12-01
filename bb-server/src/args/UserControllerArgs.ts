@@ -1,6 +1,6 @@
 import { DeepPartial } from "typeorm";
 import { Tag, Topic } from "../entities";
-import { ILatLong } from "./CommonArgs";
+import { ILocation } from "./CommonArgs";
 
 export interface IUserArgs {
 	id: number;
@@ -11,7 +11,7 @@ export interface IUserSaveArgs {
 	lastName: string;
 	imagePath?: string;
 	about?: string;
-	latLong: ILatLong;
+	location: ILocation;
 	email: string;
 	phoneNumber: string;
 	oAuthSub: string;
@@ -20,7 +20,7 @@ export interface IUserSaveArgs {
 export interface IUserEditArgs {
 	imagePath?: string;
 	about?: string;
-	latLong?: ILatLong;
+	location?: ILocation;
 	email?: string;
 	phoneNumber?: string;
 }

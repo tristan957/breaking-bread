@@ -6,7 +6,6 @@ import { IUserArgs, IUserEditArgs, IUserReviewArgs, IUserReviewEditArgs, IUserRe
 import { Recipe, Tag, Topic, User, UserReview } from "../entities";
 import { RecipeRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
-import { getLocationByCoords, LocationEntry } from "../utilities/locationInfo";
 import { invalidUser } from "../utilities/validateUser";
 
 @Controller()
@@ -52,14 +51,12 @@ export default class UserController {
 
 	@Mutation()
 	public async userSave(args: IInput<IUserSaveArgs>): Promise<User | undefined> { // Some sort of verification, maybe email
-		const { latLong, ...inputNoLatLong }: DropLatLong<IUserSaveArgs> = args.input;
-		const locationInfo: LocationEntry = await getLocationByCoords(latLong.lat, latLong.long);
-		if (locationInfo.formattedAddress === undefined) { return undefined; }
+		const { location, ...inputNoLatLong }: DropLatLong<IUserSaveArgs> = args.input;
 
 		const user: User = this.userRepository.create({
 			...inputNoLatLong,
-			latLong: `${latLong.lat}|${latLong.long}`,
-			location: locationInfo.formattedAddress,
+			latLong: `${location.lat}|${location.long}`,
+			location: location.streetAddress,
 		});
 		return this.userRepository.save(user);
 	}
@@ -68,16 +65,13 @@ export default class UserController {
 	public async userEdit(args: IInput<IUserEditArgs>): Promise<User | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
 
-		const { latLong, ...inputNoLatLong }: DropLatLong<IUserEditArgs> = args.input;
-		if (latLong !== undefined) {
-			const locationInfo: LocationEntry = await getLocationByCoords(latLong.lat, latLong.long);
-			if (locationInfo.formattedAddress === undefined) { return undefined; }
-
+		const { location, ...inputNoLatLong }: DropLatLong<IUserEditArgs> = args.input;
+		if (location !== undefined) {
 			return this.userRepository.save({
 				...this.currentUser,
 				...inputNoLatLong,
-				latLong: `${latLong.lat}|${latLong.long}`,
-				location: locationInfo.formattedAddress,
+				latLong: `${location.lat}|${location.long}`,
+				location: location.streetAddress,
 			});
 		}
 

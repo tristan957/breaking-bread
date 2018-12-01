@@ -1,16 +1,16 @@
 version: '3.6'
 
 services:
-  web:
-    container_name: bb-web
-    depends_on:
-      - server
-    build:
-      context: ./bb-client
-      dockerfile: Dockerfile
-    restart: "no"
-    ports:
-      - 10263:10263
+  # web:
+  #   container_name: bb-web
+  #   depends_on:
+  #     - server
+  #   build:
+  #     context: ./bb-client
+  #     dockerfile: Dockerfile
+  #   restart: "no"
+  #   ports:
+  #     - 10263:10263
 
   db:
     image: postgres:11-alpine
@@ -49,6 +49,6 @@ services:
     restart: "no"
     ports:
       - 10262:10262
-    command: ["wait-for-it.sh", "-t", "30", "db:5432", "--", "node", "./src/index.js"]
+    command: ["wait-for-it.sh", "-t", "45", "db:5432", "--", "node", "./src/index.js"]
     volumes: 
       - ./wait-for-it.sh:/bin/wait-for-it.sh

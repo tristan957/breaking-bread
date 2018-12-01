@@ -1,4 +1,0 @@
-input LatLongInput {
-	lat: Float!
-	long: Float!
-}
