@@ -3,6 +3,8 @@ version: '3.6'
 services:
   web:
     container_name: bb-web
+    depends_on:
+      - server
     build:
       context: ./bb-client
       dockerfile: Dockerfile
@@ -25,11 +27,13 @@ services:
       POSTGRES_DB: BreakingBread
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - 10260:5432
+      - 5432:5432
 
   adminer:
     image: adminer:latest
     container_name: bb-adminer
+    depends_on:
+      - db
     links:
       - db
     restart: "no"
@@ -38,6 +42,8 @@ services:
 
   server:
     container_name: bb-server
+    depends_on:
+      - db
     build:
       context: ./bb-server
       dockerfile: Dockerfile
@@ -46,3 +52,6 @@ services:
     restart: "no"
     ports:
       - 10262:10262
+    command: ["wait-for-it.sh", "db:5432", "--", "node", "./src/index.js"]
+    volumes: 
+      - ./wait-for-it.sh:/bin/wait-for-it.sh
