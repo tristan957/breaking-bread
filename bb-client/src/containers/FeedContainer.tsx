@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import moment from "moment";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";

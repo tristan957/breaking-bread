@@ -34,10 +34,9 @@
 	flex-grow: 1;
 }
 
-#profile-activity-info-container {
-	max-width: 800px;
-	flex-shrink: 0;
-	margin: 0px auto;
+#profile-page {
+	display: flex;
+	justify-content: center;
 }
 
 @media only screen
@@ -53,10 +52,5 @@
 
 		#profile-info-bottom > div {
 			margin-right: 0em;
-		}
-
-		#profile-activity-info-container {
-			width: 100%;
-			flex-shrink: 1;
 		}
 	}

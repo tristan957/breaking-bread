@@ -1,9 +1,8 @@
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { Route, Switch } from "react-router";
 import NotFound from "../src/components/NotFound";
-import Loading from "./components/Loading";
 import NavigationBar from "./components/NavigationBar";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -38,7 +37,7 @@ export default class App extends React.Component {
 			<Query query={USER_AUTHENTICATED}>
 				{(result: QueryResult<IUserAuthenticatedResult>) => {
 					if (result.loading) {
-						return <Loading />;
+						return <div></div>;
 					}
 					if (result.error) {
 						return (

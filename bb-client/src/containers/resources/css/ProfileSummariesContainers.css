@@ -1,6 +1,7 @@
 #profile-summaries-containers {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 }
 
 #profile-summaries-containers > div {

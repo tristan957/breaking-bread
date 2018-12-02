@@ -1,6 +1,13 @@
+#profile-activity-container {
+	display: flex;
+	flex-direction: column;
+	max-width: 800px;
+	margin: 0px auto;
+}
+
 #profile-activity-selector {
 	display: flex;
-	justify-content: space-around;
+	justify-content: center;
 	margin-bottom: 1.2em;
 }
 

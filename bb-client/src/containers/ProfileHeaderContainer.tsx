@@ -33,7 +33,7 @@ interface IProfileHeaderProps {
 	viewerID?: number;
 }
 
-export default class ProfileHeader extends React.Component<IProfileHeaderProps> {
+export default class ProfileHeaderContainer extends React.Component<IProfileHeaderProps> {
 	public render(): JSX.Element {
 		return (
 			<Query query={USER_PROFILE} variables={{ id: this.props.userID }}>

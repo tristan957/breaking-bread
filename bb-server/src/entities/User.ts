@@ -88,11 +88,11 @@ export default class User {
 	public reviewAverage: number;
 
 	@OneToMany(type => UserReview, review => review.author)
-	public userReviewsAuthored: UserReview[];
+	public authoredUserReviews: UserReview[];
 
 	@OneToMany(type => RecipeReview, review => review.author)
-	public recipeReviewsAuthored: RecipeReview[];
+	public authoredRecipeReviews: RecipeReview[];
 
 	@OneToMany(type => Recipe, recipe => recipe.author)
-	public recipesAuthored: Recipe[];
+	public authoredRecipes: Recipe[];
 }
