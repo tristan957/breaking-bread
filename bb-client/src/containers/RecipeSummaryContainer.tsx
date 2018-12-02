@@ -41,6 +41,7 @@ type RecipeResult = QueryResult<IRecipeData, IRecipeVariables>;
 interface IRecipeSummaryContainerProps {
 	showAuthor?: boolean;
 	recipeID: number;
+	viewerID?: number;
 }
 
 export default class RecipeSummaryContainer extends React.Component<IRecipeSummaryContainerProps> {
@@ -58,7 +59,7 @@ export default class RecipeSummaryContainer extends React.Component<IRecipeSumma
 						<div className="card">
 							<RecipeSummary
 								authorID={result.data!.recipe.id!}
-								viewerID={1 /*TODO*/}
+								viewerID={this.props.viewerID}
 								name={result.data!.recipe.name!}
 								tags={result.data!.recipe.tags || []}
 								createdAt={result.data!.recipe.createdAt!}

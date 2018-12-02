@@ -66,7 +66,7 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 								}
 								<div id="meal-summary-host-name">
 									<Link to={`/p/${this.props.host.id}`} className="black-link-with-underline">
-										{`${this.props.host.firstName} ${this.props.host.lastName}`}
+										{this.props.host.name}
 									</Link>
 								</div>
 							</div>

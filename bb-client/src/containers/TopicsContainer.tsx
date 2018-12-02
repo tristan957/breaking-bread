@@ -42,9 +42,6 @@ export default class TopicsContainer extends React.Component<ITopicsContainerPro
 						<div>{result.error.message}</div>;
 					}
 
-					// console.log(this.props.userID);
-					// console.log(result);
-
 					return (
 						<div id="topics-container" className="card">
 							<div className="tags-topics-list-header container-header">Topics</div>

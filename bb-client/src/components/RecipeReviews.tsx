@@ -23,7 +23,7 @@ export class RecipeReviews extends React.Component<IRecipeReviewsProps> {
 												⭐ {review.rating}/5
 											</Badge>
 										</div>
-										<span id="recipe-review-author-name">{review.author!.firstName} {review.author!.lastName}</span>
+										<span id="recipe-review-author-name">{review.author!.name}</span>
 									</div>
 									<div>
 										<p id="recipe-review-description">{review.description}</p>

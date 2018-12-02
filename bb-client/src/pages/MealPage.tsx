@@ -16,6 +16,7 @@ const MEAL = gql`
 	query meal($mealID: Int!) {
 		meal(id: $mealID) {
 			id
+			description
 			host {
 				id
 			}
@@ -26,6 +27,7 @@ const MEAL = gql`
 			}
 			recipes {
 				id
+				name
 				author {
 					id
 					name
