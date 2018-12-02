@@ -1,11 +1,10 @@
 // tslint:disable: no-unsafe-any
-
 import moment from "moment";
 import React from "react";
 import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
-import { Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
+import { Button, ButtonGroup, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
 import Showdown from "showdown";
 import { Auth0Authentication } from '../auth/Auth0Authentication';
 import GeoSuggest from "./GeoSuggest";
@@ -109,23 +108,23 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 					<NavbarBrand href="/" className="bb-navbar-brand">
 						<div id="bb-brand-container"><img id="bb-brand" src={logo} height="30" /></div>
 					</NavbarBrand>
-					<Nav navbar>
+					<Nav className="ml-auto" navbar>
 						{!authenticated && (
 							<Button onClick={this.login}>Login</Button>
 						)}
 						{authenticated && (
-							<Button onClick={this.logout}>Logout</Button>
+							<ButtonGroup>
+								<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
+									<DropdownToggle caret> + </DropdownToggle>
+									<DropdownMenu>
+										<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
+										<DropdownItem divider />
+										<DropdownItem onClick={this.toggleRecipeModal}>New Receipe</DropdownItem>
+									</DropdownMenu>
+								</Dropdown>
+								<Button onClick={this.logout}>Logout</Button>
+							</ButtonGroup>
 						)}
-					</Nav>
-					<Nav className="ml-auto" navbar>
-						<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
-							<DropdownToggle caret>Create New</DropdownToggle>
-							<DropdownMenu>
-								<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
-								<DropdownItem divider />
-								<DropdownItem onClick={this.toggleRecipeModal}>New Receipe</DropdownItem>
-							</DropdownMenu>
-						</Dropdown>
 					</Nav>
 				</Navbar>
 

@@ -23,7 +23,7 @@ export class WebAuthentication implements Auth0Authentication {
 		redirectUri: AUTH_CONFIG.callbackUrl,
 		audience: AUTH_CONFIG.audience,
 		responseType: "token id_token",
-		scope: "openid",
+		scope: "openid profile",
 	});
 
 	get authenticated(): boolean {
