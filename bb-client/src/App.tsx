@@ -39,11 +39,8 @@ export default class App extends React.Component {
 						return <div></div>;
 					}
 					if (result.error) {
-						return (
-							<div>
-								{`Error! Something terrible has happened! ${result.error.message}`}
-							</div>
-						);
+						console.log(result.error);
+						return <div>{`Error! Something terrible has happened! ${result.error.message}`}</div>;
 					}
 
 					return (
