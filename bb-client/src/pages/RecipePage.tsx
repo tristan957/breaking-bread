@@ -135,10 +135,12 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 		 * Maybe allow any user to edit if the ingredient list is empty
 		 */
 
+		const recipeID = parseInt(this.props.match.params.recipeID, 10);
+
 		return (
 			<div id="recipe-page">
 				<div id="recipe-page-left">
-					<RecipeSummaryContainer recipe={this.state.recipe} />
+					<RecipeSummaryContainer recipeID={recipeID} />
 					<div id="recipe-page-description" className="card">
 						<h3>Description</h3>
 						<hr />

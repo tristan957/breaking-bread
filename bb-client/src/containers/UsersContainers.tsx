@@ -20,7 +20,7 @@ const USER_FOLLOWING_USERS = gql`
 	query UserFollowingUsers($userID: Int!) {
 		user(id: $userID) {
 			id
-			followingUsers {
+			followers {
 				id
 			}
 		}
@@ -28,7 +28,7 @@ const USER_FOLLOWING_USERS = gql`
 `;
 
 export enum UserType {
-	FOLLOWING,
+	FOLLOWERS,
 	FOLLOWED,
 }
 

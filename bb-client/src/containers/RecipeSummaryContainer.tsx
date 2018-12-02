@@ -6,7 +6,7 @@ import Recipe from "../entities/Recipe";
 
 const RECIPE = gql`
 	query Recipe($recipeID: Int!) {
-		recipe($id: $recipeID) {
+		recipe(id: $recipeID) {
 			id
 			author {
 				id

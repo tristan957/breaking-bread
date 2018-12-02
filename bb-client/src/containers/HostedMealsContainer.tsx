@@ -6,7 +6,7 @@ import MealSummariesContainer from "./MealSummariesContainer";
 
 const USER_HOSTED_MEALS = gql`
 	query UserHostedMeals($userID: Int!) {
-		user(id: $id) {
+		user(id: $userID) {
 			id
 			hostedMeals {
 				id

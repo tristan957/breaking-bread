@@ -3,6 +3,7 @@ import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
+import ProfileActivityContainer from "../containers/ProfileActivityContainer";
 import ProfileHeaderContainer from "../containers/ProfileHeaderContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
@@ -70,7 +71,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 								}
 
 								return (
-									<div>
+									<div id="profile-page">
 										<div id="profile-info">
 											<div id="profile-info-top">
 												<ProfileHeaderContainer userID={result.data!.user!.id!} />
@@ -85,8 +86,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 												</div>
 											</div>
 										</div>
-										<div id="profile-details">
-											{/* <ProfileActivityContainer userID={result.data!.user!.id!} /> */}
+										<div id="#profile-info-activity-container">
+											<ProfileActivityContainer userID={result.data!.user!.id!} />
 										</div>
 									</div>
 								);

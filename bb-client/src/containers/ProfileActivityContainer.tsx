@@ -3,6 +3,7 @@ import MediaQuery from "react-responsive";
 import { Button, ButtonGroup } from "reactstrap";
 import HostedMealsContainer from "./HostedMealsContainer";
 import RecipeSummariesContainer, { RecipeType } from "./RecipeSummariesContainer";
+import "./resources/css/ProfileActivityContainer.css";
 import UsersContainers, { UserType } from "./UsersContainers";
 
 enum RenderedComponent {
@@ -10,7 +11,7 @@ enum RenderedComponent {
 	AUTHORED_RECIPES,
 	SAVED_RECIPES,
 	FOLLOWED_USERS,
-	FOLLOWING_USERS,
+	FOLLOWERS,
 }
 
 interface IProfileActivityContainerProps {
@@ -45,8 +46,8 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 			case RenderedComponent.FOLLOWED_USERS: {
 				return <UsersContainers userID={this.props.userID} type={UserType.FOLLOWED} />;
 			}
-			case RenderedComponent.FOLLOWING_USERS: {
-				return <UsersContainers userID={this.props.userID} type={UserType.FOLLOWING} />;
+			case RenderedComponent.FOLLOWERS: {
+				return <UsersContainers userID={this.props.userID} type={UserType.FOLLOWERS} />;
 			}
 			default: {
 				return nada;
@@ -56,7 +57,7 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 
 	public render(): JSX.Element {
 		return (
-			<div id="profile-activity-container" className="profile-activity-container-class">
+			<div id="profile-activity-container">
 				<div id="profile-activity-selector">
 					<MediaQuery query="(min-width: 675px)">
 						<ButtonGroup>
@@ -91,9 +92,9 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 4}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FOLLOWING_USERS })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FOLLOWERS })}
 							>
-								Users Following
+								Followers
 							</Button>
 						</ButtonGroup>
 					</MediaQuery>
@@ -131,14 +132,14 @@ export default class ProfileActivityContainer extends React.Component<IProfileAc
 							<Button
 								className="show-filter-modal"
 								active={this.state.renderedComponent === 4}
-								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FOLLOWING_USERS })}
+								onClick={() => this.setState({ ...this.state, renderedComponent: RenderedComponent.FOLLOWERS })}
 							>
-								Followed Users
+								Followers
 							</Button>
 						</ButtonGroup>
 					</MediaQuery>
 				</div>
-				<div>
+				<div id="profile-activity-info">
 					{this.renderActivity()}
 				</div>
 			</div>

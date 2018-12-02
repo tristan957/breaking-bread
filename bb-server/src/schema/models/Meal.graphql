@@ -7,7 +7,7 @@ type Meal {
 	price: Float!
 	title: String!
 	description: String!
-	imagePath: String!
+	imagePath: String
 	maxGuests: Int!
 	createdAt: DateTime!
 	updatedAt: DateTime!
