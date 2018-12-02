@@ -5,6 +5,7 @@ import { Route, Switch } from "react-router";
 import NotFound from "../src/components/NotFound";
 import NavigationBar from "./components/NavigationBar";
 import DashboardPage from "./pages/DashboardPage";
+import MealPage from "./pages/MealPage";
 import ProfilePage from "./pages/ProfilePage";
 import "./resources/css/App.css";
 import "./resources/css/common.css";
@@ -40,11 +41,8 @@ export default class App extends React.Component {
 						return <div></div>;
 					}
 					if (result.error) {
-						return (
-							<div>
-								{`Error! Something terrible has happened! ${result.error.message}`}
-							</div>
-						);
+						console.log(result.error);
+						return <div>{result.error.message}</div>;
 					}
 
 					return (
@@ -57,7 +55,7 @@ export default class App extends React.Component {
 									<UserContext.Provider value={{ userID: result.data!.userAuthenticated.id, reloadUser: () => result.refetch() }}>
 										<Switch>
 											<Route exact path="/" component={DashboardPage} />
-											{/* <Route exact path="/m/:mealID" component={MealPage} /> */}
+											<Route exact path="/m/:mealID" component={MealPage} />
 											<Route exact path="/p/:userID" component={ProfilePage} />
 											{/* <Route exact path="/r/:recipeID" component={RecipePage} /> */}
 											<Route component={NotFound} />

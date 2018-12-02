@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "noEmitOnError": true,
     "allowJs": true,
     "skipLibCheck": false,
     "esModuleInterop": true,
@@ -27,6 +26,6 @@
     ],
   },
   "include": [
-    "src/**/*", "../bb-server/src/migrations/2147483648-LoadTestData.ts"
+    "src/**/*"
   ]
 }

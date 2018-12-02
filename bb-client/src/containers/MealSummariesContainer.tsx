@@ -31,7 +31,7 @@ export default class MealSummariesContainer extends React.Component<IMealSummari
 								<li key={i}>
 									<MealSummaryContainer
 										showHost={this.props.showHosts || false}
-										meal={meal}
+										mealID={meal.id!}
 									/>
 								</li>
 							);
