@@ -37,47 +37,31 @@ const USER_TOGGLE_FOLLOWING = gql`
 	}
 `;
 
+interface IUserToggleFollowingData {
+	userToggleFollowing: Partial<User>[];
+}
+
 interface IUserToggleFollowingVariables {
 	userID: number;
 }
 
-type UserToggleFollowingFn = MutationFn<Partial<User>[], IUserToggleFollowingVariables>;
-type UserToggleFollowingResult = MutationResult<Partial<User>[]>;
+type UserToggleFollowingFn = MutationFn<IUserFollowingData, IUserToggleFollowingVariables>;
+type UserToggleFollowingResult = MutationResult<IUserFollowingData>;
 
 interface ILargeProfileSummaryProps {
 	userID: number;
 	viewerID?: number;
-	imagePath?: string | null;
+	imagePath?: string;
 	name: string;
 	reviewAverage?: number;
 	numberOfFollowers?: number;
 }
 
 export default class LargeProfileSummary extends React.Component<ILargeProfileSummaryProps> {
-	private hostIsFollowed = (followedUsers: Partial<User>[]): boolean => {
-		for (const followedUser of followedUsers) {
-			if (followedUser.id === this.props.userID) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private createFollowButton = (userToggleFollowing: UserToggleFollowingFn, followedUsers: Partial<User>[]): JSX.Element => {
-		return (
-			<Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => userToggleFollowing({ variables: { userID: this.props.userID } })}></Button>
-		);
-	}
-
 	public render(): JSX.Element {
 		return (
 			<div id="large-profile-summary">
-				{
-					this.props.imagePath === null
-						? <img src={defaultUserPic} alt="Profile Picture" id="large-profile-summary-picture" />
-						: <img src={this.props.imagePath || defaultUserPic} alt="Profile Picture" id="large-profile-summary-picture" />
-				}
+				<img src={this.props.imagePath || defaultUserPic} alt="Profile Picture" id="large-profile-summary-picture" />
 				<div id="large-profile-summary-name">
 					<Link to={`/p/${this.props.userID}`} className="black-link-with-underline">
 						{this.props.name}
@@ -103,26 +87,38 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 										return <div>{qResult.error.message}</div>;
 									}
 
+									console.log(qResult.data!.user.followedUsers);
+
+									const isFollowing = this.props.viewerID === undefined || qResult.data!.user.followedUsers === undefined || qResult.data!.user.followedUsers === undefined || qResult.data!.user.followedUsers!.length === 0
+										? false
+										: qResult.data!.user.followedUsers!.some(followedUser => {
+											if (followedUser.id === this.props.userID) {
+												return true;
+											}
+
+											return false;
+										});
+
+									console.log(isFollowing);
+									console.log(`${this.props.viewerID} | ${this.props.userID}`);
+
 									return (
-										<Mutation mutation={USER_TOGGLE_FOLLOWING} onCompleted={() => qResult.refetch()}>
+										<Mutation mutation={USER_TOGGLE_FOLLOWING} variables={{ userID: this.props.userID }} onCompleted={() => qResult.refetch()}>
 											{(userToggleFollowing: UserToggleFollowingFn, mResult: UserToggleFollowingResult) => {
-												if (mResult.loading) {
-													return <div></div>;
-												}
 												if (mResult.error) {
 													console.error(mResult.error);
 													return <div>{mResult.error.message}</div>;
 												}
 
-												return (
-													<Button
-														onClick={(e: React.MouseEvent<HTMLButtonElement>) => userToggleFollowing({ variables: { userID: this.props.userID } })}
-													>{this.hostIsFollowed(qResult.data!.user.followedUsers || [])
-														? "Unfollow"
-														: "Follow"
-														}
-													</Button>
-												);
+												return this.props.viewerID === undefined || qResult.data!.user.id === this.props.userID
+													? <div></div>
+													: (
+														<Button
+															onClick={(e: React.MouseEvent<HTMLButtonElement>) => userToggleFollowing()}
+														>
+															{isFollowing ? "Unfollow" : "Follow"}
+														</Button>
+													);
 											}}
 										</Mutation>
 									);

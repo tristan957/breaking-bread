@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import React from "react";
-import { Query, QueryResult } from "react-apollo";
+import { Mutation, MutationFn, MutationResult, Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router-dom";
 import { Markdown } from "react-showdown";
 import { Button } from "reactstrap";
@@ -10,12 +10,14 @@ import ProfileSummaries from "../components/ProfileSummaries";
 import RecipeSummary from "../components/RecipeSummary";
 import MealSummaryContainer from "../containers/MealSummaryContainer";
 import Meal from "../entities/Meal";
+import User from "../entities/User";
 import "./resources/css/MealPage.css";
 
 const MEAL = gql`
 	query meal($mealID: Int!) {
 		meal(id: $mealID) {
 			id
+			description
 			host {
 				id
 			}
@@ -26,6 +28,7 @@ const MEAL = gql`
 			}
 			recipes {
 				id
+				name
 				author {
 					id
 					name
@@ -60,20 +63,46 @@ interface IMealVariables {
 
 type MealResult = QueryResult<IMealData, IMealVariables>;
 
+const MEAL_TOGGLE_GUEST = gql`
+	mutation RSVP($mealID: Int!, $guestID: Int!) {
+		mealToggleGuest(mealID: $mealID, guestID: $guestID) {
+			id
+		}
+	}
+`;
+
+interface IMealToggleGuestData {
+	mealToggleGuest: Partial<User>[];
+}
+
+interface IMealToggleGuestVariables {
+	mealID: number;
+	guestID: number;
+}
+
+type MealToggleGuestResult = MutationResult<IMealToggleGuestData>;
+type MealToggleGuestFn = MutationFn<IMealToggleGuestData, IMealToggleGuestVariables>;
+
 interface IMealPageParams {
 	mealID: string;
 }
 
 export default class MealPage extends React.Component<RouteComponentProps<IMealPageParams>> {
+	private rsvp = (toggleGuest: Function, refetch: Function): void => {
+
+	}
+
+	private cancel = (toggleGuest: Function, refetch: Function): void => {
+
+	}
+
 	public render(): JSX.Element {
 		return (
 			<UserContext.Consumer>
 				{userContext => {
+					const mealID = parseInt(this.props.match.params.mealID, 10);
 					return (
-						<Query
-							query={MEAL}
-							variables={{ mealID: parseInt(this.props.match.params.mealID, 10) }}
-						>
+						<Query query={MEAL} variables={{ mealID }}>
 							{(result: MealResult) => {
 								if (result.loading) { return <div></div>; }
 								if (result.error) {
@@ -84,7 +113,16 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 									return <div></div>;
 								}
 
-								const userIsHost = result.data!.meal!.host!.id === userContext.userID;
+								const isGuest = userContext.userID === undefined || result.data!.meal!.guests === undefined || result.data!.meal!.guests!.length === 0
+									? false
+									: result.data!.meal!.guests!.some(guest => {
+										if (guest.id === userContext.userID) {
+											return true;
+										}
+
+										return false;
+									});
+
 								return (
 									<div id="meal-page">
 										<div id="meal-page-left">
@@ -130,7 +168,20 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 											<div id="meal-page-guests-container" className="card">
 												<div id="meal-page-guests-container-header">
 													<h3 className="meal-page-header">Guests ({result.data!.meal!.guestCount}/{result.data!.meal!.maxGuests})</h3>
-													<Button color="success">RSVP</Button> {/* Button should change depending on if host, guest, or potential guest */}
+													<Mutation mutation={MEAL_TOGGLE_GUEST} variables={{ mealID, guestID: userContext.userID! }} onCompleted={() => result.refetch()}>
+														{(mealToggleGuest: MealToggleGuestFn, mResult: MealToggleGuestResult) => {
+															if (mResult.error) {
+																console.error(mResult.error);
+																return <div>{mResult.error.message}</div>;
+															}
+
+															return userContext.userID === undefined || userContext.userID === result.data!.meal!.host!.id
+																? <div></div>
+																: isGuest
+																	? <Button color="danger" onClick={(e: React.MouseEvent<HTMLButtonElement>) => mealToggleGuest()}>Cancel</Button>
+																	: <Button color="success" onClick={(e: React.MouseEvent<HTMLButtonElement>) => mealToggleGuest()}>RSVP</Button>;
+														}}
+													</Mutation>
 												</div>
 												<hr />
 												<ProfileSummaries users={result.data!.meal!.guests!} />

@@ -10,7 +10,7 @@ type User = {
 	firstName: string;
 	lastName: string;
 	name: string;
-	imagePath: string | null;
+	imagePath: string;
 	about: string;
 	email: string;
 	phoneNumber: string;

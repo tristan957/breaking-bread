@@ -7,6 +7,7 @@ import NavigationBar from "./components/NavigationBar";
 import DashboardPage from "./pages/DashboardPage";
 import MealPage from "./pages/MealPage";
 import ProfilePage from "./pages/ProfilePage";
+import RecipePage from "./pages/RecipePage";
 import "./resources/css/App.css";
 import "./resources/css/common.css";
 
@@ -41,7 +42,7 @@ export default class App extends React.Component {
 						return <div></div>;
 					}
 					if (result.error) {
-						console.log(result.error);
+						console.error(result.error);
 						return <div>{result.error.message}</div>;
 					}
 
@@ -57,7 +58,7 @@ export default class App extends React.Component {
 											<Route exact path="/" component={DashboardPage} />
 											<Route exact path="/m/:mealID" component={MealPage} />
 											<Route exact path="/p/:userID" component={ProfilePage} />
-											{/* <Route exact path="/r/:recipeID" component={RecipePage} /> */}
+											<Route exact path="/r/:recipeID" component={RecipePage} />
 											<Route component={NotFound} />
 										</Switch>
 									</UserContext.Provider>

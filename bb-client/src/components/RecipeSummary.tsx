@@ -47,13 +47,10 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 				<div id="recipe-summary-information">
 					<div id="recipe-summary-left">
 						<Link to={`/r/${this.props.authorID}`} className="black-link-with-underline">
-							<h1 id="recipe-summary-name">
-								{this.props.name}
-							</h1>
+							<div id="recipe-summary-name">{this.props.name}</div>
 						</Link>
 						<span className="recipe-summary-updated">Last updated on
 							{` ${new Date(this.props.updatedAt).toLocaleDateString()}`}
-							{console.log(this.props.updatedAt)}
 						</span>
 						<div id="recipe-summary-badges">
 							<Badge className="recipe-summary-badge-item" color="primary">
