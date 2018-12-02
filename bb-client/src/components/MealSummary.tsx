@@ -56,14 +56,7 @@ export default class MealSummary extends React.Component<IMealSummaryProps> {
 						? undefined
 						: (
 							<div id="meal-summary-host" className="black-link-with-underline">
-								{
-									this.props.host.imagePath === null ?
-										(
-											<img src={defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
-										) : (
-											<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
-										)
-								}
+								<img src={this.props.host.imagePath || defaultUserPic} alt="Host Picture" id="meal-summary-host-img" />
 								<div id="meal-summary-host-name">
 									<Link to={`/p/${this.props.host.id}`} className="black-link-with-underline">
 										{this.props.host.name}
