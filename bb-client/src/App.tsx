@@ -2,6 +2,7 @@ import { gql } from "apollo-boost";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { Route, Switch } from "react-router";
+import NotFound from "../src/components/NotFound";
 import Loading from "./components/Loading";
 import NavigationBar from "./components/NavigationBar";
 import DashboardPage from "./pages/DashboardPage";
@@ -60,6 +61,7 @@ export default class App extends React.Component {
 											{/* <Route exact path="/m/:mealID" component={MealPage} /> */}
 											<Route exact path="/p/:userID" component={ProfilePage} />
 											{/* <Route exact path="/r/:recipeID" component={RecipePage} /> */}
+											<Route component={NotFound} />
 										</Switch>
 									</UserContext.Provider>
 								</div>

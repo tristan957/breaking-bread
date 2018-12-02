@@ -90,11 +90,11 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
 					<NavbarBrand href="/" className="bb-navbar-brand">
-						<div id="bb-brand-container"><img id="bb-brand" src={logo} height="30" /></div>
+						<div id="bb-brand-container"><img id="bb-brand" src={logo} /></div>
 					</NavbarBrand>
 					<Nav className="ml-auto" navbar>
 						<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
-							<DropdownToggle caret>Create New</DropdownToggle>
+							<DropdownToggle>+</DropdownToggle>
 							<DropdownMenu>
 								<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
 								<DropdownItem divider />
