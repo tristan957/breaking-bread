@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router";
@@ -33,23 +33,6 @@ interface IProfilePageParams {
 }
 
 export default class ProfilePage extends React.Component<RouteComponentProps<IProfilePageParams>> {
-	private getUserReviewAverage(userBeingViewed: Partial<User>): number {
-		if (userBeingViewed.reviews === undefined || userBeingViewed.reviews.length === 0) {
-			return 0;
-		}
-
-		let sum = 0;
-		let effectiveLength = 0;
-		for (const review of userBeingViewed.reviews) {
-			if (review.rating !== undefined) {
-				sum += review.rating;
-				effectiveLength += 1;
-			}
-		}
-
-		return sum / effectiveLength;
-	}
-
 	public render(): JSX.Element {
 		return (
 			<UserContext.Consumer>

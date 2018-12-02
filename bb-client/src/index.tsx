@@ -1,4 +1,9 @@
-import DefaultClient from "apollo-boost";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import ApolloClient from "apollo-client";
+import { ApolloLink } from "apollo-link";
+import { BatchHttpLink } from "apollo-link-batch-http";
+import { ErrorResponse, onError } from "apollo-link-error";
+import { ServerError } from "apollo-link-http-common";
 import "bootstrap/dist/css/bootstrap.min.css";
 import dotenv from "dotenv";
 import React from "react";
@@ -15,11 +20,35 @@ dotenv.config();
 const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/graphql" : "future url";
 console.log(`URI: ${uri}`);
 
-export const client = new DefaultClient({
-	headers: {
-		oAuthSub: "adjijdfaa",
-	},
-	uri,
+const client = new ApolloClient({
+	link: ApolloLink.from([
+		onError((error: ErrorResponse) => {
+			console.log("I AM AN ERROR");
+			if (error.graphQLErrors) {
+				error.graphQLErrors.map(graphQLError => {
+					console.log(
+						`[GraphQL error]: Message: ${graphQLError.message}, Location: ${graphQLError.locations}, Path: ${graphQLError.path}`
+					);
+				});
+			}
+
+			if (error.networkError) {
+				console.log(`[Network error]: ${error.networkError}`);
+				const e = error.networkError as ServerError;
+				if (e.statusCode === 404) {
+					console.log("I am a 404 error");
+					document.write("<h1>you suck</h1>");
+				}
+			}
+		}),
+		new BatchHttpLink({
+			uri,
+			headers: {
+				oAuthSub: "adjijdfaa",
+			},
+		}),
+	]),
+	cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
