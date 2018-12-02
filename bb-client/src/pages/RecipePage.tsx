@@ -156,9 +156,7 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 					<div className="card">
 						<CreatorSummary
 							userID={1}
-							name={`${"Jonathan"} ${"Wang"}`}
-							imagePath={undefined}
-							topics={[{ name: "Your mom" }, { name: "Your Dad" }]}
+							viewerID={1}
 						/>
 					</div>
 				</div>

@@ -9,13 +9,14 @@ interface IProfileSummariesProps {
 
 export default class ProfileSummaries extends React.Component<IProfileSummariesProps> {
 	public render(): JSX.Element {
+		console.log(this.props.users);
 		return (
 			<div>
 				<ul id="profile-summaries" className="no-style-list">
 					{this.props.users.map((user, i) => {
 						return (
 							<li key={i}>
-								<ProfileSummary id={user.id!} name={`${user.firstName} ${user.lastName}`} imagePath={user.imagePath} />
+								<ProfileSummary id={user.id!} name={user.name!} imagePath={user.imagePath} />
 							</li>
 						);
 					})}

@@ -5,46 +5,36 @@ import { RouteComponentProps } from "react-router-dom";
 import { Markdown } from "react-showdown";
 import { Button } from "reactstrap";
 import { UserContext } from "../App";
+import CreatorSummary from "../components/CreatorSummary";
 import ProfileSummaries from "../components/ProfileSummaries";
 import RecipeSummary from "../components/RecipeSummary";
 import MealSummaryContainer from "../containers/MealSummaryContainer";
 import Meal from "../entities/Meal";
-import Recipe from "../entities/Recipe";
 import "./resources/css/MealPage.css";
 
-const GET_MEAL = gql`
-	query GetMeal($id: Int!) {
-		getMeal(id: $id) {
+const MEAL = gql`
+	query meal($mealID: Int!) {
+		meal(id: $mealID) {
 			id
-			title
-			description
-			price
-			startTime
-			endTime
-			maxGuests
-			location
 			host {
 				id
-				firstName
-				lastName
-				about
-				whitelist {
-					id
-					name
-				}
 			}
 			guests {
 				id
-				firstName
-				lastName
+				name
+				imagePath
 			}
 			recipes {
 				id
-				name
-				description
-				timesSaved
-				updatedAt
+				author {
+					id
+					name
+					imagePath
+				}
 				createdAt
+				updatedAt
+				reviewAverage
+				timesSaved
 				tags {
 					id
 					name
@@ -53,95 +43,61 @@ const GET_MEAL = gql`
 					id
 					name
 				}
-				author {
-					id
-				}
 			}
+			guestCount
+			maxGuests
 		}
 	}
 `;
 
-interface IGetMealResult {
-	getMeal: Partial<Meal> | null;
+interface IMealData {
+	meal?: Partial<Meal>;
 }
+
+interface IMealVariables {
+	mealID: number;
+}
+
+type MealResult = QueryResult<IMealData, IMealVariables>;
 
 interface IMealPageParams {
 	mealID: string;
 }
 
 export default class MealPage extends React.Component<RouteComponentProps<IMealPageParams>> {
-	private getRecipeReviewAverage = (recipe: Partial<Recipe>): number => { // TODO: deduplicate
-		if (recipe.reviews === undefined || recipe.reviews.length === 0) {
-			return 0;
-		}
-
-		let sum = 0;
-		let effectiveLength = 0;
-		recipe.reviews.forEach(review => {
-			if (review.rating !== undefined) {
-				sum += review.rating;
-				effectiveLength += 1;
-			}
-		});
-
-		return sum / effectiveLength;
-	}
-
-	public setMeal = (
-		startTime?: number,
-		endTime?: number,
-		title?: string,
-		location?: string,
-		description?: string
-	): void => {
-		// TODO: update the date and time
-		// TODO: Push update to server
-		alert("Need to push to server");
-		// this.setState({ meal: { ...this.state.meal, title: title!, location: location!, description: description! } });
-	}
-
 	public render(): JSX.Element {
 		return (
 			<UserContext.Consumer>
 				{userContext => {
 					return (
 						<Query
-							query={GET_MEAL}
-							variables={{ id: parseInt(this.props.match.params.mealID, 10) }}
+							query={MEAL}
+							variables={{ mealID: parseInt(this.props.match.params.mealID, 10) }}
 						>
-							{(result: QueryResult<IGetMealResult>) => {
-								if (result.loading) {
+							{(result: MealResult) => {
+								if (result.loading) { return <div></div>; }
+								if (result.error) {
+									console.error(result.error);
+									return <div>{result.error.message}</div>;
+								}
+								if (result.data!.meal === undefined) {
 									return <div></div>;
 								}
-								if (result.error) {
-									return (
-										<div>
-											{`Error! Something terrible has happened! ${result.error.message}`}
-										</div>
-									);
-								}
-								if (result.data!.getMeal === null) {
-									return (
-										<div>
-											{`Error! This page does not exist! It may have been deleted.`}
-										</div>
-									);
-								}
 
-								const loggedInUserIsHost = result.data!.getMeal!.host!.id === userContext.userID;
+								const userIsHost = result.data!.meal!.host!.id === userContext.userID;
 								return (
 									<div id="meal-page">
 										<div id="meal-page-left">
-											<MealSummaryContainer meal={result.data!.getMeal!} />
+											<MealSummaryContainer mealID={result.data!.meal!.id!} />
 											<div id="meal-page-description-container" className="card">
 												<h3 className="meal-page-header">Description</h3>
 												<hr />
-												<p id="meal-page-description">{<Markdown markup={result.data!.getMeal!.description} />}</p>
+												<div id="meal-page-description">{<Markdown markup={result.data!.meal!.description} />}</div>
 											</div>
 											<div id="meal-page-recipes-container" className="card">
 												<h3 className="meal-page-header">Recipes</h3>
 												<ul className="no-style-list">
-													{result.data!.getMeal!.recipes!.map((recipe, i) => {
+													{result.data!.meal!.recipes!.map((recipe, i) => {
 														return (
 															<li key={i}>
 																<hr />
@@ -153,7 +109,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 																	imagePath={recipe.imagePath}
 																	createdAt={recipe.createdAt!}
 																	updatedAt={recipe.updatedAt!}
-																	reviewAverage={this.getRecipeReviewAverage(recipe)}
+																	reviewAverage={recipe.reviewAverage || 0}
 																	timesSaved={recipe.timesSaved || 0}
 																	allergies={recipe.allergies || []}
 																	showAuthor
@@ -166,21 +122,18 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 										</div>
 										<div id="meal-page-right">
 											<div className="card">
-												{/* <CreatorSummary
-													viewer={userContext.user!}
-													userID={result.data!.getMeal!.host!.id!}
-													name={`${result.data!.getMeal!.host!.firstName} ${result.data!.getMeal!.host!.lastName}`}
-													imagePath={result.data!.getMeal!.host!.imagePath}
-													topics={result.data!.getMeal!.host!.whitelist || []}
-												/> */}
+												<CreatorSummary
+													viewerID={userContext.userID!}
+													userID={result.data!.meal!.host!.id!}
+												/>
 											</div>
 											<div id="meal-page-guests-container" className="card">
 												<div id="meal-page-guests-container-header">
-													<h3 className="meal-page-header">Guests ({result.data!.getMeal!.guests!.length}/{result.data!.getMeal!.maxGuests})</h3>
+													<h3 className="meal-page-header">Guests ({result.data!.meal!.guestCount}/{result.data!.meal!.maxGuests})</h3>
 													<Button color="success">RSVP</Button> {/* Button should change depending on if host, guest, or potential guest */}
 												</div>
 												<hr />
-												<ProfileSummaries users={result.data!.getMeal!.guests!} />
+												<ProfileSummaries users={result.data!.meal!.guests!} />
 											</div>
 										</div>
 										{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}
