@@ -9,7 +9,7 @@ import { Button, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, Dropdow
 import Showdown from "showdown";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
-import { default as logo } from "./resources/images/logo_icon.png";
+import { default as logo } from "./resources/images/icon.png";
 
 interface INavigationBarState {
 	createdAt: moment.Moment | null;
@@ -90,7 +90,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
 					<NavbarBrand href="/" className="bb-navbar-brand">
-						<div id="bb-brand-container"><img id="bb-brand" src={logo} /></div>
+						<div id="bb-brand-container"><img id="bb-brand" src={logo} height={30} /></div>
 					</NavbarBrand>
 					<Nav className="ml-auto" navbar>
 						<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
