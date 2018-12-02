@@ -1,10 +1,9 @@
 import * as React from "react";
-import loading from "./resources/images/loading.svg";
 
 export interface IAuthCallbackPageProps { }
 
-const AuthCallback: React.SFC<IAuthCallbackPageProps> = props => {
-	const style: React.CSSProperties = {
+export default class AuthCallback extends React.Component<IAuthCallbackPageProps> {
+	public style: React.CSSProperties = {
 		position: "absolute",
 		display: "flex",
 		justifyContent: "center",
@@ -17,10 +16,10 @@ const AuthCallback: React.SFC<IAuthCallbackPageProps> = props => {
 		backgroundColor: "white",
 	};
 
-	return (
-		<div style={style}>
-			<img src={loading} alt="loading" />
-		</div>
-	);
-};
-export default AuthCallback;
+	public render(): JSX.Element {
+		return (
+			<div style={this.style}>
+			</div>
+		);
+	}
+}

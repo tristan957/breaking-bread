@@ -7,12 +7,11 @@ import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import { Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
 import Showdown from "showdown";
-import { Auth0Authentication } from '../auth/Auth0Authentication';
+import { Auth0Authentication } from "../auth/Auth0Authentication";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/icon.png";
 import S3ImageUploader from "./S3ImageUploader";
-
 
 interface INavigationBarState {
 	createdAt: moment.Moment | null;
@@ -24,7 +23,7 @@ interface INavigationBarState {
 }
 
 interface INavigationBarProps {
-	auth: Auth0Authentication,
+	auth: Auth0Authentication;
 }
 
 export default class NavigationBar extends React.Component<INavigationBarProps, INavigationBarState> {
@@ -47,11 +46,11 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 		});
 	}
 
-	login = () => {
+	public login = () => {
 		this.props.auth.login();
 	}
 
-	logout = () => {
+	public logout = () => {
 		this.props.auth.logout();
 	}
 
@@ -101,7 +100,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 		const firstColumnWidth = 3;
 		const secondColumnWidth = 12 - firstColumnWidth;
 
-		const { authenticated } = this.props.auth;
+		const { authenticated }: { authenticated: boolean } = this.props.auth;
 
 		return (
 			<div id="navbar">
