@@ -183,7 +183,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 												<GuestSummaries
 													mealID={mealID}
 													guests={result.data!.meal!.guests!}
-													reload={() => result.refetch()}
+													reload={isHost ? () => result.refetch() : undefined}
 												/>
 											</div>
 										</div>
