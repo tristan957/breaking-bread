@@ -9,21 +9,14 @@ import "./resources/css/MealModification.css";
 
 interface IMealModificationProps {
 	meal: Partial<Meal>;
-	setMeal: ((
-		startTime?: number,
-		endTime?: number,
-		title?: string,
-		city?: string,
-		description?: string
-	) => void);
 }
 
 interface IMealModificationState {
 	deletionModalVisible: boolean;
 	editModalVisible: boolean;
 	mealTitle?: string;
-	mealStartTime?: number;
-	mealEndTime?: number;
+	mealStartTime?: string;
+	mealEndTime?: string;
 	mealCity?: string;
 	mealDescription?: string;
 	createdAt?: moment.Moment;
@@ -88,16 +81,6 @@ export default class MealModification extends React.Component<IMealModificationP
 	}
 
 	public modifyMeal = (): void => {
-		this.setState({ testText: "zzz" });
-
-		this.props.setMeal(
-			this.state.mealStartTime,
-			this.state.mealEndTime,
-			this.state.mealTitle,
-			this.state.mealCity,
-			this.state.mealDescription
-		);
-
 		this.toggleEditModal();
 	}
 

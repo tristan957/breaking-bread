@@ -10,16 +10,19 @@ const USER_PROFILE = gql`
 		user(id: $id) {
 			id
 			name
+			about
 			imagePath
 			reviewAverage
 			numberOfFollowers
 			createdAt
+			phoneNumber
+			email
 		}
 	}
 `;
 
 interface IUserProfileData {
-	user: Partial<User>;
+	user?: Partial<User>;
 }
 
 interface IUserProfileVariables {
@@ -48,17 +51,21 @@ export default class ProfileHeaderContainer extends React.Component<IProfileHead
 						<div id="profile-header-container" className="card">
 							<div id="profile-header-left-container">
 								<LargeProfileSummary
-									userID={result.data!.user.id!}
+									userID={result.data!.user!.id!}
 									viewerID={this.props.viewerID}
-									name={result.data!.user.name!}
-									imagePath={result.data!.user.imagePath}
-									reviewAverage={result.data!.user.reviewAverage}
-									numberOfFollowers={result.data!.user.numberOfFollowers}
+									name={result.data!.user!.name!}
+									imagePath={result.data!.user!.imagePath}
+									reviewAverage={result.data!.user!.reviewAverage}
+									numberOfFollowers={result.data!.user!.numberOfFollowers}
 								/>
 							</div>
 							<div id="profile-header-right-container">
 								<div id="profile-header-about-container">
-									<p id="profile-header-about">This is why folks still use tables for grid layout. Vertical align (or anything with height & dynamic data) can be challenging with pure CSS. You have to be willing to do weird hacks like this (somewhat defeats the "separating content from layout" idea), or take the multi-pass rendering hit and use non-static tables. I've never once had complaints from end users for table despite that I routinely break CSS fanboys' hearts. Most of em design only simple blogs & static sites. Some of us build business software and need dense data display, and our users care more about functionality.</p>
+									<p id="profile-header-about">{result.data!.user!.about}</p>
+								</div>
+								<div id="profile-header-contact-info">
+									{result.data!.user!.email === undefined ? undefined : <div>Email: {result.data!.user!.email}</div>}
+									{result.data!.user!.phoneNumber === undefined ? undefined : <div>Phone Number: {result.data!.user!.phoneNumber}</div>}
 								</div>
 								<div id="profile-header-joined">Joined {
 									((joinedAt: string): string => {
@@ -66,7 +73,7 @@ export default class ProfileHeaderContainer extends React.Component<IProfileHead
 										return (
 											`${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
 										);
-									})(result.data!.user.createdAt!)
+									})(result.data!.user!.createdAt!)
 								}
 								</div>
 							</div>

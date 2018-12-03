@@ -6,8 +6,8 @@ interface IMealInfoFooterProps {
 	price: number;
 	numOfGuests: number;
 	maxGuests: number;
-	startTime: number;
-	endTime: number;
+	startTime: string;
+	endTime: string;
 	city: string;
 }
 
