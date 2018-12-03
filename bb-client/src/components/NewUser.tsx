@@ -1,6 +1,6 @@
+import { AvField, AvForm } from "availity-reactstrap-validation";
 import React from "react";
-import { RouteComponentProps } from "react-router";
-import { Alert, Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
+import { Alert, Button, Col, FormGroup, Input, Label } from "reactstrap";
 import "./resources/css/NewUser.css";
 
 interface IRetreivedProfileInfo {
@@ -9,16 +9,12 @@ interface IRetreivedProfileInfo {
 	lastName?: string;
 	firstName?: string;
 	picture?: string;
-	router: RouteComponentProps;
+	validSubmit: Function;
 }
 
 export default class NewUser extends React.Component<IRetreivedProfileInfo> {
 	constructor(props: IRetreivedProfileInfo) {
 		super(props);
-	}
-
-	public redirect = () => {
-		this.props.router.history.push("/");
 	}
 
 	public render(): JSX.Element {
@@ -42,27 +38,27 @@ export default class NewUser extends React.Component<IRetreivedProfileInfo> {
 					<h2>Let's first finish setting up your acccount.</h2>
 				</div>
 				<div id="new-user-container">
-					<Form id="new-user-form">
+					<AvForm id="new-user-form" onValidSubmit={this.props.validSubmit()}>
 						<FormGroup row>
 							<Label for="name" sm={firstColSize}>First Name</Label>
 							<Col sm={secondColSize}>
-								<Input type="text" name="firstNameInput" defaultValue={this.props.firstName} />
+								<AvField type="text" name="firstNameInput" defaultValue={this.props.firstName} required={true} />
 							</Col>
 						</FormGroup>
 						<FormGroup row>
 							<Label for="name" sm={firstColSize}>Last Name</Label>
 							<Col sm={secondColSize}>
-								<Input type="text" name="lastNameInput" defaultValue={this.props.lastName} />
+								<AvField type="text" name="lastNameInput" defaultValue={this.props.lastName} required={true} />
 							</Col>
 						</FormGroup>
 						<FormGroup row>
 							<Label for="name" sm={firstColSize}>Email</Label>
 							<Col sm={9}>
-								<Input type="text" name="emailInput" defaultValue={this.props.email} />
+								<AvField type="text" name="emailInput" defaultValue={this.props.email} required={true} />
 							</Col>
 						</FormGroup>
 						<FormGroup row>
-							<Label for="name" sm={firstColSize}>Hometown</Label>
+							<Label for="name" sm={firstColSize} required={true}>Hometown</Label>
 							<Col sm={secondColSize}>
 								<Input type="text" name="hometownInput" />
 							</Col>
@@ -73,19 +69,19 @@ export default class NewUser extends React.Component<IRetreivedProfileInfo> {
 								<Input type="textarea" name="descriptionInput" placeholder={"Tell us a little bit about yourself"} />
 							</Col>
 						</FormGroup>
-						<FormGroup row>
-							<Label for="name" sm={firstColSize}>Topics</Label>
+						{/* <FormGroup row>
+							<Label for="name" sm={firstColSize} required={true}>Topics</Label>
 							<Col sm={secondColSize}>
 								<Input type="text" name="topicsInput" placeholder={"List some topics that you enjoy discussing with others"} />
 							</Col>
-						</FormGroup>
+						</FormGroup> */}
 						<FormGroup row>
 							<Col sm={firstColSize}></Col>
 							<Col sm={secondColSize}>
-								<Button className="float-right" onClick={this.redirect}>Submit</Button>
+								<Button className="float-right">Submit</Button>
 							</Col>
 						</FormGroup>
-					</Form>
+					</AvForm>
 				</div>
 			</div>
 		);

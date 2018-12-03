@@ -20,6 +20,7 @@
     "apollo-link-error": "^1.1.2",
     "apollo-link-http": "^1.5.7",
     "auth0-js": "^9.8.2",
+    "availity-reactstrap-validation": "^2.3.3",
     "aws-sdk": "^2.368.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",

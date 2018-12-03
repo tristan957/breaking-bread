@@ -63,7 +63,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 					console.log(err); // TODO: Invalid login
 				});
 			}).catch((err: Auth0Error) => {
-				console.log(err); // TODO: Invalid login
+				console.log(err); // TODO: Invalid login // FIXME: Need to investigate excess trigger here
 			});
 		}
 	}
@@ -92,6 +92,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 											firstName={this.state.firstName}
 											picture={this.state.imagePath}
 											router={this.props}
+											reloadUser={userContext.reloadUser!}
 										/>
 									</div>
 								);

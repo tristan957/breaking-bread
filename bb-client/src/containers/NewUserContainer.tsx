@@ -1,4 +1,6 @@
+import ApolloClient from "apollo-client";
 import React from "react";
+import { ApolloConsumer } from "react-apollo";
 import { RouteComponentProps } from "react-router";
 import NewUser from "../components/NewUser";
 
@@ -9,6 +11,7 @@ interface IRetreivedProfileInfo {
 	firstName?: string;
 	picture?: string;
 	router: RouteComponentProps;
+	reloadUser: Function;
 }
 
 export default class NewUserContainer extends React.Component<IRetreivedProfileInfo> {
@@ -16,7 +19,10 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 		super(props);
 	}
 
-	public renderNewUser = (): JSX.Element => {
+	public submitNewUser = () => {
+	}
+
+	public renderNewUser = (client: ApolloClient<any>): JSX.Element => {
 		if (this.props.firstName !== undefined) {
 			return (
 				<NewUser
@@ -25,7 +31,7 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 					lastName={this.props.lastName!}
 					firstName={this.props.firstName}
 					picture={this.props.picture!}
-					router={this.props.router}
+					validSubmit={this.submitNewUser}
 				/>
 			);
 		} else {
@@ -37,9 +43,15 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 
 	public render(): JSX.Element {
 		return (
-			<div>
-				{this.renderNewUser()}
-			</div>
+			<ApolloConsumer>
+				{client => {
+					return (
+						<div>
+							{this.renderNewUser(client)}
+						</div>
+					);
+				}}
+			</ApolloConsumer>
 		);
 	}
 }

@@ -1749,6 +1749,17 @@ autoprefixer@^9.1.5:
     postcss "^7.0.5"
     postcss-value-parser "^3.3.1"
 
+availity-reactstrap-validation@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/availity-reactstrap-validation/-/availity-reactstrap-validation-2.3.3.tgz#03b6331820cb96fcd8d5c69458ae58d5a5b4bd5a"
+  integrity sha512-W4amjvhvh8u4S3ymNuHBzp3gvWrHQNKLmvIFsHDmT9hzFuCIIhPDI2htSbM3HuqEO/hgC4HU3zPwI1NQHY2y8A==
+  dependencies:
+    babel-runtime "^6.26.0"
+    classnames "^2.2.6"
+    lodash "^4.17.10"
+    moment "^2.22.2"
+    prop-types "^15.6.2"
+
 aws-sdk@^2.368.0:
   version "2.368.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.368.0.tgz#5855201dca9740f253e468f7ce8caa03e5eb696b"
