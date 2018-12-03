@@ -11,7 +11,6 @@ import MediaQuery from "react-responsive";
 import { Button, ButtonGroup, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Showdown from "showdown";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
-import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as fullLogo } from "./resources/images/bb-logo-full.png";
 import { default as icon } from "./resources/images/icon.png";
@@ -145,7 +144,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 		client.mutate({
 			mutation: CREATE_RECIPE_MUTATION,
 			variables,
-		});
+		}).then(());
 	}
 
 	public render(): JSX.Element {
@@ -265,7 +264,11 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 
 							{/* RECIPE MODAL */}
 							<Form onSubmit={() => {
-								this.createRecipeMutation(client, this.state.recipeForm.);
+								this.createRecipeMutation(client, {
+									name: this.state.recipeForm.name!,
+									description: this.state.recipeForm.description!,
+									...this.state.recipeForm,
+								});
 							}}>
 								<Modal size={"lg"} centered={true} isOpen={this.state.recipeModal} toggle={this.toggleRecipeModal}>
 									<ModalHeader toggle={this.toggleRecipeModal}>New Recipe</ModalHeader>
