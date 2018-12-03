@@ -1,9 +1,9 @@
 import { Auth0Config } from "./Auth0Config";
 export const AUTH_CONFIG: Auth0Config = {
-  audience: "https://bbread.com/graphql-test",
+  audience: "https://www.bbread.org/api/v1/graphql",
   domain: "bbread.auth0.com",
   clientId: "5Km8K7jPRTeT260MGPtJSOzPb5tgqKYY",
-  callbackUrl: "http://localhost:3000/callback",
+  callbackUrl: "http://localhost:3000/bb-auth",
 
   // Jonathan's credential
   // domain: "breaking-bread.auth0.com",

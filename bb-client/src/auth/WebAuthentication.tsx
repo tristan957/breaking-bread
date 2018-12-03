@@ -1,4 +1,4 @@
-import { Auth0DecodedHash, WebAuth } from "auth0-js";
+import { Auth0DecodedHash, Auth0Error, Auth0ParseHashError, Auth0UserProfile, WebAuth } from "auth0-js";
 import history from "../history";
 import { Auth0Authentication } from "./Auth0Authentication";
 import { AUTH_CONFIG } from "./configuration";
@@ -10,6 +10,14 @@ import { AUTH_CONFIG } from "./configuration";
  * @implements {Auth0Authentication}
  */
 
+export interface IProfileInfo {
+	email?: string;
+	emailVerified?: boolean;
+	lastName?: string;
+	firstName?: string;
+	imagePath?: string;
+}
+
 export class WebAuthentication implements Auth0Authentication {
 	/**
 	 * @property
@@ -17,13 +25,21 @@ export class WebAuthentication implements Auth0Authentication {
 	 * @type {WebAuth}
 	 * @memberof WebAuthenticationManager
 	 */
-	public auth0: WebAuth = new WebAuth({
+	// public auth0: WebAuth = new WebAuth({
+	// 	domain: AUTH_CONFIG.domain,
+	// 	clientID: AUTH_CONFIG.clientId,
+	// 	redirectUri: AUTH_CONFIG.callbackUrl,
+	// 	audience: AUTH_CONFIG.audience,
+	// 	responseType: "token id_token",
+	// 	scope: "openid",
+	// });
+	public webAuth: WebAuth = new WebAuth({
 		domain: AUTH_CONFIG.domain,
 		clientID: AUTH_CONFIG.clientId,
 		redirectUri: AUTH_CONFIG.callbackUrl,
 		audience: AUTH_CONFIG.audience,
-		responseType: "token id_token",
-		scope: "openid",
+		responseType: "token",
+		scope: "openid profile email",
 	});
 
 	get authenticated(): boolean {
@@ -35,20 +51,43 @@ export class WebAuthentication implements Auth0Authentication {
 	}
 
 	public login = (): void => {
-		this.auth0.authorize();
+		// Trigger login page
+		this.webAuth.authorize();
 	}
 
-	public handleAuthentication = (): void => {
-		this.auth0.parseHash((e: any, result: any) => {
-			if (result && result.accessToken && result.idToken) {
-				this.setSession(result);
-				history.replace("/");
-			} else if (e) {
-				history.replace("/");
-				// tslint:disable-next-line:no-console
-				console.error(e);
-				alert(`Error: ${e.error}. Check the console for further details.`);
-			}
+	public handleAuthentication = async (): Promise<IProfileInfo> => {
+		return new Promise((resolve, reject): void => {
+			this.webAuth.parseHash((err: Auth0ParseHashError | null, result: Auth0DecodedHash | null): void => {
+				if (err !== null) {
+					reject(err);
+				} else {
+					if (result !== null && result.accessToken !== undefined && result.idToken !== undefined && result.expiresIn !== undefined) {
+						this.setSession(result);
+
+						resolve(this.getUserInfo(result));
+					}
+				}
+			});
+		});
+	}
+
+	public async getUserInfo(result: Auth0DecodedHash): Promise<IProfileInfo> {
+		return new Promise((resolve, reject): void => {
+			this.webAuth.client.userInfo(result.accessToken!, (errUserInfo: Auth0Error | null, user: Auth0UserProfile): void => {
+				if (errUserInfo !== null) {
+					reject(errUserInfo);
+				} else {
+					const userInfo: IProfileInfo = {
+						email: user.email,
+						emailVerified: user.email_verified,
+						lastName: user.family_name,
+						firstName: user.given_name,
+						imagePath: user.picture,
+					};
+
+					resolve(userInfo);
+				}
+			});
 		});
 	}
 
