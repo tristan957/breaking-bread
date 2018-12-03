@@ -10,6 +10,12 @@ import * as serviceWorker from "./serviceWorker";
 
 dotenv.config();
 
+const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/graphql" : "https://www.bbread.org/api/v1/graphql";
+console.log(`URI: ${uri}`);
+
+// let accessToken: string | null = localStorage.getItem("access_token");
+// accessToken = accessToken === null ? "" : accessToken;
+
 ReactDOM.render(
 	<BrowserRouter>
 		<App />
