@@ -1,4 +1,3 @@
-// tslint:disable: no-unsafe-any
 import React from "react";
 import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router";
