@@ -59,11 +59,8 @@
     "@types/graphql": "^14.0.3",
     "@types/history": "^4.7.2",
     "@types/jest": "^23.3.9",
-<<<<<<< HEAD
     "@types/node-uuid": "^0.0.28",
-=======
     "@types/jwt-decode": "^2.2.1",
->>>>>>> 98e265fddc1702bf32754e5cee4c72324b8aecee
     "@types/react": "^16.4.18",
     "@types/react-autosuggest": "^9.3.6",
     "@types/react-dates": "^17.1.2",
