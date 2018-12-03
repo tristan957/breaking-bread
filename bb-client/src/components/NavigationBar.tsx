@@ -9,7 +9,7 @@ import Showdown from "showdown";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
-import { default as logo } from "./resources/images/logo_icon.png";
+import { default as logo } from "./resources/images/icon.png";
 import S3ImageUploader from "./S3ImageUploader";
 
 interface INavigationBarState {
