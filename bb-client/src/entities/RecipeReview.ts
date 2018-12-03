@@ -5,8 +5,8 @@ type RecipeReview = {
 	id: number;
 	rating: number;
 	description: string;
-	createdAt: number;
-	updatedAt: number;
+	createdAt: string;
+	updatedAt: string;
 	subject: Partial<Recipe>;
 	author: Partial<User>;
 };

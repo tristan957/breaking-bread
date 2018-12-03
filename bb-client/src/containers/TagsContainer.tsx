@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import React from "react";
 import { Query, QueryResult } from "react-apollo";
-import Items from "../components/Items";
+import Tags from "../components/Tags";
 import User from "../entities/User";
 import "./resources/css/TagsContainer.css";
 
@@ -28,6 +28,7 @@ interface IUserFollowedTagsVariables {
 type UserFollowedTagsResult = QueryResult<IUserFollowedTagsData, IUserFollowedTagsVariables>;
 
 interface ITagsContainerProps {
+	mutable?: boolean;
 	userID: number;
 }
 
@@ -46,10 +47,10 @@ export default class TagsContainer extends React.Component<ITagsContainerProps> 
 						<div id="followed-tags-card" className="card">
 							<div id="tags-topics-list-header" className="container-header">Tags</div>
 							<hr className="separator" />
-							<Items
-								items={result.data!.user.followedTags || []}
-								leadingChar="#"
-								monospace
+							<Tags
+								tags={result.data!.user.followedTags || []}
+								mutable={this.props.mutable}
+								reload={result.refetch}
 							/>
 						</div>
 					);

@@ -60,6 +60,7 @@ bootstrap({
 	},
 	setupContainer: async (container: ContainerInstance, action: Action) => {
 		const request = action.request; // user request, you can get http headers from it
+		// const decodeToken = await getToken();
 		const user: User | undefined = await getManager().findOne(User, { oAuthSub: request.headers.oauthsub as string });
 		container.set(User, user);
 	},

@@ -1,11 +1,11 @@
 #mobile-center {
-    /* margin: 0 auto; */
 	padding: 1em 1em 1em 1em;
     width: 100%;
 }
 
 #dashboard {
 	display: flex;
+	justify-content: center;
 }
 
 #top-buffer {
@@ -22,10 +22,12 @@
 }
 
 #center-container {
+	width: 800px;
     height: 100%;
 	margin-left: 1.8em;
 	margin-right: 1.8em;
-	flex-grow: 2;
+	/* flex-grow: 2; */
+	flex-shrink: 0;
 }
 
 #right-container {

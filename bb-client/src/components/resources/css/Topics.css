@@ -1,0 +1,12 @@
+.topic-list > .topics-list-topic > * {
+	margin-right: 10px;
+}
+
+.topic-list > .topics-list-topic > *:last-child {
+	margin-right: 0px;
+}
+
+.topics-list-topic {
+	display: flex;
+	justify-content: space-between;
+}

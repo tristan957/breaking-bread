@@ -1,10 +1,11 @@
-/* global google */
-/* tslint:disable:no-console */
-
 import React from "react";
 import Geosuggest from "react-geosuggest";
 
-export default class GeoSuggest extends React.Component {
+interface IGeoSuggestProps {
+	value?: string;
+}
+
+export default class GeoSuggest extends React.Component<IGeoSuggestProps> {
 	public onSuggestSelect = (suggest: any): void => {
 		console.log(suggest);
 	}
@@ -13,12 +14,11 @@ export default class GeoSuggest extends React.Component {
 		return (
 			<div>
 				<Geosuggest
-					placeholder={"Start typing!"}
-					initialValue="Texas A&M"
+					value={this.props.value}
 					onSuggestSelect={this.onSuggestSelect}
-					location={new google.maps.LatLng(40.741895, -73.989308)}
 					radius={20} />
 			</div>
 		);
 	}
 }
+// location={new google.map.LatLng(40.741895, -73989308)}

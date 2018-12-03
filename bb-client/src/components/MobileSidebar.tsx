@@ -7,6 +7,7 @@ import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import "./resources/css/MobileSidebar.css";
 import { default as MealIcon } from "./resources/images/meal-icon.svg";
 import { default as UserIcon } from "./resources/images/user-icon.svg";
+import { TopicType } from "./Topics";
 
 interface IMobileSidebarState {
 	sidebarOpen: boolean;
@@ -40,8 +41,8 @@ export default class MobileSidebar extends React.Component<IMobileDashboardProps
 							{this.props.userID === undefined ? undefined : (
 								<div>
 									<ProfileSummaryContainer userID={this.props.userID} />
-									<TagsContainer userID={this.props.userID} />
-									<TopicsContainer userID={this.props.userID} />
+									<TagsContainer userID={this.props.userID} mutable />
+									<TopicsContainer userID={this.props.userID} type={TopicType.WHITELIST} mutable />
 								</div>
 							)}
 						</div>

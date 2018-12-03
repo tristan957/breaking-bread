@@ -8,8 +8,8 @@ interface IUpcomingMealSummaryProps {
 	id: number;
 	title: string;
 	price: number;
-	startTime: number;
-	endTime: number;
+	startTime: string;
+	endTime: string;
 	guests: Partial<User>[];
 	maxGuests: number;
 	city: string;

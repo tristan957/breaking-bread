@@ -7,13 +7,14 @@ type Meal = {
 	price: number;
 	description: string;
 	city: string;
-	startTime: number;
-	endTime: number;
+	startTime: string;
+	endTime: string;
 	guestCount: number;
 	maxGuests: number;
 	imagePath: string | null;
 	createdAt: number;
 	updatedAt: number;
+	isFull: boolean;
 	host: Partial<User>;
 	guests: Partial<User>[];
 	recipes: Partial<Recipe>[];
