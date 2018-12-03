@@ -1,13 +1,17 @@
+// tslint:disable: no-unsafe-any
 import moment from "moment";
 import React from "react";
 import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
-import { Button, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
+import MediaQuery from "react-responsive";
+import { Button, ButtonGroup, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Showdown from "showdown";
+import { Auth0Authentication } from "../auth/Auth0Authentication";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
-import { default as logo } from "./resources/images/icon.png";
+import { default as fullLogo } from "./resources/images/bb-logo-full.png";
+import { default as icon } from "./resources/images/icon.png";
 
 type MealForm = {
 	valid: {
@@ -39,10 +43,13 @@ interface INavigationBarState {
 	recipeForm: RecipeForm;
 }
 
-export default class NavigationBar extends React.Component<{}, INavigationBarState> {
-	public converter: Showdown.Converter;
+interface INavigationBarProps {
+	auth: Auth0Authentication;
+}
 
-	constructor(props: Readonly<{}>) {
+export default class NavigationBar extends React.Component<INavigationBarProps, INavigationBarState> {
+	public converter: Showdown.Converter;
+	constructor(props: INavigationBarProps) {
 		super(props);
 
 		this.state = {
@@ -69,6 +76,14 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 		console.log(this.state.mealForm);
 
 		e.preventDefault();
+	}
+
+	public login = () => {
+		this.props.auth.login();
+	}
+
+	public logout = () => {
+		this.props.auth.logout();
 	}
 
 	public onSuggestSelect = (suggest: any): void => {
@@ -113,21 +128,42 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 		const firstColumnWidth = 3;
 		const secondColumnWidth = 12 - firstColumnWidth;
 
+		const { authenticated }: { authenticated: boolean } = this.props.auth;
+
 		return (
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
 					<NavbarBrand href="/" className="bb-navbar-brand">
-						<div id="bb-brand-container"><img id="bb-brand" src={logo} height={30} /></div>
+						<MediaQuery query="(max-width: 499px)">
+							<div id="bb-brand-container"><img id="bb-brand" src={icon} height={30} /></div>
+						</MediaQuery>
+						<MediaQuery query="(min-width: 500px)">
+							<div id="bb-brand-container"><img id="bb-brand" src={fullLogo} height={30} /></div>
+						</MediaQuery>
 					</NavbarBrand>
 					<Nav className="ml-auto" navbar>
-						<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
-							<DropdownToggle>+</DropdownToggle>
-							<DropdownMenu>
-								<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
-								<DropdownItem divider />
-								<DropdownItem onClick={this.toggleRecipeModal}>New Receipe</DropdownItem>
-							</DropdownMenu>
-						</Dropdown>
+						<NavItem>
+							{!authenticated && (
+								<Button onClick={this.login}>Login</Button>
+							)}
+							{authenticated && (
+								<Button onClick={this.logout}>Logout</Button>
+							)}
+						</NavItem>
+						<NavItem>
+							{authenticated && (
+								<ButtonGroup>
+									<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
+										<DropdownToggle> + </DropdownToggle>
+										<DropdownMenu>
+											<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
+											<DropdownItem divider />
+											<DropdownItem onClick={this.toggleRecipeModal}>New Receipe</DropdownItem>
+										</DropdownMenu>
+									</Dropdown>
+								</ButtonGroup>
+							)}
+						</NavItem>
 					</Nav>
 				</Navbar>
 
