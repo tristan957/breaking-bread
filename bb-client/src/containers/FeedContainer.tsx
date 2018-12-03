@@ -181,7 +181,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 										<FormGroup row>
 											<Label for="location" sm={2}>Location</Label>
 											<Col sm={10}>
-												<GeoSuggest />
+												<GeoSuggest onChange={(e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value)} />
 											</Col>
 										</FormGroup>
 										<FormGroup row>
