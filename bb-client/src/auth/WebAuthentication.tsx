@@ -25,14 +25,6 @@ export class WebAuthentication implements Auth0Authentication {
 	 * @type {WebAuth}
 	 * @memberof WebAuthenticationManager
 	 */
-	// public auth0: WebAuth = new WebAuth({
-	// 	domain: AUTH_CONFIG.domain,
-	// 	clientID: AUTH_CONFIG.clientId,
-	// 	redirectUri: AUTH_CONFIG.callbackUrl,
-	// 	audience: AUTH_CONFIG.audience,
-	// 	responseType: "token id_token",
-	// 	scope: "openid",
-	// });
 	public webAuth: WebAuth = new WebAuth({
 		domain: AUTH_CONFIG.domain,
 		clientID: AUTH_CONFIG.clientId,

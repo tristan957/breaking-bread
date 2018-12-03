@@ -1,5 +1,5 @@
 import { Auth0Error } from "auth0-js";
-import * as React from "react";
+import React from "react";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
 import { IProfileInfo, WebAuthentication } from "../auth/WebAuthentication";
