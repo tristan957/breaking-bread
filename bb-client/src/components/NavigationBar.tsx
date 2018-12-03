@@ -1,18 +1,37 @@
 import gql from "graphql-tag";
 import moment from "moment";
 import React from "react";
+import { Query, QueryResult } from "react-apollo";
 import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import { Button, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
 import Showdown from "showdown";
+import User from "../entities/User";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/icon.png";
 
 const USER_RECIPES = gql`
-
+	query UserRecipes($userID: Int!) {
+		user(id: $userID) {
+			recipes {
+				id
+				name
+			}
+		}
+	}
 `;
+
+interface IUserRecipesData {
+	user?: Partial<User>;
+}
+
+interface IUserRecipesVariables {
+	userID: number;
+}
+
+type UserRecipesResult = QueryResult<IUserRecipesData, IUserRecipesVariables>;
 
 type MealForm = {
 	valid: {
@@ -198,16 +217,26 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 									<CustomInput type="file" id="navbar-images" name="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, endTime: e.target.value } })} />
 								</Col>
 							</FormGroup>
-							{/* <FormGroup>
-								<Label for="recipes">Select Recipes</Label>
-								<Input type="select" name="recipes" id="navbar-recipes" multiple onChange={(e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value)}>
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
-									<option>4</option>
-									<option>5</option>
-								</Input>
-							</FormGroup> */}
+							<Query query={USER_RECIPES} variables={{ userID: 2 }}>
+								{(result: UserRecipesResult) => {
+									if (result.loading) { return <div></div>; }
+									if (result.error) {
+										console.error(result.error);
+										return <div>{result.error.message}</div>;
+									}
+
+									return (
+										<FormGroup>
+											<Label for="recipes">Select Recipes</Label>
+											<Input type="select" name="recipes" id="navbar-recipes" multiple onChange={(e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value)}>
+												{result.data!.user!.recipes!.map((recipe, i) => {
+													return <option key={i}>{recipe.id} -- {recipe.name}</option>;
+												})}
+											</Input>
+										</FormGroup>
+									);
+								}}
+							</Query>
 							<hr />
 							<Button type="submit" className="float-right">Submit</Button>
 							<Button className="float-right" onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.setState({ ...this.state, mealModal: !this.state.mealModal })}>Cancel</Button>

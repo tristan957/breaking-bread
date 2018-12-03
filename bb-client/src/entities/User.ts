@@ -18,6 +18,7 @@ type User = {
 	updatedAt: string;
 	timesSaved: number;
 	hostedMeals: Partial<Meal>[];
+	recipes: Partial<Recipe>[];
 	mealsAttending: Partial<Meal>[];
 	upcomingMeals: Partial<Meal>[];
 	whitelist: Partial<Topic>[];
