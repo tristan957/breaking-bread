@@ -47,11 +47,7 @@ const client = new ApolloClient({
 		new BatchHttpLink({
 			uri,
 			headers: {
-<<<<<<< HEAD
 				oAuthSub: "adjijdfaa",
-=======
-				token_bearer: "google-oauth2|104114134196689419228",
->>>>>>> 98e265fddc1702bf32754e5cee4c72324b8aecee
 			},
 		}),
 	]),
