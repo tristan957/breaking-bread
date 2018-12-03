@@ -11,9 +11,14 @@ import MediaQuery from "react-responsive";
 import { Button, ButtonGroup, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Showdown from "showdown";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
+import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as fullLogo } from "./resources/images/bb-logo-full.png";
 import { default as icon } from "./resources/images/icon.png";
+
+const USER_RECIPES = gql`
+
+`;
 
 type MealForm = {
 	valid: {
@@ -144,7 +149,11 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 		client.mutate({
 			mutation: CREATE_RECIPE_MUTATION,
 			variables,
-		}).then(());
+		}).then(() => {
+			this.toggleRecipeModal();
+		}).catch((err) => {
+			console.log(err);
+		});
 	}
 
 	public render(): JSX.Element {
@@ -223,7 +232,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 										<FormGroup row>
 											<Label for="location" sm={firstColumnWidth}>Location</Label>
 											<Col sm={secondColumnWidth}>
-												<GeoSuggest value={this.state.mealForm.location} />
+												<GeoSuggest onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, location: e.target.value } })} />
 											</Col>
 										</FormGroup>
 										<FormGroup row>

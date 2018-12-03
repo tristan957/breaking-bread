@@ -2,7 +2,7 @@ import React from "react";
 import Geosuggest from "react-geosuggest";
 
 interface IGeoSuggestProps {
-	value?: string;
+	onChange: React.ChangeEventHandler;
 }
 
 export default class GeoSuggest extends React.Component<IGeoSuggestProps> {
@@ -14,7 +14,7 @@ export default class GeoSuggest extends React.Component<IGeoSuggestProps> {
 		return (
 			<div>
 				<Geosuggest
-					value={this.props.value}
+					onChange={this.props.onChange}
 					onSuggestSelect={this.onSuggestSelect}
 					radius={20} />
 			</div>

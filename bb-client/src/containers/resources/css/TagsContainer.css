@@ -1,0 +1,28 @@
+#tags-list-header {
+	display: flex;
+	justify-content: space-between;
+}
+
+#tags-label {
+	display: flex;
+	justify-content: center;
+	/* align-content: center; */
+	flex-direction: column;
+}
+
+#tags-list-header > * {
+	flex-grow: 1;
+	margin-right: 10px;
+}
+
+#tags-list-header > *:last-child {
+	margin-right: 0px;
+}
+
+#topic-input {
+	height: 50%;
+}
+
+#topic-add {
+	margin: 0px;
+}
