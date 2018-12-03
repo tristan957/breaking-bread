@@ -49,6 +49,7 @@ const MEAL = gql`
 			}
 			guestCount
 			maxGuests
+			isFull
 		}
 	}
 `;
@@ -171,7 +172,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 																return <div>{mResult.error.message}</div>;
 															}
 
-															return userContext.userID === undefined || isHost
+															return userContext.userID === undefined || isHost || (result.data!.meal!.isFull && !isGuest)
 																? <div></div>
 																: isGuest
 																	? <Button color="danger" onClick={(e: React.MouseEvent<HTMLButtonElement>) => mealToggleGuest()}>Cancel</Button>
