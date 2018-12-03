@@ -14,6 +14,7 @@ type Meal = {
 	imagePath: string | null;
 	createdAt: number;
 	updatedAt: number;
+	isFull: boolean;
 	host: Partial<User>;
 	guests: Partial<User>[];
 	recipes: Partial<Recipe>[];
