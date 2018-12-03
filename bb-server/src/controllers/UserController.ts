@@ -2,7 +2,7 @@ import { DeepPartial } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
 import { IInput } from "../args";
 import { DropLatLong } from "../args/CommonArgs";
-import { IUserArgs, IUserEditArgs, IUserReviewArgs, IUserReviewEditArgs, IUserReviewSaveArgs, IUserSaveArgs, IUserToggleTagsArgs, IUserToggleTopiclistArgs } from "../args/UserControllerArgs";
+import { IUserArgs, IUserEditArgs, IUserReviewArgs, IUserReviewEditArgs, IUserReviewSaveArgs, IUserSaveArgs, IUserSubArgs, IUserToggleTagsArgs, IUserToggleTopiclistArgs } from "../args/UserControllerArgs";
 import { Recipe, Tag, Topic, User, UserReview } from "../entities";
 import { RecipeRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
@@ -36,6 +36,21 @@ export default class UserController {
 	@Query()
 	public user(args: IUserArgs): Promise<User | undefined> {
 		return this.userRepository.findOne(args.id);
+	}
+
+	@Query()
+	public async userSubExists(args: IUserSubArgs): Promise<boolean> {
+		const user: User | undefined = await this.userRepository.findOne({
+			where: {
+				oAuthSub: args.sub,
+			},
+		});
+
+		if (user === undefined) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@Query()
@@ -119,7 +134,7 @@ export default class UserController {
 	}
 
 	public async toggleFollowedTags(currentUser: User, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
-		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["tags"] });
+		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["followedTags"] });
 		if (user === undefined) { return undefined; }
 
 		this.tagRepository.toggleTagsList(user.followedTags, tags);

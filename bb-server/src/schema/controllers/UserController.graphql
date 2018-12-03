@@ -20,6 +20,7 @@ extend type Mutation {
 
 extend type Query {
 	user(id: Int!): User
+	userSubExists(sub: String!): Boolean!
 	userAuthenticated: User
 	userReview(id: Int!): UserReview
 }

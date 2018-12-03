@@ -18,6 +18,7 @@ export function getToken(token: string): void {
 		if (err || decoded === null) {
 			console.log(err);
 		} else {
+			console.log("fej");
 			console.log(decoded);
 		}
 	});
@@ -30,19 +31,6 @@ export function getToken(token: string): void {
 	// 	throw Error;  // TODO: Need more elegant failure
 	// });
 }
-
-// export function getUserFromAuthSub(connection: Connection, oAuthSub: string): Promise<User | undefined> {
-// 	const relations: string[] = [
-// 		"hostedMeals", "mealsAttending", "reviews", "userReviewsAuthored", "recipeReviewsAuthored",
-// 		"savedRecipes", "followedUsers", "followedBy", "recipesAuthored", "followedTags",
-// 	];
-// 	return connection
-// 		.getRepository(User)
-// 		.findOne({
-// 			where: { oAuthSub },
-// 			relations,
-// 		});
-// }
 
 function getKey(header: JwtHeader, cb: Function): void {
 	if (header.kid === undefined) {

@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router";
 import { Alert, Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
 import "./resources/css/NewUser.css";
 
@@ -11,13 +12,21 @@ interface IRetreivedProfileInfo {
 }
 
 export default class NewUser extends React.Component<IRetreivedProfileInfo> {
+	public state: { navigate: boolean } = { navigate: false };
+
 	public render(): JSX.Element {
+		const navigate = this.state.navigate;
 		const firstColSize = 3;
 		const secondColSize = 12 - firstColSize;
+
+		if (navigate) {
+			return <Redirect to={"/"} push={true} />;
+		}
+
 		return (
 			<div>
 				{
-					this.props.emailVerified === true ? (
+					this.props.emailVerified ? (
 						<div></div>
 					) : (
 							<div>
@@ -70,15 +79,9 @@ export default class NewUser extends React.Component<IRetreivedProfileInfo> {
 							</Col>
 						</FormGroup>
 						<FormGroup row>
-							<Label for="name" sm={firstColSize}>Profile Picture</Label>
-							<Col sm={secondColSize}>
-								<Input type="text" name="profilePic" />
-							</Col>
-						</FormGroup>
-						<FormGroup row>
 							<Col sm={firstColSize}></Col>
 							<Col sm={secondColSize}>
-								<Button className="float-right">Submit</Button>
+								<Button className="float-right" onClick={() => this.setState({ navigate: true })}>Submit</Button>
 							</Col>
 						</FormGroup>
 					</Form>
