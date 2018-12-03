@@ -1,7 +1,0 @@
-#profile-summaries > li {
-	margin-bottom: 10px;
-}
-
-#profile-summaries > li:last-child {
-	margin-bottom: 0px;
-}
