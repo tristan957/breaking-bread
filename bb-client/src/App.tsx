@@ -29,7 +29,7 @@ export interface IAppContext {
 interface IUserAuthenticatedResult {
 	userAuthenticated: {
 		id: number;
-	};
+	} | null;
 }
 
 // tslint:disable-next-line: variable-name
@@ -57,7 +57,7 @@ export default class App extends React.Component {
 							</div>
 							<div id="page-content">
 								<div id="content-container">
-									<UserContext.Provider value={{ userID: result.data!.userAuthenticated.id, reloadUser: () => result.refetch(), auth }}>
+									<UserContext.Provider value={{ userID: result.data!.userAuthenticated === null ? undefined : result.data!.userAuthenticated!.id, reloadUser: () => result.refetch(), auth }}>
 										<Switch>
 											<Route exact path="/" component={DashboardPage} />
 											<Route exact path="/m/:mealID" component={MealPage} />

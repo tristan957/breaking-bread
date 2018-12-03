@@ -108,7 +108,5 @@ export class WebAuthentication implements Auth0Authentication {
 		localStorage.removeItem("id_token");
 		localStorage.removeItem("expires_at");
 		localStorage.removeItem("user_id");
-		// navigate to the home route
-		// history.replace("/");
 	}
 }

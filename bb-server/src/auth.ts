@@ -45,6 +45,6 @@ function getKey(header: JwtHeader, cb: Function): void {
 }
 
 // console.log(process.argv[2]);
-getToken(process.argv[2]).then((vafr) => {
-	console.log(vafr.sub);
-});
+// getToken(process.argv[2]).then((vafr) => {
+// 	console.log(vafr.sub);
+// });

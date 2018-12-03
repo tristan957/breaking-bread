@@ -35,27 +35,27 @@ export default class MobileSidebar extends React.Component<IMobileDashboardProps
 		return (
 			<div id="mobile-container">
 				<div id="left">
-					<Menu burgerButtonClassName={"leftPane"} customBurgerIcon={<img src={UserIcon} />}>
-						<div>
-							{this.props.userID === undefined ? undefined : (
+					{this.props.userID === undefined ? undefined : (
+						<Menu burgerButtonClassName={"leftPane"} customBurgerIcon={<img src={UserIcon} />}>
+							<div>
 								<div>
 									<ProfileSummaryContainer userID={this.props.userID} />
 									<TagsContainer userID={this.props.userID} />
 									<TopicsContainer userID={this.props.userID} />
 								</div>
-							)}
-						</div>
-					</Menu>
+							</div>
+						</Menu>
+					)}
 				</div>
 				<div id="center"></div>
 				<div id="right">
-					<Menu burgerButtonClassName={"rightPane"} customBurgerIcon={<img src={MealIcon} />} right>
-						<div>
-							{this.props.userID === undefined ? undefined : (
+					{this.props.userID === undefined ? undefined : (
+						<Menu burgerButtonClassName={"rightPane"} customBurgerIcon={<img src={MealIcon} />} right>
+							<div>
 								<UpcomingMealsContainer userID={this.props.userID} />
-							)}
-						</div>
-					</Menu>
+							</div>
+						</Menu>
+					)}
 				</div>
 			</div>
 		);

@@ -54,7 +54,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 					variables: { "sub": decoded.sub },
 				}).then((result: ApolloQueryResult<IUserSubExistsResult>) => {
 					if (result.data.userSubExists!) {
-						// TODO: Set state higher up and path to dashboard
+						this.props.history.push("/");
 					} else {
 						this.setState({ ...userInfo });
 					}
