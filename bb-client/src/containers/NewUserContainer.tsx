@@ -1,4 +1,5 @@
 import React from "react";
+import { RouteComponentProps } from "react-router";
 import NewUser from "../components/NewUser";
 
 interface IRetreivedProfileInfo {
@@ -7,6 +8,7 @@ interface IRetreivedProfileInfo {
 	lastName?: string;
 	firstName?: string;
 	picture?: string;
+	router: RouteComponentProps;
 }
 
 export default class NewUserContainer extends React.Component<IRetreivedProfileInfo> {
@@ -23,6 +25,7 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 					lastName={this.props.lastName!}
 					firstName={this.props.firstName}
 					picture={this.props.picture!}
+					router={this.props.router}
 				/>
 			);
 		} else {

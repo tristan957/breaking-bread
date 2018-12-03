@@ -4,12 +4,14 @@ import React from "react";
 import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
+import MediaQuery from "react-responsive";
 import { Button, ButtonGroup, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Showdown from "showdown";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
-import { default as logo } from "./resources/images/icon.png";
+import { default as fullLogo } from "./resources/images/bb-logo-full.png";
+import { default as icon } from "./resources/images/icon.png";
 import S3ImageUploader from "./S3ImageUploader";
 
 interface INavigationBarState {
@@ -105,7 +107,12 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 			<div id="navbar">
 				<Navbar color="light" light expand="md">
 					<NavbarBrand href="/" className="bb-navbar-brand">
-						<div id="bb-brand-container"><img id="bb-brand" src={logo} height={30} /></div>
+						<MediaQuery query="(max-width: 499px)">
+							<div id="bb-brand-container"><img id="bb-brand" src={icon} height={30} /></div>
+						</MediaQuery>
+						<MediaQuery query="(min-width: 500px)">
+							<div id="bb-brand-container"><img id="bb-brand" src={fullLogo} height={30} /></div>
+						</MediaQuery>
 					</NavbarBrand>
 					<Nav className="ml-auto" navbar>
 						<NavItem>

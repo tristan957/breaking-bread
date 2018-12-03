@@ -44,7 +44,7 @@ const client = new ApolloClient({
 		new BatchHttpLink({
 			uri,
 			headers: {
-				oAuthSub: "facebook|2245887208763909",
+				oAuthSub: "adjijdfaa",
 			},
 		}),
 	]),

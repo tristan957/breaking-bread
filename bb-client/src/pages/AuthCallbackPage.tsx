@@ -84,6 +84,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 											lastName={this.state.lastName}
 											firstName={this.state.firstName}
 											picture={this.state.imagePath}
+											router={this.props}
 										/>
 									</div>
 								);

@@ -1,28 +1,29 @@
 import React from "react";
-import { Redirect } from "react-router";
+import { RouteComponentProps } from "react-router";
 import { Alert, Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
 import "./resources/css/NewUser.css";
 
 interface IRetreivedProfileInfo {
-	email: string;
-	emailVerified: boolean;
-	lastName: string;
-	firstName: string;
-	picture: string;
+	email?: string;
+	emailVerified?: boolean;
+	lastName?: string;
+	firstName?: string;
+	picture?: string;
+	router: RouteComponentProps;
 }
 
 export default class NewUser extends React.Component<IRetreivedProfileInfo> {
-	public state: { navigate: boolean } = { navigate: false };
+	constructor(props: IRetreivedProfileInfo) {
+		super(props);
+	}
+
+	public redirect = () => {
+		this.props.router.history.push("/");
+	}
 
 	public render(): JSX.Element {
-		const navigate = this.state.navigate;
 		const firstColSize = 3;
 		const secondColSize = 12 - firstColSize;
-
-		if (navigate) {
-			return <Redirect to={"/"} push={true} />;
-		}
-
 		return (
 			<div>
 				{
@@ -81,7 +82,7 @@ export default class NewUser extends React.Component<IRetreivedProfileInfo> {
 						<FormGroup row>
 							<Col sm={firstColSize}></Col>
 							<Col sm={secondColSize}>
-								<Button className="float-right" onClick={() => this.setState({ navigate: true })}>Submit</Button>
+								<Button className="float-right" onClick={this.redirect}>Submit</Button>
 							</Col>
 						</FormGroup>
 					</Form>
