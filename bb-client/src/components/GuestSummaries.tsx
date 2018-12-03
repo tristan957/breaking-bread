@@ -27,6 +27,7 @@ type MealToggleGuestFn = MutationFn<IMealToggleGuestData, IMealToggleGuestVariab
 type MealToggleGuestResult = MutationResult<IMealToggleGuestData>;
 
 interface IGuestSummariesProps {
+	viewerID?: number;
 	mealID: number;
 	guests: Partial<User>[];
 	reload?(): void;
@@ -41,7 +42,7 @@ export default class GuestSummaries extends React.Component<IGuestSummariesProps
 						return (
 							<li key={i} className="guest-summary">
 								<ProfileSummary id={guest.id!} name={guest.name!} imagePath={guest.imagePath} />
-								{this.props.reload === undefined
+								{this.props.reload === undefined || this.props.viewerID === undefined
 									? undefined
 									: (
 										<Mutation mutation={MEAL_TOGGLE_GUEST} onCompleted={() => this.props.reload!()}>
