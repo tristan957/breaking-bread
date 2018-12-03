@@ -1,25 +1,43 @@
-// tslint:disable: no-unsafe-any
 import ApolloClient from "apollo-client";
 import gql from "graphql-tag";
 import moment from "moment";
 import React from "react";
-import { ApolloConsumer } from "react-apollo";
+import { ApolloConsumer, Query, QueryResult } from "react-apollo";
 import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import MediaQuery from "react-responsive";
-import { Button, ButtonGroup, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
+import { Button, ButtonGroup, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Showdown from "showdown";
 import { UserContext } from "../App";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
+import User from "../entities/User";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as fullLogo } from "./resources/images/bb-logo-full.png";
 import { default as icon } from "./resources/images/icon.png";
 
 const USER_RECIPES = gql`
-
+	query UserRecipes($userID: Int!) {
+		user(id: $userID) {
+			id
+			savedRecipes {
+				id
+				name
+			}
+		}
+	}
 `;
+
+interface IUserRecipesData {
+	user?: Partial<User>;
+}
+
+interface IUserRecipesVariables {
+	userID: number;
+}
+
+type UserRecipesResult = QueryResult<IUserRecipesData, IUserRecipesVariables>;
 
 type MealForm = {
 	valid: {
@@ -222,18 +240,6 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 											</Nav>
 										</Navbar>
 
-										{/* Logout Modal */}
-										<Modal size={"sm"} centered={true} isOpen={this.state.logoutModal} toggle={this.toggleLogoutModal}>
-											<ModalHeader toggle={this.toggleLogoutModal}>Sign Out?</ModalHeader>
-											<ModalBody>
-												Are you sure you wish to sign out?
-											</ModalBody>
-											<ModalFooter>
-												<Button className="float-right" onClick={(): void => this.logout(userContext.reloadUser!)}>Yes</Button>
-												<Button className="float-right" onClick={this.toggleLogoutModal}>No</Button>
-											</ModalFooter>
-										</Modal>
-
 										{/* MEAL MODAL */}
 										<Modal size={"lg"} centered={true} isOpen={this.state.mealModal} toggle={this.toggleMealModal}>
 											<ModalHeader toggle={this.toggleMealModal}>New Meal</ModalHeader>
@@ -296,6 +302,26 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 															<CustomInput type="file" id="navbar-images" name="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, endTime: e.target.value } })} />
 														</Col>
 													</FormGroup>
+													<Query query={USER_RECIPES} variables={{ userID: 2 }}>
+														{(result: UserRecipesResult) => {
+															if (result.loading) { return <div></div>; }
+															if (result.error) {
+																console.error(result.error);
+																return <div>{result.error.message}</div>;
+															}
+
+															return (
+																<FormGroup>
+																	<Label for="recipes">Select Recipes</Label>
+																	<Input type="select" name="recipes" id="navbar-recipes" multiple onChange={(e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value)}>
+																		{result.data!.user!.savedRecipes!.map((recipe, i) => {
+																			return <option key={i}>{recipe.id} -- {recipe.name}</option>;
+																		})}
+																	</Input>
+																</FormGroup>
+															);
+														}}
+													</Query>
 													<hr />
 													<Button type="submit" className="float-right">Submit</Button>
 													<Button className="float-right" onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.setState({ ...this.state, mealModal: !this.state.mealModal })}>Cancel</Button>
