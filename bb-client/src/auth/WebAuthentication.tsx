@@ -1,5 +1,4 @@
 import { Auth0DecodedHash, Auth0Error, Auth0ParseHashError, Auth0UserProfile, WebAuth } from "auth0-js";
-import history from "../history";
 import { Auth0Authentication } from "./Auth0Authentication";
 import { AUTH_CONFIG } from "./configuration";
 /**
@@ -16,6 +15,16 @@ export interface IProfileInfo {
 	lastName?: string;
 	firstName?: string;
 	imagePath?: string;
+}
+
+export interface IAccessToken {
+	aud: [string, string];
+	azp: string;
+	exp: number;
+	iat: number;
+	iss: string;
+	scope: string;
+	sub: string;
 }
 
 export class WebAuthentication implements Auth0Authentication {
@@ -86,16 +95,11 @@ export class WebAuthentication implements Auth0Authentication {
 	public setSession = (authResult: Auth0DecodedHash): void => {
 		// tslint:disable-next-line:typedef
 		const { accessToken, expiresIn, idToken } = authResult;
-		// Set the time that the access token will expire at
-		// tslint:disable-next-line:no-non-null-assertion
 		const expiresAt = JSON.stringify(expiresIn! * 1000 + new Date().getTime());
-		// tslint:disable-next-line:no-non-null-assertion
+
 		localStorage.setItem("access_token", accessToken!);
-		// tslint:disable-next-line:no-non-null-assertion
 		localStorage.setItem("id_token", idToken!);
 		localStorage.setItem("expires_at", expiresAt);
-		// navigate to the home route
-		// history.replace("/home");
 	}
 
 	public logout = (): void => {
@@ -105,6 +109,6 @@ export class WebAuthentication implements Auth0Authentication {
 		localStorage.removeItem("expires_at");
 		localStorage.removeItem("user_id");
 		// navigate to the home route
-		history.replace("/");
+		// history.replace("/");
 	}
 }

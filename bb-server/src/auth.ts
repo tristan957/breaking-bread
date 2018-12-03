@@ -11,25 +11,26 @@ const options = {
 	algorithms: ["RS256"],
 };
 
-export function getToken(token: string): void {
+export interface IAccessToken {
+	aud: [string, string];
+	azp: string;
+	exp: number;
+	iat: number;
+	iss: string;
+	scope: string;
+	sub: string;
+}
 
-	// const tokenDecoded = new Promise((resolve, reject) => {
-	jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: {}) => {    // Decoded may need an Interface so context user is usable
-		if (err || decoded === null) {
-			console.log(err);
-		} else {
-			console.log("fej");
-			console.log(decoded);
-		}
+export function getToken(token: string): Promise<IAccessToken> {
+	return new Promise((resolve, reject) => {
+		jwt.verify(token, getKey, options, (err: jwt.VerifyErrors, decoded: IAccessToken) => {    // Decoded may need an Interface so context user is usable
+			if (err || decoded === null) {
+				reject(err);
+			} else {
+				resolve(decoded);
+			}
+		});
 	});
-	// });
-
-	// tokenDecoded.then((decoded) => {
-	// 	console.log(decoded);
-	// 	// TODO: Get user from oAuthSub stored inside hopefully
-	// }).catch(() => {
-	// 	throw Error;  // TODO: Need more elegant failure
-	// });
 }
 
 function getKey(header: JwtHeader, cb: Function): void {
@@ -44,4 +45,6 @@ function getKey(header: JwtHeader, cb: Function): void {
 }
 
 // console.log(process.argv[2]);
-getToken(process.argv[2]);
+getToken(process.argv[2]).then((vafr) => {
+	console.log(vafr.sub);
+});
