@@ -3,6 +3,7 @@ import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import User from "../entities/User";
 import RecipeSummaryContainer from "./RecipeSummaryContainer";
+import "./resources/css/CommonContainers.css";
 
 const USER_AUTHORED_RECIPES = gql`
 	query UserAuthoredRecipes($userID: Int!) {
@@ -76,6 +77,15 @@ export default class RecipeSummariesContainer extends React.Component<IRecipeSum
 					return (
 						<div>
 							<ul className="no-style-list">
+								{
+									recipes.length === 0 ? (
+										<div id={"container-no-items"}>
+											No recipes here!
+									</div>
+									) : (
+											<div></div>
+										)
+								}
 								{recipes.map((recipe, i) => {
 									return (
 										<li key={i}>

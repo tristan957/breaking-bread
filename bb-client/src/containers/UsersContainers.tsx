@@ -3,6 +3,7 @@ import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import User from "../entities/User";
 import ProfileSummaryContainer from "./ProfileSummaryContainer";
+import "./resources/css/CommonContainers.css";
 import "./resources/css/ProfileSummariesContainers.css";
 
 const USER_FOLLOWED_USERS = gql`
@@ -71,6 +72,15 @@ export default class UsersContainers extends React.Component<IUsersContainersPro
 
 					return (
 						<div id="profile-summaries-containers">
+							{
+								users.length === 0 ? (
+									<div id={"container-no-items"}>
+										No users here!
+									</div>
+								) : (
+										<div></div>
+									)
+							}
 							{users.map((user, i) => {
 								return <ProfileSummaryContainer key={i} userID={user.id!} />;
 							})}

@@ -22,6 +22,7 @@ interface INavigationBarState {
 	mealModal: boolean;
 	recipeModal: boolean;
 	mdeState: string | undefined;
+	logoutModal: boolean;
 }
 
 interface INavigationBarProps {
@@ -40,6 +41,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 			mealModal: false,
 			recipeModal: false,
 			mdeState: undefined,
+			logoutModal: false,
 		};
 
 		this.converter = new Showdown.Converter({
@@ -59,6 +61,12 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 
 	public onSuggestSelect = (suggest: any): void => {
 		console.log(suggest);
+	}
+
+	public toggleLogoutModal = (): void => {
+		this.setState({
+			logoutModal: !this.state.logoutModal,
+		});
 	}
 
 	public toggleDropDown = (): void => {
@@ -125,7 +133,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 											<Button onClick={this.login}>Login</Button>
 										)}
 										{authenticated && (
-											<Button onClick={(): void => this.logout(userContext.reloadUser!)}>Logout</Button>
+											<Button onClick={(): void => this.toggleLogoutModal()}>Logout</Button>
 										)}
 									</NavItem>
 									<NavItem>
@@ -144,6 +152,18 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 									</NavItem>
 								</Nav>
 							</Navbar>
+
+							{/* Logout Modal */}
+							<Modal size={"sm"} centered={true} isOpen={this.state.logoutModal} toggle={this.toggleLogoutModal}>
+								<ModalHeader toggle={this.toggleLogoutModal}>Sign Out?</ModalHeader>
+								<ModalBody>
+									Are you sure you wish to sign out?
+								</ModalBody>
+								<ModalFooter>
+									<Button className="float-right" onClick={(): void => this.logout(userContext.reloadUser!)}>Yes</Button>
+									<Button className="float-right" onClick={this.toggleLogoutModal}>No</Button>
+								</ModalFooter>
+							</Modal>
 
 							{/* MEAL MODAL */}
 							<Modal size={"lg"} centered={true} isOpen={this.state.mealModal} toggle={this.toggleMealModal}>
