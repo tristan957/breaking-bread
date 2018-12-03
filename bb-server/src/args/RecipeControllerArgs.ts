@@ -18,7 +18,7 @@ export interface IRecipeEditArgs {
 
 export interface IRecipeSaveArgs {
 	name: string;
-	description?: string;
+	description: string;
 	imagePath?: string;
 }
 

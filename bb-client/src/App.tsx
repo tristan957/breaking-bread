@@ -47,13 +47,13 @@ export default class App extends React.Component {
 					}
 
 					return (
-						<div>
-							<div id="top">
-								<NavigationBar />
-							</div>
-							<div id="page-content">
-								<div id="content-container">
-									<UserContext.Provider value={{ userID: result.data!.userAuthenticated.id, reloadUser: () => result.refetch() }}>
+						<UserContext.Provider value={{ userID: result.data!.userAuthenticated.id, reloadUser: () => result.refetch() }}>
+							<div>
+								<div id="top">
+									<NavigationBar />
+								</div>
+								<div id="page-content">
+									<div id="content-container">
 										<Switch>
 											<Route exact path="/" component={DashboardPage} />
 											<Route exact path="/m/:mealID" component={MealPage} />
@@ -61,10 +61,10 @@ export default class App extends React.Component {
 											<Route exact path="/r/:recipeID" component={RecipePage} />
 											<Route component={NotFound} />
 										</Switch>
-									</UserContext.Provider>
+									</div>
 								</div>
 							</div>
-						</div>
+						</UserContext.Provider>
 					);
 				}}
 			</Query>

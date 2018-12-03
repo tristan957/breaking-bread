@@ -42,7 +42,7 @@ export default class RecipeController {
 	public async recipeSave(args: IInput<IRecipeSaveArgs>): Promise<Recipe | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const recipe: Recipe | undefined = await this.recipeRepository.findOne({ ...args.input });
-		return recipe === undefined ? this.recipeRepository.save(this.recipeRepository.create(args.input)) : recipe;
+		return recipe === undefined ? this.recipeRepository.save(this.recipeRepository.create({ ...args.input, author: this.currentUser })) : recipe;
 	}
 
 	@Mutation()
