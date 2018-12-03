@@ -51,34 +51,23 @@ export default class App extends React.Component {
 					const auth: WebAuthentication = new WebAuthentication();
 
 					return (
-<<<<<<< HEAD
-						<UserContext.Provider value={{ userID: result.data!.userAuthenticated.id, reloadUser: () => result.refetch() }}>
-							<div>
-								<div id="top">
-									<NavigationBar />
-								</div>
-								<div id="page-content">
-									<div id="content-container">
-=======
-						<div>
+						<UserContext.Provider value={{ userID: result.data!.userAuthenticated.id, reloadUser: () => result.refetch() }}>							<div>
 							<div id="top">
 								<NavigationBar auth={auth} />
 							</div>
 							<div id="page-content">
 								<div id="content-container">
-									<UserContext.Provider value={{ userID: result.data!.userAuthenticated.id, reloadUser: () => result.refetch(), auth }}>
->>>>>>> 09527e41a1ee96b933a0abf0dc1723e915961b45
-										<Switch>
-											<Route exact path="/" component={DashboardPage} />
-											<Route exact path="/m/:mealID" component={MealPage} />
-											<Route exact path="/p/:userID" component={ProfilePage} />
-											{/* <Route exact path="/r/:recipeID" component={RecipePage} /> */}
-											<Route exact path="/bb-auth" component={AuthCallbackPage} />
-											<Route component={NotFound} />
-										</Switch>
-									</div>
+									<Switch>
+										<Route exact path="/" component={DashboardPage} />
+										<Route exact path="/m/:mealID" component={MealPage} />
+										<Route exact path="/p/:userID" component={ProfilePage} />
+										{/* <Route exact path="/r/:recipeID" component={RecipePage} /> */}
+										<Route exact path="/bb-auth" component={AuthCallbackPage} />
+										<Route component={NotFound} />
+									</Switch>
 								</div>
 							</div>
+						</div>
 						</UserContext.Provider>
 					);
 				}}
