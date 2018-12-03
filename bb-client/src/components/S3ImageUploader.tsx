@@ -12,6 +12,7 @@ type SignedRequestData = {
 interface IS3ImageUploaderState {
 	images: FileList | null;
 	imageUrls: string[];
+	label: string;
 }
 
 interface IS3ImageUploaderProps {
@@ -24,7 +25,9 @@ class S3ImageUploader extends Component<IS3ImageUploaderProps, IS3ImageUploaderS
 		this.state = {
 			images: null,
 			imageUrls: [],
+			label: "",
 		};
+		// this.submit = React.createRef();
 	}
 
 	public s3Sign(file: File): SignedRequestData {
@@ -63,6 +66,11 @@ class S3ImageUploader extends Component<IS3ImageUploaderProps, IS3ImageUploaderS
 
 	public fileOnChange = (pics: FileList | null) => {
 		this.setState({ images: pics });
+		if (pics !== null) {
+			this.updateLabel(pics[0].name);
+		} else {
+			this.updateLabel("No file selected");
+		}
 	}
 
 	public uploadPicture(file: File): void {
@@ -84,6 +92,12 @@ class S3ImageUploader extends Component<IS3ImageUploaderProps, IS3ImageUploaderS
 		}
 	}
 
+	public updateLabel = (s: string): void => {
+		this.setState({
+			label: s,
+		});
+	}
+
 	public submit = (e: React.MouseEvent): void => {
 		if (this.state.images) {
 			Array.from(this.state.images).forEach(pic => { this.uploadPicture(pic); });
@@ -97,8 +111,10 @@ class S3ImageUploader extends Component<IS3ImageUploaderProps, IS3ImageUploaderS
 			<div>
 				<CustomInput
 					type="file"
+					label={this.state.label}
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.fileOnChange(e.target.files)} />
 				<Button onClick={this.submit}>upload</Button>
+				{/* TODO: call submit function */}
 			</div>
 		);
 	}

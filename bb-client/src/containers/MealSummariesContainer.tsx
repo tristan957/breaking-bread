@@ -1,6 +1,7 @@
 import React from "react";
 import Meal from "../entities/Meal";
 import MealSummaryContainer from "./MealSummaryContainer";
+import "./resources/css/CommonContainers.css";
 
 interface IMealSummariesContainerProps {
 	meals: Partial<Meal>[];
@@ -25,6 +26,15 @@ export default class MealSummariesContainer extends React.Component<IMealSummari
 		return (
 			<div>
 				<ul className="no-style-list">
+					{
+						this.props.meals.length === 0 ? (
+							<div id={"container-no-items"}>
+								No meals here!
+							</div>
+						) : (
+								<div></div>
+							)
+					}
 					{
 						this.props.meals.map((meal, i) => {
 							return (

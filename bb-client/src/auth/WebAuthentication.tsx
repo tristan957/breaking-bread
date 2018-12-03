@@ -63,7 +63,7 @@ export class WebAuthentication implements Auth0Authentication {
 					reject(err);
 				} else {
 					if (result !== null && result.accessToken !== undefined && result.idToken !== undefined && result.expiresIn !== undefined) {
-						this.setSession(result);
+						this.setSession(result); // TODO: Change where the headers are set
 
 						resolve(this.getUserInfo(result));
 					}
@@ -108,7 +108,5 @@ export class WebAuthentication implements Auth0Authentication {
 		localStorage.removeItem("id_token");
 		localStorage.removeItem("expires_at");
 		localStorage.removeItem("user_id");
-		// navigate to the home route
-		// history.replace("/");
 	}
 }

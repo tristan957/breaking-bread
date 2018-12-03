@@ -42,7 +42,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 		};
 	}
 
-	public handleAuthentication = (auth: WebAuthentication, client: ApolloClient<any>): void => {
+	public handleAuthentication = (auth: WebAuthentication, reloadUser: Function, client: ApolloClient<any>): void => {
 		if (/access_token|id_token|error/.test(location.hash)) {
 			auth.handleAuthentication().then((userInfo: IProfileInfo) => {
 				const accessToken: string | null = localStorage.getItem("access_token");
@@ -54,7 +54,8 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 					variables: { "sub": decoded.sub },
 				}).then((result: ApolloQueryResult<IUserSubExistsResult>) => {
 					if (result.data.userSubExists!) {
-						// TODO: Set state higher up and path to dashboard
+						reloadUser();
+						this.props.history.push("/");
 					} else {
 						this.setState({ ...userInfo });
 					}
@@ -62,13 +63,12 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 					console.log(err); // TODO: Invalid login
 				});
 			}).catch((err: Auth0Error) => {
-				console.log(err); // TODO: Invalid login
+				console.log(err); // TODO: Invalid login // FIXME: Need to investigate excess trigger here
 			});
 		}
 	}
 
 	public render(): JSX.Element {
-		console.log(this.props);
 		return (
 			<UserContext.Consumer>
 				{userContext => {
@@ -82,7 +82,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 									);
 								}
 
-								this.handleAuthentication(userContext.auth, client);
+								this.handleAuthentication(userContext.auth, userContext.reloadUser!, client);
 								return (
 									<div>
 										<NewUserContainer
@@ -92,6 +92,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 											firstName={this.state.firstName}
 											picture={this.state.imagePath}
 											router={this.props}
+											reloadUser={userContext.reloadUser!}
 										/>
 									</div>
 								);

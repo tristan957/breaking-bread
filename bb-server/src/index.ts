@@ -2,6 +2,7 @@ import { GraphQLDateTime } from "graphql-iso-date";
 import { ContainerInstance } from "typedi";
 import { getManager } from "typeorm";
 import { Action, bootstrap } from "vesper";
+import { getToken, IAccessToken } from "./auth";
 import controllers from "./controllers";
 import { Allergy, entities, Meal, Recipe, RecipeReview, Tag, Topic, User, UserReview } from "./entities";
 import { AllergyRepository, MealRepository, RecipeRepository, RecipeReviewRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "./repositories";
@@ -60,9 +61,16 @@ bootstrap({
 	},
 	setupContainer: async (container: ContainerInstance, action: Action) => {
 		const request = action.request; // user request, you can get http headers from it
-		// const decodeToken = await getToken();
-		const user: User | undefined = await getManager().findOne(User, { oAuthSub: request.headers.oauthsub as string });
+		let sub = "";
+		try {
+			const decodeToken: IAccessToken = await getToken(request.headers.token_bearer as string);
+			sub = decodeToken.sub;
+		} catch (err) {
+			// Will be caught later in query and resolver
+		}
+		const user: User | undefined = await getManager().findOne(User, { oAuthSub: sub });
 		container.set(User, user);
+
 	},
 	cors: true,
 	logger: (err) => console.log(err),
