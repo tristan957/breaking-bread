@@ -1,4 +1,4 @@
-import { InMemoryCache } from "apollo-cache-inmemory";
+import { InMemoryCache, NormalizedCacheObject } from "apollo-cache-inmemory";
 import ApolloClient from "apollo-client";
 import { ApolloLink } from "apollo-link";
 import { BatchHttpLink } from "apollo-link-batch-http";
@@ -44,11 +44,29 @@ console.log(`URI: ${uri}`);
 // tslint:disable-next-line: variable-name
 export const UserContext = React.createContext<IAppContext>({ userID: undefined, reloadUser: undefined, auth: undefined });
 
-export default class App extends React.Component {
-	public render(): JSX.Element {
+interface IAppState {
+	client: ApolloClient<NormalizedCacheObject>;
+}
+
+export default class App extends React.Component<{}, IAppState> {
+	constructor(props: {}) {
+		super(props);
+
+		this.state = {
+			client: this.refreshApolloClient(),
+		};
+	}
+
+	public reloadUser = (): void => {
+		this.setState({
+			client: this.refreshApolloClient(),
+		});
+	}
+
+	public refreshApolloClient = (): ApolloClient<NormalizedCacheObject> => {
 		let accessToken: string | null = localStorage.getItem("access_token");
 		accessToken = accessToken === null ? "" : accessToken;
-		const client = new ApolloClient({
+		return new ApolloClient({
 			link: ApolloLink.from([
 				onError((error: ErrorResponse) => {
 					console.log("I AM AN ERROR");
@@ -78,9 +96,11 @@ export default class App extends React.Component {
 			]),
 			cache: new InMemoryCache(),
 		});
+	}
 
+	public render(): JSX.Element {
 		return (
-			<ApolloProvider client={client}>
+			<ApolloProvider client={this.state.client}>
 				<Query query={USER_AUTHENTICATED}>
 					{(result: QueryResult<IUserAuthenticatedResult>) => {
 						if (result.loading) {
@@ -95,12 +115,12 @@ export default class App extends React.Component {
 
 						return (
 							<div>
-								<div id="top">
-									<NavigationBar auth={auth} />
-								</div>
-								<div id="page-content">
-									<div id="content-container">
-										<UserContext.Provider value={{ userID: result.data!.userAuthenticated === null ? undefined : result.data!.userAuthenticated!.id, reloadUser: () => result.refetch(), auth }}>
+								<UserContext.Provider value={{ userID: result.data!.userAuthenticated === null ? undefined : result.data!.userAuthenticated!.id, reloadUser: this.reloadUser, auth }}>
+									<div id="top">
+										<NavigationBar auth={auth} />
+									</div>
+									<div id="page-content">
+										<div id="content-container">
 											<Switch>
 												<Route exact path="/" component={DashboardPage} />
 												<Route exact path="/m/:mealID" component={MealPage} />
@@ -109,9 +129,9 @@ export default class App extends React.Component {
 												<Route exact path="/bb-auth" component={AuthCallbackPage} />
 												<Route component={NotFound} />
 											</Switch>
-										</UserContext.Provider>
+										</div>
 									</div>
-								</div>
+								</UserContext.Provider>
 							</div>
 						);
 					}}

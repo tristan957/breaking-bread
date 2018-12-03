@@ -42,7 +42,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 		};
 	}
 
-	public handleAuthentication = (auth: WebAuthentication, client: ApolloClient<any>): void => {
+	public handleAuthentication = (auth: WebAuthentication, reloadUser: Function, client: ApolloClient<any>): void => {
 		if (/access_token|id_token|error/.test(location.hash)) {
 			auth.handleAuthentication().then((userInfo: IProfileInfo) => {
 				const accessToken: string | null = localStorage.getItem("access_token");
@@ -54,6 +54,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 					variables: { "sub": decoded.sub },
 				}).then((result: ApolloQueryResult<IUserSubExistsResult>) => {
 					if (result.data.userSubExists!) {
+						reloadUser();
 						this.props.history.push("/");
 					} else {
 						this.setState({ ...userInfo });
@@ -68,7 +69,6 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 	}
 
 	public render(): JSX.Element {
-		console.log(this.props);
 		return (
 			<UserContext.Consumer>
 				{userContext => {
@@ -82,7 +82,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 									);
 								}
 
-								this.handleAuthentication(userContext.auth, client);
+								this.handleAuthentication(userContext.auth, userContext.reloadUser!, client);
 								return (
 									<div>
 										<NewUserContainer

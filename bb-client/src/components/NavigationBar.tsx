@@ -7,6 +7,7 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 import MediaQuery from "react-responsive";
 import { Button, ButtonGroup, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Showdown from "showdown";
+import { UserContext } from "../App";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
@@ -51,8 +52,9 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 		this.props.auth.login();
 	}
 
-	public logout = () => {
+	public logout = (reloadUser: Function) => {
 		this.props.auth.logout();
+		reloadUser();
 	}
 
 	public onSuggestSelect = (suggest: any): void => {
@@ -104,149 +106,155 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 		const { authenticated }: { authenticated: boolean } = this.props.auth;
 
 		return (
-			<div id="navbar">
-				<Navbar color="light" light expand="md">
-					<NavbarBrand href="/" className="bb-navbar-brand">
-						<MediaQuery query="(max-width: 499px)">
-							<div id="bb-brand-container"><img id="bb-brand" src={icon} height={30} /></div>
-						</MediaQuery>
-						<MediaQuery query="(min-width: 500px)">
-							<div id="bb-brand-container"><img id="bb-brand" src={fullLogo} height={30} /></div>
-						</MediaQuery>
-					</NavbarBrand>
-					<Nav className="ml-auto" navbar>
-						<NavItem>
-							{!authenticated && (
-								<Button onClick={this.login}>Login</Button>
-							)}
-							{authenticated && (
-								<Button onClick={this.logout}>Logout</Button>
-							)}
-						</NavItem>
-						<NavItem>
-							{authenticated && (
-								<ButtonGroup>
-									<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
-										<DropdownToggle> + </DropdownToggle>
-										<DropdownMenu>
-											<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
-											<DropdownItem divider />
-											<DropdownItem onClick={this.toggleRecipeModal}>New Receipe</DropdownItem>
-										</DropdownMenu>
-									</Dropdown>
-								</ButtonGroup>
-							)}
-						</NavItem>
-					</Nav>
-				</Navbar>
+			<UserContext.Consumer>
+				{userContext => {
+					return (
+						<div id="navbar">
+							<Navbar color="light" light expand="md">
+								<NavbarBrand href="/" className="bb-navbar-brand">
+									<MediaQuery query="(max-width: 499px)">
+										<div id="bb-brand-container"><img id="bb-brand" src={icon} height={30} /></div>
+									</MediaQuery>
+									<MediaQuery query="(min-width: 500px)">
+										<div id="bb-brand-container"><img id="bb-brand" src={fullLogo} height={30} /></div>
+									</MediaQuery>
+								</NavbarBrand>
+								<Nav className="ml-auto" navbar>
+									<NavItem>
+										{!authenticated && (
+											<Button onClick={this.login}>Login</Button>
+										)}
+										{authenticated && (
+											<Button onClick={(): void => this.logout(userContext.reloadUser!)}>Logout</Button>
+										)}
+									</NavItem>
+									<NavItem>
+										{authenticated && (
+											<ButtonGroup>
+												<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
+													<DropdownToggle> + </DropdownToggle>
+													<DropdownMenu>
+														<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
+														<DropdownItem divider />
+														<DropdownItem onClick={this.toggleRecipeModal}>New Receipe</DropdownItem>
+													</DropdownMenu>
+												</Dropdown>
+											</ButtonGroup>
+										)}
+									</NavItem>
+								</Nav>
+							</Navbar>
 
-				{/* MEAL MODAL */}
-				<Modal size={"lg"} centered={true} isOpen={this.state.mealModal} toggle={this.toggleMealModal}>
-					<ModalHeader toggle={this.toggleMealModal}>New Meal</ModalHeader>
-					<ModalBody>
-						<Form>
-							<FormGroup row>
-								<Label for="date" sm={firstColumnWidth}>Date</Label>
-								<Col sm={secondColumnWidth}>
-									<Input type="date" name="date" id="navbar-date" />
-								</Col>
-							</FormGroup>
-							<FormGroup row>
-								<Label for="time" sm={firstColumnWidth}>Time</Label>
-								<Col sm={secondColumnWidth}>
-									<Input type="time" name="time" id="navbar-time" defaultValue="12:00" />
-								</Col>
-							</FormGroup>
-							<FormGroup row>
-								<Label for="location" sm={firstColumnWidth}>Location</Label>
-								<Col sm={secondColumnWidth}>
-									<GeoSuggest />
-								</Col>
-							</FormGroup>
-							<FormGroup row>
-								<Label for="description" sm={firstColumnWidth}>Meal Description</Label>
-								<Col sm={secondColumnWidth}>
-									<div className="navbar-description-container">
-										<ReactMde
-											onChange={this.handleValueChange}
-											generateMarkdownPreview={markdown =>
-												Promise.resolve(this.converter.makeHtml(markdown))}
-											buttonContentOptions={{
-												iconProvider: name => <i className={`fa fa-${name}`} />,
-											}}
-										/>
-									</div>
-								</Col>
-							</FormGroup>
-							<FormGroup row>
-								<Label for="tags" sm={firstColumnWidth}>Tags</Label>
-								<Col sm={secondColumnWidth}>
-									<Input type="text" name="tags" id="navbar-tags" />
-								</Col>
-							</FormGroup>
-							<FormGroup row>
-								<Label for="guests" sm={firstColumnWidth}>Number of Guests</Label>
-								<Col sm={secondColumnWidth}>
-									<InputGroup>
-										<Input type="number" max={10} min={1} step="1" />
-									</InputGroup>
-								</Col>
-							</FormGroup>
-							<FormGroup row>
-								<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
-								<Col sm={secondColumnWidth}>
-									{/* <CustomInput type="file" id="navbar-images" name="file" /> */}
-									<S3ImageUploader folderName="mealImage" />
-								</Col>
-							</FormGroup>
-						</Form>
-					</ModalBody>
-					<ModalFooter>
-						<Button className="float-right">Invite</Button>
-						<Button className="float-right">Submit</Button>
-					</ModalFooter>
-				</Modal>
+							{/* MEAL MODAL */}
+							<Modal size={"lg"} centered={true} isOpen={this.state.mealModal} toggle={this.toggleMealModal}>
+								<ModalHeader toggle={this.toggleMealModal}>New Meal</ModalHeader>
+								<ModalBody>
+									<Form>
+										<FormGroup row>
+											<Label for="date" sm={firstColumnWidth}>Date</Label>
+											<Col sm={secondColumnWidth}>
+												<Input type="date" name="date" id="navbar-date" />
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="time" sm={firstColumnWidth}>Time</Label>
+											<Col sm={secondColumnWidth}>
+												<Input type="time" name="time" id="navbar-time" defaultValue="12:00" />
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="location" sm={firstColumnWidth}>Location</Label>
+											<Col sm={secondColumnWidth}>
+												<GeoSuggest />
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="description" sm={firstColumnWidth}>Meal Description</Label>
+											<Col sm={secondColumnWidth}>
+												<div className="navbar-description-container">
+													<ReactMde
+														onChange={this.handleValueChange}
+														generateMarkdownPreview={markdown =>
+															Promise.resolve(this.converter.makeHtml(markdown))}
+														buttonContentOptions={{
+															iconProvider: name => <i className={`fa fa-${name}`} />,
+														}}
+													/>
+												</div>
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="tags" sm={firstColumnWidth}>Tags</Label>
+											<Col sm={secondColumnWidth}>
+												<Input type="text" name="tags" id="navbar-tags" />
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="guests" sm={firstColumnWidth}>Number of Guests</Label>
+											<Col sm={secondColumnWidth}>
+												<InputGroup>
+													<Input type="number" max={10} min={1} step="1" />
+												</InputGroup>
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
+											<Col sm={secondColumnWidth}>
+												{/* <CustomInput type="file" id="navbar-images" name="file" /> */}
+												<S3ImageUploader folderName="mealImage" />
+											</Col>
+										</FormGroup>
+									</Form>
+								</ModalBody>
+								<ModalFooter>
+									<Button className="float-right">Invite</Button>
+									<Button className="float-right">Submit</Button>
+								</ModalFooter>
+							</Modal>
 
-				{/* RECIPE MODAL */}
-				<Modal size={"lg"} centered={true} isOpen={this.state.recipeModal} toggle={this.toggleRecipeModal}>
-					<ModalHeader toggle={this.toggleRecipeModal}>New Recipe</ModalHeader>
-					<ModalBody>
-						<Form>
-							<FormGroup row>
-								<Label for="description" sm={firstColumnWidth}>Recipe Description</Label>
-								<Col sm={secondColumnWidth}>
-									<div className="navbar-description-container">
-										<ReactMde
-											onChange={this.handleValueChange}
-											generateMarkdownPreview={markdown =>
-												Promise.resolve(this.converter.makeHtml(markdown))}
-											buttonContentOptions={{
-												iconProvider: name => <i className={`fa fa-${name}`} />,
-											}}
-										/>
-									</div>
-								</Col>
-							</FormGroup>
-							<FormGroup row>
-								<Label for="tags" sm={firstColumnWidth}>Tags</Label>
-								<Col sm={secondColumnWidth}>
-									<Input type="text" name="tags" id="navbar-tags" />
-								</Col>
-							</FormGroup>
-							<FormGroup row>
-								<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
-								<Col sm={secondColumnWidth}>
-									{/* <CustomInput type="file" id="navbar-images" name="file" /> */}
-									<S3ImageUploader folderName="recipeImage" />
-								</Col>
-							</FormGroup>
-						</Form>
-					</ModalBody>
-					<ModalFooter>
-						<Button className="float-right">Submit</Button>
-					</ModalFooter>
-				</Modal>
-			</div>
+							{/* RECIPE MODAL */}
+							<Modal size={"lg"} centered={true} isOpen={this.state.recipeModal} toggle={this.toggleRecipeModal}>
+								<ModalHeader toggle={this.toggleRecipeModal}>New Recipe</ModalHeader>
+								<ModalBody>
+									<Form>
+										<FormGroup row>
+											<Label for="description" sm={firstColumnWidth}>Recipe Description</Label>
+											<Col sm={secondColumnWidth}>
+												<div className="navbar-description-container">
+													<ReactMde
+														onChange={this.handleValueChange}
+														generateMarkdownPreview={markdown =>
+															Promise.resolve(this.converter.makeHtml(markdown))}
+														buttonContentOptions={{
+															iconProvider: name => <i className={`fa fa-${name}`} />,
+														}}
+													/>
+												</div>
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="tags" sm={firstColumnWidth}>Tags</Label>
+											<Col sm={secondColumnWidth}>
+												<Input type="text" name="tags" id="navbar-tags" />
+											</Col>
+										</FormGroup>
+										<FormGroup row>
+											<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
+											<Col sm={secondColumnWidth}>
+												{/* <CustomInput type="file" id="navbar-images" name="file" /> */}
+												<S3ImageUploader folderName="recipeImage" />
+											</Col>
+										</FormGroup>
+									</Form>
+								</ModalBody>
+								<ModalFooter>
+									<Button className="float-right">Submit</Button>
+								</ModalFooter>
+							</Modal>
+						</div>
+					);
+				}}
+			</UserContext.Consumer>
 		);
 	}
 }
