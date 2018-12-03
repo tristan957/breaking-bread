@@ -107,6 +107,11 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 		return this.converter.makeHtml(markdown);
 	}
 
+	public uploadS3Image = (): void => {
+		// this.refs.child.submit();
+		// this.props.children.
+	}
+
 	public render(): JSX.Element {
 		const firstColumnWidth = 3;
 		const secondColumnWidth = 12 - firstColumnWidth;
@@ -262,7 +267,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 											<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
 											<Col sm={secondColumnWidth}>
 												{/* <CustomInput type="file" id="navbar-images" name="file" /> */}
-												<S3ImageUploader folderName="recipeImage" />
+												<S3ImageUploader ref={"child"} folderName="recipeImage" />
 											</Col>
 										</FormGroup>
 									</Form>
