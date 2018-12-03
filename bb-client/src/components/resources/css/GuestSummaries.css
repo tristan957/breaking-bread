@@ -1,0 +1,17 @@
+#guest-summaries > .guest-summary > * {
+	margin-right: 10px;
+}
+
+#guest-summaries > .guest-summary > *:last-child {
+	margin-right: 0px;
+}
+
+.guest-summary {
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+}
+
+#guest-summaries > .guest-summary:last-child {
+	margin-bottom: 0px;
+}

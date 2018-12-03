@@ -6,7 +6,7 @@ import { Markdown } from "react-showdown";
 import { Button } from "reactstrap";
 import { UserContext } from "../App";
 import CreatorSummary from "../components/CreatorSummary";
-import ProfileSummaries from "../components/ProfileSummaries";
+import GuestSummaries from "../components/GuestSummaries";
 import RecipeSummary from "../components/RecipeSummary";
 import MealSummaryContainer from "../containers/MealSummaryContainer";
 import Meal from "../entities/Meal";
@@ -88,14 +88,6 @@ interface IMealPageParams {
 }
 
 export default class MealPage extends React.Component<RouteComponentProps<IMealPageParams>> {
-	private rsvp = (toggleGuest: Function, refetch: Function): void => {
-
-	}
-
-	private cancel = (toggleGuest: Function, refetch: Function): void => {
-
-	}
-
 	public render(): JSX.Element {
 		return (
 			<UserContext.Consumer>
@@ -113,15 +105,19 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 									return <div></div>;
 								}
 
-								const isGuest = userContext.userID === undefined || result.data!.meal!.guests === undefined || result.data!.meal!.guests!.length === 0
-									? false
-									: result.data!.meal!.guests!.some(guest => {
-										if (guest.id === userContext.userID) {
-											return true;
-										}
+								const isHost = userContext.userID === result.data!.meal!.host!.id;
+								let isGuest = false;
+								if (!isHost) {
+									isGuest = userContext.userID === undefined || result.data!.meal!.guests === undefined || result.data!.meal!.guests!.length === 0
+										? false
+										: result.data!.meal!.guests!.some(guest => {
+											if (guest.id === userContext.userID) {
+												return true;
+											}
 
-										return false;
-									});
+											return false;
+										});
+								}
 
 								return (
 									<div id="meal-page">
@@ -175,7 +171,7 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 																return <div>{mResult.error.message}</div>;
 															}
 
-															return userContext.userID === undefined || userContext.userID === result.data!.meal!.host!.id
+															return userContext.userID === undefined || isHost
 																? <div></div>
 																: isGuest
 																	? <Button color="danger" onClick={(e: React.MouseEvent<HTMLButtonElement>) => mealToggleGuest()}>Cancel</Button>
@@ -184,7 +180,11 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 													</Mutation>
 												</div>
 												<hr />
-												<ProfileSummaries users={result.data!.meal!.guests!} />
+												<GuestSummaries
+													mealID={mealID}
+													guests={result.data!.meal!.guests!}
+													reload={() => result.refetch()}
+												/>
 											</div>
 										</div>
 										{/* TODO: If the meal has past, and the context user was a guest => review ability should show */}

@@ -61,7 +61,7 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 							</Badge>
 						</div>
 						<div id="recipe-summary-buttons">
-							{this.props.authorID === this.props.viewerID
+							{this.props.authorID === this.props.viewerID || this.props.viewerID === undefined
 								? <Button disabled outline color="secondary" className="recipe-summary-action">Review</Button>
 								: <Button outline color="secondary" className="recipe-summary-action" onClick={this.toggle}>Review</Button>
 							}
@@ -93,7 +93,14 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 									<Button color="danger" onClick={this.toggle}>Cancel</Button>
 								</ModalFooter>
 							</Modal>
-							<Button outline color="secondary" className="recipe-summary-action">Save</Button>
+							<Button
+								outline
+								disabled={!(this.props.authorID !== this.props.viewerID && this.props.viewerID !== undefined)}
+								color="secondary"
+								className="recipe-summary-action"
+							>
+								Save
+							</Button>
 						</div>
 					</div>
 					<div id="recipe-summary-card-right">
