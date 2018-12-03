@@ -6,6 +6,10 @@ export interface IUserArgs {
 	id: number;
 }
 
+export interface IUserSubArgs {
+	sub: string;
+}
+
 export interface IUserSaveArgs {
 	firstName: string;
 	lastName: string;

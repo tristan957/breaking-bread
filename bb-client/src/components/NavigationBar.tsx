@@ -4,12 +4,12 @@ import React from "react";
 import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
-import { Button, ButtonGroup, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
+import { Button, ButtonGroup, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Showdown from "showdown";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
-import { default as logo } from "./resources/images/logo_icon.png";
+import { default as logo } from "./resources/images/icon.png";
 import S3ImageUploader from "./S3ImageUploader";
 
 interface INavigationBarState {
@@ -107,31 +107,29 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 					<NavbarBrand href="/" className="bb-navbar-brand">
 						<div id="bb-brand-container"><img id="bb-brand" src={logo} height={30} /></div>
 					</NavbarBrand>
-					<Nav navbar>
-						{!authenticated && (
-							<Button onClick={this.login}>Login</Button>
-						)}
-						{authenticated && (
-							<Button onClick={this.logout}>Logout</Button>
-						)}
-					</Nav>
 					<Nav className="ml-auto" navbar>
-						{!authenticated && (
-							<Button onClick={this.login}>Login</Button>
-						)}
-						{authenticated && (
-							<ButtonGroup>
-								<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
-									<DropdownToggle caret> + </DropdownToggle>
-									<DropdownMenu>
-										<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
-										<DropdownItem divider />
-										<DropdownItem onClick={this.toggleRecipeModal}>New Receipe</DropdownItem>
-									</DropdownMenu>
-								</Dropdown>
+						<NavItem>
+							{!authenticated && (
+								<Button onClick={this.login}>Login</Button>
+							)}
+							{authenticated && (
 								<Button onClick={this.logout}>Logout</Button>
-							</ButtonGroup>
-						)}
+							)}
+						</NavItem>
+						<NavItem>
+							{authenticated && (
+								<ButtonGroup>
+									<Dropdown isOpen={this.state.dropDown} toggle={this.toggleDropDown}>
+										<DropdownToggle> + </DropdownToggle>
+										<DropdownMenu>
+											<DropdownItem onClick={this.toggleMealModal}>New Meal</DropdownItem>
+											<DropdownItem divider />
+											<DropdownItem onClick={this.toggleRecipeModal}>New Receipe</DropdownItem>
+										</DropdownMenu>
+									</Dropdown>
+								</ButtonGroup>
+							)}
+						</NavItem>
 					</Nav>
 				</Navbar>
 
@@ -149,7 +147,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 							<FormGroup row>
 								<Label for="time" sm={firstColumnWidth}>Time</Label>
 								<Col sm={secondColumnWidth}>
-									<Input type="time" name="time" id="navbar-time" />
+									<Input type="time" name="time" id="navbar-time" defaultValue="12:00" />
 								</Col>
 							</FormGroup>
 							<FormGroup row>
