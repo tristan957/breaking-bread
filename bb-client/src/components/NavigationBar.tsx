@@ -15,7 +15,8 @@ import { default as logo } from "./resources/images/icon.png";
 const USER_RECIPES = gql`
 	query UserRecipes($userID: Int!) {
 		user(id: $userID) {
-			recipes {
+			id
+			savedRecipes {
 				id
 				name
 			}
@@ -229,7 +230,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 										<FormGroup>
 											<Label for="recipes">Select Recipes</Label>
 											<Input type="select" name="recipes" id="navbar-recipes" multiple onChange={(e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value)}>
-												{result.data!.user!.recipes!.map((recipe, i) => {
+												{result.data!.user!.savedRecipes!.map((recipe, i) => {
 													return <option key={i}>{recipe.id} -- {recipe.name}</option>;
 												})}
 											</Input>
