@@ -119,7 +119,7 @@ export default class UserController {
 	}
 
 	public async toggleFollowedTags(currentUser: User, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
-		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["tags"] });
+		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["followedTags"] });
 		if (user === undefined) { return undefined; }
 
 		this.tagRepository.toggleTagsList(user.followedTags, tags);

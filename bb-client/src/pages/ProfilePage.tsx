@@ -3,6 +3,7 @@ import React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
+import { TopicType } from "../components/Topics";
 import ProfileActivityContainer from "../containers/ProfileActivityContainer";
 import ProfileHeaderContainer from "../containers/ProfileHeaderContainer";
 import TopicsContainer from "../containers/TopicsContainer";
@@ -19,7 +20,7 @@ const USER_VALIDATE = gql`
 `;
 
 interface IUserValidateData {
-	user: Partial<User> | null;
+	user?: Partial<User>;
 }
 
 interface IUserValidateVariables {
@@ -49,9 +50,11 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 									return <div>{result.error.message}</div>;
 								}
 
-								if (result.data!.user === null) {
+								if (result.data!.user === undefined) {
 									return <div>TODO: this should be a user not found page</div>;
 								}
+
+								const isViewingSelf = userContext.userID === undefined || userContext.userID !== userID ? false : true;
 
 								return (
 									<div id="profile-page">
@@ -61,8 +64,8 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 											</div>
 											<div id="profile-info-bottom">
 												<div id="profile-info-topics">
-													<TopicsContainer userID={result.data!.user!.id!} />
-													<TopicsContainer userID={result.data!.user!.id!} />
+													<TopicsContainer userID={result.data!.user!.id!} mutable={isViewingSelf} type={TopicType.WHITELIST} />
+													<TopicsContainer userID={result.data!.user!.id!} mutable={isViewingSelf} type={TopicType.BLACKLIST} />
 												</div>
 												<div id="profile-info-upcoming">
 													<UpcomingMealsContainer userID={userID} />

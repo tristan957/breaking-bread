@@ -1,0 +1,12 @@
+.tag-list > .tags-list-tag > * {
+	margin-right: 10px;
+}
+
+.tag-list > .tags-list-tag > *:last-child {
+	margin-right: 0px;
+}
+
+.tags-list-tag {
+	display: flex;
+	justify-content: space-between;
+}

@@ -4,6 +4,7 @@ import MediaQuery from "react-responsive";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
 import MobileSidebar from "../components/MobileSidebar";
+import { TopicType } from "../components/Topics";
 import FeedContainer from "../containers/FeedContainer";
 import ProfileSummaryContainer from "../containers/ProfileSummaryContainer";
 import TagsContainer from "../containers/TagsContainer";
@@ -35,8 +36,8 @@ export default class DashboardPage extends React.Component<RouteComponentProps> 
 											userContext.userID === undefined ? undefined : (
 												<div>
 													<ProfileSummaryContainer userID={userContext.userID} />
-													<TagsContainer userID={userContext.userID} />
-													<TopicsContainer userID={userContext.userID} />
+													<TagsContainer userID={userContext.userID} mutable />
+													<TopicsContainer userID={userContext.userID} type={TopicType.WHITELIST} mutable />
 												</div>
 											)
 										}
