@@ -7,8 +7,8 @@ type Meal = {
 	price: number;
 	description: string;
 	city: string;
-	startTime: number;
-	endTime: number;
+	startTime: string;
+	endTime: string;
 	guestCount: number;
 	maxGuests: number;
 	imagePath: string | null;
