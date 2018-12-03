@@ -11,6 +11,8 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
+    "@types/auth0-js": "^8.11.7",
+    "@types/node-uuid": "^0.0.28",
     "apollo-cache-inmemory": "^1.3.11",
     "apollo-client": "^2.4.7",
     "apollo-link": "^1.2.4",
@@ -27,6 +29,7 @@
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "history": "^4.7.2",
+    "jwt-decode": "^2.2.0",
     "moment": "^2.22.2",
     "moment-range": "^4.0.1",
     "node-uuid": "^1.4.8",
@@ -56,7 +59,11 @@
     "@types/graphql": "^14.0.3",
     "@types/history": "^4.7.2",
     "@types/jest": "^23.3.9",
+<<<<<<< HEAD
     "@types/node-uuid": "^0.0.28",
+=======
+    "@types/jwt-decode": "^2.2.1",
+>>>>>>> 98e265fddc1702bf32754e5cee4c72324b8aecee
     "@types/react": "^16.4.18",
     "@types/react-autosuggest": "^9.3.6",
     "@types/react-dates": "^17.1.2",

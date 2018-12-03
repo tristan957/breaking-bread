@@ -20,6 +20,9 @@ dotenv.config();
 const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/graphql" : "https://www.bbread.org/api/v1/graphql";
 console.log(`URI: ${uri}`);
 
+// let accessToken: string | null = localStorage.getItem("access_token");
+// accessToken = accessToken === null ? "" : accessToken;
+
 const client = new ApolloClient({
 	link: ApolloLink.from([
 		onError((error: ErrorResponse) => {
@@ -44,7 +47,11 @@ const client = new ApolloClient({
 		new BatchHttpLink({
 			uri,
 			headers: {
+<<<<<<< HEAD
 				oAuthSub: "adjijdfaa",
+=======
+				token_bearer: "google-oauth2|104114134196689419228",
+>>>>>>> 98e265fddc1702bf32754e5cee4c72324b8aecee
 			},
 		}),
 	]),
