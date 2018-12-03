@@ -31,25 +31,25 @@ interface IProfileSummaryProps {
 export default class ProfileSummaryContainer extends React.Component<IProfileSummaryProps> {
 	public render(): JSX.Element {
 		return (
-			<div className="card">
-				<Query query={USER_PROFILE} variables={{ id: this.props.userID }}>
-					{(result: UserProfileResult) => {
-						if (result.loading) { return <div></div>; }
-						if (result.error) {
-							console.error(result.error);
-							return <div>{result.error.message}</div>;
-						}
+			<Query query={USER_PROFILE} variables={{ id: this.props.userID }}>
+				{(result: UserProfileResult) => {
+					if (result.loading) { return <div></div>; }
+					if (result.error) {
+						console.error(result.error);
+						return <div>{result.error.message}</div>;
+					}
 
-						return (
+					return (
+						<div className="card">
 							<ProfileSummary
 								id={this.props.userID}
 								name={`${result.data!.user.firstName} ${result.data!.user.lastName}`}
 								imagePath={result.data!.user.imagePath}
 							/>
-						);
-					}}
-				</Query>
-			</div>
+						</div>
+					);
+				}}
+			</Query>
 		);
 	}
 }

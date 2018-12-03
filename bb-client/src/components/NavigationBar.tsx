@@ -1,15 +1,33 @@
-// tslint:disable: no-unsafe-any
-
 import moment from "moment";
 import React from "react";
 import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
-import { Button, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
+import { Button, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalHeader, Nav, Navbar, NavbarBrand } from "reactstrap";
 import Showdown from "showdown";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/icon.png";
+
+type MealForm = {
+	valid: {
+		date: boolean;
+	};
+	date?: string;
+	startTime?: string;
+	endTime?: string;
+	description?: string;
+	guests?: string;
+	image?: string;
+	location?: string;
+};
+
+type RecipeForm = {
+	name?: string;
+	description?: string;
+	tags?: string;
+	image?: string;
+};
 
 interface INavigationBarState {
 	createdAt: moment.Moment | null;
@@ -17,11 +35,13 @@ interface INavigationBarState {
 	dropDown: boolean;
 	mealModal: boolean;
 	recipeModal: boolean;
-	mdeState: string | undefined;
+	mealForm: MealForm;
+	recipeForm: RecipeForm;
 }
 
 export default class NavigationBar extends React.Component<{}, INavigationBarState> {
 	public converter: Showdown.Converter;
+
 	constructor(props: Readonly<{}>) {
 		super(props);
 
@@ -31,13 +51,24 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 			dropDown: false,
 			mealModal: false,
 			recipeModal: false,
-			mdeState: undefined,
+			mealForm: {
+				valid: {
+					date: true,
+				},
+			},
+			recipeForm: {},
 		};
 
 		this.converter = new Showdown.Converter({
 			tables: true,
 			simplifiedAutoLink: true,
 		});
+	}
+
+	private mealSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		console.log(this.state.mealForm);
+
+		e.preventDefault();
 	}
 
 	public onSuggestSelect = (suggest: any): void => {
@@ -74,10 +105,6 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 		});
 	}
 
-	public handleValueChange = (mdeState: string) => {
-		this.setState({ mdeState });
-	}
-
 	public generateMarkdownPreview = (markdown: string) => {
 		return this.converter.makeHtml(markdown);
 	}
@@ -108,23 +135,33 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 				<Modal size={"lg"} centered={true} isOpen={this.state.mealModal} toggle={this.toggleMealModal}>
 					<ModalHeader toggle={this.toggleMealModal}>New Meal</ModalHeader>
 					<ModalBody>
-						<Form>
+						<Form onSubmit={this.mealSubmit}>
 							<FormGroup row>
 								<Label for="date" sm={firstColumnWidth}>Date</Label>
 								<Col sm={secondColumnWidth}>
-									<Input type="date" name="date" id="navbar-date" />
+									<Input type="date" name="date" id="navbar-date" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, date: e.target.value } })} />
+									<FormFeedback>Meal is either in the past or further than one year in advance</FormFeedback>
+									<FormText>Meals can only be made a year in advance</FormText>
 								</Col>
 							</FormGroup>
 							<FormGroup row>
-								<Label for="time" sm={firstColumnWidth}>Time</Label>
+								<Label for="startTime" sm={firstColumnWidth}>Start Time</Label>
 								<Col sm={secondColumnWidth}>
-									<Input type="time" name="time" id="navbar-time" />
+									<Input type="time" name="startTime" id="navbar-startTime" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, startTime: e.target.value } })} />
+									<FormText>Be sure to specify AM or PM</FormText>
+								</Col>
+							</FormGroup>
+							<FormGroup row>
+								<Label for="endTime" sm={firstColumnWidth}>End Time</Label>
+								<Col sm={secondColumnWidth}>
+									<Input type="time" name="endTime" id="navbar-endTime" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, endTime: e.target.value } })} />
+									<FormText>Be sure to specify AM or PM</FormText>
 								</Col>
 							</FormGroup>
 							<FormGroup row>
 								<Label for="location" sm={firstColumnWidth}>Location</Label>
 								<Col sm={secondColumnWidth}>
-									<GeoSuggest />
+									<GeoSuggest value={this.state.mealForm.location} />
 								</Col>
 							</FormGroup>
 							<FormGroup row>
@@ -132,7 +169,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 								<Col sm={secondColumnWidth}>
 									<div className="navbar-description-container">
 										<ReactMde
-											onChange={this.handleValueChange}
+											onChange={(value: string) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, description: value } })}
 											generateMarkdownPreview={markdown =>
 												Promise.resolve(this.converter.makeHtml(markdown))}
 											buttonContentOptions={{
@@ -143,31 +180,24 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 								</Col>
 							</FormGroup>
 							<FormGroup row>
-								<Label for="tags" sm={firstColumnWidth}>Tags</Label>
-								<Col sm={secondColumnWidth}>
-									<Input type="text" name="tags" id="navbar-tags" />
-								</Col>
-							</FormGroup>
-							<FormGroup row>
 								<Label for="guests" sm={firstColumnWidth}>Number of Guests</Label>
 								<Col sm={secondColumnWidth}>
 									<InputGroup>
-										<Input type="number" max={10} min={1} step="1" />
+										<Input type="number" min={1} step="1" defaultValue="1" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, guests: e.target.value } })} />
 									</InputGroup>
 								</Col>
 							</FormGroup>
 							<FormGroup row>
-								<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
-								<Col sm={secondColumnWidth}>
-									<CustomInput type="file" id="navbar-images" name="file" />
+								<Label for="image" sm={firstColumnWidth}>Upload image</Label>
+								<Col sm={secondColumnWidth}> {/* Only upload one image */}
+									<CustomInput type="file" id="navbar-images" name="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, endTime: e.target.value } })} />
 								</Col>
 							</FormGroup>
+							<hr />
+							<Button type="submit" className="float-right">Submit</Button>
+							<Button className="float-right" onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.setState({ ...this.state, mealModal: !this.state.mealModal })}>Cancel</Button>
 						</Form>
 					</ModalBody>
-					<ModalFooter>
-						<Button className="float-right">Invite</Button>
-						<Button className="float-right">Submit</Button>
-					</ModalFooter>
 				</Modal>
 
 				{/* RECIPE MODAL */}
@@ -176,11 +206,16 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 					<ModalBody>
 						<Form>
 							<FormGroup row>
-								<Label for="description" sm={firstColumnWidth}>Recipe Description</Label>
+								<Label for="name" sm={firstColumnWidth}>Name</Label>
+								<Col sm={secondColumnWidth}>
+									<Input type="text" name="name" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, recipeForm: { ...this.state.recipeForm, name: e.target.value } })} />
+								</Col>
+							</FormGroup>
+							<FormGroup row>
+								<Label for="description" sm={firstColumnWidth}>Description</Label>
 								<Col sm={secondColumnWidth}>
 									<div className="navbar-description-container">
-										<ReactMde
-											onChange={this.handleValueChange}
+										<ReactMde onChange={(value: string) => this.setState({ ...this.state, recipeForm: { ...this.state.recipeForm, description: value } })}
 											generateMarkdownPreview={markdown =>
 												Promise.resolve(this.converter.makeHtml(markdown))}
 											buttonContentOptions={{
@@ -193,20 +228,20 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 							<FormGroup row>
 								<Label for="tags" sm={firstColumnWidth}>Tags</Label>
 								<Col sm={secondColumnWidth}>
-									<Input type="text" name="tags" id="navbar-tags" />
+									<Input type="text" name="tags" id="navbar-tags" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, recipeForm: { ...this.state.recipeForm, tags: e.target.value } })} />
 								</Col>
 							</FormGroup>
 							<FormGroup row>
-								<Label for="images" sm={firstColumnWidth}>Upload image(s)</Label>
+								<Label for="images" sm={firstColumnWidth}>Upload image</Label>
 								<Col sm={secondColumnWidth}>
-									<CustomInput type="file" id="navbar-images" name="file" />
+									<CustomInput type="file" id="navbar-images" name="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, recipeForm: { ...this.state.recipeForm, image: e.target.value } })} />
 								</Col>
 							</FormGroup>
+							<hr />
+							<Button type="submit" className="float-right">Submit</Button>
+							<Button className="float-right" onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.setState({ ...this.state, recipeModal: !this.state.recipeModal })}>Cancel</Button>
 						</Form>
 					</ModalBody>
-					<ModalFooter>
-						<Button className="float-right">Submit</Button>
-					</ModalFooter>
 				</Modal>
 			</div>
 		);
