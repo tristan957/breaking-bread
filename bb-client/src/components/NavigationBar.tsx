@@ -1,3 +1,4 @@
+import gql from "graphql-tag";
 import moment from "moment";
 import React from "react";
 import "react-dates/initialize";
@@ -8,6 +9,10 @@ import Showdown from "showdown";
 import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NavigationBar.css";
 import { default as logo } from "./resources/images/icon.png";
+
+const USER_RECIPES = gql`
+
+`;
 
 type MealForm = {
 	valid: {
@@ -161,7 +166,7 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 							<FormGroup row>
 								<Label for="location" sm={firstColumnWidth}>Location</Label>
 								<Col sm={secondColumnWidth}>
-									<GeoSuggest value={this.state.mealForm.location} />
+									<GeoSuggest onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, location: e.target.value } })} />
 								</Col>
 							</FormGroup>
 							<FormGroup row>
@@ -193,6 +198,16 @@ export default class NavigationBar extends React.Component<{}, INavigationBarSta
 									<CustomInput type="file" id="navbar-images" name="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, endTime: e.target.value } })} />
 								</Col>
 							</FormGroup>
+							{/* <FormGroup>
+								<Label for="recipes">Select Recipes</Label>
+								<Input type="select" name="recipes" id="navbar-recipes" multiple onChange={(e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value)}>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</Input>
+							</FormGroup> */}
 							<hr />
 							<Button type="submit" className="float-right">Submit</Button>
 							<Button className="float-right" onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.setState({ ...this.state, mealModal: !this.state.mealModal })}>Cancel</Button>
