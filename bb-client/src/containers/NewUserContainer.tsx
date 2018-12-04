@@ -19,7 +19,7 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 		super(props);
 	}
 
-	public submitNewUser = () => {
+	public submitNewUser = (client: ApolloClient<any>) => {
 		alert("hello");
 	}
 
@@ -32,7 +32,7 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 					lastName={this.props.lastName!}
 					firstName={this.props.firstName}
 					picture={this.props.picture!}
-					validSubmit={this.submitNewUser}
+					validSubmit={() => this.submitNewUser(client)}
 				/>
 			);
 		} else {
