@@ -7,7 +7,7 @@ import "react-dates/initialize";
 import ReactMde from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import MediaQuery from "react-responsive";
-import { Button, ButtonGroup, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
+import { Button, ButtonGroup, Col, CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, FormGroup, FormText, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import Showdown from "showdown";
 import { UserContext } from "../App";
 import { Auth0Authentication } from "../auth/Auth0Authentication";
@@ -220,7 +220,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 														<Button onClick={this.login}>Login</Button>
 													)}
 													{authenticated && (
-														<Button onClick={(): void => this.toggleLogoutModal()}>Logout</Button>
+														<Button onClick={this.toggleLogoutModal}>Logout</Button>
 													)}
 												</NavItem>
 												<NavItem>
@@ -239,6 +239,18 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 												</NavItem>
 											</Nav>
 										</Navbar>
+
+										{/* Logout Modal */}
+										<Modal size={"sm"} centered={true} isOpen={this.state.logoutModal} toggle={this.toggleLogoutModal}>
+											<ModalHeader toggle={this.toggleLogoutModal}>Sign Out?</ModalHeader>
+											<ModalBody>
+												Are you sure you wish to sign out?
+											</ModalBody>
+											<ModalFooter>
+												<Button className="float-right" onClick={(): void => this.logout(userContext.reloadUser!)}>Yes</Button>
+												<Button className="float-right" onClick={this.toggleLogoutModal}>No</Button>
+											</ModalFooter>
+										</Modal>
 
 										{/* MEAL MODAL */}
 										<Modal size={"lg"} centered={true} isOpen={this.state.mealModal} toggle={this.toggleMealModal}>

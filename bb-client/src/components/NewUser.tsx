@@ -28,7 +28,7 @@ export default class NewUser extends React.Component<IRetreivedProfileInfo> {
 					) : (
 							<div>
 								<Alert color="danger">
-									You're email is unverified. Please sign up with a verified email.
+									You're email is unverified. Please use an account with a verified email.
 							</Alert>
 							</div>
 						)
@@ -38,7 +38,7 @@ export default class NewUser extends React.Component<IRetreivedProfileInfo> {
 					<h2>Let's first finish setting up your acccount.</h2>
 				</div>
 				<div id="new-user-container">
-					<AvForm id="new-user-form" onValidSubmit={this.props.validSubmit()}>
+					<AvForm id="new-user-form" onValidSubmit={this.props.validSubmit}>
 						<FormGroup row>
 							<Label for="name" sm={firstColSize}>First Name</Label>
 							<Col sm={secondColSize}>

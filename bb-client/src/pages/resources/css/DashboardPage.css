@@ -22,7 +22,7 @@
 }
 
 #center-container {
-	width: 800px;
+	max-width: 600px;
     height: 100%;
 	margin-left: 1.8em;
 	margin-right: 1.8em;

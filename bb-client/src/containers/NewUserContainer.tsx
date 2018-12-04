@@ -20,6 +20,7 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 	}
 
 	public submitNewUser = () => {
+		alert("hello");
 	}
 
 	public renderNewUser = (client: ApolloClient<any>): JSX.Element => {
