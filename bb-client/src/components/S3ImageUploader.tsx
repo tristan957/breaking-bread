@@ -27,7 +27,6 @@ class S3ImageUploader extends Component<IS3ImageUploaderProps, IS3ImageUploaderS
 			imageUrls: [],
 			label: "",
 		};
-		this.submit = React.createRef();
 	}
 
 	public s3Sign(file: File): SignedRequestData {
