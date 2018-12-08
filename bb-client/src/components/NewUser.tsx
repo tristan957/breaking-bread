@@ -1,6 +1,7 @@
 import { AvField, AvForm } from "availity-reactstrap-validation";
 import React from "react";
 import { Alert, Button, Col, FormGroup, Input, Label } from "reactstrap";
+import GeoSuggest from "./GeoSuggest";
 import "./resources/css/NewUser.css";
 
 interface IRetreivedProfileInfo {
@@ -10,6 +11,12 @@ interface IRetreivedProfileInfo {
 	firstName?: string;
 	picture?: string;
 	validSubmit: Function;
+}
+
+interface INewUserState {
+	location: {
+		description?: string;
+	};
 }
 
 export default class NewUser extends React.Component<IRetreivedProfileInfo> {
@@ -58,9 +65,9 @@ export default class NewUser extends React.Component<IRetreivedProfileInfo> {
 							</Col>
 						</FormGroup>
 						<FormGroup row>
-							<Label for="name" sm={firstColSize} required={true}>Hometown</Label>
+							<Label for="name" sm={firstColSize} required={true}>Primary address</Label>
 							<Col sm={secondColSize}>
-								<Input type="text" name="hometownInput" />
+								<GeoSuggest onChange={(e) => console.log(e)} />
 							</Col>
 						</FormGroup>
 						<FormGroup row>

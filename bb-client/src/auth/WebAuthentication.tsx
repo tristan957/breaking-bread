@@ -56,16 +56,14 @@ export class WebAuthentication implements Auth0Authentication {
 		this.webAuth.authorize();
 	}
 
-	public handleAuthentication = async (): Promise<IProfileInfo> => {
+	public handleAuthentication = async (): Promise<Auth0DecodedHash> => {
 		return new Promise((resolve, reject): void => {
 			this.webAuth.parseHash((err: Auth0ParseHashError | null, result: Auth0DecodedHash | null): void => {
 				if (err !== null) {
 					reject(err);
 				} else {
 					if (result !== null && result.accessToken !== undefined && result.idToken !== undefined && result.expiresIn !== undefined) {
-						this.setSession(result); // TODO: Change where the headers are set
-
-						resolve(this.getUserInfo(result));
+						resolve(result);
 					}
 				}
 			});

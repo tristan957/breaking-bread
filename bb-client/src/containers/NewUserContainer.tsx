@@ -1,7 +1,6 @@
 import ApolloClient from "apollo-client";
 import React from "react";
 import { ApolloConsumer } from "react-apollo";
-import { RouteComponentProps } from "react-router";
 import NewUser from "../components/NewUser";
 
 interface IRetreivedProfileInfo {
@@ -10,8 +9,8 @@ interface IRetreivedProfileInfo {
 	lastName?: string;
 	firstName?: string;
 	picture?: string;
-	router: RouteComponentProps;
 	reloadUser: Function;
+	onValidSet?: Function;
 }
 
 export default class NewUserContainer extends React.Component<IRetreivedProfileInfo> {
@@ -20,7 +19,13 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 	}
 
 	public submitNewUser = (client: ApolloClient<any>) => {
-		alert("hello");
+		if (this.props.onValidSet !== undefined) {
+			alert("hello");
+			this.props.onValidSet();
+			this.props.reloadUser();
+		} else {
+			console.log("Some error higher up with token");
+		}
 	}
 
 	public renderNewUser = (client: ApolloClient<any>): JSX.Element => {

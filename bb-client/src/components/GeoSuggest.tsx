@@ -16,7 +16,9 @@ export default class GeoSuggest extends React.Component<IGeoSuggestProps> {
 				<Geosuggest
 					onChange={this.props.onChange}
 					onSuggestSelect={this.onSuggestSelect}
-					radius={20} />
+					radius={20}
+					location={new google.maps.LatLng(40.741895, -73989308)}
+				/>
 			</div>
 		);
 	}
