@@ -18,9 +18,9 @@ export enum templates {
 	USER_KICKED = "user_kicked",
 }
 
-export function sendNotification(json: any, template: string): void {
+export function sendNotification(json: any, template: templates): void {
 	const msg = {
-		template: `${__dirname}/emails/` + template,
+		template: `${__dirname}/emails/${template}`,
 		message: {
 			from: sender,
 			to: json.receiver,
@@ -37,15 +37,18 @@ export function sendNotification(json: any, template: string): void {
 		transport: transporter,
 	});
 
-	mailer.send(msg).then(console.log).catch(console.error);
+	mailer.send(msg)
+		.then(console.log)
+		.catch(console.error);
 }
 
 /* Example Usage */
-const sign_up_json = {
+const signUpJson = {
 	receiver: "jonathan.wang1996@gmail.com",
 	receiver_name: "Jon",
-}
-const meal_change_json = {
+};
+
+const mealChangeJson = {
 	receiver: "jonathan.wang1996@gmail.com",
 	receiver_name: "Jon",
 	host_name: "Grog",
@@ -58,12 +61,14 @@ const meal_change_json = {
 	new_addr: "( . ) Y ( . ) Street",
 	old_price: 999,
 	new_price: 1000,
-}
-const user_kicked_json = {
+};
+
+const userKickedJson = {
 	receiver: "jonathan.wang1996@gmail.com",
 	receiver_name: "Jon",
 	host_name: "Grog",
-}
-sendNotification(sign_up_json, templates.SIGN_UP);
-sendNotification(meal_change_json, templates.MEAL_CHANGE);
-sendNotification(user_kicked_json, templates.USER_KICKED);
+};
+
+sendNotification(signUpJson, templates.SIGN_UP);
+sendNotification(mealChangeJson, templates.MEAL_CHANGE);
+sendNotification(userKickedJson, templates.USER_KICKED);
