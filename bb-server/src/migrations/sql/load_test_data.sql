@@ -17,8 +17,8 @@ INSERT INTO "topic" ("id", "name") VALUES
 (4,	'communism');
 
 INSERT INTO "user" ("id", "firstName", "lastName", "imagePath", "oAuthSub", "about", "latLong", "location", "email", "phoneNumber", "createdAt", "updatedAt") VALUES
-(1,	'Tristan',	'Partin',	NULL,	'adjeij',	'I like long walks on the beach',	'30.619873|-96.316996',	'492 University Oaks Blvd, College Station, TX 77840, USA',	'tristan.partin@gmail.com',	'281-300-9395',	'2018-11-21 05:07:32.224883',	'2018-11-21 05:07:32.224883'),
-(2,	'Greg',	'Noonan',	NULL,	'adjijdfaa',	'I like short walks on the beach',	'30.629980|-96.359500',	'3645 Wellborn Rd, Bryan, TX 77801, USA',	'gregnoonan@tamu.edu',	'555-555-5555',	'2018-11-21 05:07:32.299152',	'2018-11-21 05:07:32.299152'),
+(1,	'Tristan',	'Partin',	NULL,	'google-oauth2|114864505001751214115',	'I like long walks on the beach',	'30.619873|-96.316996',	'492 University Oaks Blvd, College Station, TX 77840, USA',	'tristan.partin@gmail.com',	'281-300-9395',	'2018-11-21 05:07:32.224883',	'2018-11-21 05:07:32.224883'),
+(2,	'Greg',	'Noonan',	NULL,	'google-oauth2|104114134196689419228',	'I like short walks on the beach',	'30.629980|-96.359500',	'3645 Wellborn Rd, Bryan, TX 77801, USA',	'gregnoonan@tamu.edu',	'555-555-5555',	'2018-11-21 05:07:32.299152',	'2018-11-21 05:07:32.299152'),
 (3,	'Jonathan',	'Wang',	NULL,	'adjij',	'I like riding my bike on the beach',	'30.619050|-96.339390',	'Zachry Engineering Center, 125 Spence St, College Station, TX 77840, USA',	'jw206055@tamu.edu',	'666-666-6666',	'2018-11-21 05:07:32.292907',	'2018-11-21 05:07:32.292907'),
 (4,	'Zhoucheng',	'Li',	NULL,	'akopejij',	'I like sleeping on the beach',	'38.879177|-76.981812',	'1600 Pennsylvania Ave SE, Washington, DC 20003, USA',	'lizhoucheng@tamu.edu',	'777-777-7777',	'2018-11-21 05:07:32.309497',	'2018-11-21 05:07:32.309497');
 

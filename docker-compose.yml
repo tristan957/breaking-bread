@@ -29,26 +29,15 @@ services:
   adminer:
     image: adminer:latest
     container_name: bb-adminer
-    depends_on:
-      - db
-    links:
-      - db
     restart: "no"
     ports:
       - 10261:8080
 
   server:
     container_name: bb-server
-    depends_on:
-      - db
     build:
       context: ./bb-server
       dockerfile: Dockerfile
-    links:
-      - db
     restart: "no"
     ports:
       - 10262:10262
-    command: ["wait-for-it.sh", "-t", "45", "db:5432", "--", "node", "./src/index.js"]
-    volumes: 
-      - ./wait-for-it.sh:/bin/wait-for-it.sh

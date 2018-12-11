@@ -1,9 +1,9 @@
 {
 	"type": "postgres",
-	"host": "localhost",
+	"host": "breakingbread.c3qgbrxclhxz.ca-central-1.rds.amazonaws.com",
 	"port": 5432,
 	"username": "jesus",
-	"password": "christ",
+	"password": "",
 	"database": "BreakingBread",
 	"logging": false,
 	"synchronize": true,
