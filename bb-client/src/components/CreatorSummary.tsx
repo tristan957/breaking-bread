@@ -62,8 +62,15 @@ export default class CreatorSummary extends React.Component<ICreatorSummaryProps
 							<div id="creator-summary-topics-container">
 								<h4>Whitelist Topics</h4>
 								<Items
-									monospace
 									items={result.data!.user!.whitelist || []}
+									leadingChar="#"
+								/>
+							</div>
+							<hr />
+							<div id="creator-summary-topics-container">
+								<h4>Blacklist Topics</h4>
+								<Items
+									items={result.data!.user!.blacklist || []}
 									leadingChar="#"
 								/>
 							</div>
