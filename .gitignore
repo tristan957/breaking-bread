@@ -6,6 +6,6 @@ dist
 build
 docker
 .DS_Store
+ormconfig.json
 package-lock.json
 ses.config.json
-ormconfig.json
