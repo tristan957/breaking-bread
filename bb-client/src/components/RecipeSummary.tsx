@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Badge, Button, Col, Form, FormGroup, Input, InputGroup, InputGroupAddon, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Badge, Button, Col, Form, FormGroup, Input, InputGroup, InputGroupAddon, Label, Modal, ModalBody, ModalHeader } from "reactstrap";
 import Allergy from "../entities/Allergy";
 import Tag from "../entities/Tag";
 import ItemTags from "./ItemTags";
@@ -13,7 +13,7 @@ interface IRecipeSummaryProps {
 	viewerID?: number;
 	name: string;
 	tags: Partial<Tag>[];
-	imagePath?: string | null;
+	imagePath?: string | null; // TODO: get rid of null
 	createdAt: number;
 	updatedAt: number;
 	reviewAverage: number;
@@ -87,12 +87,10 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 												</InputGroup>
 											</Col>
 										</FormGroup>
+										<Button color="success" type="submit" onClick={this.toggle}>Submit</Button>{" "}
+										<Button color="danger" onClick={this.toggle}>Cancel</Button>
 									</Form>
 								</ModalBody>
-								<ModalFooter>
-									<Button color="success" onClick={this.toggle}>Submit</Button>{" "}
-									<Button color="danger" onClick={this.toggle}>Cancel</Button>
-								</ModalFooter>
 							</Modal>
 							<Button
 								outline

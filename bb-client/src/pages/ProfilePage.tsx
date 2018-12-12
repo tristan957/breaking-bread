@@ -40,8 +40,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 				{userContext => {
 					const userID = parseInt(this.props.match.params.userID!, 10);
 					return (
-						<Query query={USER_VALIDATE} variables={{ id: userID }}
-						>
+						<Query query={USER_VALIDATE} variables={{ id: userID }}>
 							{(result: UserValidateResult) => {
 								if (result.loading) {
 									return <div></div>;
@@ -60,7 +59,7 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 									<div id="profile-page">
 										<div id="profile-info">
 											<div id="profile-info-top">
-												<ProfileHeaderContainer userID={result.data!.user!.id!} />
+												<ProfileHeaderContainer userID={result.data!.user!.id!} viewerID={userContext.userID} />
 											</div>
 											<div id="profile-info-bottom">
 												<div id="profile-info-topics">

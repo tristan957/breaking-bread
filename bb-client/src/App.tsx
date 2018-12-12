@@ -107,7 +107,7 @@ export default class App extends React.Component<{}, IAppState> {
 							return <div></div>;
 						}
 						if (result.error) {
-							console.log(result.error);
+							console.error(result.error);
 							return <div>{result.error.message}</div>;
 						}
 

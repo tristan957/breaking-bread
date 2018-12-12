@@ -1,3 +1,8 @@
+#edit-profile-button {
+	display: flex;
+	justify-content: center;
+}
+
 #profile-header-about-container {
 	flex-grow: 1;
 	display: flex;
