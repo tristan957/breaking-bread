@@ -31,7 +31,7 @@ export default class MealResolver implements ResolverInterface<Meal> {
 
 	@Resolve()
 	public async guestCount(meal: Meal): Promise<number> {
-		const mealFull: Meal | undefined = await this.mealRepository.findOne(meal.id, {
+		const mealFull: Meal | undefined = await this.mealRepository.getEntityManager().findOne(Meal, meal.id, {
 			relations: ["guests"],
 		});
 
@@ -40,7 +40,7 @@ export default class MealResolver implements ResolverInterface<Meal> {
 
 	@Resolve()
 	public async isFull(meal: Meal): Promise<boolean> {
-		const mealFull: Meal | undefined = await this.mealRepository.findOne(meal.id, {
+		const mealFull: Meal | undefined = await this.mealRepository.getEntityManager().findOne(Meal, meal.id, {
 			relations: ["guests"],
 		});
 		if (mealFull === undefined) { return false; }

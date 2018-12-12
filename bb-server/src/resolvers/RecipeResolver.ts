@@ -12,7 +12,7 @@ export default class RecipeResolver implements ResolverInterface<Recipe> {
 
 	@Resolve()
 	public async savedBy(recipe: Recipe): Promise<User[] | []> {
-		const recipeFull: Recipe | undefined = await this.recipeRepository.findOne(recipe.id, {
+		const recipeFull: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, recipe.id, {
 			relations: ["savedBy"],
 		});
 		if (recipeFull === undefined) { return []; }
@@ -22,7 +22,7 @@ export default class RecipeResolver implements ResolverInterface<Recipe> {
 
 	@Resolve()
 	public async timesSaved(recipe: Recipe): Promise<number> {
-		const recipeFull: Recipe | undefined = await this.recipeRepository.findOne(recipe.id, {
+		const recipeFull: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, recipe.id, {
 			relations: ["savedBy"],
 		});
 		if (recipeFull === undefined) { return -1; }
@@ -32,7 +32,7 @@ export default class RecipeResolver implements ResolverInterface<Recipe> {
 
 	@Resolve()
 	public async reviewAverage(recipe: Recipe): Promise<number> {
-		const fullRecipe: Recipe | undefined = await this.recipeRepository.findOne(recipe.id, {
+		const fullRecipe: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, recipe.id, {
 			relations: ["reviews"],
 		});
 		if (fullRecipe === undefined) { return -1; }
@@ -48,7 +48,7 @@ export default class RecipeResolver implements ResolverInterface<Recipe> {
 
 	@Resolve()
 	public async mealsServedAt(recipe: Recipe): Promise<Meal[] | []> {
-		const recipeFull: Recipe | undefined = await this.recipeRepository.findOne(recipe.id, {
+		const recipeFull: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, recipe.id, {
 			relations: ["mealsServedAt"],
 		});
 		if (recipeFull === undefined) { return []; }

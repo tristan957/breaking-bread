@@ -1,15 +1,10 @@
 import { Service } from "typedi";
-import { EntityManager, Repository } from "typeorm";
-import { AllergyRepository, TagRepository } from ".";
-import { Recipe } from "../entities";
+import { EntityManager } from "typeorm";
+import Repository from "./Repository";
 
 @Service()
-export default class RecipeRepository extends Repository<Recipe> {
-	private entityManager: EntityManager;
-
-	constructor(entityManager: EntityManager, tagRepository: TagRepository, allergyRepository: AllergyRepository) {
-		super();
-
-		this.entityManager = entityManager;
+export default class RecipeRepository extends Repository {
+	constructor(entityManager: EntityManager) {
+		super(entityManager);
 	}
 }

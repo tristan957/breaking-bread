@@ -25,7 +25,7 @@ export default class UserResolver implements ResolverInterface<User> {
 
 	@Resolve()
 	public async hostedMeals(user: User): Promise<Meal[] | []> {
-		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
+		const fullUser: User | undefined = await this.userRepository.getEntityManager().findOne(User, user.id, {
 			relations: ["hostedMeals"],
 		});
 		if (fullUser === undefined) { return []; }
@@ -34,7 +34,7 @@ export default class UserResolver implements ResolverInterface<User> {
 
 	@Resolve()
 	public async followers(user: User): Promise<User[] | []> {
-		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
+		const fullUser: User | undefined = await this.userRepository.getEntityManager().findOne(User, user.id, {
 			relations: ["followers"],
 		});
 		if (fullUser === undefined) { return []; }
@@ -43,7 +43,7 @@ export default class UserResolver implements ResolverInterface<User> {
 
 	@Resolve()
 	public async numberOfFollowers(user: User): Promise<number> {
-		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
+		const fullUser: User | undefined = await this.userRepository.getEntityManager().findOne(User, user.id, {
 			relations: ["followers"],
 		});
 		if (fullUser === undefined) { return -1; }
@@ -53,7 +53,7 @@ export default class UserResolver implements ResolverInterface<User> {
 
 	@Resolve()
 	public async upcomingMeals(user: User): Promise<Meal[] | []> {
-		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
+		const fullUser: User | undefined = await this.userRepository.getEntityManager().findOne(User, user.id, {
 			relations: ["mealsAttending", "hostedMeals"],
 		});
 		if (fullUser === undefined) { return []; }
@@ -74,7 +74,7 @@ export default class UserResolver implements ResolverInterface<User> {
 
 	@Resolve()
 	public async reviewAverage(user: User): Promise<number> {
-		const fullUser: User | undefined = await this.userRepository.findOne(user.id, {
+		const fullUser: User | undefined = await this.userRepository.getEntityManager().findOne(User, user.id, {
 			relations: ["reviews"],
 		});
 		if (fullUser === undefined) { return -1; }
