@@ -76,8 +76,8 @@ export default class TagsContainer extends React.Component<ITagsContainerProps, 
 					}
 
 					return (
-						<div id="followed-tags-card" className="card">
-							<div id="tags-list-header" className="container-header">
+						<div id="tags-container" className="card">
+							<div id="tags-list-header">
 								<div className="container-header" id="tags-label">Tags</div>
 								{this.props.mutable
 									? (
@@ -92,7 +92,7 @@ export default class TagsContainer extends React.Component<ITagsContainerProps, 
 													<InputGroup id="tag-input">
 														<Input onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ name: e.target.value })} />
 														<InputGroupAddon addonType="append">
-															<Button color="success" id="topic-add" onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+															<Button color="success" id="tag-add" onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
 																userToggleFollowedTags({ variables: { tags: [{ name: this.state.name }] } });
 															}}>
 																+

@@ -19,7 +19,7 @@ interface IUserToggleWhitelistData {
 }
 
 interface IUserToggleWhitelistVariables {
-	topic: Partial<Topic>[];
+	topics: Partial<Topic>[];
 }
 
 type UserToggleWhitelistResult = MutationResult<IUserToggleWhitelistData>;
@@ -39,7 +39,7 @@ interface IUserToggleBlacklistData {
 }
 
 interface IUserToggleBlacklistVariables {
-	topic: Partial<Topic>[];
+	topics: Partial<Topic>[];
 }
 
 type UserToggleBlacklistResult = MutationResult<IUserToggleBlacklistData>;
@@ -78,7 +78,7 @@ export default class Topics extends React.Component<ITopicsProps> {
 
 													return (
 														<Button close onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-															userToggleWhitelist({ variables: { topic: [{ id: topic.id }] } });
+															userToggleWhitelist({ variables: { topics: [{ id: topic.id }] } });
 														}} />
 													);
 												}}
@@ -93,7 +93,7 @@ export default class Topics extends React.Component<ITopicsProps> {
 
 													return (
 														<Button close onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-															userToggleBlacklist({ variables: { topic: [{ id: topic.id }] } });
+															userToggleBlacklist({ variables: { topics: [{ id: topic.id }] } });
 														}} />
 													);
 												}}
