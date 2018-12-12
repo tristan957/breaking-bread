@@ -68,12 +68,13 @@ export default class UserController {
 	public async userSave(args: IInput<IUserSaveArgs>): Promise<User | undefined> { // Some sort of verification, maybe email
 		const { location, ...inputNoLatLong }: DropLatLong<IUserSaveArgs> = args.input;
 
-		const user: User = this.userRepository.getEntityManager().create(User, {
+		const user: User = await this.userRepository.getEntityManager().create(User, {
 			...inputNoLatLong,
 			latLong: `${location.lat}|${location.long}`,
 			location: location.streetAddress,
 		});
-		return this.userRepository.getEntityManager().save(user);
+		const newUser: User = await this.userRepository.getEntityManager().save(user);
+		return newUser;
 	}
 
 	@Mutation()
