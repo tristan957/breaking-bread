@@ -39,7 +39,7 @@ interface IUserAuthenticatedResult {
 	} | null;
 }
 
-const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/graphql" : "https://www.bbread.org/api/v1/graphql";
+const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/graphql" : "https://www.partin.io/bread/api/v1/graphql";
 console.log(`URI: ${uri}`);
 
 // tslint:disable-next-line: variable-name
