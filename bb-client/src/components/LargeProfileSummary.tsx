@@ -100,7 +100,6 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 
 											return false;
 										});
-									console.log(isFollowing);
 
 									return (
 										<Mutation mutation={USER_TOGGLE_FOLLOWING} variables={{ userID: this.props.userID }} onCompleted={() => qResult.refetch()}>

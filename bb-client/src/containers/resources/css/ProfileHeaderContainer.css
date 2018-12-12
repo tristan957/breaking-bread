@@ -3,6 +3,12 @@
 	justify-content: center;
 }
 
+#profile-review-button {
+	margin-top: 15px;
+	display: flex;
+	justify-content: center;
+}
+
 #profile-header-about-container {
 	flex-grow: 1;
 	display: flex;
