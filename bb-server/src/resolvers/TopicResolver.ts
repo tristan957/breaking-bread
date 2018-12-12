@@ -12,7 +12,7 @@ export default class TopicResolver implements ResolverInterface<Topic> {
 
 	@Resolve()
 	public async blackListedBy(topic: Topic): Promise<User[] | []> {
-		const topicFull: Topic | undefined = await this.topicRepository.findOne(topic.id, { relations: ["blackListedBy"] });
+		const topicFull: Topic | undefined = await this.topicRepository.getEntityManager().findOne(Topic, topic.id, { relations: ["blackListedBy"] });
 		if (topicFull === undefined) { return []; }
 
 		return topicFull.blackListedBy;
@@ -20,7 +20,7 @@ export default class TopicResolver implements ResolverInterface<Topic> {
 
 	@Resolve()
 	public async whiteListedBy(topic: Topic): Promise<User[] | []> {
-		const topicFull: Topic | undefined = await this.topicRepository.findOne(topic.id, { relations: ["whiteListedBy"] });
+		const topicFull: Topic | undefined = await this.topicRepository.getEntityManager().findOne(Topic, topic.id, { relations: ["whiteListedBy"] });
 		if (topicFull === undefined) { return []; }
 
 		return topicFull.whiteListedBy;

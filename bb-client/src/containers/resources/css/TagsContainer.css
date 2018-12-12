@@ -6,7 +6,6 @@
 #tags-label {
 	display: flex;
 	justify-content: center;
-	/* align-content: center; */
 	flex-direction: column;
 }
 
@@ -19,10 +18,10 @@
 	margin-right: 0px;
 }
 
-#topic-input {
+#tag-input {
 	height: 50%;
 }
 
-#topic-add {
+#tag-add {
 	margin: 0px;
 }

@@ -12,7 +12,7 @@ export default class TagResolver implements ResolverInterface<Tag> {
 
 	@Resolve()
 	public async associatedRecipes(tag: Tag): Promise<Recipe[] | []> {
-		const tagFull: Tag | undefined = await this.tagRepository.findOne(tag.id, { relations: ["associatedRecipes"] });
+		const tagFull: Tag | undefined = await this.tagRepository.getEntityManager().findOne(Tag, tag.id, { relations: ["associatedRecipes"] });
 		if (tagFull === undefined) { return []; }
 
 		return tagFull.associatedRecipes;
@@ -20,7 +20,7 @@ export default class TagResolver implements ResolverInterface<Tag> {
 
 	@Resolve()
 	public async followers(tag: Tag): Promise<User[] | []> {
-		const tagFull: Tag | undefined = await this.tagRepository.findOne(tag.id, { relations: ["followers"] });
+		const tagFull: Tag | undefined = await this.tagRepository.getEntityManager().findOne(Tag, tag.id, { relations: ["followers"] });
 		if (tagFull === undefined) { return []; }
 
 		return tagFull.followers;

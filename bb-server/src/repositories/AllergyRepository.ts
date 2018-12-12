@@ -1,15 +1,13 @@
 import { Service } from "typedi";
-import { DeepPartial, EntityManager, Repository } from "typeorm";
+import { DeepPartial, EntityManager } from "typeorm";
 import { Allergy } from "../entities";
+import Repository from "./Repository";
 import { toggleItemByID } from "./utilities/toggleByID";
 
 @Service()
-export default class AllergyRepository extends Repository<Allergy> {
-	public entityManager: EntityManager;
-
+export default class AllergyRepository extends Repository {
 	constructor(entityManager: EntityManager) {
-		super();
-		this.entityManager = entityManager;
+		super(entityManager);
 	}
 
 	public async toggleAllergies(allergyList: Allergy[], allergies: DeepPartial<Allergy>[]): Promise<void> {
@@ -19,7 +17,7 @@ export default class AllergyRepository extends Repository<Allergy> {
 				: await this.entityManager.findOne(Allergy, { name: toggleAllergy.name });
 
 			if (allergy === undefined) {
-				allergy = await this.entityManager.save(Allergy, this.entityManager.create(
+				allergy = await this.entityManager.save(this.entityManager.create(
 					Allergy,
 					{
 						name: toggleAllergy.name.toLowerCase(),

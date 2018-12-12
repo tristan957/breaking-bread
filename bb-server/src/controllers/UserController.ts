@@ -35,12 +35,12 @@ export default class UserController {
 
 	@Query()
 	public user(args: IUserArgs): Promise<User | undefined> {
-		return this.userRepository.findOne(args.id);
+		return this.userRepository.getEntityManager().findOne(User, args.id);
 	}
 
 	@Query()
 	public async userSubExists(args: IUserSubArgs): Promise<boolean> {
-		const user: User | undefined = await this.userRepository.findOne({
+		const user: User | undefined = await this.userRepository.getEntityManager().findOne(User, {
 			where: {
 				oAuthSub: args.sub,
 			},
@@ -61,19 +61,19 @@ export default class UserController {
 
 	@Query()
 	public userReview(args: IUserReviewArgs): Promise<UserReview | undefined> {
-		return this.userReviewRepository.findOne(args.id);
+		return this.userReviewRepository.getEntityManager().findOne(UserReview, args.id);
 	}
 
 	@Mutation()
 	public async userSave(args: IInput<IUserSaveArgs>): Promise<User | undefined> { // Some sort of verification, maybe email
 		const { location, ...inputNoLatLong }: DropLatLong<IUserSaveArgs> = args.input;
 
-		const user: User = this.userRepository.create({
+		const user: User = this.userRepository.getEntityManager().create(User, {
 			...inputNoLatLong,
 			latLong: `${location.lat}|${location.long}`,
 			location: location.streetAddress,
 		});
-		return this.userRepository.save(user);
+		return this.userRepository.getEntityManager().save(user);
 	}
 
 	@Mutation()
@@ -82,7 +82,7 @@ export default class UserController {
 
 		const { location, ...inputNoLatLong }: DropLatLong<IUserEditArgs> = args.input;
 		if (location !== undefined) {
-			return this.userRepository.save({
+			return this.userRepository.getEntityManager().save({
 				...this.currentUser,
 				...inputNoLatLong,
 				latLong: `${location.lat}|${location.long}`,
@@ -90,7 +90,7 @@ export default class UserController {
 			});
 		}
 
-		return this.userRepository.save({
+		return this.userRepository.getEntityManager().save({
 			...this.currentUser,
 			...inputNoLatLong,
 		});
@@ -99,16 +99,16 @@ export default class UserController {
 	@Mutation()
 	public async userDelete(): Promise<boolean | undefined> { // Maybe prompt on front-end first
 		if (invalidUser(this.currentUser)) { return undefined; }
-		await this.userRepository.remove(this.currentUser);
+		await this.userRepository.getEntityManager().remove(this.currentUser);
 		return true;
 	}
 
 	public async toggleWhitelist(currentUser: User, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
-		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["whitelist"] });
+		const user: User | undefined = await this.userRepository.getEntityManager().findOne(User, currentUser.id, { relations: ["whitelist"] });
 		if (user === undefined) { return undefined; }
 
 		this.topicRepository.toggleTopicsList(user.whitelist, topics);
-		await this.userRepository.save(user);
+		await this.userRepository.getEntityManager().save(user);
 		return user.whitelist;
 	}
 
@@ -119,11 +119,11 @@ export default class UserController {
 	}
 
 	public async toggleBlacklist(currentUser: User, topics: DeepPartial<Topic>[]): Promise<Topic[] | undefined> {
-		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["blacklist"] });
+		const user: User | undefined = await this.userRepository.getEntityManager().findOne(User, currentUser.id, { relations: ["blacklist"] });
 		if (user === undefined) { return undefined; }
 
 		this.topicRepository.toggleTopicsList(user.blacklist, topics);
-		await this.userRepository.save(user);
+		await this.userRepository.getEntityManager().save(user);
 		return user.blacklist;
 	}
 
@@ -134,11 +134,11 @@ export default class UserController {
 	}
 
 	public async toggleFollowedTags(currentUser: User, tags: DeepPartial<Tag>[]): Promise<Tag[] | undefined> {
-		const user: User | undefined = await this.userRepository.findOne(currentUser.id, { relations: ["followedTags"] });
+		const user: User | undefined = await this.userRepository.getEntityManager().findOne(User, currentUser.id, { relations: ["followedTags"] });
 		if (user === undefined) { return undefined; }
 
 		this.tagRepository.toggleTagsList(user.followedTags, tags);
-		await this.userRepository.save(user);
+		await this.userRepository.getEntityManager().save(user);
 		return user.followedTags;
 	}
 
@@ -151,34 +151,34 @@ export default class UserController {
 	@Mutation()
 	public async userToggleFollowing(args: IUserArgs): Promise<User[] | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const fullUser: User = await this.userRepository.findOne(this.currentUser.id, { relations: ["followedUsers"] });
-		const toFollow: User | undefined = await this.userRepository.findOne(args.id);
+		const fullUser: User = await this.userRepository.getEntityManager().findOne(User, this.currentUser.id, { relations: ["followedUsers"] });
+		const toFollow: User | undefined = await this.userRepository.getEntityManager().findOne(User, args.id);
 		if (toFollow === undefined) { return undefined; }
 
 		await toggleItemByID(fullUser.followedUsers, toFollow);
-		await this.userRepository.save(fullUser);
+		await this.userRepository.getEntityManager().save(fullUser);
 		return fullUser.followedUsers;
 	}
 
 	@Mutation()
 	public async userToggleSavedRecipe(args: IUserArgs): Promise<Recipe[] | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const fullUser: User = await this.userRepository.findOne(this.currentUser.id, { relations: ["savedRecipes"] });
-		const toSave: Recipe | undefined = await this.recipeRepository.findOne(args.id);
+		const fullUser: User = await this.userRepository.getEntityManager().findOne(User, this.currentUser.id, { relations: ["savedRecipes"] });
+		const toSave: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, args.id);
 		if (toSave === undefined) { return undefined; }
 
 		await toggleItemByID(fullUser.savedRecipes, toSave);
-		await this.userRepository.save(fullUser);
+		await this.userRepository.getEntityManager().save(fullUser);
 		return fullUser.savedRecipes;
 	}
 
 	@Mutation()
 	public async userReviewSave(args: IInput<IUserReviewSaveArgs>): Promise<UserReview | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }	// Need to check if user was in a past attended meal
-		const subject: User | undefined = await this.userRepository.findOne(args.input.subjectID);
+		const subject: User | undefined = await this.userRepository.getEntityManager().findOne(User, args.input.subjectID);
 		if (subject === undefined) { return undefined; }
 
-		const review: UserReview | undefined = await this.userReviewRepository.findOne({
+		const review: UserReview | undefined = await this.userReviewRepository.getEntityManager().findOne(UserReview, {
 			where: {
 				subject: {
 					id: args.input.subjectID,
@@ -189,7 +189,7 @@ export default class UserController {
 			},
 		});
 
-		return review === undefined ? this.userReviewRepository.save(this.userReviewRepository.create({
+		return review === undefined ? this.userReviewRepository.getEntityManager().save(this.userReviewRepository.getEntityManager().create(UserReview, {
 			...args.input,
 			author: this.currentUser,
 			subject,
@@ -199,11 +199,11 @@ export default class UserController {
 	@Mutation()
 	public async userReviewEdit(args: IInput<IUserReviewEditArgs>): Promise<UserReview | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const review: UserReview | undefined = await this.userReviewRepository.findOne(args.input.id, { relations: ["author"] });
+		const review: UserReview | undefined = await this.userReviewRepository.getEntityManager().findOne(UserReview, args.input.id, { relations: ["author"] });
 
 		if (this.currentUser.id !== review.author.id) { return undefined; }
 
-		return review === undefined ? undefined : this.userReviewRepository.save(
+		return review === undefined ? undefined : this.userReviewRepository.getEntityManager().save(
 			{
 				...review,
 				...args.input,

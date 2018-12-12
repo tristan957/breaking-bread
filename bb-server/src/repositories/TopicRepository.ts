@@ -1,26 +1,23 @@
 import { Service } from "typedi";
-import { DeepPartial, EntityManager, Repository } from "typeorm";
+import { DeepPartial, EntityManager } from "typeorm";
 import { Topic } from "../entities";
+import Repository from "./Repository";
 import { toggleItemByID } from "./utilities/toggleByID";
 
 @Service()
-export default class TopicRepository extends Repository<Topic> {
-	private entityManager: EntityManager;
-
+export default class TopicRepository extends Repository {
 	constructor(entityManager: EntityManager) {
-		super();
-
-		this.entityManager = entityManager;
+		super(entityManager);
 	}
 
 	public async toggleTopicsList(topicList: Topic[], topics: DeepPartial<Topic>[]): Promise<void> {
 		for (const toggleTopic of topics) {
 			let topic: Topic | undefined = toggleTopic.id !== undefined
-				? await this.findOne(toggleTopic.id)
-				: await this.findOne({ name: toggleTopic.name });
+				? await this.entityManager.findOne(Topic, toggleTopic.id)
+				: await this.entityManager.findOne(Topic, { name: toggleTopic.name });
 
 			if (topic === undefined) {
-				topic = await this.save(this.create({ name: toggleTopic.name.toLowerCase() }));
+				topic = await this.entityManager.save(this.entityManager.create(Topic, { name: toggleTopic.name.toLowerCase() }));
 			}
 
 			await toggleItemByID(topicList, topic);

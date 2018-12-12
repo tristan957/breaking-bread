@@ -37,15 +37,15 @@ export default class MealController {
 
 	@Query()
 	public meal(args: IMealArgs): Promise<Meal | undefined> {
-		return this.mealRepository.findOne(args.id);
+		return this.mealRepository.getEntityManager().findOne(Meal, args.id);
 	}
 
 	public getTag(tag: DeepPartial<Tag>): Promise<Tag | undefined> {
-		return this.tagRepository.findOne({ where: { ...tag } });
+		return this.tagRepository.getEntityManager().findOne(Tag, { where: { ...tag } });
 	}
 
 	public getTopic(topic: DeepPartial<Topic>): Promise<Topic | undefined> {
-		return this.topicRepository.findOne({ where: { ...topic } });
+		return this.topicRepository.getEntityManager().findOne(Topic, { where: { ...topic } });
 	}
 
 	public filterFilledMeals(meals: Meal[]): Meal[] {
@@ -87,7 +87,7 @@ export default class MealController {
 		}
 
 		// Getting all meals
-		let meals: Meal[] = await this.mealRepository.find({
+		let meals: Meal[] = await this.mealRepository.getEntityManager().find(Meal, {
 			where: {
 				...where,
 				startTime: MoreThan(new Date(new Date().getTime() + 60 * 60000)),  // Now +60 minutes  TODO: Date filtering
@@ -123,12 +123,12 @@ export default class MealController {
 	public async mealSave(args: IInput<IMealSaveArgs>): Promise<Meal | undefined> {
 		const { location, ...inputNoLatLong }: DropLatLong<IMealSaveArgs> = args.input;
 
-		const meal = this.mealRepository.create({
+		const meal = this.mealRepository.getEntityManager().create(Meal, {
 			...inputNoLatLong,
 			latLong: `${location.lat}|${location.long}`,
 			location: location.streetAddress,
 		});
-		return this.mealRepository.save(meal);
+		return this.mealRepository.getEntityManager().save(meal);
 	}
 
 	@Mutation()
@@ -136,11 +136,11 @@ export default class MealController {
 		const { location, ...inputNoLatLong }: DropLatLong<IMealEditArgs> = args.input;
 
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.input.id, { relations: ["host"] });
+		const meal: Meal | undefined = await this.mealRepository.getEntityManager().findOne(Meal, args.input.id, { relations: ["host"] });
 		if (meal === undefined || meal.host.id !== this.currentUser.id) { return undefined; }
 
 		if (location !== undefined) {
-			return this.mealRepository.save({
+			return this.mealRepository.getEntityManager().save({
 				...meal,
 				...inputNoLatLong,
 				latLong: `${location.lat}|${location.long}`,
@@ -148,7 +148,7 @@ export default class MealController {
 			});
 		}
 
-		return this.mealRepository.save({
+		return this.mealRepository.getEntityManager().save({
 			...meal,
 			...inputNoLatLong,
 		});
@@ -157,10 +157,10 @@ export default class MealController {
 	@Mutation()
 	public async mealDelete(args: IMealDeleteArgs): Promise<Boolean | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host"] });
+		const meal: Meal | undefined = await this.mealRepository.getEntityManager().findOne(Meal, args.mealID, { relations: ["host"] });
 		if (meal === undefined || this.currentUser.id !== meal.host.id) { return false; }
 
-		await this.mealRepository.remove(meal);
+		await this.mealRepository.getEntityManager().remove(meal);
 		return true;
 	}
 
@@ -168,29 +168,29 @@ export default class MealController {
 	public async mealToggleGuest(args: IMealToggleGuestArgs): Promise<User[] | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
 
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host", "guests"] });
-		const guest: User | undefined = await this.userRepository.findOne(args.guestID !== undefined ? args.guestID : this.currentUser.id);
+		const meal: Meal | undefined = await this.mealRepository.getEntityManager().findOne(Meal, args.mealID, { relations: ["host", "guests"] });
+		const guest: User | undefined = await this.userRepository.getEntityManager().findOne(User, args.guestID !== undefined ? args.guestID : this.currentUser.id);
 		if (meal === undefined || guest === undefined) { return undefined; }
 		if (!(guest.id !== this.currentUser.id || meal.host.id !== this.currentUser.id)) { return undefined; }
 
 		await toggleItemByID(meal.guests, guest);
 
-		await this.mealRepository.save(meal);
+		await this.mealRepository.getEntityManager().save(meal);
 		return meal.guests;
 	}
 
 	@Mutation()
 	public async mealToggleRecipes(args: IMealToggleRecipesArgs): Promise<Recipe[] | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const meal: Meal | undefined = await this.mealRepository.findOne(args.mealID, { relations: ["host", "recipes"] });
-		const recipe: Recipe | undefined = await this.recipeRepository.findOne(args.recipeID);
+		const meal: Meal | undefined = await this.mealRepository.getEntityManager().findOne(Meal, args.mealID, { relations: ["host", "recipes"] });
+		const recipe: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, args.recipeID);
 
 		if (meal === undefined || recipe === undefined) { return undefined; }
 		if (meal.host.id !== this.currentUser.id) { return undefined; }
 
 		await toggleItemByID(meal.recipes, recipe);
 
-		await this.mealRepository.save(meal);
+		await this.mealRepository.getEntityManager().save(meal);
 		return meal.recipes;
 	}
 }

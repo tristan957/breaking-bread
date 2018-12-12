@@ -30,39 +30,39 @@ export default class RecipeController {
 
 	@Query()
 	public recipe(args: IRecipeArgs): Promise<Recipe | undefined> {
-		return this.recipeRepository.findOne(args.id);
+		return this.recipeRepository.getEntityManager().findOne(Recipe, args.id);
 	}
 
 	@Query()
 	public recipeReview(args: IRecipeReviewArgs): Promise<RecipeReview | undefined> {
-		return this.recipeReviewRepository.findOne(args.id);
+		return this.recipeReviewRepository.getEntityManager().findOne(RecipeReview, args.id);
 	}
 
 	@Mutation()
 	public async recipeSave(args: IInput<IRecipeSaveArgs>): Promise<Recipe | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const recipe: Recipe | undefined = await this.recipeRepository.findOne({ ...args.input });
-		return recipe === undefined ? this.recipeRepository.save(this.recipeRepository.create({ ...args.input, author: this.currentUser })) : recipe;
+		const recipe: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, { ...args.input });
+		return recipe === undefined ? this.recipeRepository.getEntityManager().save(this.recipeRepository.getEntityManager().create(Recipe, { ...args.input, author: this.currentUser })) : recipe;
 	}
 
 	@Mutation()
 	public async recipeEdit(args: IInput<IRecipeEditArgs>): Promise<Recipe | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const recipe: Recipe | undefined = await this.recipeRepository.findOne(args.input.id, {
+		const recipe: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, args.input.id, {
 			relations: ["author"],
 		});
 		if (recipe === undefined) { return undefined; }
 		if (this.currentUser.id !== recipe.author.id) { return undefined; }
 
-		return this.recipeRepository.save({ ...recipe, ...args.input });
+		return this.recipeRepository.getEntityManager().save({ ...recipe, ...args.input });
 	}
 
 	public async toggleTags(recipeID: number, tags: DeepPartial<Tag>[], currentUser: User): Promise<Tag[] | undefined> {
-		const recipe: Recipe | undefined = await this.recipeRepository.findOne(recipeID, { relations: ["tags", "author"] });
+		const recipe: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, recipeID, { relations: ["tags", "author"] });
 		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.tagRepository.toggleTagsList(recipe.tags, tags);
-		await this.recipeRepository.save(recipe);
+		await this.recipeRepository.getEntityManager().save(recipe);
 		return recipe.tags;
 	}
 
@@ -74,11 +74,11 @@ export default class RecipeController {
 	}
 
 	public async toggleAllergies(recipeID: number, allergies: DeepPartial<Allergy>[], currentUser: User): Promise<Allergy[] | undefined> {
-		const recipe: Recipe | undefined = await this.recipeRepository.findOne(recipeID, { relations: ["allergies", "author"] });
+		const recipe: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, recipeID, { relations: ["allergies", "author"] });
 		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.allergyRepository.toggleAllergies(recipe.allergies, allergies);
-		await this.recipeRepository.save(recipe);
+		await this.recipeRepository.getEntityManager().save(recipe);
 		return recipe.allergies;
 	}
 
@@ -92,10 +92,10 @@ export default class RecipeController {
 	@Mutation()
 	public async recipeReviewSave(args: IInput<IRecipeReviewSaveArgs>): Promise<RecipeReview | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }	// Need to check if user has been to a meal with this recipe in the past?
-		const subject: Recipe | undefined = await this.recipeRepository.findOne(args.input.subjectID);
+		const subject: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, args.input.subjectID);
 		if (subject === undefined) { return undefined; }
 
-		const review: RecipeReview | undefined = await this.recipeReviewRepository.findOne({
+		const review: RecipeReview | undefined = await this.recipeReviewRepository.getEntityManager().findOne(RecipeReview, {
 			where: {
 				subject: {
 					id: args.input.subjectID,
@@ -106,7 +106,7 @@ export default class RecipeController {
 			},
 		});
 
-		return review === undefined ? this.recipeReviewRepository.save(this.recipeReviewRepository.create({
+		return review === undefined ? this.recipeReviewRepository.getEntityManager().save(this.recipeReviewRepository.getEntityManager().create(RecipeReview, {
 			...args.input,
 			author: this.currentUser,
 			subject,
@@ -116,12 +116,12 @@ export default class RecipeController {
 	@Mutation()
 	public async recipeReviewEdit(args: IInput<IRecipeReviewEditArgs>): Promise<RecipeReview | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const review: RecipeReview | undefined = await this.recipeReviewRepository.findOne(args.input.id, {
+		const review: RecipeReview | undefined = await this.recipeReviewRepository.getEntityManager().findOne(RecipeReview, args.input.id, {
 			relations: ["author"],
 		});
 		if (this.currentUser.id !== review.author.id) { return undefined; }
 
-		return review === undefined ? undefined : this.recipeReviewRepository.save(
+		return review === undefined ? undefined : this.recipeReviewRepository.getEntityManager().save(
 			{
 				...review,
 				...args.input,

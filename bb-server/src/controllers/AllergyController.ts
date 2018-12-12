@@ -16,14 +16,14 @@ export default class AllergyController {
 
 	@Query()
 	public allergy(args: IAllergyArgs): Promise<Allergy | undefined> {
-		return this.allergyRepository.findOne(args.id);
+		return this.allergyRepository.getEntityManager().findOne(Allergy, args.id);
 	}
 
 	@Mutation()
 	public async allergySave(args: IAllergySaveArgs): Promise<Allergy | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const allergy: Allergy | undefined = await this.allergyRepository.findOne({ name: args.name });
-		return allergy === undefined ? this.allergyRepository.save(this.allergyRepository.create({
+		const allergy: Allergy | undefined = await this.allergyRepository.getEntityManager().findOne(Allergy, { name: args.name });
+		return allergy === undefined ? this.allergyRepository.getEntityManager().save(this.allergyRepository.getEntityManager().create(Allergy, {
 			name: args.name.toLowerCase(),
 		})) : allergy;
 	}

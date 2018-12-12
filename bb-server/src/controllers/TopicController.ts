@@ -17,14 +17,14 @@ export default class TopicController {
 
 	@Query()
 	public topic(args: ITopicArgs): Promise<Topic | undefined> {
-		return this.topicRepository.findOne(args.id);
+		return this.topicRepository.getEntityManager().findOne(Topic, args.id);
 	}
 
 	@Mutation()
 	public async topicSave(args: ITopicSaveArgs): Promise<Topic | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
-		const topic: Topic | undefined = await this.topicRepository.findOne({ name: args.name });
-		return topic === undefined ? this.topicRepository.save(this.topicRepository.create({
+		const topic: Topic | undefined = await this.topicRepository.getEntityManager().findOne(Topic, { name: args.name });
+		return topic === undefined ? this.topicRepository.getEntityManager().save(this.topicRepository.getEntityManager().create(Topic, {
 			name: args.name.toLowerCase(),
 		})) : topic;
 	}
