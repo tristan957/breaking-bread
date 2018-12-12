@@ -19,6 +19,7 @@ const MEAL = gql`
 				id
 				name
 				about
+				imagePath
 				whitelist {
 					id
 					name

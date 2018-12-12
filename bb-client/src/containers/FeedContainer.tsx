@@ -20,30 +20,6 @@ const MEAL_FEED = gql`
 				cursor
 				node {
 					id
-					title
-					startTime
-					endTime
-					city
-					price
-					recipes {
-						tags {
-							id
-							name
-						}
-					}
-					host {
-						id
-						firstName
-						lastName
-						about
-						imagePath
-					}
-					guests {
-						id
-						firstName
-						lastName
-					}
-					maxGuests
 				}
 			}
 			pageInfo {
