@@ -1,21 +1,19 @@
 import React from "react";
-import Geosuggest from "react-geosuggest";
+import Geosuggest, { Suggest } from "react-geosuggest";
 
 interface IGeoSuggestProps {
-	onChange: React.ChangeEventHandler;
+	onSelect?: ((suggestion: Suggest) => void);
+	onChange?: ((e: React.ChangeEvent<HTMLInputElement>) => void);
 }
 
 export default class GeoSuggest extends React.Component<IGeoSuggestProps> {
-	public onSuggestSelect = (suggest: any): void => {
-		console.log(suggest);
-	}
-
 	public render(): JSX.Element {
 		return (
 			<div>
 				<Geosuggest
+					onSuggestSelect={this.props.onSelect}
 					onChange={this.props.onChange}
-					onSuggestSelect={this.onSuggestSelect}
+					queryDelay={400}
 					radius={20}
 					location={new google.maps.LatLng(40.741895, -73989308)}
 				/>

@@ -1,7 +1,41 @@
 import ApolloClient from "apollo-client";
+import gql from "graphql-tag";
 import React from "react";
-import { ApolloConsumer } from "react-apollo";
-import NewUser from "../components/NewUser";
+import { ApolloConsumer, FetchResult } from "react-apollo";
+import NewUser, { INewUserDetails } from "../components/NewUser";
+
+const USER_SAVE = gql`
+	mutation UserSave ($input: UserSaveInput!) {
+		userSave(input: $input) {
+			id
+		}
+	}
+`;
+
+interface IUserSaveInput {
+	input: {
+		firstName: string;
+		lastName: string;
+		imagePath?: string;
+		about?: string;
+		location: {
+			streetAddress: string;
+			lat: number;
+			long: number;
+		};
+		email: string;
+		phoneNumber: string;
+		oAuthSub: string;
+	};
+}
+
+interface IUserSaveResult {
+	userSave: {
+		id: number | null;
+	};
+}
+
+type UserSaveResult = FetchResult<IUserSaveResult>;
 
 interface IRetreivedProfileInfo {
 	email?: string;
@@ -9,8 +43,9 @@ interface IRetreivedProfileInfo {
 	lastName?: string;
 	firstName?: string;
 	picture?: string;
-	reloadUser: Function;
+	userSub?: string;
 	onValidSet?: Function;
+	reloadUser: Function;
 }
 
 export default class NewUserContainer extends React.Component<IRetreivedProfileInfo> {
@@ -18,14 +53,40 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 		super(props);
 	}
 
-	public submitNewUser = (client: ApolloClient<any>) => {
-		if (this.props.onValidSet !== undefined) {
-			alert("hello");
+	public submitNewUser = (client: ApolloClient<any>, newUserDetails: INewUserDetails) => {
+		const variables: IUserSaveInput = {
+			input: {
+				lastName: newUserDetails.lastName!,
+				firstName: newUserDetails.firstName!,
+				imagePath: this.props.picture,
+				about: newUserDetails.description,
+				location: {
+					streetAddress: newUserDetails.location!.label,
+					lat: parseFloat(newUserDetails.location!.location.lat),
+					long: parseFloat(newUserDetails.location!.location.lng),
+				},
+				email: newUserDetails.email!,
+				phoneNumber: newUserDetails.phoneNumber!,
+				oAuthSub: this.props.userSub!,
+			},
+		};
+
+		client.mutate<IUserSaveResult>({
+			mutation: USER_SAVE,
+			variables,
+		}).then((result: UserSaveResult) => {
+			if (this.props.onValidSet === undefined || result.data === undefined) {
+				return console.log("Issue with mutation");
+			}
+			if (result.data.userSave.id === null) {
+				return console.log("Issue with user creation on the server.");
+			}
+
 			this.props.onValidSet();
 			this.props.reloadUser();
-		} else {
-			console.log("Some error higher up with token");
-		}
+		}).catch((err: Error) => {
+			console.log(err);
+		});
 	}
 
 	public renderNewUser = (client: ApolloClient<any>): JSX.Element => {
@@ -37,7 +98,7 @@ export default class NewUserContainer extends React.Component<IRetreivedProfileI
 					lastName={this.props.lastName!}
 					firstName={this.props.firstName}
 					picture={this.props.picture!}
-					validSubmit={() => this.submitNewUser(client)}
+					validSubmit={(newUserDetails: INewUserDetails) => this.submitNewUser(client, newUserDetails)}
 				/>
 			);
 		} else {

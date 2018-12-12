@@ -27,6 +27,7 @@ interface IAuthCallbackPageState {
 	lastName?: string;
 	firstName?: string;
 	imagePath?: string;
+	userSub?: string;
 	onValidSet?: Function;
 }
 
@@ -59,14 +60,14 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 						this.props.history.push("/");
 					} else {
 						auth.getUserInfo(decodedHash).then(
-							(userInfo: IProfileInfo) => this.setState({ ...userInfo, onValidSet: () => auth.setSession(decodedHash) })
+							(userInfo: IProfileInfo) => this.setState({ ...userInfo, userSub: decoded.sub, onValidSet: () => auth.setSession(decodedHash) })
 						);
 					}
 				}).catch((err: Error) => {
-					console.log(err); // TODO: Invalid login
+					// console.log(err); // TODO: Invalid login
 				});
 			}).catch((err: Auth0Error) => {
-				console.log(err); // TODO: Invalid login // FIXME: Need to investigate excess trigger here
+				// console.log(err); // TODO: Invalid login // FIXME: Need to investigate excess trigger here
 			});
 		}
 	}
@@ -94,8 +95,9 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 											lastName={this.state.lastName}
 											firstName={this.state.firstName}
 											picture={this.state.imagePath}
-											reloadUser={userContext.reloadUser!}
+											userSub={this.state.userSub}
 											onValidSet={this.state.onValidSet}
+											reloadUser={userContext.reloadUser!}
 										/>
 									</div>
 								);

@@ -282,7 +282,7 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 													<FormGroup row>
 														<Label for="location" sm={firstColumnWidth}>Location</Label>
 														<Col sm={secondColumnWidth}>
-															<GeoSuggest onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ ...this.state, mealForm: { ...this.state.mealForm, location: e.target.value } })} />
+															<GeoSuggest onChange={(e: React.ChangeEvent<HTMLInputElement>) => { this.setState({ ...this.state, mealForm: { ...this.state.mealForm, location: e.target.value } }); }} />
 														</Col>
 													</FormGroup>
 													<FormGroup row>

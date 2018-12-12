@@ -59,6 +59,7 @@ bootstrap({
 	customResolvers: {
 		DateTime: GraphQLDateTime,
 	},
+	// FIXME: Need better public and private restrictions, should not be able to make a new user without a valid (and verified) token
 	setupContainer: async (container: ContainerInstance, action: Action) => {
 		const request = action.request; // user request, you can get http headers from it
 		let sub = "";
