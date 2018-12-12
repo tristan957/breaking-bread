@@ -71,7 +71,7 @@ export default class RecipePage extends React.Component<RouteComponentProps<IRec
 											<div id="recipe-page-description" className="card">
 												<h3>Description</h3>
 												<hr />
-												<p>{<Markdown markup={result.data!.recipe!.description} />}</p>
+												<div>{<Markdown markup={result.data!.recipe!.description} />}</div>
 											</div>
 											<div id="recipe-page-reviews">
 												<RecipeReviewsContainer recipeID={recipeID} />

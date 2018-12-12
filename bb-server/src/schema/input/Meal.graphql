@@ -1,5 +1,5 @@
 input MealSaveInput {
-	location: LocationInput!
+	location: LocationInput
 	startTime: DateTime!
 	endTime: DateTime!
 	price: Float!

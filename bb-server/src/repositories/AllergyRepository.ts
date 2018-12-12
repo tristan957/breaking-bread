@@ -20,7 +20,7 @@ export default class AllergyRepository extends Repository {
 				allergy = await this.entityManager.save(this.entityManager.create(
 					Allergy,
 					{
-						name: toggleAllergy.name.toLowerCase(),
+						name: toggleAllergy.name.toLowerCase().replace(/\s/g, ""),
 					}
 				));
 			}

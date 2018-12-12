@@ -43,7 +43,7 @@ export interface IDateSpanFilter {
 }
 
 export interface IMealSaveArgs {
-	location: ILocation;
+	location?: ILocation;
 	startTime: Date;
 	endTime: Date;
 	price: number;

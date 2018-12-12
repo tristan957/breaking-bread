@@ -17,7 +17,7 @@ export default class TopicRepository extends Repository {
 				: await this.entityManager.findOne(Topic, { name: toggleTopic.name });
 
 			if (topic === undefined) {
-				topic = await this.entityManager.save(this.entityManager.create(Topic, { name: toggleTopic.name.toLowerCase() }));
+				topic = await this.entityManager.save(this.entityManager.create(Topic, { name: toggleTopic.name.toLowerCase().replace(/\s/g, "") }));
 			}
 
 			await toggleItemByID(topicList, topic);

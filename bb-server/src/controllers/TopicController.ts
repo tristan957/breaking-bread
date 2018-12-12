@@ -25,7 +25,7 @@ export default class TopicController {
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const topic: Topic | undefined = await this.topicRepository.getEntityManager().findOne(Topic, { name: args.name });
 		return topic === undefined ? this.topicRepository.getEntityManager().save(Topic, this.topicRepository.getEntityManager().create(Topic, {
-			name: args.name.toLowerCase(),
+			name: args.name.toLowerCase().replace(/\s/g, ""),
 		})) : topic;
 	}
 }
