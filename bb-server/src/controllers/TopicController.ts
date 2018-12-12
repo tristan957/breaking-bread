@@ -24,7 +24,7 @@ export default class TopicController {
 	public async topicSave(args: ITopicSaveArgs): Promise<Topic | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const topic: Topic | undefined = await this.topicRepository.getEntityManager().findOne(Topic, { name: args.name });
-		return topic === undefined ? this.topicRepository.getEntityManager().save(this.topicRepository.getEntityManager().create(Topic, {
+		return topic === undefined ? this.topicRepository.getEntityManager().save(Topic, this.topicRepository.getEntityManager().create(Topic, {
 			name: args.name.toLowerCase(),
 		})) : topic;
 	}

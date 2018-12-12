@@ -22,6 +22,8 @@ export interface IUserSaveArgs {
 }
 
 export interface IUserEditArgs {
+	firstName?: string;
+	lastName?: string;
 	imagePath?: string;
 	about?: string;
 	location?: ILocation;

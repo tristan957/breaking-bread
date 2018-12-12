@@ -91,7 +91,7 @@ export default class UserController {
 			});
 		}
 
-		return this.userRepository.getEntityManager().save({
+		return this.userRepository.getEntityManager().save(User, {
 			...this.currentUser,
 			...inputNoLatLong,
 		});
@@ -109,7 +109,7 @@ export default class UserController {
 		if (user === undefined) { return undefined; }
 
 		this.topicRepository.toggleTopicsList(user.whitelist, topics);
-		await this.userRepository.getEntityManager().save(user);
+		await this.userRepository.getEntityManager().save(User, user);
 		return user.whitelist;
 	}
 
@@ -124,7 +124,7 @@ export default class UserController {
 		if (user === undefined) { return undefined; }
 
 		this.topicRepository.toggleTopicsList(user.blacklist, topics);
-		await this.userRepository.getEntityManager().save(user);
+		await this.userRepository.getEntityManager().save(User, user);
 		return user.blacklist;
 	}
 
@@ -139,7 +139,7 @@ export default class UserController {
 		if (user === undefined) { return undefined; }
 
 		this.tagRepository.toggleTagsList(user.followedTags, tags);
-		await this.userRepository.getEntityManager().save(user);
+		await this.userRepository.getEntityManager().save(User, user);
 		return user.followedTags;
 	}
 
@@ -157,7 +157,7 @@ export default class UserController {
 		if (toFollow === undefined) { return undefined; }
 
 		await toggleItemByID(fullUser.followedUsers, toFollow);
-		await this.userRepository.getEntityManager().save(fullUser);
+		await this.userRepository.getEntityManager().save(User, fullUser);
 		return fullUser.followedUsers;
 	}
 
@@ -169,7 +169,7 @@ export default class UserController {
 		if (toSave === undefined) { return undefined; }
 
 		await toggleItemByID(fullUser.savedRecipes, toSave);
-		await this.userRepository.getEntityManager().save(fullUser);
+		await this.userRepository.getEntityManager().save(User, fullUser);
 		return fullUser.savedRecipes;
 	}
 
@@ -190,7 +190,7 @@ export default class UserController {
 			},
 		});
 
-		return review === undefined ? this.userReviewRepository.getEntityManager().save(this.userReviewRepository.getEntityManager().create(UserReview, {
+		return review === undefined ? this.userReviewRepository.getEntityManager().save(UserReview, this.userReviewRepository.getEntityManager().create(UserReview, {
 			...args.input,
 			author: this.currentUser,
 			subject,
@@ -204,11 +204,9 @@ export default class UserController {
 
 		if (this.currentUser.id !== review.author.id) { return undefined; }
 
-		return review === undefined ? undefined : this.userReviewRepository.getEntityManager().save(
-			{
-				...review,
-				...args.input,
-			}
-		);
+		return review === undefined ? undefined : this.userReviewRepository.getEntityManager().save(UserReview, {
+			...review,
+			...args.input,
+		});
 	}
 }

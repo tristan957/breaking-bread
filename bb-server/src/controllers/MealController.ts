@@ -128,7 +128,7 @@ export default class MealController {
 			latLong: `${location.lat}|${location.long}`,
 			location: location.streetAddress,
 		});
-		return this.mealRepository.getEntityManager().save(meal);
+		return this.mealRepository.getEntityManager().save(Meal, meal);
 	}
 
 	@Mutation()
@@ -148,7 +148,7 @@ export default class MealController {
 			});
 		}
 
-		return this.mealRepository.getEntityManager().save({
+		return this.mealRepository.getEntityManager().save(Meal, {
 			...meal,
 			...inputNoLatLong,
 		});
@@ -160,7 +160,7 @@ export default class MealController {
 		const meal: Meal | undefined = await this.mealRepository.getEntityManager().findOne(Meal, args.mealID, { relations: ["host"] });
 		if (meal === undefined || this.currentUser.id !== meal.host.id) { return false; }
 
-		await this.mealRepository.getEntityManager().remove(meal);
+		await this.mealRepository.getEntityManager().remove(Meal, meal);
 		return true;
 	}
 
@@ -175,7 +175,7 @@ export default class MealController {
 
 		await toggleItemByID(meal.guests, guest);
 
-		await this.mealRepository.getEntityManager().save(meal);
+		await this.mealRepository.getEntityManager().save(Meal, meal);
 		return meal.guests;
 	}
 
@@ -190,7 +190,7 @@ export default class MealController {
 
 		await toggleItemByID(meal.recipes, recipe);
 
-		await this.mealRepository.getEntityManager().save(meal);
+		await this.mealRepository.getEntityManager().save(Meal, meal);
 		return meal.recipes;
 	}
 }

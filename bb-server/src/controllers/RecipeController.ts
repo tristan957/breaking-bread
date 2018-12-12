@@ -44,7 +44,7 @@ export default class RecipeController {
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const recipe: Recipe | undefined = await this.recipeRepository.getEntityManager().findOne(Recipe, { ...args.input });
 		return recipe === undefined
-			? await this.recipeRepository.getEntityManager().save(this.recipeRepository.getEntityManager().create(Recipe, { ...args.input, author: this.currentUser }))
+			? await this.recipeRepository.getEntityManager().save(Recipe, this.recipeRepository.getEntityManager().create(Recipe, { ...args.input, author: this.currentUser }))
 			: recipe;
 	}
 
@@ -57,7 +57,7 @@ export default class RecipeController {
 		if (recipe === undefined) { return undefined; }
 		if (this.currentUser.id !== recipe.author.id) { return undefined; }
 
-		return this.recipeRepository.getEntityManager().save({ ...recipe, ...args.input });
+		return this.recipeRepository.getEntityManager().save(Recipe, { ...recipe, ...args.input });
 	}
 
 	public async toggleTags(recipeID: number, tags: DeepPartial<Tag>[], currentUser: User): Promise<Tag[] | undefined> {
@@ -65,7 +65,7 @@ export default class RecipeController {
 		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.tagRepository.toggleTagsList(recipe.tags, tags);
-		await this.recipeRepository.getEntityManager().save(recipe);
+		await this.recipeRepository.getEntityManager().save(Recipe, recipe);
 		return recipe.tags;
 	}
 
@@ -81,7 +81,7 @@ export default class RecipeController {
 		if (recipe === undefined || recipe.author.id !== currentUser.id) { return undefined; }
 
 		this.allergyRepository.toggleAllergies(recipe.allergies, allergies);
-		await this.recipeRepository.getEntityManager().save(recipe);
+		await this.recipeRepository.getEntityManager().save(Recipe, recipe);
 		return recipe.allergies;
 	}
 
@@ -109,7 +109,7 @@ export default class RecipeController {
 			},
 		});
 
-		return review === undefined ? this.recipeReviewRepository.getEntityManager().save(this.recipeReviewRepository.getEntityManager().create(RecipeReview, {
+		return review === undefined ? this.recipeReviewRepository.getEntityManager().save(RecipeReview, this.recipeReviewRepository.getEntityManager().create(RecipeReview, {
 			...args.input,
 			author: this.currentUser,
 			subject,
@@ -124,11 +124,9 @@ export default class RecipeController {
 		});
 		if (this.currentUser.id !== review.author.id) { return undefined; }
 
-		return review === undefined ? undefined : this.recipeReviewRepository.getEntityManager().save(
-			{
-				...review,
-				...args.input,
-			}
-		);
+		return review === undefined ? undefined : this.recipeReviewRepository.getEntityManager().save(RecipeReview, {
+			...review,
+			...args.input,
+		});
 	}
 }

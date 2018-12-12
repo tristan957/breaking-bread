@@ -23,7 +23,7 @@ export default class AllergyController {
 	public async allergySave(args: IAllergySaveArgs): Promise<Allergy | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const allergy: Allergy | undefined = await this.allergyRepository.getEntityManager().findOne(Allergy, { name: args.name });
-		return allergy === undefined ? this.allergyRepository.getEntityManager().save(this.allergyRepository.getEntityManager().create(Allergy, {
+		return allergy === undefined ? this.allergyRepository.getEntityManager().save(Allergy, this.allergyRepository.getEntityManager().create(Allergy, {
 			name: args.name.toLowerCase(),
 		})) : allergy;
 	}
