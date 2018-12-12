@@ -6,7 +6,7 @@ const client: JwksRsa.JwksClient = JwksRsa({
 });
 
 const options = {
-	audience: "https://www.partin.io/bread/api/v1/graphql",
+	audience: "https://www.partin.io/bread/api/v1/graphql/",
 	issuer: `https://bbread.auth0.com/`,
 	algorithms: ["RS256"],
 };
