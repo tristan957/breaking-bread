@@ -87,7 +87,11 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 										return <div>{qResult.error.message}</div>;
 									}
 
-									const isFollowing = this.props.viewerID === undefined || qResult.data!.user.followedUsers === undefined || qResult.data!.user.followedUsers === undefined || qResult.data!.user.followedUsers!.length === 0
+									// console.log(this.props.viewerID);
+									// console.log(this.props.userID);
+									// console.log(qResult.data!.user.followedUsers);
+
+									const isFollowing = this.props.viewerID === undefined || qResult.data!.user.followedUsers === undefined || qResult.data!.user.followedUsers!.length === 0
 										? false
 										: qResult.data!.user.followedUsers!.some(followedUser => {
 											if (followedUser.id === this.props.userID) {
@@ -96,6 +100,7 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 
 											return false;
 										});
+									console.log(isFollowing);
 
 									return (
 										<Mutation mutation={USER_TOGGLE_FOLLOWING} variables={{ userID: this.props.userID }} onCompleted={() => qResult.refetch()}>

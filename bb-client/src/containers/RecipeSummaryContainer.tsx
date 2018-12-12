@@ -18,6 +18,14 @@ const RECIPE = gql`
 			}
 			createdAt
 			updatedAt
+			reviews {
+				id
+				rating
+				description
+				author {
+					id
+				}
+			}
 			reviewAverage
 			timesSaved
 			allergies {
@@ -58,6 +66,8 @@ export default class RecipeSummaryContainer extends React.Component<IRecipeSumma
 					return (
 						<div className="card">
 							<RecipeSummary
+								reload={() => result.refetch()}
+								reviews={result.data!.recipe.reviews || []}
 								recipeID={result.data!.recipe.id!}
 								authorID={result.data!.recipe.id!}
 								viewerID={this.props.viewerID}

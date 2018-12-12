@@ -34,6 +34,14 @@ const MEAL = gql`
 					name
 					imagePath
 				}
+				reviews {
+					id
+					rating
+					description
+					author {
+						id
+					}
+				}
 				createdAt
 				updatedAt
 				reviewAverage
@@ -138,6 +146,8 @@ export default class MealPage extends React.Component<RouteComponentProps<IMealP
 															<li key={i}>
 																<hr />
 																<RecipeSummary
+																	reload={() => result.refetch()}
+																	reviews={recipe.reviews || []}
 																	recipeID={recipe.id!}
 																	authorID={recipe.author!.id!}
 																	viewerID={userContext.userID}
