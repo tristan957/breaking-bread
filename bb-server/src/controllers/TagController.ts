@@ -25,7 +25,7 @@ export default class TagController {
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const tag: Tag | undefined = await this.tagRepository.getEntityManager().findOne(Tag, { name: args.name });
 		return tag === undefined ? this.tagRepository.getEntityManager().save(this.tagRepository.getEntityManager().create(Tag, {
-			name: args.name.toLowerCase(),
+			name: args.name.toLowerCase().replace(/\s/g, ""),
 		})) : tag;
 	}
 }

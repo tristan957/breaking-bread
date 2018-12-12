@@ -128,7 +128,7 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 
 	public render(): JSX.Element {
 		const options: IMealFeedOptions = {}; // TODO: Load options some other way
-		const first = 2;
+		const first = 1;
 
 		return (
 			<Query

@@ -24,7 +24,7 @@ export default class AllergyController {
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const allergy: Allergy | undefined = await this.allergyRepository.getEntityManager().findOne(Allergy, { name: args.name });
 		return allergy === undefined ? this.allergyRepository.getEntityManager().save(this.allergyRepository.getEntityManager().create(Allergy, {
-			name: args.name.toLowerCase(),
+			name: args.name.toLowerCase().replace(/\s/g, ""),
 		})) : allergy;
 	}
 }

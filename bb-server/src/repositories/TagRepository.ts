@@ -17,7 +17,7 @@ export default class TagRepository extends Repository {
 				: await this.entityManager.findOne(Tag, { name: toggleTag.name });
 
 			if (tag === undefined) {
-				tag = await this.entityManager.save(this.entityManager.create(Tag, { name: toggleTag.name.toLowerCase() }));
+				tag = await this.entityManager.save(this.entityManager.create(Tag, { name: toggleTag.name.toLowerCase().replace(/\s/g, "") }));
 			}
 
 			await toggleItemByID(tagList, tag);

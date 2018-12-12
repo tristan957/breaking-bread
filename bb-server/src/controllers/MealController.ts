@@ -121,12 +121,17 @@ export default class MealController {
 
 	@Mutation()
 	public async mealSave(args: IInput<IMealSaveArgs>): Promise<Meal | undefined> {
+		if (invalidUser(this.currentUser)) { return undefined; }
+
 		const { location, ...inputNoLatLong }: DropLatLong<IMealSaveArgs> = args.input;
+		const streetAddress = location === undefined ? this.currentUser.location : location.streetAddress;
+		const latLong = location === undefined ? this.currentUser.latLong : `${location.lat}|${location.long}`;
 
 		const meal = this.mealRepository.getEntityManager().create(Meal, {
 			...inputNoLatLong,
-			latLong: `${location.lat}|${location.long}`,
-			location: location.streetAddress,
+			latLong,
+			location: streetAddress,
+			host: this.currentUser,
 		});
 		return this.mealRepository.getEntityManager().save(meal);
 	}

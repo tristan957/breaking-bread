@@ -36,11 +36,11 @@ const languages: Partial<Tag>[] = [
 ];
 
 const getSuggestions = (value: String): Partial<Tag>[] => {
-	const inputValue = value.trim().toLowerCase();
+	const inputValue = value.trim().toLowerCase().replace(/\s/g, "");
 	const inputLength = inputValue.length;
 
 	return inputLength === 0 ? [] : languages.filter(lang =>
-		lang.name!.toLowerCase().slice(0, inputLength) === inputValue
+		lang.name!.toLowerCase().replace(/\s/g, "").slice(0, inputLength) === inputValue
 	);
 };
 
