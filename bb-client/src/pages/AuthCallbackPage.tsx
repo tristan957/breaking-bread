@@ -7,6 +7,7 @@ import { ApolloConsumer } from "react-apollo";
 import { RouteComponentProps } from "react-router";
 import { UserContext } from "../App";
 import { IAccessToken, IProfileInfo, WebAuthentication } from "../auth/WebAuthentication";
+import NotFound from "../components/NotFound";
 import NewUserContainer from "../containers/NewUserContainer";
 
 const USER_SUB_EXISTS = gql`
@@ -81,8 +82,7 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 							{client => {
 								if (userContext.auth === undefined) {
 									return (
-										<div>
-										</div>
+										<NotFound></NotFound>
 									);
 								}
 
@@ -97,7 +97,11 @@ export default class AuthCallbackPage extends React.Component<RouteComponentProp
 											picture={this.state.imagePath}
 											userSub={this.state.userSub}
 											onValidSet={this.state.onValidSet}
-											reloadUser={userContext.reloadUser!}
+											reloadUser={() => {
+												if (userContext.reloadUser === undefined) { return console.log("reloadUser is undefined"); }
+												userContext.reloadUser();
+												this.props.history.push("/");
+											}}
 										/>
 									</div>
 								);

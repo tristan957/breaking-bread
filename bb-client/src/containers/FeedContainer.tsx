@@ -84,7 +84,7 @@ interface IMealFeedResult {
 		edges: IEdge[];
 		pageInfo: IPageInfo;
 		totalCount: number;
-	};
+	} | null;
 }
 
 interface IFeedContainerState {
@@ -142,16 +142,23 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 					if (result.loading) {
 						return <div></div>;
 					}
-					if (result.error) {
+					if (result.data === undefined || result.data.feed === null) {
+						if (result.error !== undefined) {
+							return (
+								<div>
+									{`Error! Something terrible has happened! ${result.error.message}`}
+								</div>
+							);
+						}
 						return (
-							<div>
-								{`Error! Something terrible has happened! ${result.error.message}`}
+							<div id="feed-container">
+								<h2>Oops! Looks like there's nothing here. If you'd like, try hosting a meal!</h2>
 							</div>
 						);
 					}
 
 					let consumedCursor = false;
-					const feedMeals: Partial<Meal>[] = result.data!.feed.edges.map(edge => edge.node);
+					const feedMeals: Partial<Meal>[] = result.data.feed.edges.map(edge => edge.node);
 					return (
 						<div id="feed-container">
 							<div id="feed-header">
@@ -210,14 +217,14 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 							</Modal>
 							<MealSummariesContainer
 								onLoadMore={() => {
-									if (result.data!.feed.pageInfo.hasNextPage && !consumedCursor) {
+									if (result.data!.feed!.pageInfo.hasNextPage && !consumedCursor) {
 										consumedCursor = true;
 
 										result.fetchMore({
 											variables: {
 												options,
 												first,
-												after: result.data!.feed.pageInfo.endCursor,
+												after: result.data!.feed!.pageInfo.endCursor,
 											},
 											updateQuery: (prev: IMealFeedResult, { fetchMoreResult }): IMealFeedResult => {
 												if (!fetchMoreResult) { return prev; }
@@ -226,9 +233,9 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 												return {
 													...prev,
 													feed: {
-														...prev.feed,
-														...fetchMoreResult.feed,
-														edges: [...prev.feed.edges, ...fetchMoreResult.feed.edges],
+														...prev.feed!,
+														...fetchMoreResult.feed!,
+														edges: [...prev.feed!.edges, ...fetchMoreResult.feed!.edges],
 													},
 												};
 											},

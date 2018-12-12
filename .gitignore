@@ -8,3 +8,4 @@ docker
 .DS_Store
 package-lock.json
 ses.config.json
+ormconfig.json
