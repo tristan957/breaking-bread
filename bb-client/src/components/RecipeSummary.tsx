@@ -8,6 +8,7 @@ import "./resources/css/RecipeSummary.css";
 import { default as defaultMealPic } from "./resources/images/default_meal_pic.jpg";
 
 interface IRecipeSummaryProps {
+	recipeID: number;
 	authorID: number;
 	viewerID?: number;
 	name: string;
@@ -46,7 +47,7 @@ export default class RecipeSummary extends React.Component<IRecipeSummaryProps, 
 				<img src={this.props.imagePath || defaultMealPic} id="recipe-summary-img" alt="Recipe Picture" />
 				<div id="recipe-summary-information">
 					<div id="recipe-summary-left">
-						<Link to={`/r/${this.props.authorID}`} className="black-link-with-underline">
+						<Link to={`/r/${this.props.recipeID}`} className="black-link-with-underline">
 							<div id="recipe-summary-name">{this.props.name}</div>
 						</Link>
 						<span className="recipe-summary-updated">Last updated on

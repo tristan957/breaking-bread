@@ -342,16 +342,16 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 										</Modal>
 
 										{/* RECIPE MODAL */}
-										<Form onSubmit={() => {
-											this.createRecipeMutation(client, {
-												name: this.state.recipeForm.name!,
-												description: this.state.recipeForm.description!,
-												...this.state.recipeForm,
-											});
-										}}>
-											<Modal size={"lg"} centered={true} isOpen={this.state.recipeModal} toggle={this.toggleRecipeModal}>
-												<ModalHeader toggle={this.toggleRecipeModal}>New Recipe</ModalHeader>
-												<ModalBody>
+										<Modal size={"lg"} centered={true} isOpen={this.state.recipeModal} toggle={this.toggleRecipeModal}>
+											<ModalHeader toggle={this.toggleRecipeModal}>New Recipe</ModalHeader>
+											<ModalBody>
+												<Form onSubmit={() => {
+													console.log("Triggering");
+													this.createRecipeMutation(client, {
+														name: this.state.recipeForm.name!,
+														description: this.state.recipeForm.description!,
+													});
+												}}>
 													<FormGroup row>
 														<Label for="name" sm={firstColumnWidth}>Name</Label>
 														<Col sm={secondColumnWidth}>
@@ -387,9 +387,9 @@ export default class NavigationBar extends React.Component<INavigationBarProps, 
 													<hr />
 													<Button type="submit" className="float-right">Submit</Button>
 													<Button className="float-right" onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.setState({ ...this.state, recipeModal: !this.state.recipeModal })}>Cancel</Button>
-												</ModalBody>
-											</Modal>
-										</Form>
+												</Form>
+											</ModalBody>
+										</Modal>
 									</div>
 								);
 							}}

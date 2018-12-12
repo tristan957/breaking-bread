@@ -68,6 +68,7 @@ bootstrap({
 			sub = decodeToken.sub;
 		} catch (err) {
 			// Will be caught later in query and resolver
+			// console.log(err);
 		}
 		const user: User | undefined = await getManager().findOne(User, { oAuthSub: sub });
 		container.set(User, user);

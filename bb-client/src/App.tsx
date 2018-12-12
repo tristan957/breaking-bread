@@ -15,6 +15,7 @@ import AuthCallbackPage from "./pages/AuthCallbackPage";
 import DashboardPage from "./pages/DashboardPage";
 import MealPage from "./pages/MealPage";
 import ProfilePage from "./pages/ProfilePage";
+import RecipePage from "./pages/RecipePage";
 import "./resources/css/App.css";
 import "./resources/css/common.css";
 
@@ -124,7 +125,7 @@ export default class App extends React.Component<{}, IAppState> {
 												<Route exact path="/" component={DashboardPage} />
 												<Route exact path="/m/:mealID" component={MealPage} />
 												<Route exact path="/p/:userID" component={ProfilePage} />
-												{/* <Route exact path="/r/:recipeID" component={RecipePage} /> */}
+												<Route exact path="/r/:recipeID" component={RecipePage} />
 												<Route exact path="/bb-auth" component={AuthCallbackPage} />
 												<Route component={NotFound} />
 											</Switch>
