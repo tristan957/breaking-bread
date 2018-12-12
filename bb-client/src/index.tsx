@@ -7,7 +7,7 @@ import App from "./App";
 import "./resources/css/index.css";
 import * as serviceWorker from "./serviceWorker";
 
-const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/graphql" : "https://www.bbread.org/api/v1/graphql";
+const uri = process.env.NODE_ENV === "development" ? "http://localhost:10262/graphql" : "https://www.partin.io/bread/api/v1/graphql";
 
 ReactDOM.render(
 	<BrowserRouter>
