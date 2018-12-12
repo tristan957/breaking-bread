@@ -2,7 +2,7 @@ import { DeepPartial } from "typeorm";
 import { Controller, Mutation, Query } from "vesper";
 import { IInput } from "../args";
 import { DropLatLong } from "../args/CommonArgs";
-import { IUserArgs, IUserEditArgs, IUserReviewArgs, IUserReviewEditArgs, IUserReviewSaveArgs, IUserSaveArgs, IUserSubArgs, IUserToggleTagsArgs, IUserToggleTopiclistArgs } from "../args/UserControllerArgs";
+import { IUserArgs, IUserEditArgs, IUserReviewArgs, IUserReviewEditArgs, IUserReviewSaveArgs, IUserSaveArgs, IUserSubArgs, IUserToggleFollowingArgs, IUserToggleTagsArgs, IUserToggleTopiclistArgs } from "../args/UserControllerArgs";
 import { Recipe, Tag, Topic, User, UserReview } from "../entities";
 import { RecipeRepository, TagRepository, TopicRepository, UserRepository, UserReviewRepository } from "../repositories";
 import { toggleItemByID } from "../repositories/utilities/toggleByID";
@@ -150,10 +150,10 @@ export default class UserController {
 	}
 
 	@Mutation()
-	public async userToggleFollowing(args: IUserArgs): Promise<User[] | undefined> {
+	public async userToggleFollowing(args: IUserToggleFollowingArgs): Promise<User[] | undefined> {
 		if (invalidUser(this.currentUser)) { return undefined; }
 		const fullUser: User = await this.userRepository.getEntityManager().findOne(User, this.currentUser.id, { relations: ["followedUsers"] });
-		const toFollow: User | undefined = await this.userRepository.getEntityManager().findOne(User, args.id);
+		const toFollow: User | undefined = await this.userRepository.getEntityManager().findOne(User, args.userID);
 		if (toFollow === undefined) { return undefined; }
 
 		await toggleItemByID(fullUser.followedUsers, toFollow);

@@ -87,10 +87,6 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 										return <div>{qResult.error.message}</div>;
 									}
 
-									// console.log(this.props.viewerID);
-									// console.log(this.props.userID);
-									// console.log(qResult.data!.user.followedUsers);
-
 									const isFollowing = this.props.viewerID === undefined || qResult.data!.user.followedUsers === undefined || qResult.data!.user.followedUsers!.length === 0
 										? false
 										: qResult.data!.user.followedUsers!.some(followedUser => {
@@ -109,7 +105,7 @@ export default class LargeProfileSummary extends React.Component<ILargeProfileSu
 													return <div>{mResult.error.message}</div>;
 												}
 
-												return this.props.viewerID === undefined || qResult.data!.user.id === this.props.userID
+												return this.props.viewerID === undefined || this.props.viewerID === this.props.userID
 													? <div></div>
 													: (
 														<Button

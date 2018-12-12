@@ -6,6 +6,10 @@ export interface IUserArgs {
 	id: number;
 }
 
+export interface IUserToggleFollowingArgs {
+	userID: number;
+}
+
 export interface IUserSubArgs {
 	sub: string;
 }
