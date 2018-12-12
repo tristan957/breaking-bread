@@ -157,6 +157,8 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 						);
 					}
 
+					console.log(result);
+
 					let consumedCursor = false;
 					const feedMeals: Partial<Meal>[] = result.data.feed.edges.map(edge => edge.node);
 					return (
@@ -217,6 +219,8 @@ export default class FeedContainer extends React.Component<{}, IFeedContainerSta
 							</Modal>
 							<MealSummariesContainer
 								onLoadMore={() => {
+									console.log(`Second ${result}`);
+
 									if (result.data!.feed!.pageInfo.hasNextPage && !consumedCursor) {
 										consumedCursor = true;
 
