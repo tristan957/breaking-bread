@@ -45,7 +45,7 @@ export default class RecipeReviewsContainer extends React.Component<IRecipeRevie
 					if (result.loading) { return <div></div>; }
 					if (result.error) {
 						console.error(result.error);
-						return <div>{result.error.message}</div>
+						return <div>{result.error.message}</div>;
 					}
 
 					return (
@@ -53,7 +53,7 @@ export default class RecipeReviewsContainer extends React.Component<IRecipeRevie
 							<h3>Reviews</h3>
 							<RecipeReviews reviews={result.data!.recipe.reviews || []} />
 						</div>
-					)
+					);
 				}}
 			</Query>
 		);

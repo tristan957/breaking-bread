@@ -45,7 +45,7 @@ export default class UserReviewsContainer extends React.Component<IUserReviewsCo
 					if (result.loading) { return <div></div>; }
 					if (result.error) {
 						console.error(result.error);
-						return <div>{result.error.message}</div>
+						return <div>{result.error.message}</div>;
 					}
 
 					return (
@@ -53,7 +53,7 @@ export default class UserReviewsContainer extends React.Component<IUserReviewsCo
 							<h3>Reviews</h3>
 							<UserReviews reviews={result.data!.user.reviews || []} />
 						</div>
-					)
+					);
 				}}
 			</Query>
 		);
