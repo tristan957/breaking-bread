@@ -6,6 +6,7 @@ import { UserContext } from "../App";
 import { TopicType } from "../components/Topics";
 import ProfileActivityContainer from "../containers/ProfileActivityContainer";
 import ProfileHeaderContainer from "../containers/ProfileHeaderContainer";
+import TagsContainer from "../containers/TagsContainer";
 import TopicsContainer from "../containers/TopicsContainer";
 import UpcomingMealsContainer from "../containers/UpcomingMealsContainer";
 import User from "../entities/User";
@@ -63,11 +64,12 @@ export default class ProfilePage extends React.Component<RouteComponentProps<IPr
 											</div>
 											<div id="profile-info-bottom">
 												<div id="profile-info-topics">
-													<TopicsContainer userID={result.data!.user!.id!} mutable={isViewingSelf} type={TopicType.WHITELIST} />
-													<TopicsContainer userID={result.data!.user!.id!} mutable={isViewingSelf} type={TopicType.BLACKLIST} />
+													<TopicsContainer title="Whitelist Topics" userID={result.data!.user!.id!} mutable={isViewingSelf} type={TopicType.WHITELIST} />
+													<TopicsContainer title="Blacklist Topics" userID={result.data!.user!.id!} mutable={isViewingSelf} type={TopicType.BLACKLIST} />
+													<TagsContainer title="Followed Tags" userID={result.data!.user!.id!} mutable={isViewingSelf} />
 												</div>
 												<div id="profile-info-upcoming">
-													<UpcomingMealsContainer userID={userID} />
+													<UpcomingMealsContainer title={isViewingSelf ? "Your Upcoming Meals" : "Upcoming Meals"} userID={userID} />
 												</div>
 											</div>
 										</div>

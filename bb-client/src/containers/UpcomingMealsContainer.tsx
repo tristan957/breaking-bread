@@ -7,6 +7,7 @@ import "./resources/css/UpcomingMealsContainer.css";
 
 interface IUpcomingMealsContainerProps {
 	userID: number;
+	title?: string;
 }
 
 const USER_UPCOMING_MEALS = gql`
@@ -55,7 +56,7 @@ export default class UpcomingMealsContainer extends React.Component<IUpcomingMea
 
 					return (
 						<div className="card">
-							<div className="container-header">Your Upcoming Meals</div>
+							<div className="container-header">{this.props.title || "Upcoming Meals"}</div>
 							<hr className="separator" />
 							<UpcomingMeals upcomingMeals={result.data!.user.upcomingMeals || []} />
 						</div>

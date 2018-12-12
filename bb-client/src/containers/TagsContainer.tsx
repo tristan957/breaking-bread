@@ -52,6 +52,7 @@ type UserToggleFollowedTagsFn = MutationFn<IUserToggleFollowedTagsData, IUserTog
 interface ITagsContainerProps {
 	mutable?: boolean;
 	userID: number;
+	title?: string;
 }
 
 interface ITagsContainerState {
@@ -78,7 +79,7 @@ export default class TagsContainer extends React.Component<ITagsContainerProps, 
 					return (
 						<div id="tags-container" className="card">
 							<div id="tags-list-header">
-								<div className="container-header" id="tags-label">Tags</div>
+								<div className="container-header" id="tags-label">{this.props.title || "Tags"}</div>
 								{this.props.mutable
 									? (
 										<Mutation mutation={USER_TOGGLE_FOLLOWED_TAGS} onCompleted={() => result.refetch()}>

@@ -80,6 +80,7 @@ interface ITopicsContainerProps {
 	mutable?: boolean;
 	userID: number;
 	type: TopicType;
+	title?: string;
 }
 
 interface ITopicsContainerState {
@@ -106,7 +107,7 @@ export default class TopicsContainer extends React.Component<ITopicsContainerPro
 					return (
 						<div id="topics-container" className="card">
 							<div id="topics-list-header">
-								<div className="container-header" id="topics-label">Topics</div>
+								<div className="container-header" id="topics-label">{this.props.title || "Topics"}</div>
 								{this.props.mutable
 									? (
 										<Mutation mutation={this.props.type === TopicType.WHITELIST ? USER_TOGGLE_WHITELIST : USER_TOGGLE_BLACKLIST} onCompleted={() => result.refetch()}>
