@@ -111,7 +111,7 @@ export default class ProfileHeaderContainer extends React.Component<IProfileHead
 								/>
 								{result.data!.user!.id! === this.props.viewerID
 									? (
-										<Mutation mutation={USER_EDIT}>
+										<Mutation mutation={USER_EDIT} onCompleted={() => result.refetch()}>
 											{(userEdit: UserEditFn, mResult: UserEditResult) => {
 												if (mResult.error) {
 													console.error(mResult.error);
